@@ -1,2 +1,2 @@
-# SolutionChecker
-Checks VisualStudio solutions against a plethora of different rules to keep your solution and projects tidy.
+# SolutionInspector
+Inspects VisualStudio solutions against violations against a plethora of different rules to keep your solution tidy.
