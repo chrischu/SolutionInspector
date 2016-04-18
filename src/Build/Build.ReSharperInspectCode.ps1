@@ -23,7 +23,7 @@ BuildStep Execute-ReSharperCodeInspection {
   [xml] $xml = Get-Content $resultsFile
   $numberOfIssues = $xml.CreateNavigator().Evaluate("count(//Issue)")
 
-  if (($Mode -eq "Local") -and $numberOfIssues -gt 0) {
+  if ($numberOfIssues -gt 0) {
     throw "BUILD FAILED: There are $numberOfIssues ReSharper code inspection issues."
   }
 

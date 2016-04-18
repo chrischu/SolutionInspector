@@ -16,7 +16,7 @@ BuildStep Build-Solution {
       [Parameter(Mandatory)] [string] $fxCopResultsDirectory)
 
   $treatCodeAnalysisWarningsAsErrorsParam = ""
-  if (($Mode -eq "Local") -and $runFxCopCodeAnalysis) {
+  if ($runFxCopCodeAnalysis) {
     $treatCodeAnalysisWarningsAsErrorsParam = ";CodeAnalysisTreatWarningsAsErrors=True"
   }
 
