@@ -1,0 +1,24 @@
+﻿Now:
+* Implement concept how to utilize SolutionChecker in a project:
+** Variant 1: Reference NuGet package in Console application project and derive from special base class, executing console app runs SolutionChecker. Additional rules can be added by referencing DLLs/NuGet packages.
+** Variant 2: Pre-built version, additional rules have to be placed in a folder 'Rules' next to the executable.
+
+Soon:
+* More solution & project rules
+** NuGet references should have correct hint path
+** (non-dev) NuGet references should have Private set
+** Generated files below Declaration (RN-specific)
+** Generated files should be newer than Declaration change date (RN-specific)
+** Should have nuspec (RN-specific)
+** Project name/default namespace (RN-specific?)
+* Test setup for PersonRegister
+* Tests for object model
+
+Eventually:
+* File rules (maybe would be better to write R# inspections)
+** Two different ways to check:
+*** String-based (just get file source code as string)
+*** Roslyn-based (validate source code via Roslyn Syntax Tree)
+* GUI Reporting
+* Fixes (Console & GUI)
+** Enables immediately fixing a problem reported by a rule (not for all rules though)

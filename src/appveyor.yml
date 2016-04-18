@@ -1,0 +1,49 @@
+version: 1.0.{build}
+branches:
+  only:
+  - master
+  - develop
+environment:
+  NuGetApiKey:
+    secure: Q2iw3AS2EBEcG4wVWDZY/ruR0Whvs50gTeCleO/uypdP7G7ajODYw030N3sOONtP
+build_script:
+- ps: |
+    function Get-LastTagVersionFromGit() {
+      $versionTag = (git describe --tags --abbrev=0 2>$null)
+  
+      if($LastExitCode -eq 0) {
+        return "$versionTag"
+      } else {
+        return "0.0.0"
+      }
+    }
+
+    function Construct-Version([string] $versionTag, [int] $buildNumber) {
+      if (-not ($versionTag -Match "^v(\d+\.\d+\.\d+)$")) {
+        throw "The tag '$versionTag' is not a valid version tag of the form 'v{major}.{minor}.{patch}'."
+      }
+  
+      $parsedVersion = New-Object Version $versionTag.Substring(1)
+      return (New-Object Version $parsedVersion.Major,$parsedVersion.Minor,$parsedVersion.Build,$buildNumber)
+    }
+
+    if ($env:APPVEYOR_REPO_BRANCH -eq "master" -and $env:APPVEYOR_REPO_TAG -eq "true") {
+      $Version = Construct-Version $env:APPVEYOR_REPO_TAG_NAME $env:APPVEYOR_BUILD_NUMBER
+      $IsPreReleaseBuild = $False
+      $PushNuGetPackages = $True
+    } else {
+      $Version = Construct-Version ("v" + (Get-LastTagVersionFromGit)) $env:APPVEYOR_BUILD_NUMBER
+      $IsPreReleaseBuild = $True
+      $PushNuGetPackages = $False
+    }
+
+    ./Build.ps1 `
+      -Mode "AppVeyor" `
+      -Version "$Version" `
+      -CommitHash "$env:APPVEYOR_REPO_COMMIT" `
+      -Configuration "Release" `
+      -CreateNuGetPackages $True `
+      -PushNuGetPackages $PushNuGetPackages `
+      -IsPreReleaseBuild $IsPreReleaseBuild `
+      -NuGetApiKey "$env:NuGetApiKey"
+test: off

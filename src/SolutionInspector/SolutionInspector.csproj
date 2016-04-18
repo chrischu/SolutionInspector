@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SolutionInspector</RootNamespace>
+    <AssemblyName>SolutionInspector</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <DocumentationFile>bin\Debug\SolutionInspector.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\SolutionInspector.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fasterflect, Version=2.1.3.0, Culture=neutral, PublicKeyToken=38d18473284c1ca7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.1.4.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ManyConsole, Version=0.4.2.19, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ManyConsole.0.4.2.19\lib\ManyConsole.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="NDesk.Options, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NullGuard, Version=1.4.6.0, Culture=neutral, PublicKeyToken=1958ac8092168428, processorArchitecture=MSIL">
+      <HintPath>..\packages\NullGuard.Fody.1.4.6\lib\dotnet\NullGuard.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="SystemInterface, Version=0.10.1.44, Culture=neutral, PublicKeyToken=fbc3a63dd3cf8960, processorArchitecture=MSIL">
+      <HintPath>..\packages\SystemWrapper.Interfaces.0.10.1.44\lib\net45\SystemInterface.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SystemWrapper, Version=0.10.1.44, Culture=neutral, PublicKeyToken=fbc3a63dd3cf8960, processorArchitecture=MSIL">
+      <HintPath>..\packages\SystemWrapper.Wrappers.0.10.1.44\lib\net45\SystemWrapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="Commands\CheckCommand.cs" />
+    <Compile Include="Configuration\Infrastructure\ConfigurationElementCollectionBase.cs" />
+    <Compile Include="Configuration\Infrastructure\KeyedConfigurationElement.cs" />
+    <Compile Include="Configuration\Infrastructure\KeyedConfigurationElementCollectionBase.cs" />
+    <Compile Include="Configuration\MsBuildParsing\MsBuildParsingConfigurationSection.cs" />
+    <Compile Include="Configuration\MsBuildParsing\ProjectBuildActionConfigurationElement.cs" />
+    <Compile Include="Configuration\MsBuildParsing\ProjectBuildActionsConfigurationElement.cs" />
+    <Compile Include="Configuration\Rules\ProjectItemRulesConfigurationCollection.cs" />
+    <Compile Include="Configuration\Rules\ProjectItemRuleGroupConfigurationElement.cs" />
+    <Compile Include="ObjectModel\ConfigurationProjectItem.cs" />
+    <Compile Include="Rules\ProjectConfigRuleBase.cs" />
+    <Compile Include="Rules\ProjectItemRule.cs" />
+    <Compile Include="Utilities\NameFilterConverter.cs" />
+    <Compile Include="Utilities\NameFilter.cs" />
+    <Compile Include="Configuration\SolutionCheckerConfiguration.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\AssertNotNullExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\XmlExtensions.cs" />
+    <Compile Include="ObjectModel\AdvancedProject.cs" />
+    <Compile Include="ObjectModel\BuildConfiguration.cs" />
+    <Compile Include="ObjectModel\ConditionalProperty.cs" />
+    <Compile Include="ObjectModel\DllReferenceBase.cs" />
+    <Compile Include="ObjectModel\FileReference.cs" />
+    <Compile Include="ObjectModel\GacReference.cs" />
+    <Compile Include="ObjectModel\NuGetPackage.cs" />
+    <Compile Include="ObjectModel\NuGetReference.cs" />
+    <Compile Include="ObjectModel\Project.cs" />
+    <Compile Include="ObjectModel\ProjectItem.cs" />
+    <Compile Include="ObjectModel\ProjectItemBuildAction.cs" />
+    <Compile Include="ObjectModel\ProjectOutputType.cs" />
+    <Compile Include="ObjectModel\ProjectReference.cs" />
+    <Compile Include="ObjectModel\Solution.cs" />
+    <Compile Include="Reporting\IViolationReporter.cs" />
+    <Compile Include="Reporting\RuleViolationViewModel.cs" />
+    <Compile Include="Reporting\RuleViolationViewModelConverter.cs" />
+    <Compile Include="Reporting\TableViolationReporter.cs" />
+    <Compile Include="Reporting\ViolationReporterProxy.cs" />
+    <Compile Include="Reporting\ViolationReportFormat.cs" />
+    <Compile Include="Reporting\XmlViolationReporter.cs" />
+    <Compile Include="Commands\SolutionCheckerCommand.cs" />
+    <Compile Include="Configuration\Rules\ProjectRuleGroupConfigurationElement.cs" />
+    <Compile Include="Configuration\Rules\ProjectRulesConfigurationCollection.cs" />
+    <Compile Include="Configuration\Rules\RuleConfigurationCollection.cs" />
+    <Compile Include="Configuration\Rules\RuleConfigurationElement.cs" />
+    <Compile Include="Configuration\Rules\RulesConfigurationElement.cs" />
+    <Compile Include="Configuration\Rules\RulesConfigurationSection.cs" />
+    <Compile Include="Properties\InternalsVisibleTo.cs" />
+    <Compile Include="Rules\ConfigurableRule.cs" />
+    <Compile Include="Rules\IRuleTarget.cs" />
+    <Compile Include="Rules\ProjectRule.cs" />
+    <Compile Include="Rules\Rule.cs" />
+    <Compile Include="Rules\RuleCollection.cs" />
+    <Compile Include="Rules\RuleCollectionBuilder.cs" />
+    <Compile Include="Rules\RuleConfigurationInstantiator.cs" />
+    <Compile Include="Rules\RuleTypeInfo.cs" />
+    <Compile Include="Rules\RuleTypeResolver.cs" />
+    <Compile Include="Rules\RuleTypeResolvingException.cs" />
+    <Compile Include="Rules\RuleTypeUtility.cs" />
+    <Compile Include="Rules\RuleViolation.cs" />
+    <Compile Include="Rules\SolutionRule.cs" />
+    <Compile Include="SolutionChecker.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\BuildConfigurationFilter.cs" />
+    <Compile Include="Utilities\BuildConfigurationFilterConverter.cs" />
+    <Compile Include="Utilities\CollectionDifferenceFinder.cs" />
+    <Compile Include="Utilities\CollectionDifferences.cs" />
+    <Compile Include="Utilities\ConsoleTableWriter.cs" />
+    <Compile Include="Utilities\ConsoleTableWriterCharacters.cs" />
+    <Compile Include="Utilities\ConsoleTableWriterOptions.cs" />
+    <Compile Include="Utilities\SolutionLoader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\SharedTemplate.nuspec">
+      <Link>Properties\SharedTemplate.nuspec</Link>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="App.config.uninstall.xdt" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.config.install.xdt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

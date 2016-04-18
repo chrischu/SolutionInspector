@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <configSections xdt:Transform="InsertIfMissing">
+    <sectionGroup xdt:Transform="InsertIfMissing" name="solutionInspector" type="SolutionInspector.Configuration.SolutionInspectorConfiguration, SolutionInspector">
+      <section name="msBuildParsing" type="SolutionInspector.Configuration.MsBuildParsing.MsBuildParsingConfigurationSection, SolutionInspector" />
+      <section name="rules" type="SolutionInspector.Configuration.Rules.RulesConfigurationSection, SolutionInspector" />
+    </sectionGroup>
+  </configSections>
+
+  <solutionInspector>
+    <rules xdt:Transform="InsertIfMissing">
+      <solutionRules xdt:Transform="InsertIfMissing">
+        <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+              type="SolutionInspector.Rules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector"  />
+        <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+              type="SolutionInspector.Rules.SolutionBuildConfigurationsRule, SolutionInspector"
+              expectedConfigurations="Debug,Release" expectedPlatforms="AnyCPU" />
+      </solutionRules>
+      <projectRules xdt:Transform="InsertIfMissing">
+        <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)" appliesTo="*">
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.AllProjectItemsMustBePresentRule, SolutionInspector" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.NonDevelopmentNuGetPackagesMustAlsoBeRepresentedByAReferenceRule, SolutionInspector" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.ProjectPropertyRule, SolutionInspector"
+                property="AppDesignerFolder" expectedValue="Properties" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.ProjectBuildConfigurationDependentPropertyRule, SolutionInspector"
+                buildConfigurationFilter="Debug|*" property="Optimize" value="false" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.RequiredCompilationSymbolsProjectRule, SolutionInspector"
+                requiredCompilationSymbols="TRACE" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.RequiredNuGetPackagesRule, SolutionInspector">
+            <nuGetPackage id="log4net" />
+          </rule>
+        </projectRuleGroup>
+        <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)"
+                          appliesTo="+*;-*Tests;-*TestInfrastructure">
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.ProjectMustProvideXmlDocumentationRule, SolutionInspector" />
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.ProjectConfigFileShouldHaveCorrectFrameworkVersionRule, SolutionInspector"
+                expectedVersion="v4.0" expectedSKU=".NETFramework,Version=v4.6.1" />
+        </projectRuleGroup>
+        <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)"
+                          appliesTo="*UnitTests">
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.ProjectPropertyRule, SolutionInspector"
+                property="TestProjectType" expectedValue="UnitTest" />
+        </projectRuleGroup>
+      </projectRules>
+      <projectItemRules xdt:Transform="InsertIfMissing">
+        <projectItemRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo,inProject)" appliesTo="*" inProject="*">
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.Rules.ProjectItemMustHaveCustomToolSetRule, SolutionInspector"
+                expectedCustomTool="CustomTool" expectedCustomToolNamespace="CustomToolNamespace" />
+        </projectItemRuleGroup>
+      </projectItemRules>
+    </rules>
+  </solutionInspector>
+</configuration>

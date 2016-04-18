@@ -1,0 +1,101 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector", "SolutionInspector\SolutionInspector.csproj", "{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.Tests", "SolutionInspector.Tests\SolutionInspector.Tests.csproj", "{7567EC00-11F6-4210-A62C-A3D08B156C62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.TestInfrastructure", "SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj", "{D154C744-EAB0-479A-BA22-B822AAFD3774}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Shared", ".Shared", "{9406B298-0063-4635-88C4-648D9C97DF31}"
+	ProjectSection(SolutionItems) = preProject
+		AssemblyInfoShared.cs = AssemblyInfoShared.cs
+		FodyWeavers.xml = FodyWeavers.xml
+		FxCop.ruleset = FxCop.ruleset
+		..\RoadMap.txt = ..\RoadMap.txt
+		SharedTemplate.nuspec = SharedTemplate.nuspec
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionPackages", "SolutionPackages\SolutionPackages.csproj", "{A094B4E4-7328-4A4C-9474-F12F483F03E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NuGet", ".NuGet", "{92C11CB7-1E60-4F78-A063-D0B024D1C0A0}"
+	ProjectSection(SolutionItems) = preProject
+		.NuGet\NuGet.config = .NuGet\NuGet.config
+		.NuGet\NuGet.exe = .NuGet\NuGet.exe
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Build", ".Build", "{F6047FB9-2305-434A-A14B-50AFD33C1702}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+		Build-Analyze.cmd = Build-Analyze.cmd
+		Build-Package.cmd = Build-Package.cmd
+		Build-Tests.cmd = Build-Tests.cmd
+		Build.cmd = Build.cmd
+		Build.ps1 = Build.ps1
+		InsertSourceLinks.msbuild = InsertSourceLinks.msbuild
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{CF675B56-CD6D-4E18-A751-EB7BA25F6547}"
+	ProjectSection(SolutionItems) = preProject
+		Build\Build.Common.ps1 = Build\Build.Common.ps1
+		Build\Build.Logging.ps1 = Build\Build.Logging.ps1
+		Build\Build.MSBuild.ps1 = Build\Build.MSBuild.ps1
+		Build\Build.NuGet.ps1 = Build\Build.NuGet.ps1
+		Build\Build.Reporting.AppVeyor.ps1 = Build\Build.Reporting.AppVeyor.ps1
+		Build\Build.Reporting.Local.ps1 = Build\Build.Reporting.Local.ps1
+		Build\Build.ReSharperInspectCode.ps1 = Build\Build.ReSharperInspectCode.ps1
+		Build\Build.Testing.ps1 = Build\Build.Testing.ps1
+		Build\BuildLibrary.ps1 = Build\BuildLibrary.ps1
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.TestConsole", "SolutionInspector.TestConsole\SolutionInspector.TestConsole.csproj", "{9E33C5B1-89AD-4A24-82FA-6C9489159A54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.DefaultRules", "SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj", "{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.DefaultRules.Tests", "SolutionInspector.DefaultRules.Tests\SolutionInspector.DefaultRules.Tests.csproj", "{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7567EC00-11F6-4210-A62C-A3D08B156C62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7567EC00-11F6-4210-A62C-A3D08B156C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7567EC00-11F6-4210-A62C-A3D08B156C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7567EC00-11F6-4210-A62C-A3D08B156C62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D154C744-EAB0-479A-BA22-B822AAFD3774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D154C744-EAB0-479A-BA22-B822AAFD3774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D154C744-EAB0-479A-BA22-B822AAFD3774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D154C744-EAB0-479A-BA22-B822AAFD3774}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A094B4E4-7328-4A4C-9474-F12F483F03E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A094B4E4-7328-4A4C-9474-F12F483F03E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A094B4E4-7328-4A4C-9474-F12F483F03E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A094B4E4-7328-4A4C-9474-F12F483F03E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E33C5B1-89AD-4A24-82FA-6C9489159A54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E33C5B1-89AD-4A24-82FA-6C9489159A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E33C5B1-89AD-4A24-82FA-6C9489159A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E33C5B1-89AD-4A24-82FA-6C9489159A54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A094B4E4-7328-4A4C-9474-F12F483F03E3} = {9406B298-0063-4635-88C4-648D9C97DF31}
+		{CF675B56-CD6D-4E18-A751-EB7BA25F6547} = {F6047FB9-2305-434A-A14B-50AFD33C1702}
+	EndGlobalSection
+EndGlobal

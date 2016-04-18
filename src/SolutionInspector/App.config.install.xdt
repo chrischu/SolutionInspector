@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <configSections xdt:Transform="InsertIfMissing">
+    <sectionGroup xdt:Transform="InsertIfMissing" name="solutionInspector" type="SolutionInspector.Configuration.SolutionInspectorConfiguration, SolutionInspector">
+      <section name="msBuildParsing" type="SolutionInspector.Configuration.MsBuildParsing.MsBuildParsingConfigurationSection, SolutionInspector" />
+      <section name="rules" type="SolutionInspector.Configuration.Rules.RulesConfigurationSection, SolutionInspector" />
+    </sectionGroup>
+  </configSections>
+
+  <solutionInspector xdt:Transform="Insert">
+    <msBuildParsing>
+      <projectBuildActions>
+        <projectBuildAction name="None" />
+        <projectBuildAction name="Compile" />
+        <projectBuildAction name="Content" />
+        <projectBuildAction name="EmbeddedResource" />
+        <projectBuildAction name="CodeAnalysisDictionary" />
+        <projectBuildAction name="ApplicationDefinition" />
+        <projectBuildAction name="Page" />
+        <projectBuildAction name="Resource" />
+        <projectBuildAction name="SplashScreen" />
+        <projectBuildAction name="DesignData" />
+        <projectBuildAction name="DesignDataWithDesignTimeCreatableTypes" />
+        <projectBuildAction name="EntityDeploy" />
+        <projectBuildAction name="XamlAppDef" />
+        <projectBuildAction name="Fakes" />
+      </projectBuildActions>
+    </msBuildParsing>
+    <rules />
+  </solutionInspector>
+</configuration>
