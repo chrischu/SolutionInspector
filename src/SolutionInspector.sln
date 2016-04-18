@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".NuGet", ".NuGet", "{92C11C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Build", ".Build", "{F6047FB9-2305-434A-A14B-50AFD33C1702}"
 	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
+		..\appveyor.yml = ..\appveyor.yml
 		Build-Analyze.cmd = Build-Analyze.cmd
 		Build-Package.cmd = Build-Package.cmd
 		Build-Tests.cmd = Build-Tests.cmd
