@@ -78,7 +78,7 @@ switch($Mode) {
     . $PSScriptRoot\Build.Reporting.Local.ps1
   }
   "AppVeyor" {
-    . $PSScriptRoot\Build.Reporting.Local.ps1
+    . $PSScriptRoot\Build.Reporting.AppVeyor.ps1
   }
 }
 

@@ -23,11 +23,11 @@ BuildStep Execute-ReSharperCodeInspection {
   [xml] $xml = Get-Content $resultsFile
   $numberOfIssues = $xml.CreateNavigator().Evaluate("count(//Issue)")
 
+  Write-Host "ReSharper InspectCode found $numberOfIssues issues."
+
   if ($numberOfIssues -gt 0) {
     throw "BUILD FAILED: There are $numberOfIssues ReSharper code inspection issues."
   }
-
-  Write-Host "ReSharper InspectCode found $numberOfIssues issues."
 
   return $numberOfIssues
 }
