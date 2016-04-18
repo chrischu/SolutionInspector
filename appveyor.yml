@@ -37,6 +37,8 @@ build_script:
       $PushNuGetPackages = $False
     }
 
+    Push-Location "src"
+
     ./Build.ps1 `
       -Mode "AppVeyor" `
       -Version "$Version" `
@@ -46,4 +48,6 @@ build_script:
       -PushNuGetPackages $PushNuGetPackages `
       -IsPreReleaseBuild $IsPreReleaseBuild `
       -NuGetApiKey "$env:NuGetApiKey"
+
+    Pop-Location
 test: off
