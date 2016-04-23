@@ -12,7 +12,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
   {
     public static void ShouldAllBeEquivalentTo<T>(this IEnumerable<T> subject, params object[] expectation)
     {
-      FluentAssertions.AssertionExtensions.ShouldAllBeEquivalentTo(subject, expectation);
+      subject.ShouldAllBeEquivalentTo(expectation, config => config.RespectingRuntimeTypes().IgnoringCyclicReferences());
     }
 
     public static void ShouldAllBeEquivalentTo<T>(this IEnumerable<T> subject, Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> config, params object[] expectation)
