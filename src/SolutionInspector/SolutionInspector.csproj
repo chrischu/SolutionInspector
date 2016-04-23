@@ -113,6 +113,7 @@
     <Compile Include="Configuration\Rules\ProjectItemRulesConfigurationCollection.cs" />
     <Compile Include="Configuration\Rules\ProjectItemRuleGroupConfigurationElement.cs" />
     <Compile Include="ObjectModel\ConfigurationProjectItem.cs" />
+    <Compile Include="Reporting\VisualStudioViolationReporter.cs" />
     <Compile Include="Rules\ProjectConfigRuleBase.cs" />
     <Compile Include="Rules\ProjectItemRule.cs" />
     <Compile Include="Utilities\NameFilterConverter.cs" />

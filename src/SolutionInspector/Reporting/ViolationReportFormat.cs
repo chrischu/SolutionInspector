@@ -3,6 +3,7 @@
   internal enum ViolationReportFormat
   {
     Table,
-    Xml
+    Xml,
+    VisualStudio
   }
 }
