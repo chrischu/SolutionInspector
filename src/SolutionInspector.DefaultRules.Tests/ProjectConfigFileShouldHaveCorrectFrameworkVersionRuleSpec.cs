@@ -48,6 +48,28 @@ namespace SolutionInspector.DefaultRules.Tests
           });
     };
 
+    class when_evaluating_project_without_framework_config
+    {
+      Establish ctx = () =>
+      {
+        var configurationXml =
+            XDocument.Parse(@"<configuration></configuration>");
+
+        A.CallTo(() => ConfigurationProjectItem.ConfigurationXml).Returns(configurationXml);
+      };
+
+      Because of = () => Result = SUT.Evaluate(Project);
+
+      It returns_violation = () =>
+          Result.ShouldAllBeEquivalentTo(
+              new RuleViolation(
+                  SUT,
+                  ConfigurationProjectItem,
+                  "No explicit configuration for the supported runtime version/SKU could be found."));
+
+      static IEnumerable<IRuleViolation> Result;
+    }
+
     class when_evaluating_project_with_correct_framework_config
     {
       Establish ctx = () =>
