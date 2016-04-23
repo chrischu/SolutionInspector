@@ -62,6 +62,7 @@ namespace SolutionInspector.ObjectModel
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 
     string IRuleTarget.Identifier => Path.GetFileName(_solutionPath);
+    string IRuleTarget.FullPath => _solutionPath;
 
     public static Solution Load(string solutionFilePath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {

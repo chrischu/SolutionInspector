@@ -197,6 +197,7 @@ namespace SolutionInspector.ObjectModel
     public IConfigurationProjectItem ConfigurationProjectItem { get; }
 
     string IRuleTarget.Identifier => Path.GetFileName(Advanced.MsBuildProject.FullPath);
+    string IRuleTarget.FullPath => Advanced.MsBuildProject.FullPath;
 
     private IEnumerable<NuGetPackage> BuildNuGetPackages(IFileInfo nuGetPackagesFile)
     {

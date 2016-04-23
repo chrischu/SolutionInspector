@@ -75,6 +75,7 @@ namespace SolutionInspector.ObjectModel
 
     public string Name => Path.GetFileName(Include);
     public string Identifier => Name;
+    public string FullPath => File.FullName;
 
     public string Include { get; }
 
@@ -110,7 +111,9 @@ namespace SolutionInspector.ObjectModel
     public static ProjectItem FromMsBuildProjectItem(IProject project, Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
       var buildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
-      var file = new FileInfoWrap(msBuildProjectItem.EvaluatedInclude);
+
+      var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
+      var file = new FileInfoWrap(fullPath);
       var metadata = msBuildProjectItem.Metadata.ToDictionary(m => m.Name, m => m.EvaluatedValue);
 
       return new ProjectItem(project, msBuildProjectItem.EvaluatedInclude, buildAction, file, metadata);

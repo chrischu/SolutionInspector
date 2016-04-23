@@ -9,5 +9,10 @@ namespace SolutionInspector.Rules
     /// Identifies the <see cref="IRuleTarget"/>.
     /// </summary>
     string Identifier { get; }
+
+    /// <summary>
+    /// The full path of the <see cref="IRuleTarget"/>.
+    /// </summary>
+    string FullPath { get; }
   }
 }
