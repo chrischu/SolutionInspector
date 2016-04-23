@@ -149,9 +149,6 @@ namespace SolutionInspector.Tests.Rules
 
     class Rule : IRule
     {
-      public Rule()
-      {
-      }
     }
 
     class RuleWithoutPublicCtor : IRule

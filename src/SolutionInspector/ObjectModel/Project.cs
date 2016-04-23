@@ -239,7 +239,7 @@ namespace SolutionInspector.ObjectModel
           continue;
         }
 
-        var matchingNuGetPackage = nuGetPackages.SingleOrDefault(p => reference.HintPath.StartsWith($@"..\packages\{p.PackageDirectoryName}"));
+        var matchingNuGetPackage = nuGetPackages.SingleOrDefault(p => reference.HintPath.StartsWith($@"..\packages\{p.PackageDirectoryName}", StringComparison.Ordinal));
 
         if (matchingNuGetPackage != null)
           nuGetReferences.Add(
