@@ -63,7 +63,7 @@ namespace SolutionInspector
           ctx =>
               new ConsoleTableWriter(
                   Console.Out,
-                  new ConsoleTableWriterOptions { PreferredTableWidth = Console.WindowWidth, Characters = ConsoleTableWriterCharacters.AdvancedAscii })
+                  new ConsoleTableWriterOptions { PreferredTableWidth = 200, Characters = ConsoleTableWriterCharacters.AdvancedAscii })
           ).As<IConsoleTableWriter>();
 
       builder.Register(
@@ -74,7 +74,8 @@ namespace SolutionInspector
                       ViolationReportFormat.Table,
                       new TableViolationReporter(ctx.Resolve<IRuleViolationViewModelConverter>(), ctx.Resolve<IConsoleTableWriter>())
                   },
-                  { ViolationReportFormat.Xml, new XmlViolationReporter(Console.Out, ctx.Resolve<IRuleViolationViewModelConverter>()) }
+                  { ViolationReportFormat.Xml, new XmlViolationReporter(Console.Out, ctx.Resolve<IRuleViolationViewModelConverter>()) },
+                  { ViolationReportFormat.VisualStudio, new VisualStudioViolationReporter() }
               }
               )).As<IViolationReporterProxy>();
 

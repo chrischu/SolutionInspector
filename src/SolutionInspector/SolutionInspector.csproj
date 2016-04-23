@@ -164,7 +164,7 @@
     <Compile Include="Rules\RuleTypeUtility.cs" />
     <Compile Include="Rules\RuleViolation.cs" />
     <Compile Include="Rules\SolutionRule.cs" />
-    <Compile Include="SolutionChecker.cs" />
+    <Compile Include="SolutionInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\BuildConfigurationFilter.cs" />
     <Compile Include="Utilities\BuildConfigurationFilterConverter.cs" />
