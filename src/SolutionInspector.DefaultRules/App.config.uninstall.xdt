@@ -4,54 +4,54 @@
     <rules>
       <solutionRules>
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-              type="SolutionInspector.Rules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules"  />
+              type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules"  />
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-              type="SolutionInspector.Rules.SolutionBuildConfigurationsRule, SolutionInspector.DefaultRules"
+              type="SolutionInspector.DefaultRules.SolutionBuildConfigurationsRule, SolutionInspector.DefaultRules"
               expectedConfigurations="Debug,Release" expectedPlatforms="AnyCPU" />
       </solutionRules>
       <projectRules>
         <projectRuleGroup xdt:Locator="Match(appliesTo)" appliesTo="_All">
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.NonDevelopmentNuGetPackagesMustAlsoBeRepresentedByAReferenceRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.NonDevelopmentNuGetPackagesMustAlsoBeRepresentedByAReferenceRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.ProjectPropertyRule, SolutionInspector.DefaultRules"
+                type="SolutionInspector.DefaultRules.ProjectPropertyRule, SolutionInspector.DefaultRules"
                 property="AppDesignerFolder" expectedValue="Properties" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.ProjectBuildConfigurationDependentPropertyRule, SolutionInspector.DefaultRules"
-                buildConfigurationFilter="Debug|*" property="Optimize" value="false" />
+                type="SolutionInspector.DefaultRules.ProjectBuildConfigurationDependentPropertyRule, SolutionInspector.DefaultRules"
+                buildConfigurationFilter="Debug|*" property="Optimize" expectedValue="false" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.RequiredCompilationSymbolsProjectRule, SolutionInspector.DefaultRules"
+                type="SolutionInspector.DefaultRules.RequiredCompilationSymbolsProjectRule, SolutionInspector.DefaultRules"
                 requiredCompilationSymbols="TRACE" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.RequiredNuGetPackagesRule, SolutionInspector.DefaultRules">
+                type="SolutionInspector.DefaultRules.RequiredNuGetPackagesRule, SolutionInspector.DefaultRules">
             <nuGetPackage id="log4net" />
           </rule>
         </projectRuleGroup>
         <projectRuleGroup xdt:Locator="Match(appliesTo)"
                           appliesTo="+*;-*Tests;-*TestInfrastructure">
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.ProjectMustProvideXmlDocumentationRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.ProjectMustProvideXmlDocumentationRule, SolutionInspector.DefaultRules" />
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.ProjectConfigFileShouldHaveCorrectFrameworkVersionRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.ProjectConfigFileShouldHaveCorrectFrameworkVersionRule, SolutionInspector.DefaultRules" />
         </projectRuleGroup>
         <projectRuleGroup xdt:Locator="Match(appliesTo)"
                           appliesTo="*UnitTests">
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.ProjectPropertyRule, SolutionInspector.DefaultRules"
+                type="SolutionInspector.DefaultRules.ProjectPropertyRule, SolutionInspector.DefaultRules"
                 property="TestProjectType" expectedValue="UnitTest" />
         </projectRuleGroup>
       </projectRules>
       <projectItemRules>
         <projectItemRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo,inProject)" appliesTo="*" inProject="*">
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.Rules.ProjectItemMustHaveCustomToolSetRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.ProjectItemMustHaveCustomToolSetRule, SolutionInspector.DefaultRules" />
         </projectItemRuleGroup>
       </projectItemRules>
     </rules>
