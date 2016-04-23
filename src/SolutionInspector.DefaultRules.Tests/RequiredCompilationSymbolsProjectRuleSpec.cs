@@ -52,7 +52,7 @@ namespace SolutionInspector.DefaultRules.Tests
       SUT = new RequiredCompilationSymbolsProjectRule(
           new RequiredCompilationSymbolsProjectRuleConfiguration
           {
-              new RequiredCompilationSymbolsConfiguration
+              new RequiredCompilationSymbolsConfigurationElement
               {
                   BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("Included", "*")),
                   RequiredCompilationSymbols = new CommaDelimitedStringCollection { "TRACE", "DEBUG" }

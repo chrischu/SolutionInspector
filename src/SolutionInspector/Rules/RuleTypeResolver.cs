@@ -45,7 +45,7 @@ namespace SolutionInspector.Rules
       var ruleType = Type.GetType(ruleTypeName);
 
       if (ruleType == null)
-        throw new RuleTypeResolvingException("Could not resolve rule type 'DoesNotExist'.");
+        throw new RuleTypeResolvingException($"Could not resolve rule type '{ruleTypeName}'.");
 
       if (!typeof(IRule).IsAssignableFrom(ruleType))
         throw new RuleTypeResolvingException($"The type '{ruleType.Name}' is not a valid rule type.");

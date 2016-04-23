@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Xml.Linq;
@@ -10,34 +11,41 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   /// Checks that the configuration file for the project (App.config/Web.config) has the correct target framework version/SKU set.
   /// </summary>
-  public class ProjectConfigFileShouldHaveCorrectFrameworkVersionRule : ProjectConfigRuleBase<ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration>
+  public class ProjectConfigFileShouldHaveCorrectFrameworkVersionRule
+      : ProjectConfigRuleBase<ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration>
   {
     /// <inheritdoc />
-    public ProjectConfigFileShouldHaveCorrectFrameworkVersionRule(ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration configuration)
+    public ProjectConfigFileShouldHaveCorrectFrameworkVersionRule (
+        ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration configuration)
         : base(configuration)
     {
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<IRuleViolation> Evaluate(IConfigurationProjectItem target, XDocument configurationXml)
+    protected override IEnumerable<IRuleViolation> Evaluate (IConfigurationProjectItem target, XDocument configurationXml)
     {
       var supportedRuntimeElement = configurationXml.XPathSelectElement("/configuration/startup/supportedRuntime");
 
-      var version = supportedRuntimeElement.Attribute("version").Value;
-      if (version != Configuration.ExpectedVersion)
-        yield return
-            new RuleViolation(
-                this,
-                target,
-                $"Unexpected value for supported runtime version, was '{version}' but should be '{Configuration.ExpectedVersion}'.");
+      if (supportedRuntimeElement == null)
+        yield return new RuleViolation(this, target, "No explicit configuration for the supported runtime version/SKU could be found.");
+      else
+      {
+        var version = supportedRuntimeElement.Attribute("version").Value;
+        if (version != Configuration.ExpectedVersion)
+          yield return
+              new RuleViolation(
+                  this,
+                  target,
+                  $"Unexpected value for supported runtime version, was '{version}' but should be '{Configuration.ExpectedVersion}'.");
 
-      var sku = supportedRuntimeElement.Attribute("sku").Value;
-      if (sku != Configuration.ExpectedSKU)
-        yield return
-            new RuleViolation(
-                this,
-                target,
-                $"Unexpected value for supported runtime SKU, was '{sku}' but should be '{Configuration.ExpectedSKU}'.");
+        var sku = supportedRuntimeElement.Attribute("sku").Value;
+        if (sku != Configuration.ExpectedSKU)
+          yield return
+              new RuleViolation(
+                  this,
+                  target,
+                  $"Unexpected value for supported runtime SKU, was '{sku}' but should be '{Configuration.ExpectedSKU}'.");
+      }
     }
   }
 

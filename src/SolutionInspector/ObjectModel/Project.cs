@@ -139,8 +139,8 @@ namespace SolutionInspector.ObjectModel
     {
       var configurationItem = ProjectItems.SingleOrDefault(
           i =>
-              string.Equals(i.Name, "App.config", StringComparison.InvariantCultureIgnoreCase)
-              || string.Equals(i.Name, "Web.config", StringComparison.InvariantCultureIgnoreCase));
+              string.Equals(i.Include, "App.config", StringComparison.InvariantCultureIgnoreCase)
+              || string.Equals(i.Include, "Web.config", StringComparison.InvariantCultureIgnoreCase));
 
       if (configurationItem == null)
         return null;
@@ -161,7 +161,9 @@ namespace SolutionInspector.ObjectModel
 
         if(dependentUpon != null)
         {
-          var parent = projectItems[dependentUpon];
+          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.Include), dependentUpon);
+
+          var parent = projectItems[dependentUponInclude];
           projectItem.SetParent(parent);
         }
       }

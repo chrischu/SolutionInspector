@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -33,7 +34,8 @@ namespace SolutionInspector.DefaultRules
         {
           var properties = target.Advanced.ConfigurationDependentProperties[matchingBuildConfig];
 
-          var actualSymbols = new HashSet<string>(properties.GetValueOrDefault("DefineConstants").Split(';'));
+          var defineConstants = properties.GetValueOrDefault("DefineConstants");
+          var actualSymbols = new HashSet<string>(defineConstants?.Split(';') ?? Enumerable.Empty<string>());
 
           foreach (var requiredSymbol in config.RequiredCompilationSymbols)
             if (!actualSymbols.Contains(requiredSymbol))
@@ -52,14 +54,14 @@ namespace SolutionInspector.DefaultRules
   /// </summary>
   [ConfigurationCollection(typeof(RequiredCompilationSymbolsConfiguration))]
   public class RequiredCompilationSymbolsProjectRuleConfiguration
-      : KeyedConfigurationElementCollectionBase<RequiredCompilationSymbolsConfiguration, BuildConfigurationFilter>
+      : KeyedConfigurationElementCollectionBase<RequiredCompilationSymbolsConfigurationElement, BuildConfigurationFilter>
   {
   }
 
   /// <summary>
   /// Configuration for which compilation symbols (<see cref="RequiredCompilationSymbols"/>) are required in the build configurations matching the <see cref="BuildConfigurationFilter"/>.
   /// </summary>
-  public class RequiredCompilationSymbolsConfiguration : KeyedConfigurationElement<BuildConfigurationFilter>
+  public class RequiredCompilationSymbolsConfigurationElement : KeyedConfigurationElement<BuildConfigurationFilter>
   {
     /// <inheritdoc />
     public override string KeyName => "buildConfigurationFilter";
