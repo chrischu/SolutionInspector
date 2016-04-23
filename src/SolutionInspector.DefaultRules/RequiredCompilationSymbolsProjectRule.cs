@@ -52,7 +52,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   /// Configuration for the <see cref="RequiredCompilationSymbolsProjectRule"/>.
   /// </summary>
-  [ConfigurationCollection(typeof(RequiredCompilationSymbolsConfiguration))]
+  [ConfigurationCollection(typeof(RequiredCompilationSymbolsConfigurationElement))]
   public class RequiredCompilationSymbolsProjectRuleConfiguration
       : KeyedConfigurationElementCollectionBase<RequiredCompilationSymbolsConfigurationElement, BuildConfigurationFilter>
   {
@@ -67,7 +67,7 @@ namespace SolutionInspector.DefaultRules
     public override string KeyName => "buildConfigurationFilter";
 
     /// <summary>
-    /// Filter that controlls which build configuration this <see cref="RequiredCompilationSymbolsConfiguration"/> applies to.
+    /// Filter that controlls which build configuration this <see cref="RequiredCompilationSymbolsConfigurationElement"/> applies to.
     /// </summary>
     [TypeConverter(typeof(BuildConfigurationFilterConverter))]
     [ConfigurationProperty("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
