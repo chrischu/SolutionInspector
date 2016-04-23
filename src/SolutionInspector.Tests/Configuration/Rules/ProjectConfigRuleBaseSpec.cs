@@ -28,7 +28,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 namespace SolutionInspector.Tests.Configuration.Rules
 {
   [Subject(typeof (ProjectConfigRuleBase<>))]
-  class ProjectConfigurationRuleBaseSpec
+  class ProjectConfigRuleBaseSpec
   {
     static DummyProjectConfigRule SUT;
 
@@ -106,8 +106,7 @@ namespace SolutionInspector.Tests.Configuration.Rules
       }
 
       protected override IEnumerable<IRuleViolation> Evaluate(
-          IProject target,
-          IConfigurationProjectItem configurationItem,
+          IConfigurationProjectItem target,
           XDocument configurationXml)
       {
         yield return _violation;

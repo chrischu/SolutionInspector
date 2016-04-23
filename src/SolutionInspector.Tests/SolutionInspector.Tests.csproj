@@ -108,7 +108,7 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="Configuration\Infrastructure\ConfigurationElementCollectionBaseSpec.cs" />
-    <Compile Include="Configuration\Rules\ProjectConfigurationRuleBaseSpec.cs" />
+    <Compile Include="Configuration\Rules\ProjectConfigRuleBaseSpec.cs" />
     <Compile Include="Configuration\Rules\RuleConfigurationElementSpec.cs" />
     <Compile Include="Utilities\NameFilterSpec.cs" />
     <Compile Include="Configuration\Rules\RulesConfigurationSectionSpec.cs" />

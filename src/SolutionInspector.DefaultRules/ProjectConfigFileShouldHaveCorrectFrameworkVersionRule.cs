@@ -19,7 +19,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<IRuleViolation> Evaluate(IProject target, IConfigurationProjectItem configurationItem, XDocument configurationXml)
+    protected override IEnumerable<IRuleViolation> Evaluate(IConfigurationProjectItem target, XDocument configurationXml)
     {
       var supportedRuntimeElement = configurationXml.XPathSelectElement("/configuration/startup/supportedRuntime");
 

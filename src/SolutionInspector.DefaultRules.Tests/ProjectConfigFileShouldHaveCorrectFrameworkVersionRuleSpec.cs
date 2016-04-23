@@ -82,11 +82,11 @@ namespace SolutionInspector.DefaultRules.Tests
           Result.ShouldAllBeEquivalentTo(
               new RuleViolation(
                   SUT,
-                  Project,
+                  ConfigurationProjectItem,
                   "Unexpected value for supported runtime version, was 'DifferentVersion' but should be 'Version'."),
               new RuleViolation(
                   SUT,
-                  Project,
+                  ConfigurationProjectItem,
                   "Unexpected value for supported runtime SKU, was 'DifferentSKU' but should be 'SKU'."));
 
       static IEnumerable<IRuleViolation> Result;

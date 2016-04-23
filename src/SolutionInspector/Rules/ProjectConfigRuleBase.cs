@@ -28,14 +28,14 @@ namespace SolutionInspector.Rules
             ? new[] { new RuleViolation(this, target, $"For the project '{target.Name}' no configuration file could be found.") }
             : Enumerable.Empty<IRuleViolation>();
 
-      return Evaluate(target, configurationItem, configurationItem.ConfigurationXml);
+      return Evaluate(configurationItem, configurationItem.ConfigurationXml);
     }
 
     /// <summary>
-    /// Checks the project configuration file (<paramref name="configurationItem"/>) and its contents (<paramref name="configurationXml"/>).
+    /// Checks the project configuration file (<paramref name="target"/>) and its contents (<paramref name="configurationXml"/>).
     /// </summary>
     /// <returns></returns>
-    protected abstract IEnumerable<IRuleViolation> Evaluate(IProject target, IConfigurationProjectItem configurationItem, XDocument configurationXml);
+    protected abstract IEnumerable<IRuleViolation> Evaluate(IConfigurationProjectItem target, XDocument configurationXml);
   }
 
   /// <summary>
