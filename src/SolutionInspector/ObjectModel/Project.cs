@@ -161,7 +161,7 @@ namespace SolutionInspector.ObjectModel
 
         if(dependentUpon != null)
         {
-          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.Include), dependentUpon);
+          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.Include).AssertNotNull(), dependentUpon);
 
           var parent = projectItems[dependentUponInclude];
           projectItem.SetParent(parent);
