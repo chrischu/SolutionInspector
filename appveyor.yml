@@ -8,40 +8,58 @@ environment:
     secure: Q2iw3AS2EBEcG4wVWDZY/ruR0Whvs50gTeCleO/uypdP7G7ajODYw030N3sOONtP
 build_script:
 - ps: |
-    function Get-LastTagVersionFromGit() {
+    function Get-VersionInfoFromGit() {
       $versionTag = (git describe --tags --abbrev=0 2>$null)
-  
+
       if($LastExitCode -eq 0) {
-        return "$versionTag"
+        $version = Parse-Version $versionTag
+        $buildCounter = (git rev-list ${versionTag}..HEAD --count) + 1
       } else {
-        return "0.0.0"
+        $version = New-Object Version "0.0.0.0"
+        $buildCounter = (git rev-list HEAD --count)
       }
+
+      $result = @{
+        Version = $version;
+        BuildCounter = $buildCounter;
+      }
+
+      return (New-Object -TypeName PSObject -Property $result)
     }
 
-    function Construct-Version([string] $versionTag, [int] $buildNumber) {
+    function Parse-Version([string] $versionTag) {
       if (-not ($versionTag -Match "^v(\d+\.\d+\.\d+)$")) {
         throw "The tag '$versionTag' is not a valid version tag of the form 'v{major}.{minor}.{patch}'."
       }
-  
+
       $parsedVersion = New-Object Version $versionTag.Substring(1)
-      return (New-Object Version $parsedVersion.Major,$parsedVersion.Minor,$parsedVersion.Build,$buildNumber)
+
+      return $parsedVersion
     }
 
+    $VersionTag = ""
+
     if ($env:APPVEYOR_REPO_BRANCH -eq "master" -and $env:APPVEYOR_REPO_TAG -eq "true") {
-      $Version = Construct-Version $env:APPVEYOR_REPO_TAG_NAME $env:APPVEYOR_BUILD_NUMBER
+      $Version = Parse-Version $env:APPVEYOR_REPO_TAG_NAME
+      $BuildCounter = 0
+
       $IsPreReleaseBuild = $False
       $PushNuGetPackages = $True
     } else {
-      $Version = Construct-Version ("v" + (Get-LastTagVersionFromGit)) $env:APPVEYOR_BUILD_NUMBER
+      $versionInfo = Get-VersionInfoFromGit
+      $Version = $versionInfo.Version
+      $BuildCounter = $versionInfo.BuildCounter
+      
       $IsPreReleaseBuild = $True
       $PushNuGetPackages = $False
     }
-
+        
     Push-Location "src"
 
     ./Build.ps1 `
       -Mode "AppVeyor" `
       -Version "$Version" `
+      -BuildCounter $BuildCounter `
       -CommitHash "$env:APPVEYOR_REPO_COMMIT" `
       -Configuration "Release" `
       -CreateNuGetPackages $True `

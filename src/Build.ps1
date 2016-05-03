@@ -5,6 +5,8 @@ Param (
   [Parameter()]
   [string] $Version = "0.0.0",
   [Parameter()]
+  [int] $BuildCounter = 0,
+  [Parameter()]
   [string] $CommitHash,
   [Parameter()]
   [string] $Configuration = "Debug",
@@ -62,7 +64,7 @@ $AssemblyVersion = New-Object Version $AssemblyFileVersion.Major,0,0,0
 $AssemblyInformationalVersion = New-Object Version $AssemblyFileVersion.Major,$AssemblyFileVersion.Minor,$AssemblyFileVersion.Build
 
 if ($IsPreReleaseBuild) {
-  $AssemblyInformationalVersion = "$AssemblyInformationalVersion-pre"
+  $AssemblyInformationalVersion = "$AssemblyInformationalVersion-pre$BuildCounter"
 }
 
 $ProjectDirectories = Get-ProjectDirectoriesFromSolution $SolutionFile
