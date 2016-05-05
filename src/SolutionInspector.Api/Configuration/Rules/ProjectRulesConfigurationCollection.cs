@@ -6,9 +6,8 @@ using SolutionInspector.Api.Configuration.Infrastructure;
 namespace SolutionInspector.Api.Configuration.Rules
 {
   [UsedImplicitly]
-  [ConfigurationCollection(typeof(ProjectRuleGroupConfigurationElement), AddItemName = "projectRuleGroup",
-        CollectionType = ConfigurationElementCollectionType.BasicMap)]
   internal class ProjectRulesConfigurationCollection : KeyedConfigurationElementCollectionBase<ProjectRuleGroupConfigurationElement, string>
   {
+    protected override string ElementName => "projectRuleGroup";
   }
 }

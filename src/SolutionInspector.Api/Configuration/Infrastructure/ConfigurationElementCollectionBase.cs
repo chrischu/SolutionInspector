@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Xml;
 using Fasterflect;
-using SolutionInspector.Api.Extensions;
 
 namespace SolutionInspector.Api.Configuration.Infrastructure
 {
   /// <summary>
   /// Base class for <see cref="ConfigurationElementCollection"/>s with elements of type <typeparamref name="TElement"/>.
   /// </summary>
-  public class ConfigurationElementCollectionBase<TElement> : ConfigurationElementCollection, IEnumerable<TElement>
+  public abstract class ConfigurationElementCollectionBase<TElement> : ConfigurationElementCollection, IEnumerable<TElement>
       where TElement : ConfigurationElement, new()
 
   {
@@ -28,6 +27,14 @@ namespace SolutionInspector.Api.Configuration.Infrastructure
       return new TElement();
     }
 
+    protected abstract override string ElementName { get; }
+
+    public override ConfigurationElementCollectionType CollectionType => ConfigurationElementCollectionType.BasicMap;
+
+    protected override bool IsElementName(string elementName)
+    {
+      return !string.IsNullOrWhiteSpace(elementName) && elementName == ElementName;
+    }
 
     /// <inheritdoc />
     protected override object GetElementKey(ConfigurationElement element)
@@ -55,10 +62,5 @@ namespace SolutionInspector.Api.Configuration.Infrastructure
       BaseAdd(element);
       return true;
     }
-
-    /// <summary>
-    /// Name of the configuration element contained in the collection.
-    /// </summary>
-    protected override string ElementName => typeof (TElement).Name.FirstToLower().Replace("ConfigurationElement", "");
   }
 }

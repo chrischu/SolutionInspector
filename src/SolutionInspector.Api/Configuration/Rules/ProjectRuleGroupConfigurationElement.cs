@@ -23,7 +23,6 @@ namespace SolutionInspector.Api.Configuration.Rules
     IReadOnlyCollection<IRuleConfiguration> Rules { get; }
   }
 
-  [ConfigurationCollection(typeof (RuleConfigurationElement), AddItemName = "rule", CollectionType = ConfigurationElementCollectionType.BasicMap)]
   internal class ProjectRuleGroupConfigurationElement : RuleConfigurationCollection, IKeyedConfigurationElement<string>, IProjectRuleGroupConfiguration
   {
     [ConfigurationProperty("appliesTo", IsRequired = true, DefaultValue = "*")]

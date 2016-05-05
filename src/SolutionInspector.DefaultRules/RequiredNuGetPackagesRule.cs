@@ -31,8 +31,6 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   /// Configuration for the <see cref="RequiredNuGetPackagesRule"/>.
   /// </summary>
-  [ConfigurationCollection(typeof(RequiredNuGetPackageConfigurationElement), AddItemName = "nuGetPackage",
-        CollectionType = ConfigurationElementCollectionType.BasicMap)]
   public class RequiredNuGetPackagesRuleConfiguration : KeyedConfigurationElementCollectionBase<RequiredNuGetPackageConfigurationElement, string>
   {
     /// <inheritdoc />

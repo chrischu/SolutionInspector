@@ -6,9 +6,8 @@ using SolutionInspector.Api.Configuration.Infrastructure;
 namespace SolutionInspector.Api.Configuration.Rules
 {
   [UsedImplicitly]
-  [ConfigurationCollection(typeof(RuleConfigurationElement), AddItemName = "rule")]
   internal class RuleConfigurationCollection : KeyedConfigurationElementCollectionBase<RuleConfigurationElement, string>
   {
-
+    protected override string ElementName => "rule";
   }
 }

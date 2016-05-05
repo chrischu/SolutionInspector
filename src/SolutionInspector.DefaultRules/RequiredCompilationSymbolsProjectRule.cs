@@ -52,10 +52,10 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   /// Configuration for the <see cref="RequiredCompilationSymbolsProjectRule"/>.
   /// </summary>
-  [ConfigurationCollection(typeof(RequiredCompilationSymbolsConfigurationElement))]
   public class RequiredCompilationSymbolsProjectRuleConfiguration
       : KeyedConfigurationElementCollectionBase<RequiredCompilationSymbolsConfigurationElement, BuildConfigurationFilter>
   {
+    protected override string ElementName => "requiredCompilationSymbols";
   }
 
   /// <summary>
