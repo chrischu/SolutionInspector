@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
-  /// Represents errors that occur when trying to resolve the type of a <see cref="IRule"/>.
+  /// Represents errors that occurs when trying to resolve the type of a <see cref="IRule"/>.
   /// </summary>
   [Serializable]
   public class RuleTypeResolvingException : Exception

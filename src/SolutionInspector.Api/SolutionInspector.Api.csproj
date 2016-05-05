@@ -117,8 +117,11 @@
     <Compile Include="Configuration\Rules\ProjectItemRuleGroupConfigurationElement.cs" />
     <Compile Include="ObjectModel\ConfigurationProjectItem.cs" />
     <Compile Include="Reporting\VisualStudioViolationReporter.cs" />
+    <Compile Include="Rules\InvalidRuleAssemblyException.cs" />
+    <Compile Include="Rules\RuleAssemblyLoader.cs" />
     <Compile Include="Rules\ProjectConfigRuleBase.cs" />
     <Compile Include="Rules\ProjectItemRule.cs" />
+    <Compile Include="Rules\RuleAssemblyNotFoundException.cs" />
     <Compile Include="Utilities\NameFilterConverter.cs" />
     <Compile Include="Utilities\NameFilter.cs" />
     <Compile Include="Configuration\SolutionCheckerConfiguration.cs" />

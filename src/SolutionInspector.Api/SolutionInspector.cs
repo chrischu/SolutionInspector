@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using SystemInterface.IO;
 using SystemWrapper.IO;
 using Autofac;
@@ -36,6 +37,10 @@ namespace SolutionInspector.Api
 
       using (var container = SetupContainer())
       {
+        var ruleAssemblyLoader = container.Resolve<IRuleAssemblyLoader>();
+        var solutionInspectorConfiguration = container.Resolve<ISolutionInspectorConfiguration>();
+        ruleAssemblyLoader.LoadRuleAssemblies(solutionInspectorConfiguration.RuleAssemblyImports.Imports);
+
         var commands = container.Resolve<IEnumerable<ConsoleCommand>>();
         return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
       }
