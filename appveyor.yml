@@ -69,3 +69,11 @@ build_script:
 
     Pop-Location
 test: off
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: Lp2YKeJITl6VZV0SSdpSrbnuPujRolIyat9yAIq7W3xNkSZ36PGrPwRMrPBK4V11
+  draft: true
+  prerelease: true
+  on:
+    branch: master
