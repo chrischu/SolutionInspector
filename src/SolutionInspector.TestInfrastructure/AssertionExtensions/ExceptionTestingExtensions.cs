@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentAssertions;
 using FluentAssertions.Primitives;
 using FluentAssertions.Specialized;
 
@@ -6,7 +7,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
   public static class ExceptionTestingExtensions
   {
-    public static ExceptionAssertions<TException> Be<TException>(this ObjectAssertions objectAssertions)
+    public static ExceptionAssertions<TException> Be<TException> (this ObjectAssertions objectAssertions)
         where TException : Exception
     {
       objectAssertions.BeOfType<TException>();
@@ -14,11 +15,20 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
       return new ExceptionAssertions<TException>(new[] { (TException) objectAssertions.Subject });
     }
 
-    public static void BeArgumentException(this ObjectAssertions objectAssertions, string message, string parameterName)
+    public static void BeArgumentException (this ObjectAssertions objectAssertions, string message, string parameterName)
     {
       var expectedMessage = new ArgumentException(message, parameterName).Message;
 
       objectAssertions.Be<ArgumentException>().WithMessage(expectedMessage);
-    } 
+    }
+
+    public static ExceptionAssertions<TException> WithInnerException<TException> (
+        this ExceptionAssertions<TException> exceptionAssertions,
+        Exception innerException)
+        where TException : Exception
+    {
+      exceptionAssertions.And.InnerException.Should().BeSameAs(innerException);
+      return exceptionAssertions;
+    }
   }
 }
