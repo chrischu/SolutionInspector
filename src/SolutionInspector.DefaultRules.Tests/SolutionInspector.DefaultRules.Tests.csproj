@@ -120,9 +120,9 @@
       <Project>{D154C744-EAB0-479A-BA22-B822AAFD3774}</Project>
       <Name>SolutionInspector.TestInfrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector\SolutionInspector.csproj">
+    <ProjectReference Include="..\SolutionInspector\SolutionInspector.Api.csproj">
       <Project>{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}</Project>
-      <Name>SolutionInspector</Name>
+      <Name>SolutionInspector.Api</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

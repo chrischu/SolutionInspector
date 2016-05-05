@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Configuration;
-using SolutionInspector.ObjectModel;
-using SolutionInspector.Rules;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules
 {

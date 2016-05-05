@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
-using SolutionInspector.Configuration.Infrastructure;
-using SolutionInspector.ObjectModel;
-using SolutionInspector.Rules;
+using SolutionInspector.Api.Configuration.Infrastructure;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules
 {

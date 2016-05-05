@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using SolutionInspector.ObjectModel;
-using SolutionInspector.Rules;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules
 {

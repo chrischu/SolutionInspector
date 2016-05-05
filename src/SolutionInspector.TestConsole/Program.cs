@@ -2,9 +2,9 @@
 {
   internal static class Program
   {
-    private static void Main()
+    private static int Main(string[] args)
     {
-
+      return Api.SolutionInspector.Run(args);
     }
   }
 }

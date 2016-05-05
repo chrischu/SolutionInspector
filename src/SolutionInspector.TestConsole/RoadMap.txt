@@ -1,6 +1,6 @@
 ﻿Now:
-* Implement concept how to utilize SolutionChecker in a project:
-** Variant 1: Reference NuGet package in Console application project and derive from special base class, executing console app runs SolutionChecker. Additional rules can be added by referencing DLLs/NuGet packages.
+* Implement concept how to utilize SolutionInspector in a project:
+** Variant 1: Reference NuGet package in Console application project and derive from special base class, executing console app runs SolutionInspector. Additional rules can be added by referencing DLLs/NuGet packages.
 ** Variant 2: Pre-built version, additional rules have to be placed in a folder 'Rules' next to the executable.
 
 Soon:

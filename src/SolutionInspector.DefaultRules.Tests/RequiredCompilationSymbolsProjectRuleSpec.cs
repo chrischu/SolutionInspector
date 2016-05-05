@@ -3,10 +3,10 @@ using System.Configuration;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
-using SolutionInspector.ObjectModel;
-using SolutionInspector.Rules;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
+using SolutionInspector.Api.Utilities;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
-using SolutionInspector.Utilities;
 
 #region R# preamble for Machine.Specifications files
 

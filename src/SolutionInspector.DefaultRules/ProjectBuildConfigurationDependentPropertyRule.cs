@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
-using SolutionInspector.Extensions;
-using SolutionInspector.ObjectModel;
-using SolutionInspector.Rules;
-using SolutionInspector.Utilities;
+using SolutionInspector.Api.Extensions;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
+using SolutionInspector.Api.Utilities;
 
 namespace SolutionInspector.DefaultRules
 {

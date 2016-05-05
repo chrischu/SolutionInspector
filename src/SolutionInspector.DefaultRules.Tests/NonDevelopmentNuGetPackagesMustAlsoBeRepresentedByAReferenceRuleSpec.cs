@@ -4,8 +4,8 @@ using System.Reflection;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
-using SolutionInspector.ObjectModel;
-using SolutionInspector.Rules;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
