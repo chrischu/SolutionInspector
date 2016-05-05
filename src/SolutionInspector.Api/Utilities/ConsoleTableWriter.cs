@@ -13,8 +13,8 @@ namespace SolutionInspector.Api.Utilities
   [PublicAPI]
   internal interface IConsoleTableWriter
   {
-    void Write<T>(IEnumerable<T> rows, params Expression<Func<T, object>>[] columnSelectors);
-    void Write<T>(IEnumerable<T> rows, string[] headers, params Func<T, object>[] columnSelectors);
+    void Write<T> (IEnumerable<T> rows, params Expression<Func<T, object>>[] columnSelectors);
+    void Write<T> (IEnumerable<T> rows, string[] headers, params Func<T, object>[] columnSelectors);
   }
 
   internal class ConsoleTableWriter : IConsoleTableWriter
@@ -22,25 +22,25 @@ namespace SolutionInspector.Api.Utilities
     private readonly TextWriter _consoleOut;
     private readonly ConsoleTableWriterOptions _options;
 
-    public ConsoleTableWriter(TextWriter consoleOut, ConsoleTableWriterOptions options = null)
+    public ConsoleTableWriter (TextWriter consoleOut, ConsoleTableWriterOptions options = null)
     {
       _consoleOut = consoleOut;
       _options = options ?? new ConsoleTableWriterOptions();
     }
 
-    public void Write<T>(IEnumerable<T> rows, params Expression<Func<T, object>>[] columnSelectors)
+    public void Write<T> (IEnumerable<T> rows, params Expression<Func<T, object>>[] columnSelectors)
     {
-      var headers = columnSelectors.Select(s => GetMemberName(s)).ToArray();
+      var headers = columnSelectors.Select(GetMemberName).ToArray();
       var selectors = columnSelectors.Select(exp => exp.Compile()).ToArray();
       Write(rows, headers, selectors);
     }
 
-    public void Write<T>(IEnumerable<T> rows, string[] headers, params Func<T, object>[] columnSelectors)
+    public void Write<T> (IEnumerable<T> rows, string[] headers, params Func<T, object>[] columnSelectors)
     {
       Write(rows.ToArray(), headers, columnSelectors);
     }
 
-    private void Write<T>(T[] rows, string[] headers, Func<T, object>[] columnSelectors)
+    private void Write<T> (T[] rows, string[] headers, Func<T, object>[] columnSelectors)
     {
       Trace.Assert(headers.Length == columnSelectors.Length);
 
@@ -66,7 +66,7 @@ namespace SolutionInspector.Api.Utilities
       Write(cells);
     }
 
-    private void Write(string[,] cells)
+    private void Write (string[,] cells)
     {
       var columnWidthRanges = CalculatePreferredColumnWidthRanges(cells);
       var availableWidth = CalculateAvailableWidth(cells, columnWidthRanges);
@@ -88,7 +88,7 @@ namespace SolutionInspector.Api.Utilities
       WriteRowSeparator(columnWidths, 1);
     }
 
-    private void WriteHeaderRow(string[,] cells, int[] columnWidths)
+    private void WriteHeaderRow (string[,] cells, int[] columnWidths)
     {
       _consoleOut.Write(_options.Characters.Vertical);
 
@@ -118,7 +118,7 @@ namespace SolutionInspector.Api.Utilities
       _consoleOut.WriteLine();
     }
 
-    private void WriteRow(string[,] cells, int rowIndex, int[] columnWidths)
+    private void WriteRow (string[,] cells, int rowIndex, int[] columnWidths)
     {
       var row = new string[cells.GetLength(1)][];
 
@@ -134,10 +134,10 @@ namespace SolutionInspector.Api.Utilities
         {
           _consoleOut.Write(' ');
 
-          if (lineIndex >= row[colIndex].Length)
-            _consoleOut.Write(new string(' ', columnWidths[colIndex]));
-          else
-            _consoleOut.Write(row[colIndex][lineIndex].PadRight(columnWidths[colIndex]));
+          _consoleOut.Write(
+              lineIndex >= row[colIndex].Length
+                  ? new string(' ', columnWidths[colIndex])
+                  : row[colIndex][lineIndex].PadRight(columnWidths[colIndex]));
 
           _consoleOut.Write(' ');
           _consoleOut.Write(_options.Characters.Vertical);
@@ -147,7 +147,7 @@ namespace SolutionInspector.Api.Utilities
       }
     }
 
-    private IEnumerable<string> SplitIntoLines(string cellValue, int columnWidth)
+    private IEnumerable<string> SplitIntoLines (string cellValue, int columnWidth)
     {
       var sb = new StringBuilder();
 
@@ -172,7 +172,7 @@ namespace SolutionInspector.Api.Utilities
       yield return sb.ToString();
     }
 
-    private void WriteRowSeparator(int[] columnWidths, int indicator)
+    private void WriteRowSeparator (int[] columnWidths, int indicator)
     {
       var start = indicator < 0
           ? _options.Characters.TopLeftCorner
@@ -194,7 +194,7 @@ namespace SolutionInspector.Api.Utilities
       _consoleOut.WriteLine(end);
     }
 
-    private int[] CalculateColumnWidths(WidthRange[] columnWidthRanges, int availableWidth)
+    private int[] CalculateColumnWidths (WidthRange[] columnWidthRanges, int availableWidth)
     {
       var columnWidths = columnWidthRanges.Select(r => r.Min).ToArray();
 
@@ -208,7 +208,7 @@ namespace SolutionInspector.Api.Utilities
 
       dividableWidth = availableWidth - columnWidths.Sum();
       var index = 0;
-      while (dividableWidth > 0 && columnWidths.Select((w,i) => new {w,i}).Any(x => x.w < columnWidthRanges[x.i].Max))
+      while (dividableWidth > 0 && columnWidths.Select((w, i) => new { w, i }).Any(x => x.w < columnWidthRanges[x.i].Max))
       {
         if (columnWidths[index] < columnWidthRanges[index].Max)
         {
@@ -221,7 +221,7 @@ namespace SolutionInspector.Api.Utilities
       return columnWidths;
     }
 
-    private WidthRange[] CalculatePreferredColumnWidthRanges(string[,] cells)
+    private WidthRange[] CalculatePreferredColumnWidthRanges (string[,] cells)
     {
       var widthRanges = new WidthRange[cells.GetLength(1)];
 
@@ -243,7 +243,7 @@ namespace SolutionInspector.Api.Utilities
       return widthRanges;
     }
 
-    private int CalculateAvailableWidth(string[,] cells, WidthRange[] widthRanges)
+    private int CalculateAvailableWidth (string[,] cells, WidthRange[] widthRanges)
     {
       var widthForLines =
           2 * 2 + // outer lines '| ' and ' |'
@@ -260,7 +260,7 @@ namespace SolutionInspector.Api.Utilities
       return availableWidth;
     }
 
-    private string GetMemberName<T>(Expression<Func<T, object>> expression)
+    private string GetMemberName<T> (Expression<Func<T, object>> expression)
     {
       var memberExpression = expression.Body as MemberExpression ?? ((UnaryExpression) expression.Body).Operand as MemberExpression;
       return memberExpression.AssertNotNull().Member.Name;
@@ -273,12 +273,12 @@ namespace SolutionInspector.Api.Utilities
 
       public int Diff => Max - Min;
 
-      public void TrySetNewMax(int max)
+      public void TrySetNewMax (int max)
       {
         Max = Math.Max(max, Max);
       }
 
-      public void TrySetNewMin(int min)
+      public void TrySetNewMin (int min)
       {
         Min = Math.Max(min, Min);
       }

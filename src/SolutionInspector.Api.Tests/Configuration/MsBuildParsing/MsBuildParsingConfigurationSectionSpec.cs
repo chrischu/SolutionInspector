@@ -3,7 +3,6 @@ using System.Configuration;
 using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
-using SolutionInspector.Api.Configuration.RuleAssemblyImports;
 using SolutionInspector.TestInfrastructure.Configuration;
 
 #region R# preamble for Machine.Specifications files

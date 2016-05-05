@@ -8,7 +8,7 @@ using Microsoft.Build.Evaluation;
 namespace SolutionInspector.Api.Configuration.MsBuildParsing
 {
   /// <summary>
-  /// Configuration that controlls how the MSBuild (e.g. csproj) files are parsed.
+  /// Configuration that controls how the MSBuild (e.g. csproj) files are parsed.
   /// </summary>
   [PublicAPI]
   public interface IMsBuildParsingConfiguration

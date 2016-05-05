@@ -71,7 +71,7 @@ namespace SolutionInspector.Api.Tests.Rules
                 FakeHelper.CreateAndConfigure<IProjectRuleGroupConfiguration>(
                     c =>
                     {
-                      A.CallTo(() => c.AppliesTo).Returns<INameFilter>(new NameFilter(new[] { "*" }));
+                      A.CallTo(() => c.AppliesTo).Returns(new NameFilter(new[] { "*" }));
                       A.CallTo(() => c.Rules).Returns(rules);
                     }),
                 FakeHelper.CreateAndConfigure<IProjectRuleGroupConfiguration>(

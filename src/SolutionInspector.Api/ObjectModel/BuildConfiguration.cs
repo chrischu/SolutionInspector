@@ -10,7 +10,7 @@ namespace SolutionInspector.Api.ObjectModel
   [PublicAPI]
   public class BuildConfiguration : IEquatable<BuildConfiguration>
   {
-    private static Regex s_Regex = new Regex(@"[A-Za-z0-9 *]+\|[A-Za-z0-9 *]+", RegexOptions.Compiled);
+    private static Regex s_regex = new Regex(@"[A-Za-z0-9 *]+\|[A-Za-z0-9 *]+", RegexOptions.Compiled);
 
     /// <summary>
     /// The name of the configuration (e.g. Debug).
@@ -78,7 +78,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// </summary>
     public static BuildConfiguration Parse(string s)
     {
-      if (!s_Regex.IsMatch(s))
+      if (!s_regex.IsMatch(s))
         throw new ArgumentException($"The value '{s}' is not a valid string representation of a {nameof(BuildConfiguration)}");
 
       var split = s.Split('|');

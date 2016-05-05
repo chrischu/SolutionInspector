@@ -42,7 +42,7 @@ namespace SolutionInspector.Api.ObjectModel
   [PublicAPI]
   internal class AdvancedProject : IAdvancedProject
   {
-    private const string c_ConfigurationRegex = @"^\s*'\$\(Configuration\)\|\$\(Platform\)'\s*==\s*'(?<Configuration>\w+)\|(?<Platform>\w+)'\s*$";
+    private const string c_configurationRegex = @"^\s*'\$\(Configuration\)\|\$\(Platform\)'\s*==\s*'(?<Configuration>\w+)\|(?<Platform>\w+)'\s*$";
     private readonly Project _project;
 
     public AdvancedProject(Project project, Microsoft.Build.Evaluation.Project msBuildProject, ProjectInSolution msBuildProjectInSolution)
@@ -63,7 +63,7 @@ namespace SolutionInspector.Api.ObjectModel
       ConfigurationDependentProperties = CreateConfigurationDependentProperties();
 
       ConditionalProperties = conditionalProperties
-          .Where(p => !Regex.IsMatch(p.Condition, c_ConfigurationRegex))
+          .Where(p => !Regex.IsMatch(p.Condition, c_configurationRegex))
           .ToDictionary(p => p.Property.Name, p => new ConditionalProperty(p.Property.EvaluatedValue, p.Condition));
     }
 
@@ -81,7 +81,7 @@ namespace SolutionInspector.Api.ObjectModel
       var dict = new Dictionary<BuildConfiguration, IReadOnlyDictionary<string, string>>();
 
       var configurationDependentProperties = MsBuildProject.Xml.PropertyGroups
-          .Select(g => new { PropertyGroup = g, Match = Regex.Match(g.Condition, c_ConfigurationRegex) })
+          .Select(g => new { PropertyGroup = g, Match = Regex.Match(g.Condition, c_configurationRegex) })
           .Where(x => x.Match.Success)
           .Select(
               x =>

@@ -127,7 +127,6 @@
     <Compile Include="Configuration\SolutionCheckerConfiguration.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\AssertNotNullExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
     <Compile Include="ObjectModel\AdvancedProject.cs" />
     <Compile Include="ObjectModel\BuildConfiguration.cs" />

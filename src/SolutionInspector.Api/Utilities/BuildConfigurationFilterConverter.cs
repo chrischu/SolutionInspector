@@ -37,7 +37,7 @@ namespace SolutionInspector.Api.Utilities
 
       var split = ((string) data).Split(',');
 
-      return new BuildConfigurationFilter(split.Select(s => BuildConfiguration.Parse(s)));
+      return new BuildConfigurationFilter(split.Select(BuildConfiguration.Parse));
     }
   }
 }

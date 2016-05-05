@@ -53,7 +53,7 @@ namespace SolutionInspector.Api.Extensions
       if (xmlNode.Attributes == null)
         return;
 
-      var toRemove = xmlNode.Attributes.Cast<XmlAttribute>().Where(attribute => filter(attribute)).ToArray();
+      var toRemove = xmlNode.Attributes.Cast<XmlAttribute>().Where(filter).ToArray();
 
       foreach (var attribute in toRemove)
         xmlNode.Attributes.Remove(attribute);

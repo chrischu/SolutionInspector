@@ -2,6 +2,7 @@
 using FluentAssertions;
 using FluentAssertions.Primitives;
 using FluentAssertions.Specialized;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
@@ -22,6 +23,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
       objectAssertions.Be<ArgumentException>().WithMessage(expectedMessage);
     }
 
+    [PublicAPI]
     public static ExceptionAssertions<TException> WithInnerException<TException> (
         this ExceptionAssertions<TException> exceptionAssertions,
         Exception innerException)

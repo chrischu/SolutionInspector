@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Api.Configuration.RuleAssemblyImports
 {
+  /// <summary>
+  /// Configuration used to import rule assemblies.
+  /// </summary>
   public interface IRuleAssemblyImportsConfiguration
   {
+    /// <summary>
+    /// A collection of paths (files and directories) from which to load assemblies.
+    /// </summary>
     IReadOnlyCollection<string> Imports { get; }
   }
 
@@ -16,6 +23,7 @@ namespace SolutionInspector.Api.Configuration.RuleAssemblyImports
   <import path=""C:\Path\To\Assembly.dll"" />
 </ruleAssemblyImports>";
 
+    [UsedImplicitly]
     [ConfigurationProperty("", IsRequired = true, IsKey = false, IsDefaultCollection = true)]
     public RuleAssemblyImportsConfigurationCollection Imports
     {

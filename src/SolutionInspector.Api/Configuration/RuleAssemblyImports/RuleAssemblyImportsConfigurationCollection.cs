@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration.Infrastructure;
 

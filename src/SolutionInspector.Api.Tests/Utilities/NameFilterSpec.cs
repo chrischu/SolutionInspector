@@ -32,13 +32,13 @@ namespace SolutionInspector.Api.Tests.Utilities
       Because of = () => Result = ParseFilter("+Include");
 
       It matches_included = () =>
-          AssertionExtensions.Should((bool) Result.IsMatch("Include")).BeTrue();
+          Result.IsMatch("Include").Should().BeTrue();
 
       It does_not_match_not_included = () =>
-          AssertionExtensions.Should((bool) Result.IsMatch("NotIncluded")).BeFalse();
+          Result.IsMatch("NotIncluded").Should().BeFalse();
 
       It parses_correctly = () =>
-          AssertionExtensions.Should((string) Result.ToString()).Be("+Include");
+          Result.ToString().Should().Be("+Include");
 
       static NameFilter Result;
     }
@@ -48,13 +48,13 @@ namespace SolutionInspector.Api.Tests.Utilities
       Because of = () => Result = ParseFilter("Include");
 
       It matches_included = () =>
-          AssertionExtensions.Should((bool) Result.IsMatch("Include")).BeTrue();
+          Result.IsMatch("Include").Should().BeTrue();
 
       It does_not_match_not_included = () =>
-          AssertionExtensions.Should((bool) Result.IsMatch("NotIncluded")).BeFalse();
+          Result.IsMatch("NotIncluded").Should().BeFalse();
 
       It parses_correctly = () =>
-          AssertionExtensions.Should((string) Result.ToString()).Be("+Include");
+          Result.ToString().Should().Be("+Include");
 
       static NameFilter Result;
     }
@@ -64,16 +64,16 @@ namespace SolutionInspector.Api.Tests.Utilities
       Because of = () => Result = ParseFilter("Inc*lude");
 
       It matches_included_without_extra_characters = () =>
-          AssertionExtensions.Should((bool) Result.IsMatch("Include")).BeTrue();
+          Result.IsMatch("Include").Should().BeTrue();
 
       It matches_included_with_extra_characters = () =>
-          AssertionExtensions.Should((bool) Result.IsMatch("IncEXTRASTUFFlude")).BeTrue();
+          Result.IsMatch("IncEXTRASTUFFlude").Should().BeTrue();
 
       It does_not_match_not_included = () =>
-          AssertionExtensions.Should((bool) Result.IsMatch("NotIncluded")).BeFalse();
+          Result.IsMatch("NotIncluded").Should().BeFalse();
 
       It parses_correctly = () =>
-          AssertionExtensions.Should((string) Result.ToString()).Be("+Inc*lude");
+          Result.ToString().Should().Be("+Inc*lude");
 
       static NameFilter Result;
     }
@@ -83,20 +83,20 @@ namespace SolutionInspector.Api.Tests.Utilities
       Because of = () => Result = ParseFilter("+*Include;-ExcludedInclude");
 
       It matches_included = () =>
-          AssertionExtensions.Should((bool) Result.IsMatch("Include")).BeTrue();
+          Result.IsMatch("Include").Should().BeTrue();
 
       It does_not_match_excluded = () =>
-          AssertionExtensions.Should((bool) Result.IsMatch("ExcludedInclude")).BeFalse();
+          Result.IsMatch("ExcludedInclude").Should().BeFalse();
 
       It parses_correctly = () =>
-          AssertionExtensions.Should((string) Result.ToString()).Be("+*Include;-ExcludedInclude");
+          Result.ToString().Should().Be("+*Include;-ExcludedInclude");
 
       static NameFilter Result;
     }
 
     class when_parsing_malformed_filter_string
     {
-      Because of = () => Exception = Catch.Exception<NameFilter>(() => ParseFilter(";"));
+      Because of = () => Exception = Catch.Exception(() => ParseFilter(";"));
 
       private It throws = () =>
           Exception.Should().Be<ConfigurationErrorsException>()
