@@ -62,6 +62,9 @@
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectItemMustHaveCustomToolSetRule, SolutionInspector.DefaultRules"
                 expectedCustomTool="CustomTool" expectedCustomToolNamespace="CustomToolNamespace" />
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectItemMustHaveCorrectBuildActionRule, SolutionInspector.DefaultRules"
+                expectedBuildAction="Compile" />
         </projectItemRuleGroup>
       </projectItemRules>
     </rules>

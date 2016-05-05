@@ -52,6 +52,8 @@
         <projectItemRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo,inProject)" appliesTo="*" inProject="*">
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectItemMustHaveCustomToolSetRule, SolutionInspector.DefaultRules" />
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectItemMustHaveCorrectBuildActionRule, SolutionInspector.DefaultRules" />
         </projectItemRuleGroup>
       </projectItemRules>
     </rules>

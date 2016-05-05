@@ -95,5 +95,10 @@ namespace SolutionInspector.Api.ObjectModel
     {
       return !(left == right);
     }
+
+    public override string ToString ()
+    {
+      return _value;
+    }
   }
 }

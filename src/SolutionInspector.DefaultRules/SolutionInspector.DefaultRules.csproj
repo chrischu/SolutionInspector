@@ -63,6 +63,7 @@
     <Compile Include="NonDevelopmentNuGetPackagesMustAlsoBeRepresentedByAReferenceRule.cs" />
     <Compile Include="NuGetPackagesShouldHaveOneVersionAcrossSolutionRule.cs" />
     <Compile Include="ProjectBuildConfigurationDependentPropertyRule.cs" />
+    <Compile Include="ProjectItemMustHaveCorrectBuildActionRule.cs" />
     <Compile Include="ProjectMustProvideXmlDocumentationRule.cs" />
     <Compile Include="ProjectItemMustHaveCustomToolSetRule.cs" />
     <Compile Include="ProjectPropertyRule.cs" />
