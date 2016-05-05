@@ -25,7 +25,7 @@ namespace SolutionInspector.TestInfrastructure
 
     public static string String()
     {
-      return StringBetween(0, c_SomeStringDefaultMaxLength);
+      return StringBetween(1, c_SomeStringDefaultMaxLength);
     }
 
     private static string StringBetween (int minLength, int maxLength)
