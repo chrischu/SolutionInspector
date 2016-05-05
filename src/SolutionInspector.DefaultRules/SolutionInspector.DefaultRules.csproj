@@ -82,7 +82,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SolutionInspector\SolutionInspector.Api.csproj">
+    <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
       <Project>{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}</Project>
       <Name>SolutionInspector.Api</Name>
     </ProjectReference>

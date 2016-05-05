@@ -1,6 +1,8 @@
-﻿namespace SolutionInspector.TestConsole
+﻿using System;
+
+namespace SolutionInspector
 {
-  internal static class Program
+  internal static class SolutionInspectorProgram
   {
     private static int Main(string[] args)
     {

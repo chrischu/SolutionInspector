@@ -7,8 +7,8 @@
     <ProjectGuid>{9E33C5B1-89AD-4A24-82FA-6C9489159A54}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SolutionInspector.TestConsole</RootNamespace>
-    <AssemblyName>SolutionInspector.TestConsole</AssemblyName>
+    <RootNamespace>SolutionInspector</RootNamespace>
+    <AssemblyName>SolutionInspector</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -69,7 +69,7 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="SolutionInspectorProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,7 +81,7 @@
       <Project>{bcb0a8e8-f220-46fb-9b07-9b2b3f9809b1}</Project>
       <Name>SolutionInspector.DefaultRules</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector\SolutionInspector.Api.csproj">
+    <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
       <Project>{84eb4f29-70f0-462b-ba37-da6f9261c8c8}</Project>
       <Name>SolutionInspector.Api</Name>
     </ProjectReference>

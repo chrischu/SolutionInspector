@@ -50,7 +50,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{CF67
 		Build\BuildLibrary.ps1 = Build\BuildLibrary.ps1
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.TestConsole", "SolutionInspector.TestConsole\SolutionInspector.TestConsole.csproj", "{9E33C5B1-89AD-4A24-82FA-6C9489159A54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector", "SolutionInspector\SolutionInspector.csproj", "{9E33C5B1-89AD-4A24-82FA-6C9489159A54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.DefaultRules", "SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj", "{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}"
 EndProject
