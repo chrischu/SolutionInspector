@@ -9,20 +9,20 @@ namespace SolutionInspector.Api.Utilities
 {
   internal interface ISolutionLoader
   {
-    ISolution Load(string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration);
+    ISolution Load (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration);
   }
 
-  [UsedImplicitly( /* by container */)]
+  [UsedImplicitly ( /* by container */)]
   internal class SolutionLoader : ISolutionLoader
   {
     private readonly IFile _file;
 
-    public SolutionLoader(IFile file)
+    public SolutionLoader (IFile file)
     {
       _file = file;
     }
 
-    public ISolution Load(string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
+    public ISolution Load (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
       if (!_file.Exists(solutionPath))
         throw new FileNotFoundException($"Could not find solution file at '{solutionPath}'.");

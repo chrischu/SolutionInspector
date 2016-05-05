@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -24,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (AllProjectItemsMustBePresentRule))]
+  [Subject (typeof (AllProjectItemsMustBePresentRule))]
   class AllProjectItemsMustBePresentRuleSpec
   {
     static IProjectItem ProjectItem;
@@ -45,10 +46,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_and_all_files_are_existing
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => ProjectItem.File.Exists).Returns(true);
-      };
+      Establish ctx = () => { A.CallTo(() => ProjectItem.File.Exists).Returns(true); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -60,10 +58,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_and_at_least_one_file_is_missing
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => ProjectItem.File.Exists).Returns(false);
-      };
+      Establish ctx = () => { A.CallTo(() => ProjectItem.File.Exists).Returns(false); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 

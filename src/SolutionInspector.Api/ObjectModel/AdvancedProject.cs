@@ -8,33 +8,33 @@ using Microsoft.Build.Construction;
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
-  /// Provides access to more advanced/raw properties of the underlying MSBuild project file.
+  ///   Provides access to more advanced/raw properties of the underlying MSBuild project file.
   /// </summary>
   [PublicAPI]
   public interface IAdvancedProject
   {
     /// <summary>
-    /// The raw <see cref="ProjectInSolution"/>.
+    ///   The raw <see cref="ProjectInSolution" />.
     /// </summary>
     ProjectInSolution MsBuildProjectInSolution { get; }
 
     /// <summary>
-    /// The raw <see cref="Microsoft.Build.Evaluation.Project"/>.
+    ///   The raw <see cref="Microsoft.Build.Evaluation.Project" />.
     /// </summary>
     Microsoft.Build.Evaluation.Project MsBuildProject { get; }
 
     /// <summary>
-    /// A raw collection of all project properties.
+    ///   A raw collection of all project properties.
     /// </summary>
     IReadOnlyDictionary<string, string> Properties { get; }
 
     /// <summary>
-    /// A raw collection of all configuration-dependent (i.e. properties that depend on the configuration/platform of the build) project properties.
+    ///   A raw collection of all configuration-dependent (i.e. properties that depend on the configuration/platform of the build) project properties.
     /// </summary>
     IReadOnlyDictionary<BuildConfiguration, IReadOnlyDictionary<string, string>> ConfigurationDependentProperties { get; }
 
     /// <summary>
-    /// A raw collection of all conditional project properties.
+    ///   A raw collection of all conditional project properties.
     /// </summary>
     IReadOnlyDictionary<string, ConditionalProperty> ConditionalProperties { get; }
   }
@@ -45,7 +45,7 @@ namespace SolutionInspector.Api.ObjectModel
     private const string c_configurationRegex = @"^\s*'\$\(Configuration\)\|\$\(Platform\)'\s*==\s*'(?<Configuration>\w+)\|(?<Platform>\w+)'\s*$";
     private readonly Project _project;
 
-    public AdvancedProject(Project project, Microsoft.Build.Evaluation.Project msBuildProject, ProjectInSolution msBuildProjectInSolution)
+    public AdvancedProject (Project project, Microsoft.Build.Evaluation.Project msBuildProject, ProjectInSolution msBuildProjectInSolution)
     {
       MsBuildProjectInSolution = msBuildProjectInSolution;
       _project = project;
@@ -76,7 +76,7 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IReadOnlyDictionary<string, ConditionalProperty> ConditionalProperties { get; }
 
-    private IReadOnlyDictionary<BuildConfiguration, IReadOnlyDictionary<string, string>> CreateConfigurationDependentProperties()
+    private IReadOnlyDictionary<BuildConfiguration, IReadOnlyDictionary<string, string>> CreateConfigurationDependentProperties ()
     {
       var dict = new Dictionary<BuildConfiguration, IReadOnlyDictionary<string, string>>();
 
@@ -106,7 +106,8 @@ namespace SolutionInspector.Api.ObjectModel
         try
         {
           dict.Add(configuration, configurationDependentProperties[configuration].ToDictionary(s => s, s => MsBuildProject.GetPropertyValue(s)));
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
           Console.WriteLine(ex);
         }

@@ -25,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (RequiredNuGetPackagesRule))]
+  [Subject (typeof (RequiredNuGetPackagesRule))]
   class RequiredNuGetPackagesRuleSpec
   {
     static IProject Project;
@@ -43,10 +43,11 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_and_all_NuGet_packages_are_there
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => Project.NuGetPackages).Returns(new[] { new NuGetPackage("Package", Version.Parse("0.0.1"), false, "", "net461", false) });
-      };
+      Establish ctx =
+          () =>
+          {
+            A.CallTo(() => Project.NuGetPackages).Returns(new[] { new NuGetPackage("Package", Version.Parse("0.0.1"), false, "", "net461", false) });
+          };
 
       Because of = () => Result = SUT.Evaluate(Project);
 

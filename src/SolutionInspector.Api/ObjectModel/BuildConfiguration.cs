@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
-  /// Represents a MSBuild build configuration consisting of the configuration (e.g. Debug) and the platform (e.g. AnyCPU).
+  ///   Represents a MSBuild build configuration consisting of the configuration (e.g. Debug) and the platform (e.g. AnyCPU).
   /// </summary>
   [PublicAPI]
   public class BuildConfiguration : IEquatable<BuildConfiguration>
@@ -13,37 +13,37 @@ namespace SolutionInspector.Api.ObjectModel
     private static Regex s_regex = new Regex(@"[A-Za-z0-9 *]+\|[A-Za-z0-9 *]+", RegexOptions.Compiled);
 
     /// <summary>
-    /// The name of the configuration (e.g. Debug).
+    ///   The name of the configuration (e.g. Debug).
     /// </summary>
     public string ConfigurationName { get; }
 
     /// <summary>
-    /// The name of the platform (e.g. AnyCPU).
+    ///   The name of the platform (e.g. AnyCPU).
     /// </summary>
     public string PlatformName { get; }
 
     /// <summary>
-    /// The full name of the <see cref="BuildConfiguration"/>.
+    ///   The full name of the <see cref="BuildConfiguration" />.
     /// </summary>
     public string Name => $"{ConfigurationName}|{PlatformName}";
 
     /// <summary>
-    /// Creates a new <see cref="BuildConfiguration"/>.
+    ///   Creates a new <see cref="BuildConfiguration" />.
     /// </summary>
-    public BuildConfiguration(string configurationName, string platform)
+    public BuildConfiguration (string configurationName, string platform)
     {
       ConfigurationName = configurationName;
       PlatformName = platform;
     }
 
     /// <inheritdoc />
-    public override string ToString()
+    public override string ToString ()
     {
       return Name;
     }
 
     /// <inheritdoc />
-    public bool Equals([CanBeNull] BuildConfiguration other)
+    public bool Equals ([CanBeNull] BuildConfiguration other)
     {
       if (ReferenceEquals(null, other))
         return false;
@@ -53,7 +53,7 @@ namespace SolutionInspector.Api.ObjectModel
     }
 
     /// <inheritdoc />
-    public override bool Equals([CanBeNull] object obj)
+    public override bool Equals ([CanBeNull] object obj)
     {
       if (ReferenceEquals(null, obj))
         return false;
@@ -65,7 +65,7 @@ namespace SolutionInspector.Api.ObjectModel
     }
 
     /// <inheritdoc />
-    public override int GetHashCode()
+    public override int GetHashCode ()
     {
       unchecked
       {
@@ -74,9 +74,9 @@ namespace SolutionInspector.Api.ObjectModel
     }
 
     /// <summary>
-    /// Converts the string representation of a <see cref="BuildConfiguration"/> to its <see cref="BuildConfiguration"/> equivalent.
+    ///   Converts the string representation of a <see cref="BuildConfiguration" /> to its <see cref="BuildConfiguration" /> equivalent.
     /// </summary>
-    public static BuildConfiguration Parse(string s)
+    public static BuildConfiguration Parse (string s)
     {
       if (!s_regex.IsMatch(s))
         throw new ArgumentException($"The value '{s}' is not a valid string representation of a {nameof(BuildConfiguration)}");

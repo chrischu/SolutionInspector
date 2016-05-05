@@ -23,15 +23,12 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Configuration.MsBuildParsing
 {
-  [Subject(typeof (MsBuildParsingConfigurationSection))]
+  [Subject (typeof (MsBuildParsingConfigurationSection))]
   class MsBuildParsingConfigurationSectionSpec
   {
     static IMsBuildParsingConfiguration SUT;
 
-    Establish ctx = () =>
-    {
-      SUT = new MsBuildParsingConfigurationSection();
-    };
+    Establish ctx = () => { SUT = new MsBuildParsingConfigurationSection(); };
 
     class when_deserializing_config
     {

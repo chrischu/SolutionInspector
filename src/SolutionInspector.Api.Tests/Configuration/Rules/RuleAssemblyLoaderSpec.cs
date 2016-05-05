@@ -106,10 +106,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
 
     class when_loading_an_assembly_without_rules
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => LoadedAssembly.GetExportedTypes()).Returns(new[] { typeof (string) });
-      };
+      Establish ctx = () => { A.CallTo(() => LoadedAssembly.GetExportedTypes()).Returns(new[] { typeof (string) }); };
 
       Because of = () => Exception = Catch.Exception(() => SUT.LoadRuleAssemblies(new[] { "File.dll" }));
 
@@ -143,7 +140,6 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
 
     class DummyRule : IRule
     {
-
     }
   }
 }

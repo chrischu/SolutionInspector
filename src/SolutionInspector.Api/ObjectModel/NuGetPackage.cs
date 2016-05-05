@@ -5,55 +5,55 @@ using JetBrains.Annotations;
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
-  /// Represents a NuGet package referenced by a project.
+  ///   Represents a NuGet package referenced by a project.
   /// </summary>
   [PublicAPI]
   public class NuGetPackage : IEquatable<NuGetPackage>
   {
     /// <summary>
-    /// The package's id.
+    ///   The package's id.
     /// </summary>
     public string Id { get; }
 
     /// <summary>
-    /// The package's version.
+    ///   The package's version.
     /// </summary>
     public Version Version { get; }
 
     /// <summary>
-    /// <c>True</c> if the package is a pre-release package, <c>false</c> otherwise.
+    ///   <c>True</c> if the package is a pre-release package, <c>false</c> otherwise.
     /// </summary>
     public bool IsPreRelease { get; }
 
     /// <summary>
-    /// The package's pre-release tag (if any).
+    ///   The package's pre-release tag (if any).
     /// </summary>
     public string PreReleaseTag { get; }
 
     /// <summary>
-    /// The package's full version string in the format "&lt;Version&gt;&lt;PreReleaseTag&gt;".
+    ///   The package's full version string in the format "&lt;Version&gt;&lt;PreReleaseTag&gt;".
     /// </summary>
     public string FullVersionString => $"{Version}{PreReleaseTag}";
 
     /// <summary>
-    /// The package's directory name (relative to the NuGet packages folder)".
+    ///   The package's directory name (relative to the NuGet packages folder)".
     /// </summary>
     public string PackageDirectoryName => $@"{Id}.{FullVersionString}";
 
     /// <summary>
-    /// The package's target framework.
+    ///   The package's target framework.
     /// </summary>
     public string TargetFramework { get; }
 
     /// <summary>
-    /// <c>True</c> if the package is only a development dependency, <c>false</c> otherwise.
+    ///   <c>True</c> if the package is only a development dependency, <c>false</c> otherwise.
     /// </summary>
     public bool IsDevelopmentDependency { get; }
 
     /// <summary>
-    /// Creates a new <see cref="NuGetPackage"/>.
+    ///   Creates a new <see cref="NuGetPackage" />.
     /// </summary>
-    public NuGetPackage(
+    public NuGetPackage (
         string id,
         Version version,
         bool isPreRelease,
@@ -70,9 +70,9 @@ namespace SolutionInspector.Api.ObjectModel
     }
 
     /// <summary>
-    /// Creates a <see cref="NuGetPackage"/> instance from the given <paramref name="packageElement"/> from the project packages.config.
+    ///   Creates a <see cref="NuGetPackage" /> instance from the given <paramref name="packageElement" /> from the project packages.config.
     /// </summary>
-    public static NuGetPackage FromXmlElement(XmlElement packageElement)
+    public static NuGetPackage FromXmlElement (XmlElement packageElement)
     {
       var id = packageElement.GetAttribute("id");
       bool isPreRelease = false;
@@ -97,7 +97,7 @@ namespace SolutionInspector.Api.ObjectModel
     }
 
     /// <inheritdoc />
-    public bool Equals([CanBeNull] NuGetPackage other)
+    public bool Equals ([CanBeNull] NuGetPackage other)
     {
       if (ReferenceEquals(null, other))
         return false;
@@ -107,7 +107,7 @@ namespace SolutionInspector.Api.ObjectModel
     }
 
     /// <inheritdoc />
-    public override bool Equals([CanBeNull] object obj)
+    public override bool Equals ([CanBeNull] object obj)
     {
       if (ReferenceEquals(null, obj))
         return false;
@@ -119,19 +119,19 @@ namespace SolutionInspector.Api.ObjectModel
     }
 
     /// <inheritdoc />
-    public override int GetHashCode()
+    public override int GetHashCode ()
     {
       return PackageDirectoryName.GetHashCode();
     }
 
     /// <inheritdoc />
-    public static bool operator ==([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
+    public static bool operator == ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
     {
       return Equals(left, right);
     }
 
     /// <inheritdoc />
-    public static bool operator !=([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
+    public static bool operator != ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
     {
       return !Equals(left, right);
     }

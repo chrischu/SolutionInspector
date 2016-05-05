@@ -15,7 +15,6 @@ namespace SolutionInspector.DefaultRules
   public class ProjectXPathRule : ConfigurableProjectRule<ProjectXPathRuleConfiguration>
   {
     /// <inheritdoc />
-
     public ProjectXPathRule (ProjectXPathRuleConfiguration configuration)
         : base(configuration)
     {
@@ -35,7 +34,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    ///   Occurs when the XPath expression used in <see cref="ProjectXPathRuleConfiguration"/> does not evaluate to a boolean value.
+    ///   Occurs when the XPath expression used in <see cref="ProjectXPathRuleConfiguration" /> does not evaluate to a boolean value.
     /// </summary>
     [Serializable]
     public class InvalidXPathExpressionException : Exception
@@ -43,7 +42,7 @@ namespace SolutionInspector.DefaultRules
       /// <summary>
       ///   Creates a new <see cref="InvalidXPathExpressionException" />
       /// </summary>
-      public InvalidXPathExpressionException(string xPathExpression, Exception innerException = null)
+      public InvalidXPathExpressionException (string xPathExpression, Exception innerException = null)
           : base($"The configured XPath expression '{xPathExpression}' does not evaluate to a boolean value.", innerException)
       {
       }
@@ -51,7 +50,7 @@ namespace SolutionInspector.DefaultRules
       /// <summary>
       ///   Serialization constructor.
       /// </summary>
-      protected InvalidXPathExpressionException(SerializationInfo info, StreamingContext context)
+      protected InvalidXPathExpressionException (SerializationInfo info, StreamingContext context)
           : base(info, context)
       {
       }
@@ -59,7 +58,7 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration for the <see cref="ProjectXPathRule"/>.
+  ///   Configuration for the <see cref="ProjectXPathRule" />.
   /// </summary>
   public class ProjectXPathRuleConfiguration : ConfigurationElement
   {

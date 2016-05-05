@@ -24,7 +24,7 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Utilities
 {
-  [Subject(typeof (NameFilter))]
+  [Subject (typeof (NameFilter))]
   class NameFilterSpec
   {
     class when_parsing_explicit_include
@@ -105,7 +105,7 @@ namespace SolutionInspector.Api.Tests.Utilities
       static Exception Exception;
     }
 
-    static NameFilter ParseFilter(string filterString)
+    static NameFilter ParseFilter (string filterString)
     {
       var configuration = new Configuration();
       ConfigurationHelper.DeserializeElement(configuration, $@"<element filter=""{filterString}"" />");
@@ -114,7 +114,7 @@ namespace SolutionInspector.Api.Tests.Utilities
 
     class Configuration : ConfigurationElement
     {
-      [ConfigurationProperty("filter")]
+      [ConfigurationProperty ("filter")]
       public NameFilter NameFilter
       {
         get { return (NameFilter) this["filter"]; }

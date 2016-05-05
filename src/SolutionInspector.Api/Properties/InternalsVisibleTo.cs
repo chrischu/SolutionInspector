@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("SolutionInspector.Api.Tests")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
+[assembly: InternalsVisibleTo ("SolutionInspector.Api.Tests")]
+[assembly: InternalsVisibleTo ("DynamicProxyGenAssembly2")]

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SolutionInspector.Api.ObjectModel;
@@ -6,12 +7,12 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  /// Verifies that every NuGet package is only referenced in one version across all projects.
+  ///   Verifies that every NuGet package is only referenced in one version across all projects.
   /// </summary>
   public class NuGetPackagesShouldHaveOneVersionAcrossSolutionRule : SolutionRule
   {
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate(ISolution target)
+    public override IEnumerable<IRuleViolation> Evaluate (ISolution target)
     {
       var nuGetPackagesWithMultipleVersions =
           target.Projects.SelectMany(p => p.NuGetPackages)

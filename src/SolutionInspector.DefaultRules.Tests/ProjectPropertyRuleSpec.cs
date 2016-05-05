@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -24,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (ProjectPropertyRule))]
+  [Subject (typeof (ProjectPropertyRule))]
   class ProjectPropertyRuleSpec
   {
     static IProject Project;
@@ -49,10 +50,8 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_property_with_same_value
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => AdvancedProject.Properties).Returns(new Dictionary<string, string> { { "Property", "ExpectedValue" } });
-      };
+      Establish ctx =
+          () => { A.CallTo(() => AdvancedProject.Properties).Returns(new Dictionary<string, string> { { "Property", "ExpectedValue" } }); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -64,10 +63,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_property_with_different_value
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => AdvancedProject.Properties).Returns(new Dictionary<string, string> { { "Property", "ActualValue" } });
-      }; 
+      Establish ctx = () => { A.CallTo(() => AdvancedProject.Properties).Returns(new Dictionary<string, string> { { "Property", "ActualValue" } }); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -80,10 +76,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_non_existing_property
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => AdvancedProject.Properties).Returns(new Dictionary<string, string>());
-      };
+      Establish ctx = () => { A.CallTo(() => AdvancedProject.Properties).Returns(new Dictionary<string, string>()); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 

@@ -7,12 +7,12 @@ using JetBrains.Annotations;
 namespace SolutionInspector.Api.Configuration.RuleAssemblyImports
 {
   /// <summary>
-  /// Configuration used to import rule assemblies.
+  ///   Configuration used to import rule assemblies.
   /// </summary>
   public interface IRuleAssemblyImportsConfiguration
   {
     /// <summary>
-    /// A collection of paths (files and directories) from which to load assemblies.
+    ///   A collection of paths (files and directories) from which to load assemblies.
     /// </summary>
     IReadOnlyCollection<string> Imports { get; }
   }
@@ -24,13 +24,13 @@ namespace SolutionInspector.Api.Configuration.RuleAssemblyImports
 </ruleAssemblyImports>";
 
     [UsedImplicitly]
-    [ConfigurationProperty("", IsRequired = true, IsKey = false, IsDefaultCollection = true)]
+    [ConfigurationProperty ("", IsRequired = true, IsKey = false, IsDefaultCollection = true)]
     public RuleAssemblyImportsConfigurationCollection Imports
     {
-      get { return (RuleAssemblyImportsConfigurationCollection)base[""]; }
+      get { return (RuleAssemblyImportsConfigurationCollection) base[""]; }
       set { base[""] = value; }
     }
-    
+
     IReadOnlyCollection<string> IRuleAssemblyImportsConfiguration.Imports => Imports.Select(i => i.Path).ToArray();
   }
 }

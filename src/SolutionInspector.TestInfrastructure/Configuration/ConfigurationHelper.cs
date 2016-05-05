@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using Fasterflect;
@@ -6,18 +7,18 @@ using Fasterflect;
 namespace SolutionInspector.TestInfrastructure.Configuration
 {
   /// <summary>
-  /// Utility class designed to deserialize xml-fragments into configuration elements.
+  ///   Utility class designed to deserialize xml-fragments into configuration elements.
   /// </summary>
   [ExcludeFromCodeCoverage]
   public static class ConfigurationHelper
   {
     public static void DeserializeElement (ConfigurationElement configurationElement, string xmlFragment)
     {
-      using (var reader = new XmlTextReader (xmlFragment, XmlNodeType.Document, null))
+      using (var reader = new XmlTextReader(xmlFragment, XmlNodeType.Document, null))
       {
         reader.WhitespaceHandling = WhitespaceHandling.None;
         reader.IsStartElement();
-        configurationElement.CallMethod("DeserializeElement", (XmlReader)reader, false);
+        configurationElement.CallMethod("DeserializeElement", (XmlReader) reader, false);
       }
     }
 
@@ -26,7 +27,7 @@ namespace SolutionInspector.TestInfrastructure.Configuration
       using (var reader = new XmlTextReader(xmlFragment, XmlNodeType.Document, null))
       {
         reader.WhitespaceHandling = WhitespaceHandling.None;
-        configurationSection.CallMethod("DeserializeSection", (XmlReader)reader);
+        configurationSection.CallMethod("DeserializeSection", (XmlReader) reader);
       }
     }
   }

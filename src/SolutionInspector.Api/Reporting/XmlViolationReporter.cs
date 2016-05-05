@@ -12,13 +12,13 @@ namespace SolutionInspector.Api.Reporting
     private readonly TextWriter _outWriter;
     private readonly IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
 
-    public XmlViolationReporter(TextWriter outWriter, IRuleViolationViewModelConverter ruleViolationViewModelConverter)
+    public XmlViolationReporter (TextWriter outWriter, IRuleViolationViewModelConverter ruleViolationViewModelConverter)
     {
       _outWriter = outWriter;
       _ruleViolationViewModelConverter = ruleViolationViewModelConverter;
     }
 
-    public void Report(IEnumerable<IRuleViolation> violations)
+    public void Report (IEnumerable<IRuleViolation> violations)
     {
       var violationModels = _ruleViolationViewModelConverter.Convert(violations);
 

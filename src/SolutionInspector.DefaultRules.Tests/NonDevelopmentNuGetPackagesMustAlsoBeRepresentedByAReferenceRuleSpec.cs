@@ -26,7 +26,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (NonDevelopmentNuGetPackagesMustAlsoBeRepresentedByAReferenceRule))]
+  [Subject (typeof (NonDevelopmentNuGetPackagesMustAlsoBeRepresentedByAReferenceRule))]
   class NonDevelopmentNuGetPackagesMustAlsoBeRepresentedByAReferenceRuleSpec
   {
     static IProject Project;
@@ -56,10 +56,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_a_NuGet_package_does_not_have_a_corresponding_reference
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => Project.NuGetReferences).Returns(new NuGetReference[0]);
-      };
+      Establish ctx = () => { A.CallTo(() => Project.NuGetReferences).Returns(new NuGetReference[0]); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 

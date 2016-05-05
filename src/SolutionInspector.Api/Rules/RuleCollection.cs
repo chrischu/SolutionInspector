@@ -14,10 +14,13 @@ namespace SolutionInspector.Api.Rules
   internal class RuleCollection : IRuleCollection
   {
     public IReadOnlyCollection<ISolutionRule> SolutionRules { get; }
-    public IReadOnlyCollection<IProjectRule> ProjectRules { get; } 
-    public IReadOnlyCollection<IProjectItemRule> ProjectItemRules { get; } 
+    public IReadOnlyCollection<IProjectRule> ProjectRules { get; }
+    public IReadOnlyCollection<IProjectItemRule> ProjectItemRules { get; }
 
-    public RuleCollection(IEnumerable<ISolutionRule> solutionRules, IEnumerable<IProjectRule> projectRules, IEnumerable<IProjectItemRule> projectItemRules)
+    public RuleCollection (
+        IEnumerable<ISolutionRule> solutionRules,
+        IEnumerable<IProjectRule> projectRules,
+        IEnumerable<IProjectItemRule> projectItemRules)
     {
       SolutionRules = solutionRules.ToArray();
       ProjectRules = projectRules.ToArray();

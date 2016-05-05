@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -25,7 +26,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (ProjectBuildConfigurationDependentPropertyRule))]
+  [Subject (typeof (ProjectBuildConfigurationDependentPropertyRule))]
   class ProjectBuildConfigurationDependentPropertyRuleSpec
   {
     static IProject Project;
@@ -119,8 +120,11 @@ namespace SolutionInspector.DefaultRules.Tests
 
       It returns_violation = () =>
           Result.ShouldAllBeEquivalentTo(
-              new RuleViolation(SUT, Project, "Unexpected value for property 'Property' in build configuration " +
-                                              $"'{BuildConfiguration1}', was '<null>' but should be 'ExpectedValue'."));
+              new RuleViolation(
+                  SUT,
+                  Project,
+                  "Unexpected value for property 'Property' in build configuration " +
+                  $"'{BuildConfiguration1}', was '<null>' but should be 'ExpectedValue'."));
 
       static IEnumerable<IRuleViolation> Result;
     }
@@ -148,12 +152,12 @@ namespace SolutionInspector.DefaultRules.Tests
       Establish ctx = () =>
       {
         SUT = new ProjectBuildConfigurationDependentPropertyRule(
-         new ProjectBuildConfigurationDependentPropertyRuleConfiguration
-         {
-           Property = Property,
-           ExpectedValue = ExpectedValue,
-           BuildConfigurationFilter = FilterIncludeOneAndTwo
-         });
+            new ProjectBuildConfigurationDependentPropertyRuleConfiguration
+            {
+                Property = Property,
+                ExpectedValue = ExpectedValue,
+                BuildConfigurationFilter = FilterIncludeOneAndTwo
+            });
 
         A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration1])
             .Returns(new Dictionary<string, string> { { Property, "ActualValue" } });

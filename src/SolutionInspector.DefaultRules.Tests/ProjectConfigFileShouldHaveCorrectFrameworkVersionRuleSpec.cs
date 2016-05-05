@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using FakeItEasy;
 using FluentAssertions;
@@ -25,7 +26,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (ProjectConfigFileShouldHaveCorrectFrameworkVersionRule))]
+  [Subject (typeof (ProjectConfigFileShouldHaveCorrectFrameworkVersionRule))]
   class ProjectConfigFileShouldHaveCorrectFrameworkVersionRuleSpec
   {
     static IProject Project;
@@ -43,8 +44,8 @@ namespace SolutionInspector.DefaultRules.Tests
       SUT = new ProjectConfigFileShouldHaveCorrectFrameworkVersionRule(
           new ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration
           {
-            ExpectedVersion = "Version",
-            ExpectedSKU = "SKU"
+              ExpectedVersion = "Version",
+              ExpectedSKU = "SKU"
           });
     };
 
@@ -93,7 +94,8 @@ namespace SolutionInspector.DefaultRules.Tests
       Establish ctx = () =>
       {
         var configurationXml =
-            XDocument.Parse(@"<configuration><startup><supportedRuntime version=""DifferentVersion"" sku=""DifferentSKU"" /></startup></configuration>");
+            XDocument.Parse(
+                @"<configuration><startup><supportedRuntime version=""DifferentVersion"" sku=""DifferentSKU"" /></startup></configuration>");
 
         A.CallTo(() => ConfigurationProjectItem.ConfigurationXml).Returns(configurationXml);
       };

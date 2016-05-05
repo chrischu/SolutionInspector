@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 using ManyConsole;
@@ -10,25 +11,25 @@ namespace SolutionInspector.Api.Commands
   [PublicAPI]
   internal interface IArgumentsBuilderWithSetValues<out TArguments>
   {
-    IArgumentsBuilderWithSetValues<TArguments> Option(string longKey, string shortKey, string description, Action<TArguments, string> setValue);
-    IArgumentsBuilderWithSetValues<TArguments> Option<T>(string longKey, string shortKey, string description, Action<TArguments, T> setValue);
-    IArgumentsBuilderWithSetValues<TArguments> Flag(string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
+    IArgumentsBuilderWithSetValues<TArguments> Option (string longKey, string shortKey, string description, Action<TArguments, string> setValue);
+    IArgumentsBuilderWithSetValues<TArguments> Option<T> (string longKey, string shortKey, string description, Action<TArguments, T> setValue);
+    IArgumentsBuilderWithSetValues<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
   }
 
   [PublicAPI]
   internal interface IArgumentsBuilder<out TArguments>
   {
-    IArgumentsBuilder<TArguments> Option(string longKey, string shortKey, string description, Action<TArguments, string> setValue);
-    IArgumentsBuilder<TArguments> Option<T>(string longKey, string shortKey, string description, Action<TArguments, T> setValue);
-    IArgumentsBuilder<TArguments> Flag(string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
+    IArgumentsBuilder<TArguments> Option (string longKey, string shortKey, string description, Action<TArguments, string> setValue);
+    IArgumentsBuilder<TArguments> Option<T> (string longKey, string shortKey, string description, Action<TArguments, T> setValue);
+    IArgumentsBuilder<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
 
-    IArgumentsBuilderWithSetValues<TArguments> Values(Action<IValueArgumentsBuilder<TArguments>> configureValueArguments);
+    IArgumentsBuilderWithSetValues<TArguments> Values (Action<IValueArgumentsBuilder<TArguments>> configureValueArguments);
   }
 
   [PublicAPI]
   internal interface IValueArgumentsBuilder<out TArguments>
   {
-    IValueArgumentsBuilder<TArguments> Value(string name, Action<TArguments, string> setValue);
+    IValueArgumentsBuilder<TArguments> Value (string name, Action<TArguments, string> setValue);
   }
 
   internal abstract class SolutionInspectorCommand<TRawArguments, TParsedArguments> : ConsoleCommand
@@ -38,8 +39,8 @@ namespace SolutionInspector.Api.Commands
     private readonly ArgumentsBuilder<TRawArguments> _rawArgumentsBuilder;
     private TParsedArguments _parsedArguments;
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    protected SolutionInspectorCommand(string command, string description)
+    [SuppressMessage ("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    protected SolutionInspectorCommand (string command, string description)
     {
       IsCommand(command, description);
       SkipsCommandSummaryBeforeRunning();
@@ -49,9 +50,9 @@ namespace SolutionInspector.Api.Commands
       SetupArguments(_rawArgumentsBuilder);
     }
 
-    protected abstract void SetupArguments(IArgumentsBuilder<TRawArguments> argumentsBuilder);
+    protected abstract void SetupArguments (IArgumentsBuilder<TRawArguments> argumentsBuilder);
 
-    public sealed override int? OverrideAfterHandlingArgumentsBeforeRun([NotNull] string[] remainingArguments)
+    public sealed override int? OverrideAfterHandlingArgumentsBeforeRun ([NotNull] string[] remainingArguments)
     {
       _rawArgumentsBuilder.HandleRemainingArguments(remainingArguments);
       _parsedArguments = ValidateAndParseArguments(_rawArguments, message => new ConsoleHelpAsException(message));
@@ -59,14 +60,14 @@ namespace SolutionInspector.Api.Commands
       return base.OverrideAfterHandlingArgumentsBeforeRun(remainingArguments);
     }
 
-    protected abstract TParsedArguments ValidateAndParseArguments(TRawArguments arguments, Func<string, Exception> reportError);
+    protected abstract TParsedArguments ValidateAndParseArguments (TRawArguments arguments, Func<string, Exception> reportError);
 
-    public sealed override int Run([NotNull] string[] remainingArguments)
+    public sealed override int Run ([NotNull] string[] remainingArguments)
     {
       return Run(_parsedArguments);
     }
 
-    protected abstract int Run(TParsedArguments arguments);
+    protected abstract int Run (TParsedArguments arguments);
 
     private class ArgumentsBuilder<TArguments> : IArgumentsBuilder<TArguments>, IArgumentsBuilderWithSetValues<TArguments>
         where TArguments : new()
@@ -75,39 +76,39 @@ namespace SolutionInspector.Api.Commands
       private readonly TArguments _arguments;
       private readonly ValueArgumentsBuilder _valueArgumentsBuilder = new ValueArgumentsBuilder();
 
-      public ArgumentsBuilder(ConsoleCommand command, TArguments arguments)
+      public ArgumentsBuilder (ConsoleCommand command, TArguments arguments)
       {
         _command = command;
         _arguments = arguments;
       }
 
-      public IArgumentsBuilder<TArguments> Option(string longKey, string shortKey, string description, Action<TArguments, string> setValue)
+      public IArgumentsBuilder<TArguments> Option (string longKey, string shortKey, string description, Action<TArguments, string> setValue)
       {
         _command.HasOption($"{shortKey}|{longKey}=", description, v => setValue(_arguments, v));
         return this;
       }
 
-      public IArgumentsBuilder<TArguments> Option<T>(string longKey, string shortKey, string description, Action<TArguments, T> setValue)
+      public IArgumentsBuilder<TArguments> Option<T> (string longKey, string shortKey, string description, Action<TArguments, T> setValue)
       {
         _command.HasOption<T>($"{shortKey}|{longKey}=", description, v => setValue(_arguments, v));
         return this;
       }
 
 
-      public IArgumentsBuilder<TArguments> Flag(string longKey, string shortKey, string description, Action<TArguments, bool> setValue)
+      public IArgumentsBuilder<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue)
       {
         _command.HasOption($"{shortKey}|{longKey}", description, v => setValue(_arguments, v != null));
         return this;
       }
 
-      public IArgumentsBuilderWithSetValues<TArguments> Values(Action<IValueArgumentsBuilder<TArguments>> configureValueArguments)
+      public IArgumentsBuilderWithSetValues<TArguments> Values (Action<IValueArgumentsBuilder<TArguments>> configureValueArguments)
       {
         configureValueArguments(_valueArgumentsBuilder);
         _valueArgumentsBuilder.SetupAdditionalArguments(_command);
         return this;
       }
 
-      IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Option(
+      IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Option (
           string longKey,
           string shortKey,
           string description,
@@ -116,7 +117,7 @@ namespace SolutionInspector.Api.Commands
         return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
       }
 
-      IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Option<T>(
+      IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Option<T> (
           string longKey,
           string shortKey,
           string description,
@@ -125,7 +126,7 @@ namespace SolutionInspector.Api.Commands
         return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
       }
 
-      IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Flag(
+      IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Flag (
           string longKey,
           string shortKey,
           string description,
@@ -140,7 +141,7 @@ namespace SolutionInspector.Api.Commands
 
         private string AdditionalArgumentsString => string.Join(" ", _valueArguments.Select(a => $"<{a.Name}>"));
 
-        public IValueArgumentsBuilder<TArguments> Value(string name, Action<TArguments, string> setValue)
+        public IValueArgumentsBuilder<TArguments> Value (string name, Action<TArguments, string> setValue)
         {
           _valueArguments.Add(new ValueArgument(name, setValue));
           return this;
@@ -151,19 +152,19 @@ namespace SolutionInspector.Api.Commands
           public string Name { get; }
           public Action<TArguments, string> SetValueAction { get; }
 
-          public ValueArgument(string name, Action<TArguments, string> setValueAction)
+          public ValueArgument (string name, Action<TArguments, string> setValueAction)
           {
             Name = name;
             SetValueAction = setValueAction;
           }
         }
 
-        public void SetupAdditionalArguments(ConsoleCommand command)
+        public void SetupAdditionalArguments (ConsoleCommand command)
         {
           command.HasAdditionalArguments(_valueArguments.Count, AdditionalArgumentsString);
         }
 
-        public void ParseAdditionalArguments(TArguments arguments, string[] remainingArguments)
+        public void ParseAdditionalArguments (TArguments arguments, string[] remainingArguments)
         {
           Trace.Assert(remainingArguments.Length == _valueArguments.Count);
 
@@ -172,7 +173,7 @@ namespace SolutionInspector.Api.Commands
         }
       }
 
-      public void HandleRemainingArguments(string[] remainingArguments)
+      public void HandleRemainingArguments (string[] remainingArguments)
       {
         _valueArgumentsBuilder?.ParseAdditionalArguments(_arguments, remainingArguments);
       }

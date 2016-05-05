@@ -31,7 +31,7 @@ using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
-  [Subject(typeof (RuleCollectionBuilder))]
+  [Subject (typeof (RuleCollectionBuilder))]
   class RuleCollectionBuilderSpec
   {
     static IRuleTypeResolver RuleTypeResolver;
@@ -134,7 +134,7 @@ namespace SolutionInspector.Api.Tests.Rules
       static IRuleCollection Result;
     }
 
-    static void AssertProjectRuleProxy<TRule>(IRule rule, string include, string exclude = null)
+    static void AssertProjectRuleProxy<TRule> (IRule rule, string include, string exclude = null)
     {
       var projectRuleProxyType =
           typeof (RuleCollectionBuilder).GetNestedTypes(BindingFlags.NonPublic).Single(t => t.Name == "FilteringProjectRuleProxy");
@@ -154,7 +154,7 @@ namespace SolutionInspector.Api.Tests.Rules
       }
     }
 
-    static void AssertProjectItemRuleProxy<TRule>(IRule rule, string appliesTo, string inProject)
+    static void AssertProjectItemRuleProxy<TRule> (IRule rule, string appliesTo, string inProject)
     {
       var projectRuleProxyType =
           typeof (RuleCollectionBuilder).GetNestedTypes(BindingFlags.NonPublic).Single(t => t.Name == "FilteringProjectItemRuleProxy");
@@ -173,17 +173,17 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class Rule : IProjectRule, ISolutionRule, IProjectItemRule
     {
-      public IEnumerable<IRuleViolation> Evaluate(IProject target)
+      public IEnumerable<IRuleViolation> Evaluate (IProject target)
       {
         return Enumerable.Empty<RuleViolation>();
       }
 
-      public IEnumerable<IRuleViolation> Evaluate(ISolution target)
+      public IEnumerable<IRuleViolation> Evaluate (ISolution target)
       {
         return Enumerable.Empty<RuleViolation>();
       }
 
-      public IEnumerable<IRuleViolation> Evaluate(IProjectItem target)
+      public IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
       {
         return Enumerable.Empty<RuleViolation>();
       }

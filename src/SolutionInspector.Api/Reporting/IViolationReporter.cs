@@ -6,6 +6,6 @@ namespace SolutionInspector.Api.Reporting
 {
   internal interface IViolationReporter
   {
-    void Report(IEnumerable<IRuleViolation> violations);
+    void Report (IEnumerable<IRuleViolation> violations);
   }
 }

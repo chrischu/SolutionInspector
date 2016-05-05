@@ -5,7 +5,7 @@ using SolutionInspector.Api.ObjectModel;
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
-  /// A SolutionInspector rule that targets <see cref="IProject"/>s.
+  ///   A SolutionInspector rule that targets <see cref="IProject" />s.
   /// </summary>
   public interface IProjectRule : IRule<IProject>
   {
@@ -21,7 +21,7 @@ namespace SolutionInspector.Api.Rules
       where TConfiguration : ConfigurationElement
   {
     /// <inheritdoc />
-    protected ConfigurableProjectRule(TConfiguration configuration)
+    protected ConfigurableProjectRule (TConfiguration configuration)
         : base(configuration)
     {
     }

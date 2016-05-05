@@ -6,7 +6,7 @@ using SolutionInspector.Api.ObjectModel;
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
-  /// A SolutionInspector rule that targets <see cref="IProjectItem"/>s.
+  ///   A SolutionInspector rule that targets <see cref="IProjectItem" />s.
   /// </summary>
   public interface IProjectItemRule : IRule<IProjectItem>
   {
@@ -20,10 +20,10 @@ namespace SolutionInspector.Api.Rules
 
   /// <inheritdoc />
   public abstract class ConfigurableProjectItemRule<TConfiguration> : ConfigurableRule<IProjectItem, TConfiguration>, IProjectItemRule
-    where TConfiguration : ConfigurationElement
+      where TConfiguration : ConfigurationElement
   {
-  /// <inheritdoc />
-    protected ConfigurableProjectItemRule(TConfiguration configuration)
+    /// <inheritdoc />
+    protected ConfigurableProjectItemRule (TConfiguration configuration)
         : base(configuration)
     {
     }

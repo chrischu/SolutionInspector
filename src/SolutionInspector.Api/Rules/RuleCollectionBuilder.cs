@@ -9,7 +9,7 @@ namespace SolutionInspector.Api.Rules
 {
   internal interface IRuleCollectionBuilder
   {
-    IRuleCollection Build(IRulesConfiguration rulesConfiguration);
+    IRuleCollection Build (IRulesConfiguration rulesConfiguration);
   }
 
   internal class RuleCollectionBuilder : IRuleCollectionBuilder
@@ -17,7 +17,7 @@ namespace SolutionInspector.Api.Rules
     private readonly IRuleTypeResolver _ruleTypeResolver;
     private readonly IRuleConfigurationInstantiator _ruleConfigurationInstantiator;
 
-    public RuleCollectionBuilder(
+    public RuleCollectionBuilder (
         IRuleTypeResolver ruleTypeResolver,
         IRuleConfigurationInstantiator ruleConfigurationInstantiator)
     {
@@ -25,7 +25,7 @@ namespace SolutionInspector.Api.Rules
       _ruleConfigurationInstantiator = ruleConfigurationInstantiator;
     }
 
-    public IRuleCollection Build(IRulesConfiguration rulesConfiguration)
+    public IRuleCollection Build (IRulesConfiguration rulesConfiguration)
     {
       var solutionRules = BuildSolutionRules(rulesConfiguration.SolutionRules);
       var projectRules = BuildProjectRules(rulesConfiguration.ProjectRuleGroups);
@@ -34,26 +34,26 @@ namespace SolutionInspector.Api.Rules
       return new RuleCollection(solutionRules, projectRules, projectItemRules);
     }
 
-    private IEnumerable<ISolutionRule> BuildSolutionRules(IReadOnlyCollection<IRuleConfiguration> solutionRulesConfiguration)
+    private IEnumerable<ISolutionRule> BuildSolutionRules (IReadOnlyCollection<IRuleConfiguration> solutionRulesConfiguration)
     {
       return InstantiateRules<ISolutionRule>(solutionRulesConfiguration);
     }
 
-    private IEnumerable<IProjectRule> BuildProjectRules(IReadOnlyCollection<IProjectRuleGroupConfiguration> projectRuleGroups)
+    private IEnumerable<IProjectRule> BuildProjectRules (IReadOnlyCollection<IProjectRuleGroupConfiguration> projectRuleGroups)
     {
       foreach (var projectRuleGroup in projectRuleGroups)
         foreach (var projectRule in InstantiateRules<IProjectRule>(projectRuleGroup.Rules))
           yield return new FilteringProjectRuleProxy(projectRuleGroup.AppliesTo, projectRule);
     }
 
-    private IEnumerable<IProjectItemRule> BuildProjectItemRules(IReadOnlyCollection<IProjectItemRuleGroupConfiguration> projectItemRuleGrousp)
+    private IEnumerable<IProjectItemRule> BuildProjectItemRules (IReadOnlyCollection<IProjectItemRuleGroupConfiguration> projectItemRuleGrousp)
     {
       foreach (var projectItemRuleGroup in projectItemRuleGrousp)
         foreach (var projectItemRule in InstantiateRules<IProjectItemRule>(projectItemRuleGroup.Rules))
           yield return new FilteringProjectItemRuleProxy(projectItemRuleGroup.AppliesTo, projectItemRuleGroup.InProject, projectItemRule);
     }
 
-    private IEnumerable<TRule> InstantiateRules<TRule>(IReadOnlyCollection<IRuleConfiguration> ruleConfigurations)
+    private IEnumerable<TRule> InstantiateRules<TRule> (IReadOnlyCollection<IRuleConfiguration> ruleConfigurations)
         where TRule : IRule
     {
       return from ruleConfiguration in ruleConfigurations
@@ -68,13 +68,13 @@ namespace SolutionInspector.Api.Rules
       private readonly INameFilter _filter;
       private readonly IProjectRule _rule;
 
-      public FilteringProjectRuleProxy(INameFilter filter, IProjectRule rule)
+      public FilteringProjectRuleProxy (INameFilter filter, IProjectRule rule)
       {
         _filter = filter;
         _rule = rule;
       }
 
-      public IEnumerable<IRuleViolation> Evaluate(IProject target)
+      public IEnumerable<IRuleViolation> Evaluate (IProject target)
       {
         if (_filter.IsMatch(target.Name))
           return _rule.Evaluate(target);
@@ -89,14 +89,14 @@ namespace SolutionInspector.Api.Rules
       private readonly INameFilter _inProject;
       private readonly IProjectItemRule _rule;
 
-      public FilteringProjectItemRuleProxy(INameFilter appliesTo, INameFilter inProject, IProjectItemRule rule)
+      public FilteringProjectItemRuleProxy (INameFilter appliesTo, INameFilter inProject, IProjectItemRule rule)
       {
         _appliesTo = appliesTo;
         _inProject = inProject;
         _rule = rule;
       }
 
-      public IEnumerable<IRuleViolation> Evaluate(IProjectItem target)
+      public IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
       {
         if (_inProject.IsMatch(target.Project.Name) && _appliesTo.IsMatch(target.Name))
           return _rule.Evaluate(target);

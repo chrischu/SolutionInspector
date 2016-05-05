@@ -12,28 +12,28 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
-  /// Represents a VisualStudio solution.
+  ///   Represents a VisualStudio solution.
   /// </summary>
   [PublicAPI]
   public interface ISolution : IRuleTarget
   {
     /// <summary>
-    /// The solution's name.
+    ///   The solution's name.
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    /// The directory where the solution lies.
+    ///   The directory where the solution lies.
     /// </summary>
     IDirectoryInfo SolutionDirectory { get; }
 
     /// <summary>
-    /// All <see cref="IProject"/> contained in the solution.
+    ///   All <see cref="IProject" /> contained in the solution.
     /// </summary>
     IReadOnlyCollection<IProject> Projects { get; }
 
     /// <summary>
-    /// All <see cref="BuildConfiguration"/>s in the solution.
+    ///   All <see cref="BuildConfiguration" />s in the solution.
     /// </summary>
     IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
   }
@@ -43,7 +43,7 @@ namespace SolutionInspector.Api.ObjectModel
     private readonly string _solutionPath;
     private readonly SolutionFile _solutionFile;
 
-    private Solution(string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
+    private Solution (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
       _solutionPath = solutionPath;
       Name = Path.GetFileNameWithoutExtension(solutionPath);
@@ -65,7 +65,7 @@ namespace SolutionInspector.Api.ObjectModel
     string IRuleTarget.Identifier => Path.GetFileName(_solutionPath);
     string IRuleTarget.FullPath => _solutionPath;
 
-    public static Solution Load(string solutionFilePath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
+    public static Solution Load (string solutionFilePath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
       var fullPath = Path.GetFullPath(solutionFilePath);
       return new Solution(fullPath, msBuildParsingConfiguration);

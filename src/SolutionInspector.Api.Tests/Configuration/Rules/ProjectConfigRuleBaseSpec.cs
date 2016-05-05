@@ -28,7 +28,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.Configuration.Rules
 {
-  [Subject(typeof (ProjectConfigRuleBase<>))]
+  [Subject (typeof (ProjectConfigRuleBase<>))]
   class ProjectConfigRuleBaseSpec
   {
     static DummyProjectConfigRule SUT;
@@ -44,7 +44,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
       RuleViolation = A.Fake<IRuleViolation>();
 
       SUT = new DummyProjectConfigRule(Configuration, RuleViolation);
-      
+
       Project = A.Fake<IProject>();
       A.CallTo(() => Project.Name).Returns("Project");
     };
@@ -100,13 +100,13 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
     {
       private readonly IRuleViolation _violation;
 
-      public DummyProjectConfigRule(DummyProjectConfigurationRuleConfiguration configuration, IRuleViolation violation)
+      public DummyProjectConfigRule (DummyProjectConfigurationRuleConfiguration configuration, IRuleViolation violation)
           : base(configuration)
       {
         _violation = violation;
       }
 
-      protected override IEnumerable<IRuleViolation> Evaluate(
+      protected override IEnumerable<IRuleViolation> Evaluate (
           IConfigurationProjectItem target,
           XDocument configurationXml)
       {
@@ -116,7 +116,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
 
     class DummyProjectConfigurationRuleConfiguration : ProjectConfigRuleConfigurationBase
     {
-      public DummyProjectConfigurationRuleConfiguration()
+      public DummyProjectConfigurationRuleConfiguration ()
       {
         ReportViolationOnMissingConfigurationFile = true;
       }

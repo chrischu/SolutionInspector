@@ -23,7 +23,7 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Configuration.Rules
 {
-  [Subject(typeof (RuleConfigurationElement))]
+  [Subject (typeof (RuleConfigurationElement))]
   class RuleConfigurationElementSpec
   {
     static RuleConfigurationElement SUT;
@@ -52,16 +52,16 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
 
     class SubConfiguration : ConfigurationElement
     {
-      [ConfigurationProperty("indirect", DefaultValue = "", IsRequired = true)]
+      [ConfigurationProperty ("indirect", DefaultValue = "", IsRequired = true)]
       public string Indirect => (string) this["indirect"];
     }
 
     class RuleConfiguration : ConfigurationElement
     {
-      [ConfigurationProperty("direct", DefaultValue = "", IsRequired = true)]
+      [ConfigurationProperty ("direct", DefaultValue = "", IsRequired = true)]
       public string Direct => (string) this["direct"];
 
-      [ConfigurationProperty("sub")]
+      [ConfigurationProperty ("sub")]
       public SubConfiguration Sub => (SubConfiguration) this["sub"];
     }
   }

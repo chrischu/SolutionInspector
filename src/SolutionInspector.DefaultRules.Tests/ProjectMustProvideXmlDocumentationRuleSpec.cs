@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -24,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (ProjectMustProvideXmlDocumentationRule))]
+  [Subject (typeof (ProjectMustProvideXmlDocumentationRule))]
   class ProjectMustProvideXmlDocumentationRuleSpec
   {
     static string ProjectName;

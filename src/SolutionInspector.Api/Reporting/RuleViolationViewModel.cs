@@ -9,7 +9,7 @@ namespace SolutionInspector.Api.Reporting
     public string Target { get; }
     public string Message { get; }
 
-    public RuleViolationViewModel(int index, string rule, string target, string message)
+    public RuleViolationViewModel (int index, string rule, string target, string message)
     {
       Index = index;
       Rule = rule;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using FakeItEasy;
@@ -27,7 +28,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (SolutionBuildConfigurationsRule))]
+  [Subject (typeof (SolutionBuildConfigurationsRule))]
   class SolutionBuildConfigurationsRuleSpec
   {
     static ISolution Solution;
@@ -76,10 +77,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_all_configurations_are_as_expected
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => Solution.BuildConfigurations).Returns(new[] { new BuildConfiguration("Configuration", "Platform") });
-      };
+      Establish ctx = () => { A.CallTo(() => Solution.BuildConfigurations).Returns(new[] { new BuildConfiguration("Configuration", "Platform") }); };
 
       Because of = () => Result = SUT.Evaluate(Solution).ToArray();
 
@@ -91,10 +89,12 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_there_are_unexpected_configurations
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => Solution.BuildConfigurations).Returns(new[] { new BuildConfiguration("Configuration", "Platform"), new BuildConfiguration("Unex", "pected") });
-      };
+      Establish ctx =
+          () =>
+          {
+            A.CallTo(() => Solution.BuildConfigurations)
+                .Returns(new[] { new BuildConfiguration("Configuration", "Platform"), new BuildConfiguration("Unex", "pected") });
+          };
 
       Because of = () => Result = SUT.Evaluate(Solution);
 
@@ -106,10 +106,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_there_are_missing_configurations
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => Solution.BuildConfigurations).Returns(new BuildConfiguration[0]);
-      };
+      Establish ctx = () => { A.CallTo(() => Solution.BuildConfigurations).Returns(new BuildConfiguration[0]); };
 
       Because of = () => Result = SUT.Evaluate(Solution);
 

@@ -23,19 +23,17 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Configuration.RuleAssemblyImports
 {
-  [Subject(typeof (RuleAssemblyImportsConfigurationSection))]
+  [Subject (typeof (RuleAssemblyImportsConfigurationSection))]
   class RuleAssemblyImportsConfigurationSectionSpec
   {
     static IRuleAssemblyImportsConfiguration SUT;
 
-    Establish ctx = () =>
-    {
-      SUT = new RuleAssemblyImportsConfigurationSection();
-    };
+    Establish ctx = () => { SUT = new RuleAssemblyImportsConfigurationSection(); };
 
     class when_deserializing_config
     {
-      Because of = () => ConfigurationHelper.DeserializeSection((ConfigurationSection) SUT, RuleAssemblyImportsConfigurationSection.ExampleConfiguration);
+      Because of =
+          () => ConfigurationHelper.DeserializeSection((ConfigurationSection) SUT, RuleAssemblyImportsConfigurationSection.ExampleConfiguration);
 
       It reads_rule_assembly_imports = () =>
           SUT.Imports.Should().BeEquivalentTo(@"C:\Path\To\Assembly.dll");

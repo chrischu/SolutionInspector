@@ -10,7 +10,7 @@ using SolutionInspector.Api.Utilities;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  /// Verifies that all expected combinations of build configuration/platform are present in the solution.
+  ///   Verifies that all expected combinations of build configuration/platform are present in the solution.
   /// </summary>
   public class SolutionBuildConfigurationsRule : ConfigurableSolutionRule<SolutionBuildConfigurationsRuleConfiguration>
   {
@@ -20,7 +20,7 @@ namespace SolutionInspector.DefaultRules
     internal IReadOnlyCollection<BuildConfiguration> ExpectedConfigurations => _expectedConfigurations.Value;
 
     /// <inheritdoc />
-    public SolutionBuildConfigurationsRule(SolutionBuildConfigurationsRuleConfiguration configuration)
+    public SolutionBuildConfigurationsRule (SolutionBuildConfigurationsRuleConfiguration configuration)
         : base(configuration)
     {
       _collectionDifferenceFinder = new CollectionDifferenceFinder();
@@ -31,7 +31,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate(ISolution target)
+    public override IEnumerable<IRuleViolation> Evaluate (ISolution target)
     {
       var differences = _collectionDifferenceFinder.FindDifferences(ExpectedConfigurations, target.BuildConfigurations);
 
@@ -44,15 +44,15 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration for the <see cref="SolutionBuildConfigurationsRule"/>.
+  ///   Configuration for the <see cref="SolutionBuildConfigurationsRule" />.
   /// </summary>
   public class SolutionBuildConfigurationsRuleConfiguration : ConfigurationElement
   {
     /// <summary>
-    /// A list of expected configurations (e.g. Build, Release).
+    ///   A list of expected configurations (e.g. Build, Release).
     /// </summary>
-    [TypeConverter(typeof (CommaDelimitedStringCollectionConverter))]
-    [ConfigurationProperty("expectedConfigurations", DefaultValue = "", IsRequired = true)]
+    [TypeConverter (typeof (CommaDelimitedStringCollectionConverter))]
+    [ConfigurationProperty ("expectedConfigurations", DefaultValue = "", IsRequired = true)]
     public CommaDelimitedStringCollection Configurations
     {
       get { return (CommaDelimitedStringCollection) this["expectedConfigurations"]; }
@@ -60,10 +60,10 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    /// A list of expected platforms (e.g. AnyCPU, x64).
+    ///   A list of expected platforms (e.g. AnyCPU, x64).
     /// </summary>
-    [TypeConverter(typeof (CommaDelimitedStringCollectionConverter))]
-    [ConfigurationProperty("expectedPlatforms", DefaultValue = "", IsRequired = true)]
+    [TypeConverter (typeof (CommaDelimitedStringCollectionConverter))]
+    [ConfigurationProperty ("expectedPlatforms", DefaultValue = "", IsRequired = true)]
     public CommaDelimitedStringCollection Platforms
     {
       get { return (CommaDelimitedStringCollection) this["expectedPlatforms"]; }

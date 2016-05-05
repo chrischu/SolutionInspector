@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml;
 using SolutionInspector.Api.Configuration.Infrastructure;
@@ -9,31 +10,31 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.Api.Configuration.Rules
 {
   /// <summary>
-  /// Configuration for a <see cref="IRule"/>.
+  ///   Configuration for a <see cref="IRule" />.
   /// </summary>
   public interface IRuleConfiguration
   {
     /// <summary>
-    /// The assembly-qualified type name of the <see cref="IRule"/>.
+    ///   The assembly-qualified type name of the <see cref="IRule" />.
     /// </summary>
     string RuleType { get; }
 
     /// <summary>
-    /// The configuration for the <see cref="IRule"/> as XML.
+    ///   The configuration for the <see cref="IRule" /> as XML.
     /// </summary>
     XmlElement Configuration { get; }
   }
 
   internal class RuleConfigurationElement : KeyedConfigurationElement<string>, IRuleConfiguration
   {
-    [ConfigurationProperty("type", IsRequired = true)]
+    [ConfigurationProperty ("type", IsRequired = true)]
     public string RuleType => Key;
 
     public XmlElement Configuration { get; private set; }
 
     public override string KeyName => "type";
 
-    protected override void DeserializeElement(XmlReader reader, bool serializeCollectionKey)
+    protected override void DeserializeElement (XmlReader reader, bool serializeCollectionKey)
     {
       var subReader = reader.ReadSubtree();
       subReader.Read();
@@ -49,8 +50,8 @@ namespace SolutionInspector.Api.Configuration.Rules
       Configuration = CreateConfigurationElement(node);
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-    private XmlReader CreateReaderForBaseCall(XmlNode node)
+    [SuppressMessage ("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+    private XmlReader CreateReaderForBaseCall (XmlNode node)
     {
       var nodeForBase = node.CloneNode(true);
       nodeForBase.RemoveAllChildren();
@@ -62,7 +63,7 @@ namespace SolutionInspector.Api.Configuration.Rules
       return reader;
     }
 
-    private XmlElement CreateConfigurationElement(XmlNode node)
+    private XmlElement CreateConfigurationElement (XmlNode node)
     {
       var nodeForConfiguration = node.CloneNode(true);
       nodeForConfiguration.RemoveAttributesWhere(a => a.LocalName == KeyName);

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -6,14 +7,14 @@ using System.Xml;
 namespace SolutionInspector.Api.Extensions
 {
   /// <summary>
-  /// Extension methods for XML classes.
+  ///   Extension methods for XML classes.
   /// </summary>
   public static class XmlExtensions
   {
     /// <summary>
-    /// Adds an attribute with the given <paramref name="name"/> and <paramref name="value"/> to the <paramref name="element"/>.
+    ///   Adds an attribute with the given <paramref name="name" /> and <paramref name="value" /> to the <paramref name="element" />.
     /// </summary>
-    public static void AddAttribute(this XmlElement element, string name, string value)
+    public static void AddAttribute (this XmlElement element, string name, string value)
     {
       var attr = element.OwnerDocument.AssertNotNull().CreateAttribute(name);
       attr.Value = value;
@@ -21,9 +22,9 @@ namespace SolutionInspector.Api.Extensions
     }
 
     /// <summary>
-    /// Adds an element with the given <paramref name="name"/> and <paramref name="value"/> to the <paramref name="element"/>.
+    ///   Adds an element with the given <paramref name="name" /> and <paramref name="value" /> to the <paramref name="element" />.
     /// </summary>
-    public static void AddElement(this XmlElement element, string name, string value)
+    public static void AddElement (this XmlElement element, string name, string value)
     {
       var elem = element.OwnerDocument.AssertNotNull().CreateElement(name);
       elem.InnerText = value;
@@ -31,9 +32,9 @@ namespace SolutionInspector.Api.Extensions
     }
 
     /// <summary>
-    /// Removes all children from the <paramref name="xmlNode"/>.
+    ///   Removes all children from the <paramref name="xmlNode" />.
     /// </summary>
-    public static void RemoveAllChildren(this XmlNode xmlNode)
+    public static void RemoveAllChildren (this XmlNode xmlNode)
     {
       var child = xmlNode.FirstChild;
 
@@ -46,9 +47,9 @@ namespace SolutionInspector.Api.Extensions
     }
 
     /// <summary>
-    /// Removes all attributes that match the <paramref name="filter"/> from the <paramref name="xmlNode"/>.
+    ///   Removes all attributes that match the <paramref name="filter" /> from the <paramref name="xmlNode" />.
     /// </summary>
-    public static void RemoveAttributesWhere(this XmlNode xmlNode, Func<XmlAttribute, bool> filter)
+    public static void RemoveAttributesWhere (this XmlNode xmlNode, Func<XmlAttribute, bool> filter)
     {
       if (xmlNode.Attributes == null)
         return;
@@ -60,10 +61,10 @@ namespace SolutionInspector.Api.Extensions
     }
 
     /// <summary>
-    /// Creates an instance of <see cref="XmlReader"/> from the given <paramref name="xmlNode"/>.
+    ///   Creates an instance of <see cref="XmlReader" /> from the given <paramref name="xmlNode" />.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-    public static XmlReader Read(this XmlNode xmlNode)
+    [SuppressMessage ("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+    public static XmlReader Read (this XmlNode xmlNode)
     {
       var reader = new XmlTextReader(new StringReader(xmlNode.OuterXml));
       reader.Read();

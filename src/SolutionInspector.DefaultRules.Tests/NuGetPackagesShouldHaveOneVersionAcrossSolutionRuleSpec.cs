@@ -25,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (NuGetPackagesShouldHaveOneVersionAcrossSolutionRule))]
+  [Subject (typeof (NuGetPackagesShouldHaveOneVersionAcrossSolutionRule))]
   class NuGetPackagesShouldHaveOneVersionAcrossSolutionRuleSpec
   {
     static ISolution Solution;
@@ -70,7 +70,8 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Solution);
 
       It returns_violations = () =>
-          Result.ShouldAllBeEquivalentTo(new RuleViolation(SUT, Solution, "The NuGet package 'Id' is referenced in more than one version ('1.0', '1.1')."));
+          Result.ShouldAllBeEquivalentTo(
+              new RuleViolation(SUT, Solution, "The NuGet package 'Id' is referenced in more than one version ('1.0', '1.1')."));
 
       static IEnumerable<IRuleViolation> Result;
     }
@@ -86,7 +87,8 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Solution);
 
       It returns_violations = () =>
-          Result.ShouldAllBeEquivalentTo(new RuleViolation(SUT, Solution, "The NuGet package 'Id' is referenced in more than one version ('1.0', '1.1-tag')."));
+          Result.ShouldAllBeEquivalentTo(
+              new RuleViolation(SUT, Solution, "The NuGet package 'Id' is referenced in more than one version ('1.0', '1.1-tag')."));
 
       static IEnumerable<IRuleViolation> Result;
     }

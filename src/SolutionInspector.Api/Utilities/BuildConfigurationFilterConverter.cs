@@ -9,14 +9,14 @@ using SolutionInspector.Api.ObjectModel;
 namespace SolutionInspector.Api.Utilities
 {
   /// <summary>
-  /// Configuration converter that converts between <see cref="string"/> and <see cref="BuildConfigurationFilter"/>.
+  ///   Configuration converter that converts between <see cref="string" /> and <see cref="BuildConfigurationFilter" />.
   /// </summary>
   public class BuildConfigurationFilterConverter : ConfigurationConverterBase
   {
     /// <summary>
-    /// Converts a <see cref="BuildConfigurationFilter"/> to a <see cref="string"/>.
+    ///   Converts a <see cref="BuildConfigurationFilter" /> to a <see cref="string" />.
     /// </summary>
-    public override object ConvertTo([CanBeNull] ITypeDescriptorContext ctx, [CanBeNull] CultureInfo ci, [CanBeNull] object value, Type type)
+    public override object ConvertTo ([CanBeNull] ITypeDescriptorContext ctx, [CanBeNull] CultureInfo ci, [CanBeNull] object value, Type type)
     {
       if (value == null)
         return null;
@@ -28,9 +28,9 @@ namespace SolutionInspector.Api.Utilities
     }
 
     /// <summary>
-    /// Converts a <see cref="string"/> to a <see cref="BuildConfigurationFilter"/>.
+    ///   Converts a <see cref="string" /> to a <see cref="BuildConfigurationFilter" />.
     /// </summary>
-    public override object ConvertFrom([CanBeNull] ITypeDescriptorContext ctx, [CanBeNull] CultureInfo ci, [CanBeNull] object data)
+    public override object ConvertFrom ([CanBeNull] ITypeDescriptorContext ctx, [CanBeNull] CultureInfo ci, [CanBeNull] object data)
     {
       if (data == null)
         return null;

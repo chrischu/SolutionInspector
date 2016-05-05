@@ -23,24 +23,21 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Configuration.Rules
 {
-  [Subject(typeof (RulesConfigurationSection))]
+  [Subject (typeof (RulesConfigurationSection))]
   class RulesConfigurationSectionSpec
   {
     static RulesConfigurationSection SUT;
 
-    Establish ctx = () =>
-    {
-      SUT = new RulesConfigurationSection();
-    };
+    Establish ctx = () => { SUT = new RulesConfigurationSection(); };
 
     class when_deserializing_config
     {
       Because of = () => ConfigurationHelper.DeserializeSection(SUT, RulesConfigurationSection.ExampleConfiguration);
 
-      It reads_solution_rules = () => 
-        AssertRule(SUT.SolutionRules.Single());
+      It reads_solution_rules = () =>
+          AssertRule(SUT.SolutionRules.Single());
 
-      It reads_project_rule_groups =() =>
+      It reads_project_rule_groups = () =>
       {
         var allGroup = SUT.ProjectRules.GetElement("+*");
         AssertRule(allGroup.Rules.Single());
@@ -59,7 +56,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
       };
     }
 
-    static void AssertRule(IRuleConfiguration rule)
+    static void AssertRule (IRuleConfiguration rule)
     {
       rule.RuleType.Should().Be("Namespace.Rule, Assembly");
       rule.Configuration.OuterXml.Should().Be(@"<rule property=""Property""><innerConfig property=""InnerProperty"" /></rule>");

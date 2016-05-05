@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using FakeItEasy;
 using FluentAssertions;
@@ -26,7 +27,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (RequiredCompilationSymbolsProjectRule))]
+  [Subject (typeof (RequiredCompilationSymbolsProjectRule))]
   class RequiredCompilationSymbolsProjectRuleSpec
   {
     static IProject Project;

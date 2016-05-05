@@ -26,7 +26,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
-  [Subject(typeof (RuleTypeResolver))]
+  [Subject (typeof (RuleTypeResolver))]
   class RuleTypeResolverSpec
   {
     static IRuleTypeResolver SUT;
@@ -153,31 +153,31 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class RuleWithoutPublicCtor : IRule
     {
-      private RuleWithoutPublicCtor()
+      private RuleWithoutPublicCtor ()
       {
       }
     }
 
     class RuleWithMultipleCtors : IRule
     {
-      public RuleWithMultipleCtors()
+      public RuleWithMultipleCtors ()
       {
       }
 
       // ReSharper disable once UnusedParameter.Local
-      public RuleWithMultipleCtors(object dummyParameter)
+      public RuleWithMultipleCtors (object dummyParameter)
       {
       }
     }
 
     class ConfigurableRule : ConfigurableRule<IRuleTarget, ConfigurableRuleConfiguration>
     {
-      public ConfigurableRule(ConfigurableRuleConfiguration configuration)
+      public ConfigurableRule (ConfigurableRuleConfiguration configuration)
           : base(configuration)
       {
       }
 
-      public override IEnumerable<IRuleViolation> Evaluate(IRuleTarget target)
+      public override IEnumerable<IRuleViolation> Evaluate (IRuleTarget target)
       {
         return Enumerable.Empty<IRuleViolation>();
       }
@@ -185,7 +185,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class ConfigurableRuleWithoutCorrectCtor : IConfigurableRule<IRuleTarget, ConfigurableRuleConfiguration>
     {
-      public IEnumerable<IRuleViolation> Evaluate(IRuleTarget target)
+      public IEnumerable<IRuleViolation> Evaluate (IRuleTarget target)
       {
         return Enumerable.Empty<IRuleViolation>();
       }
@@ -195,18 +195,18 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class ConfigurableRuleWithMultipleCtors : ConfigurableRule<IRuleTarget, ConfigurableRuleConfiguration>
     {
-      public ConfigurableRuleWithMultipleCtors(ConfigurableRuleConfiguration configuration)
+      public ConfigurableRuleWithMultipleCtors (ConfigurableRuleConfiguration configuration)
           : base(configuration)
       {
       }
 
       // ReSharper disable once UnusedParameter.Local
-      public ConfigurableRuleWithMultipleCtors(ConfigurableRuleConfiguration configuration, object dummyParameter)
+      public ConfigurableRuleWithMultipleCtors (ConfigurableRuleConfiguration configuration, object dummyParameter)
           : base(configuration)
       {
       }
 
-      public override IEnumerable<IRuleViolation> Evaluate(IRuleTarget target)
+      public override IEnumerable<IRuleViolation> Evaluate (IRuleTarget target)
       {
         return Enumerable.Empty<IRuleViolation>();
       }

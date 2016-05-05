@@ -14,15 +14,15 @@ using SolutionInspector.Api.Utilities;
 namespace SolutionInspector.Api
 {
   /// <summary>
-  /// Entry point for a SolutionInspector run.
+  ///   Entry point for a SolutionInspector run.
   /// </summary>
   [PublicAPI]
   public static class SolutionInspector
   {
     /// <summary>
-    /// Runs the SolutionInspector with the given console <paramref name="args"/>.
+    ///   Runs the SolutionInspector with the given console <paramref name="args" />.
     /// </summary>
-    public static int Run(string[] args)
+    public static int Run (string[] args)
     {
       ////var solution =
       ////    Solution.Load(@"C:\Users\Chris\Documents\Visual Studio 2015\Projects\SolutionInspector.TestSolution\SolutionInspector.TestSolution.sln");
@@ -45,7 +45,7 @@ namespace SolutionInspector.Api
       }
     }
 
-    private static IContainer SetupContainer()
+    private static IContainer SetupContainer ()
     {
       var builder = new ContainerBuilder();
 

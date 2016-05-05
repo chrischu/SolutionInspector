@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 namespace SolutionInspector.TestInfrastructure
 {
   /// <summary>
-  /// Returns random data for common types.
+  ///   Returns random data for common types.
   /// </summary>
   [PublicAPI]
   public static class Some
@@ -17,13 +17,14 @@ namespace SolutionInspector.TestInfrastructure
 
     // Thread-local Random instance provider
     private static int s_Seed = Environment.TickCount;
+
     private static readonly ThreadLocal<Random> s_threadLocalRandomProvider =
         new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref s_Seed)));
 
     // ReSharper disable UnusedMember.Global - maybe used in the future
     public static bool Boolean => Random.Next(2) == 1;
 
-    public static string String()
+    public static string String ()
     {
       return StringBetween(1, c_SomeStringDefaultMaxLength);
     }
@@ -44,6 +45,7 @@ namespace SolutionInspector.TestInfrastructure
       var values = System.Enum.GetValues(typeof (T));
       return (T) values.GetValue(Random.Next(values.Length));
     }
+
     // ReSharper restore UnusedMember.Global
 
     private static int NextRandomBetweenInclusive (int minValue, int maxValue)
@@ -58,7 +60,7 @@ namespace SolutionInspector.TestInfrastructure
     public static Exception Exception => new SomeException(String());
 
     /// <summary>
-    /// Some exception.
+    ///   Some exception.
     /// </summary>
     [Serializable]
     private class SomeException : Exception

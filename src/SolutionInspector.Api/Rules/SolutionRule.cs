@@ -6,7 +6,7 @@ using SolutionInspector.Api.ObjectModel;
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
-  /// A SolutionInspector rule that targets <see cref="ISolution"/>s.
+  ///   A SolutionInspector rule that targets <see cref="ISolution" />s.
   /// </summary>
   public interface ISolutionRule : IRule<ISolution>
   {
@@ -23,7 +23,7 @@ namespace SolutionInspector.Api.Rules
       where TConfiguration : ConfigurationElement
   {
     /// <inheritdoc />
-    protected ConfigurableSolutionRule(TConfiguration configuration)
+    protected ConfigurableSolutionRule (TConfiguration configuration)
         : base(configuration)
     {
     }

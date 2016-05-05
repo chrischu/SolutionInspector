@@ -27,7 +27,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (ProjectXPathRule))]
+  [Subject (typeof (ProjectXPathRule))]
   class ProjectXPathRuleSpec
   {
     static IProject Project;
@@ -51,10 +51,10 @@ namespace SolutionInspector.DefaultRules.Tests
       Establish ctx = () =>
       {
         SUT = new ProjectXPathRule(
-          new ProjectXPathRuleConfiguration
-          {
-            XPath = "boolean(//element[@attr=7])"
-          });
+            new ProjectXPathRuleConfiguration
+            {
+                XPath = "boolean(//element[@attr=7])"
+            });
       };
 
       Because of = () => Result = SUT.Evaluate(Project);
@@ -70,10 +70,10 @@ namespace SolutionInspector.DefaultRules.Tests
       Establish ctx = () =>
       {
         SUT = new ProjectXPathRule(
-          new ProjectXPathRuleConfiguration
-          {
-            XPath = "boolean(//nonExistingElement)"
-          });
+            new ProjectXPathRuleConfiguration
+            {
+                XPath = "boolean(//nonExistingElement)"
+            });
       };
 
       Because of = () => Result = SUT.Evaluate(Project);
@@ -90,10 +90,10 @@ namespace SolutionInspector.DefaultRules.Tests
       Establish ctx = () =>
       {
         SUT = new ProjectXPathRule(
-          new ProjectXPathRuleConfiguration
-          {
-            XPath = "//element"
-          });
+            new ProjectXPathRuleConfiguration
+            {
+                XPath = "//element"
+            });
       };
 
       Because of = () => Exception = Catch.Exception(() => SUT.Evaluate(Project).ToArray());

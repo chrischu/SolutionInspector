@@ -6,7 +6,7 @@ namespace SolutionInspector.Api.Configuration.MsBuildParsing
 {
   internal class ProjectBuildActionConfigurationElement : KeyedConfigurationElement<string>
   {
-    [ConfigurationProperty("name")]
+    [ConfigurationProperty ("name")]
     public string Name => Key;
 
     public override string KeyName => "name";

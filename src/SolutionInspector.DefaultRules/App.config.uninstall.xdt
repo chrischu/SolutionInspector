@@ -4,7 +4,7 @@
     <rules>
       <solutionRules>
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-              type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules"  />
+              type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules" />
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.SolutionBuildConfigurationsRule, SolutionInspector.DefaultRules"
               expectedConfigurations="Debug,Release" expectedPlatforms="AnyCPU" />

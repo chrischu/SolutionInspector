@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
   <configSections>
-    <sectionGroup xdt:Transform="Remove" name="solutionInspector" type="SolutionInspector.Configuration.SolutionInspectorConfiguration, SolutionInspector.Api" />
+    <sectionGroup xdt:Transform="Remove" name="solutionInspector"
+                  type="SolutionInspector.Configuration.SolutionInspectorConfiguration, SolutionInspector.Api" />
   </configSections>
 
   <solutionInspector xdt:Transform="Remove" />

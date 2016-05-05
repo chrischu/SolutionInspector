@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -10,19 +11,19 @@ using SolutionInspector.Api.Utilities;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  /// Verifies that a project's property has the expected value in the build configurations matched by the 
-  /// <see cref="ProjectBuildConfigurationDependentPropertyRuleConfiguration.BuildConfigurationFilter"/>.
+  ///   Verifies that a project's property has the expected value in the build configurations matched by the
+  ///   <see cref="ProjectBuildConfigurationDependentPropertyRuleConfiguration.BuildConfigurationFilter" />.
   /// </summary>
   public class ProjectBuildConfigurationDependentPropertyRule : ConfigurableProjectRule<ProjectBuildConfigurationDependentPropertyRuleConfiguration>
   {
     /// <inheritdoc />
-    public ProjectBuildConfigurationDependentPropertyRule(ProjectBuildConfigurationDependentPropertyRuleConfiguration configuration)
+    public ProjectBuildConfigurationDependentPropertyRule (ProjectBuildConfigurationDependentPropertyRuleConfiguration configuration)
         : base(configuration)
     {
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate(IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       var matchingBuildConfigs = target.BuildConfigurations.Where(c => Configuration.BuildConfigurationFilter.IsMatch(c));
 
@@ -44,15 +45,15 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration for the <see cref="ProjectBuildConfigurationDependentPropertyRule"/>.
+  ///   Configuration for the <see cref="ProjectBuildConfigurationDependentPropertyRule" />.
   /// </summary>
   public class ProjectBuildConfigurationDependentPropertyRuleConfiguration : ConfigurationElement
   {
     /// <summary>
-    /// Controlls in which build configurations the <see cref="Property"/> is checked against the <see cref="ExpectedValue"/>.
+    ///   Controlls in which build configurations the <see cref="Property" /> is checked against the <see cref="ExpectedValue" />.
     /// </summary>
-    [TypeConverter(typeof (BuildConfigurationFilterConverter))]
-    [ConfigurationProperty("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
+    [TypeConverter (typeof (BuildConfigurationFilterConverter))]
+    [ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
       get { return (BuildConfigurationFilter) this["buildConfigurationFilter"]; }
@@ -60,9 +61,9 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    /// The property to check.
+    ///   The property to check.
     /// </summary>
-    [ConfigurationProperty("property", DefaultValue = "", IsRequired = true)]
+    [ConfigurationProperty ("property", DefaultValue = "", IsRequired = true)]
     public string Property
     {
       get { return (string) this["property"]; }
@@ -70,14 +71,13 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    /// The expected property value to check against.
+    ///   The expected property value to check against.
     /// </summary>
-    [ConfigurationProperty("expectedValue", DefaultValue = "", IsRequired = true)]
+    [ConfigurationProperty ("expectedValue", DefaultValue = "", IsRequired = true)]
     public string ExpectedValue
     {
       get { return (string) this["expectedValue"]; }
       set { this["expectedValue"] = value; }
-
     }
   }
 }

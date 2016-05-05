@@ -11,58 +11,58 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
-  /// Represents a MSBuild project item.
+  ///   Represents a MSBuild project item.
   /// </summary>
   [PublicAPI]
   public interface IProjectItem : IRuleTarget
   {
     /// <summary>
-    /// The project the item is contained in.
+    ///   The project the item is contained in.
     /// </summary>
     IProject Project { get; }
 
     /// <summary>
-    /// The (file) name of the project item.
+    ///   The (file) name of the project item.
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    /// The path (relative to the project file) of the project item.
+    ///   The path (relative to the project file) of the project item.
     /// </summary>
     string Include { get; }
 
     /// <summary>
-    /// The build action that is configured for the project item.
+    ///   The build action that is configured for the project item.
     /// </summary>
     ProjectItemBuildAction BuildAction { get; }
 
     /// <summary>
-    /// A <see cref="IFileInfo"/> pointing to the project item.
+    ///   A <see cref="IFileInfo" /> pointing to the project item.
     /// </summary>
     IFileInfo File { get; }
 
     /// <summary>
-    /// Metadata for the project item.
+    ///   Metadata for the project item.
     /// </summary>
     IReadOnlyDictionary<string, string> Metadata { get; }
 
     /// <summary>
-    /// The custom tool that is configured for the project item.
+    ///   The custom tool that is configured for the project item.
     /// </summary>
     string CustomTool { get; }
 
     /// <summary>
-    /// The custom tool namespace that is configured for the project item.
+    ///   The custom tool namespace that is configured for the project item.
     /// </summary>
     string CustomToolNamespace { get; }
 
     /// <summary>
-    /// The project item's parent project item (if any).
+    ///   The project item's parent project item (if any).
     /// </summary>
     IProjectItem Parent { get; }
 
     /// <summary>
-    /// The project item's child project items (if any).
+    ///   The project item's child project items (if any).
     /// </summary>
     IReadOnlyCollection<IProjectItem> Children { get; }
   }
@@ -94,7 +94,12 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IReadOnlyCollection<IProjectItem> Children => _children;
 
-    public ProjectItem(IProject project, string include, ProjectItemBuildAction buildAction, IFileInfo file, IReadOnlyDictionary<string, string> metadata)
+    public ProjectItem (
+        IProject project,
+        string include,
+        ProjectItemBuildAction buildAction,
+        IFileInfo file,
+        IReadOnlyDictionary<string, string> metadata)
     {
       Project = project;
       Include = include;
@@ -103,13 +108,13 @@ namespace SolutionInspector.Api.ObjectModel
       Metadata = metadata;
     }
 
-    internal void SetParent(ProjectItem parent)
+    internal void SetParent (ProjectItem parent)
     {
       parent._children.Add(this);
       Parent = parent;
     }
 
-    public static ProjectItem FromMsBuildProjectItem(IProject project, Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
+    public static ProjectItem FromMsBuildProjectItem (IProject project, Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
       var buildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
 
@@ -119,6 +124,5 @@ namespace SolutionInspector.Api.ObjectModel
 
       return new ProjectItem(project, msBuildProjectItem.EvaluatedInclude, buildAction, file, metadata);
     }
-
   }
 }

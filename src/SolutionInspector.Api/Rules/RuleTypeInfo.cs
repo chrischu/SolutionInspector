@@ -15,7 +15,7 @@ namespace SolutionInspector.Api.Rules
 
     public bool IsConfigurable => ConfigurationType != null;
 
-    public RuleTypeInfo(Type ruleType, [CanBeNull] Type configurationType, ConstructorInfo constructor)
+    public RuleTypeInfo (Type ruleType, [CanBeNull] Type configurationType, ConstructorInfo constructor)
     {
       RuleType = ruleType;
       Constructor = constructor;

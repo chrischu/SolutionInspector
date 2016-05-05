@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -24,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (ProjectItemMustHaveCorrectBuildActionRule))]
+  [Subject (typeof (ProjectItemMustHaveCorrectBuildActionRule))]
   class ProjectItemMustHaveCorrectBuildActionRuleSpec
   {
     static IProjectItem ProjectItem;
@@ -44,10 +45,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_project_item_with_correct_build_action
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => ProjectItem.BuildAction).Returns(ProjectItemBuildAction.Compile);
-      };
+      Establish ctx = () => { A.CallTo(() => ProjectItem.BuildAction).Returns(ProjectItemBuildAction.Compile); };
 
       Because of = () => Result = SUT.Evaluate(ProjectItem);
 
@@ -59,10 +57,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_project_item_with_incorrect_values
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => ProjectItem.BuildAction).Returns(ProjectItemBuildAction.None);
-      };
+      Establish ctx = () => { A.CallTo(() => ProjectItem.BuildAction).Returns(ProjectItemBuildAction.None); };
 
       Because of = () => Result = SUT.Evaluate(ProjectItem);
 

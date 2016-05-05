@@ -9,12 +9,12 @@ namespace SolutionInspector.Api.Rules
 {
   internal interface IRuleConfigurationInstantiator
   {
-    ConfigurationElement Instantiate([CanBeNull] Type configurationType, XmlElement configurationXml);
+    ConfigurationElement Instantiate ([CanBeNull] Type configurationType, XmlElement configurationXml);
   }
 
   internal class RuleConfigurationInstantiator : IRuleConfigurationInstantiator
   {
-    public ConfigurationElement Instantiate([CanBeNull] Type configurationType, XmlElement configurationXml)
+    public ConfigurationElement Instantiate ([CanBeNull] Type configurationType, XmlElement configurationXml)
     {
       if (configurationType == null)
         return null;
@@ -22,7 +22,9 @@ namespace SolutionInspector.Api.Rules
       var configuration = (ConfigurationElement) Activator.CreateInstance(configurationType);
 
       using (var reader = configurationXml.Read())
+      {
         configuration.CallMethod("DeserializeElement", reader, false);
+      }
 
       return configuration;
     }

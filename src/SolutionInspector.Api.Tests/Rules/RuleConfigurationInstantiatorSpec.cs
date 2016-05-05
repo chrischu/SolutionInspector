@@ -24,7 +24,7 @@ using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
-  [Subject(typeof (RuleConfigurationInstantiator))]
+  [Subject (typeof (RuleConfigurationInstantiator))]
   class RuleConfigurationInstantiatorSpec
   {
     static string AssemblyName;
@@ -62,7 +62,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class RuleConfiguration : ConfigurationElement
     {
-      [ConfigurationProperty("property", DefaultValue = "", IsRequired = true)]
+      [ConfigurationProperty ("property", DefaultValue = "", IsRequired = true)]
       public string Property => (string) this["property"];
     }
   }

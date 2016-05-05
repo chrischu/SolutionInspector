@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -24,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof (ProjectItemMustHaveCustomToolSetRule))]
+  [Subject (typeof (ProjectItemMustHaveCustomToolSetRule))]
   class ProjectItemMustHaveCustomToolSetRuleSpec
   {
     static IProjectItem ProjectItem;
@@ -39,7 +40,7 @@ namespace SolutionInspector.DefaultRules.Tests
           new ProjectItemMustHaveCustomToolSetRuleConfiguration
           {
               ExpectedCustomTool = "CustomTool",
-              ExpectedCustomToolNamespace= "CustomToolNamespace"
+              ExpectedCustomToolNamespace = "CustomToolNamespace"
           });
     };
 
@@ -72,7 +73,10 @@ namespace SolutionInspector.DefaultRules.Tests
       It returns_violation = () =>
           Result.ShouldAllBeEquivalentTo(
               new RuleViolation(SUT, ProjectItem, "Unexpected value for custom tool, was 'DIFFERENT' but should be 'CustomTool'."),
-              new RuleViolation(SUT, ProjectItem, "Unexpected value for custom tool namespace, was 'DIFFERENT_NS' but should be 'CustomToolNamespace'."));
+              new RuleViolation(
+                  SUT,
+                  ProjectItem,
+                  "Unexpected value for custom tool namespace, was 'DIFFERENT_NS' but should be 'CustomToolNamespace'."));
 
       static IEnumerable<IRuleViolation> Result;
     }

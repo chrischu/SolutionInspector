@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -9,18 +10,18 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  /// Verifies that the project references all the NuGet packages configured via <see cref="RequiredNuGetPackagesRuleConfiguration"/>.
+  ///   Verifies that the project references all the NuGet packages configured via <see cref="RequiredNuGetPackagesRuleConfiguration" />.
   /// </summary>
   public class RequiredNuGetPackagesRule : ConfigurableProjectRule<RequiredNuGetPackagesRuleConfiguration>
   {
     /// <inheritdoc />
-    public RequiredNuGetPackagesRule([NotNull] RequiredNuGetPackagesRuleConfiguration configuration)
+    public RequiredNuGetPackagesRule ([NotNull] RequiredNuGetPackagesRuleConfiguration configuration)
         : base(configuration)
     {
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate(IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       return from requiredNuGetPackage in Configuration
         where target.NuGetPackages.All(p => p.Id != requiredNuGetPackage.Id)
@@ -29,7 +30,7 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration for the <see cref="RequiredNuGetPackagesRule"/>.
+  ///   Configuration for the <see cref="RequiredNuGetPackagesRule" />.
   /// </summary>
   public class RequiredNuGetPackagesRuleConfiguration : KeyedConfigurationElementCollectionBase<RequiredNuGetPackageConfigurationElement, string>
   {
@@ -38,7 +39,7 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration element that represents a required NuGet package.
+  ///   Configuration element that represents a required NuGet package.
   /// </summary>
   public class RequiredNuGetPackageConfigurationElement : KeyedConfigurationElement<string>
   {
@@ -46,12 +47,12 @@ namespace SolutionInspector.DefaultRules
     public override string KeyName => "id";
 
     /// <summary>
-    /// The id of the required NuGet package.
+    ///   The id of the required NuGet package.
     /// </summary>
-    [ConfigurationProperty("id", DefaultValue = "", IsRequired = true, IsKey = true)]
+    [ConfigurationProperty ("id", DefaultValue = "", IsRequired = true, IsKey = true)]
     public string Id
     {
-      get { return (string)this["id"]; }
+      get { return (string) this["id"]; }
       set { this["id"] = value; }
     }
   }

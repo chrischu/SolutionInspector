@@ -32,7 +32,7 @@ using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Api.Tests.Commands
 {
-  [Subject(typeof (InspectCommand))]
+  [Subject (typeof (InspectCommand))]
   class InspectCommandSpec
   {
     static ISolution Solution;
@@ -198,7 +198,7 @@ namespace SolutionInspector.Api.Tests.Commands
           A.CallTo(() => ViolationReporterProxy.Report(A<ViolationReportFormat>._, A<IEnumerable<RuleViolation>>._)).MustNotHaveHappened();
     }
 
-    static int RunCommand(ConsoleCommand command, params string[] arguments)
+    static int RunCommand (ConsoleCommand command, params string[] arguments)
     {
       return ConsoleCommandDispatcher.DispatchCommand(command, arguments, TextWriter.Null);
     }

@@ -26,7 +26,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
-  [Subject(typeof (RuleTypeUtility))]
+  [Subject (typeof (RuleTypeUtility))]
   class RuleTypeUtilitySpec
   {
     class when_getting_configuration_type_from_non_rule_type
@@ -41,7 +41,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_getting_configuration_type_from_non_configurable_rule_type
     {
-      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof(Rule));
+      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof (Rule));
 
       It returns_null = () =>
           Result.Should().BeNull();
@@ -51,7 +51,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_getting_configuration_type_from_configurable_rule_type
     {
-      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof(ConfigurableRule));
+      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof (ConfigurableRule));
 
       It returns_configuration_type = () =>
           Result.Should().Be(typeof (ConfigurableRuleConfiguration));
@@ -61,18 +61,21 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_getting_configuration_type_from_indirectly_configurable_rule_type
     {
-      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof(IndirectlyConfigurableRule));
+      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof (IndirectlyConfigurableRule));
 
       It returns_configuration_type = () =>
-          Result.Should().Be(typeof(ConfigurableRuleConfiguration));
+          Result.Should().Be(typeof (ConfigurableRuleConfiguration));
 
       static Type Result;
     }
 
-    class Rule : IRule { }
+    class Rule : IRule
+    {
+    }
 
-    class ConfigurableRule : IConfigurableRule<IRuleTarget, ConfigurableRuleConfiguration> {
-      public IEnumerable<IRuleViolation> Evaluate(IRuleTarget target)
+    class ConfigurableRule : IConfigurableRule<IRuleTarget, ConfigurableRuleConfiguration>
+    {
+      public IEnumerable<IRuleViolation> Evaluate (IRuleTarget target)
       {
         return Enumerable.Empty<IRuleViolation>();
       }
@@ -82,7 +85,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class SomeIntermediateRule : IConfigurableRule<IRuleTarget, ConfigurableRuleConfiguration>
     {
-      public IEnumerable<IRuleViolation> Evaluate(IRuleTarget target)
+      public IEnumerable<IRuleViolation> Evaluate (IRuleTarget target)
       {
         return Enumerable.Empty<IRuleViolation>();
       }
@@ -92,7 +95,6 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class IndirectlyConfigurableRule : SomeIntermediateRule
     {
-
     }
 
     class ConfigurableRuleConfiguration : ConfigurationElement

@@ -6,9 +6,9 @@ namespace SolutionInspector.Api.Reporting
 {
   internal class VisualStudioViolationReporter : IViolationReporter
   {
-    public void Report(IEnumerable<IRuleViolation> violations)
+    public void Report (IEnumerable<IRuleViolation> violations)
     {
-      foreach(var violation in violations)
+      foreach (var violation in violations)
       {
         Console.Error.WriteLine($"{violation.Target.FullPath}: SolutionInspector warning SI0000: {violation.Message} ({violation.Rule})");
       }

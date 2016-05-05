@@ -9,7 +9,7 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  /// Checks that the configuration file for the project (App.config/Web.config) has the correct target framework version/SKU set.
+  ///   Checks that the configuration file for the project (App.config/Web.config) has the correct target framework version/SKU set.
   /// </summary>
   public class ProjectConfigFileShouldHaveCorrectFrameworkVersionRule
       : ProjectConfigRuleBase<ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration>
@@ -50,14 +50,14 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration for the <see cref="ProjectConfigFileShouldHaveCorrectFrameworkVersionRule"/>.
+  ///   Configuration for the <see cref="ProjectConfigFileShouldHaveCorrectFrameworkVersionRule" />.
   /// </summary>
   public class ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration : ProjectConfigRuleConfigurationBase
   {
     /// <summary>
-    /// The expected framework version (e.g. "v4.0")
+    ///   The expected framework version (e.g. "v4.0")
     /// </summary>
-    [ConfigurationProperty("expectedVersion", DefaultValue = "", IsRequired = true)]
+    [ConfigurationProperty ("expectedVersion", DefaultValue = "", IsRequired = true)]
     public string ExpectedVersion
     {
       get { return (string) this["expectedVersion"]; }
@@ -65,12 +65,12 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    /// The expected SKU (e.g. ".NETFramework,Version=v4.6.1").
+    ///   The expected SKU (e.g. ".NETFramework,Version=v4.6.1").
     /// </summary>
-    [ConfigurationProperty("expectedSKU", DefaultValue = "", IsRequired = true)]
+    [ConfigurationProperty ("expectedSKU", DefaultValue = "", IsRequired = true)]
     public string ExpectedSKU
     {
-      get { return (string)this["expectedSKU"]; }
+      get { return (string) this["expectedSKU"]; }
       set { this["expectedSKU"] = value; }
     }
   }

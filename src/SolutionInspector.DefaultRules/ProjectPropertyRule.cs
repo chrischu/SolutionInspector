@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using SolutionInspector.Api.Extensions;
@@ -7,18 +8,18 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  /// Verifies that a project's property has the expected value.
+  ///   Verifies that a project's property has the expected value.
   /// </summary>
   public class ProjectPropertyRule : ConfigurableProjectRule<ProjectPropertyRuleConfiguration>
   {
     /// <inheritdoc />
-    public ProjectPropertyRule(ProjectPropertyRuleConfiguration configuration)
+    public ProjectPropertyRule (ProjectPropertyRuleConfiguration configuration)
         : base(configuration)
     {
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate(IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       var actualValue = target.Advanced.Properties.GetValueOrDefault(Configuration.Property);
 
@@ -33,27 +34,27 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration for the <see cref="ProjectPropertyRule"/>.
+  ///   Configuration for the <see cref="ProjectPropertyRule" />.
   /// </summary>
   public class ProjectPropertyRuleConfiguration : ConfigurationElement
   {
     /// <summary>
-    /// The property to check.
+    ///   The property to check.
     /// </summary>
-    [ConfigurationProperty("property", DefaultValue = "", IsRequired = true)]
+    [ConfigurationProperty ("property", DefaultValue = "", IsRequired = true)]
     public string Property
     {
-      get { return (string)this["property"]; }
+      get { return (string) this["property"]; }
       set { this["property"] = value; }
     }
 
     /// <summary>
-    /// The expected property value to check against.
+    ///   The expected property value to check against.
     /// </summary>
-    [ConfigurationProperty("expectedValue", DefaultValue = "", IsRequired = true)]
+    [ConfigurationProperty ("expectedValue", DefaultValue = "", IsRequired = true)]
     public string ExpectedValue
     {
-      get { return (string)this["expectedValue"]; }
+      get { return (string) this["expectedValue"]; }
       set { this["expectedValue"] = value; }
     }
   }

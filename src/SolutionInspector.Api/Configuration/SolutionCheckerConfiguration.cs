@@ -8,22 +8,22 @@ using SolutionInspector.Api.Configuration.Rules;
 namespace SolutionInspector.Api.Configuration
 {
   /// <summary>
-  /// Configuration for the SolutionInspector.
+  ///   Configuration for the SolutionInspector.
   /// </summary>
   public interface ISolutionInspectorConfiguration
   {
     /// <summary>
-    /// Allows importing rule assemblies to enable access to rules contained in them.
+    ///   Allows importing rule assemblies to enable access to rules contained in them.
     /// </summary>
     IRuleAssemblyImportsConfiguration RuleAssemblyImports { get; }
 
     /// <summary>
-    /// Controls how SolutionInspector parses MSBuild files.
+    ///   Controls how SolutionInspector parses MSBuild files.
     /// </summary>
     IMsBuildParsingConfiguration MsBuildParsing { get; }
 
     /// <summary>
-    /// Configures the various rules that are checked against when running the SolutionInspector.
+    ///   Configures the various rules that are checked against when running the SolutionInspector.
     /// </summary>
     IRulesConfiguration Rules { get; }
   }
@@ -37,7 +37,7 @@ namespace SolutionInspector.Api.Configuration
 
     public IRulesConfiguration Rules => (RulesConfigurationSection) Sections["rules"];
 
-    public static SolutionInspectorConfiguration Load()
+    public static SolutionInspectorConfiguration Load ()
     {
       var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
       return (SolutionInspectorConfiguration) configuration.GetSectionGroup("solutionInspector");

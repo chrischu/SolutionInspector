@@ -7,12 +7,12 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  /// Verifies project items have the build action set that is configured via <see cref="ProjectItemMustHaveCorrectBuildActionRuleConfiguration"/>.
+  ///   Verifies project items have the build action set that is configured via <see cref="ProjectItemMustHaveCorrectBuildActionRuleConfiguration" />.
   /// </summary>
   public class ProjectItemMustHaveCorrectBuildActionRule : ConfigurableProjectItemRule<ProjectItemMustHaveCorrectBuildActionRuleConfiguration>
   {
     /// <inheritdoc />
-    public ProjectItemMustHaveCorrectBuildActionRule(ProjectItemMustHaveCorrectBuildActionRuleConfiguration configuration)
+    public ProjectItemMustHaveCorrectBuildActionRule (ProjectItemMustHaveCorrectBuildActionRuleConfiguration configuration)
         : base(configuration)
     {
     }
@@ -29,17 +29,17 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration for the <see cref="ProjectItemMustHaveCorrectBuildActionRule"/>.
+  ///   Configuration for the <see cref="ProjectItemMustHaveCorrectBuildActionRule" />.
   /// </summary>
   public class ProjectItemMustHaveCorrectBuildActionRuleConfiguration : ConfigurationElement
   {
     /// <summary>
-    /// Expected build action.
+    ///   Expected build action.
     /// </summary>
-    [ConfigurationProperty("expectedBuildAction", DefaultValue = "", IsRequired = true)]
+    [ConfigurationProperty ("expectedBuildAction", DefaultValue = "", IsRequired = true)]
     public string ExpectedBuildAction
     {
-      get { return (string)this["expectedBuildAction"]; }
+      get { return (string) this["expectedBuildAction"]; }
       set { this["expectedBuildAction"] = value; }
     }
   }

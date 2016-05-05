@@ -7,22 +7,22 @@ using Fasterflect;
 namespace SolutionInspector.Api.Configuration.Infrastructure
 {
   /// <summary>
-  /// Base class for <see cref="ConfigurationElementCollection"/>s with elements of type <typeparamref name="TElement"/>.
+  ///   Base class for <see cref="ConfigurationElementCollection" />s with elements of type <typeparamref name="TElement" />.
   /// </summary>
   public abstract class ConfigurationElementCollectionBase<TElement> : ConfigurationElementCollection, IEnumerable<TElement>
       where TElement : ConfigurationElement, new()
 
   {
     /// <summary>
-    /// Adds the given <paramref name="element"/> to the collection.
+    ///   Adds the given <paramref name="element" /> to the collection.
     /// </summary>
-    public void Add(TElement element)
+    public void Add (TElement element)
     {
       BaseAdd(element);
     }
 
     /// <inheritdoc />
-    protected sealed override ConfigurationElement CreateNewElement()
+    protected sealed override ConfigurationElement CreateNewElement ()
     {
       return new TElement();
     }
@@ -31,19 +31,19 @@ namespace SolutionInspector.Api.Configuration.Infrastructure
 
     public override ConfigurationElementCollectionType CollectionType => ConfigurationElementCollectionType.BasicMap;
 
-    protected override bool IsElementName(string elementName)
+    protected override bool IsElementName (string elementName)
     {
       return !string.IsNullOrWhiteSpace(elementName) && elementName == ElementName;
     }
 
     /// <inheritdoc />
-    protected override object GetElementKey(ConfigurationElement element)
+    protected override object GetElementKey (ConfigurationElement element)
     {
       return element;
     }
 
     /// <inheritdoc />
-    public new IEnumerator<TElement> GetEnumerator()
+    public new IEnumerator<TElement> GetEnumerator ()
     {
       var enumerator = base.GetEnumerator();
 
@@ -52,7 +52,7 @@ namespace SolutionInspector.Api.Configuration.Infrastructure
     }
 
     /// <inheritdoc />
-    protected override bool OnDeserializeUnrecognizedElement(string elementName, XmlReader reader)
+    protected override bool OnDeserializeUnrecognizedElement (string elementName, XmlReader reader)
     {
       if (elementName != ElementName)
         return false;

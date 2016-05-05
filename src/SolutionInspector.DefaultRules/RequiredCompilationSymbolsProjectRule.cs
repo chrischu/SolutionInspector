@@ -13,18 +13,19 @@ using SolutionInspector.Api.Utilities;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  /// Verifies that all the compilation symbols (configured in <see cref="RequiredCompilationSymbolsProjectRuleConfiguration"/>) are configured in the project.
+  ///   Verifies that all the compilation symbols (configured in <see cref="RequiredCompilationSymbolsProjectRuleConfiguration" />) are configured in the
+  ///   project.
   /// </summary>
   public class RequiredCompilationSymbolsProjectRule : ConfigurableProjectRule<RequiredCompilationSymbolsProjectRuleConfiguration>
   {
     /// <inheritdoc />
-    public RequiredCompilationSymbolsProjectRule([NotNull] RequiredCompilationSymbolsProjectRuleConfiguration configuration)
+    public RequiredCompilationSymbolsProjectRule ([NotNull] RequiredCompilationSymbolsProjectRuleConfiguration configuration)
         : base(configuration)
     {
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate(IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       foreach (var config in Configuration)
       {
@@ -50,7 +51,7 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration for the <see cref="RequiredCompilationSymbolsProjectRule"/>.
+  ///   Configuration for the <see cref="RequiredCompilationSymbolsProjectRule" />.
   /// </summary>
   public class RequiredCompilationSymbolsProjectRuleConfiguration
       : KeyedConfigurationElementCollectionBase<RequiredCompilationSymbolsConfigurationElement, BuildConfigurationFilter>
@@ -59,7 +60,8 @@ namespace SolutionInspector.DefaultRules
   }
 
   /// <summary>
-  /// Configuration for which compilation symbols (<see cref="RequiredCompilationSymbols"/>) are required in the build configurations matching the <see cref="BuildConfigurationFilter"/>.
+  ///   Configuration for which compilation symbols (<see cref="RequiredCompilationSymbols" />) are required in the build configurations matching the
+  ///   <see cref="BuildConfigurationFilter" />.
   /// </summary>
   public class RequiredCompilationSymbolsConfigurationElement : KeyedConfigurationElement<BuildConfigurationFilter>
   {
@@ -67,24 +69,24 @@ namespace SolutionInspector.DefaultRules
     public override string KeyName => "buildConfigurationFilter";
 
     /// <summary>
-    /// Filter that controlls which build configuration this <see cref="RequiredCompilationSymbolsConfigurationElement"/> applies to.
+    ///   Filter that controlls which build configuration this <see cref="RequiredCompilationSymbolsConfigurationElement" /> applies to.
     /// </summary>
-    [TypeConverter(typeof(BuildConfigurationFilterConverter))]
-    [ConfigurationProperty("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
+    [TypeConverter (typeof (BuildConfigurationFilterConverter))]
+    [ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
-      get { return (BuildConfigurationFilter)this["buildConfigurationFilter"]; }
+      get { return (BuildConfigurationFilter) this["buildConfigurationFilter"]; }
       set { this["buildConfigurationFilter"] = value; }
     }
 
     /// <summary>
-    /// All the compilation symbols that are required and are therefore checked.
+    ///   All the compilation symbols that are required and are therefore checked.
     /// </summary>
-    [TypeConverter(typeof(CommaDelimitedStringCollectionConverter))]
-    [ConfigurationProperty("requiredCompilationSymbols", DefaultValue = "", IsRequired = true)]
+    [TypeConverter (typeof (CommaDelimitedStringCollectionConverter))]
+    [ConfigurationProperty ("requiredCompilationSymbols", DefaultValue = "", IsRequired = true)]
     public CommaDelimitedStringCollection RequiredCompilationSymbols
     {
-      get { return (CommaDelimitedStringCollection)this["requiredCompilationSymbols"]; }
+      get { return (CommaDelimitedStringCollection) this["requiredCompilationSymbols"]; }
       set { this["requiredCompilationSymbols"] = value; }
     }
   }

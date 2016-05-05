@@ -18,7 +18,7 @@ namespace SolutionInspector.Api.Commands
     private readonly IRuleCollectionBuilder _ruleCollectionBuilder;
     private readonly IViolationReporterProxy _violationReporterProxy;
 
-    public InspectCommand(
+    public InspectCommand (
         ISolutionInspectorConfiguration configuration,
         ISolutionLoader solutionLoader,
         IRuleCollectionBuilder ruleCollectionBuilder,
@@ -31,7 +31,7 @@ namespace SolutionInspector.Api.Commands
       _violationReporterProxy = violationReporterProxy;
     }
 
-    protected override void SetupArguments(IArgumentsBuilder<RawArguments> argumentsBuilder)
+    protected override void SetupArguments (IArgumentsBuilder<RawArguments> argumentsBuilder)
     {
       argumentsBuilder
           .Option<ViolationReportFormat>(
@@ -42,7 +42,7 @@ namespace SolutionInspector.Api.Commands
           .Values(c => c.Value("solutionFilePath", (a, v) => a.SolutionFilePath = v));
     }
 
-    protected override ParsedArguments ValidateAndParseArguments(RawArguments arguments, Func<string, Exception> reportError)
+    protected override ParsedArguments ValidateAndParseArguments (RawArguments arguments, Func<string, Exception> reportError)
     {
       var solution = ValidateAndParseSolution(arguments, reportError);
       var rules = _ruleCollectionBuilder.Build(_configuration.Rules);
@@ -50,7 +50,7 @@ namespace SolutionInspector.Api.Commands
       return new ParsedArguments(solution, rules, arguments.ReportFormat);
     }
 
-    private ISolution ValidateAndParseSolution(RawArguments arguments, Func<string, Exception> reportError)
+    private ISolution ValidateAndParseSolution (RawArguments arguments, Func<string, Exception> reportError)
     {
       try
       {
@@ -66,7 +66,7 @@ namespace SolutionInspector.Api.Commands
       }
     }
 
-    protected override int Run(ParsedArguments arguments)
+    protected override int Run (ParsedArguments arguments)
     {
       var violations = GetRuleViolations(arguments.Solution, arguments.Rules).ToArray();
 
@@ -80,7 +80,7 @@ namespace SolutionInspector.Api.Commands
       return 0;
     }
 
-    private IEnumerable<IRuleViolation> GetRuleViolations(ISolution solution, IRuleCollection rules)
+    private IEnumerable<IRuleViolation> GetRuleViolations (ISolution solution, IRuleCollection rules)
     {
       var ruleViolations = new List<IRuleViolation>();
 
@@ -91,8 +91,8 @@ namespace SolutionInspector.Api.Commands
         foreach (var project in solution.Projects)
           ruleViolations.AddRange(projectRule.Evaluate(project));
 
-      foreach(var projectItemRule in rules.ProjectItemRules)
-        foreach(var project in solution.Projects)
+      foreach (var projectItemRule in rules.ProjectItemRules)
+        foreach (var project in solution.Projects)
           foreach (var projectItem in project.ProjectItems)
             ruleViolations.AddRange(projectItemRule.Evaluate(projectItem));
 
@@ -111,7 +111,7 @@ namespace SolutionInspector.Api.Commands
       public IRuleCollection Rules { get; }
       public ViolationReportFormat? ReportFormat { get; }
 
-      public ParsedArguments(ISolution solution, IRuleCollection rules, ViolationReportFormat? reportFormat)
+      public ParsedArguments (ISolution solution, IRuleCollection rules, ViolationReportFormat? reportFormat)
       {
         Solution = solution;
         Rules = rules;
