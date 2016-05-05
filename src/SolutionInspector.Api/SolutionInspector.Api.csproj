@@ -110,6 +110,9 @@
     <Compile Include="Configuration\MsBuildParsing\MsBuildParsingConfigurationSection.cs" />
     <Compile Include="Configuration\MsBuildParsing\ProjectBuildActionConfigurationElement.cs" />
     <Compile Include="Configuration\MsBuildParsing\ProjectBuildActionsConfigurationElement.cs" />
+    <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportConfigurationElement.cs" />
+    <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportsConfigurationCollection.cs" />
+    <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportsConfigurationSection.cs" />
     <Compile Include="Configuration\Rules\ProjectItemRulesConfigurationCollection.cs" />
     <Compile Include="Configuration\Rules\ProjectItemRuleGroupConfigurationElement.cs" />
     <Compile Include="ObjectModel\ConfigurationProjectItem.cs" />

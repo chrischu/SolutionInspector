@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
+using SolutionInspector.Api.Configuration.RuleAssemblyImports;
 using SolutionInspector.Api.Configuration.Rules;
 
 namespace SolutionInspector.Api.Configuration
@@ -11,6 +13,11 @@ namespace SolutionInspector.Api.Configuration
   /// </summary>
   public interface ISolutionInspectorConfiguration
   {
+    /// <summary>
+    /// Allows importing rule assemblies to enable access to rules contained in them.
+    /// </summary>
+    IRuleAssemblyImportsConfiguration RuleAssemblyImports { get; }
+
     /// <summary>
     /// Controls how SolutionInspector parses MSBuild files.
     /// </summary>
@@ -25,6 +32,8 @@ namespace SolutionInspector.Api.Configuration
   [UsedImplicitly]
   internal class SolutionInspectorConfiguration : ConfigurationSectionGroup, ISolutionInspectorConfiguration
   {
+    public IRuleAssemblyImportsConfiguration RuleAssemblyImports => (RuleAssemblyImportsConfigurationSection) Sections["ruleAssemblyImports"];
+
     public IMsBuildParsingConfiguration MsBuildParsing => (MsBuildParsingConfigurationSection) Sections["msBuildParsing"];
 
     public IRulesConfiguration Rules => (RulesConfigurationSection) Sections["rules"];
