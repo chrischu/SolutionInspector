@@ -33,6 +33,9 @@
                 type="SolutionInspector.DefaultRules.RequiredNuGetPackagesRule, SolutionInspector.DefaultRules">
             <nuGetPackage id="log4net" />
           </rule>
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectXPathRule, SolutionInspector.DefaultRules" />
         </projectRuleGroup>
         <projectRuleGroup xdt:Locator="Match(appliesTo)"
                           appliesTo="+*;-*Tests;-*TestInfrastructure">

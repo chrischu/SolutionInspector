@@ -41,6 +41,10 @@
                 type="SolutionInspector.DefaultRules.RequiredNuGetPackagesRule, SolutionInspector.DefaultRules">
             <nuGetPackage id="log4net" />
           </rule>
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectXPathRule, SolutionInspector.DefaultRules"
+                xPath="boolean(//Content)" />
         </projectRuleGroup>
         <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)"
                           appliesTo="+*;-*Tests;-*TestInfrastructure">

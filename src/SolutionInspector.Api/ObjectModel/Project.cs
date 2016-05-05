@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using System.Xml.Linq;
 using SystemInterface.IO;
 using SystemWrapper.IO;
 using JetBrains.Annotations;
@@ -15,98 +16,103 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
-  /// Represents a MSBuild project.
+  ///   Represents a MSBuild project.
   /// </summary>
   [PublicAPI]
   public interface IProject : IRuleTarget
   {
     /// <summary>
-    /// Contains advanced/raw properties of the underlying MSBuild file.
+    ///   Contains advanced/raw properties of the underlying MSBuild file.
     /// </summary>
     IAdvancedProject Advanced { get; }
 
     /// <summary>
-    /// The project's name.
+    ///   The project's name.
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    /// The name in which the project is stored, relative to the solution file.
+    ///   The name in which the project is stored, relative to the solution file.
     /// </summary>
     string FolderName { get; }
 
     /// <summary>
-    /// A <see cref="IFileInfo"/> that represents the project file.
+    ///   A <see cref="IFileInfo" /> that represents the project file.
     /// </summary>
     IFileInfo ProjectFile { get; }
 
     /// <summary>
-    /// All <see cref="BuildConfiguration"/>s in the project.
+    ///   A <see cref="XDocument" /> that represents the project file.
+    /// </summary>
+    XDocument ProjectXml { get; }
+
+    /// <summary>
+    ///   All <see cref="BuildConfiguration" />s in the project.
     /// </summary>
     IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 
     /// <summary>
-    /// The project's default namespace.
+    ///   The project's default namespace.
     /// </summary>
     string DefaultNamespace { get; }
 
     /// <summary>
-    /// The project's assembly name.
+    ///   The project's assembly name.
     /// </summary>
     string AssemblyName { get; }
 
     /// <summary>
-    /// The project's target framework version.
+    ///   The project's target framework version.
     /// </summary>
     Version TargetFrameworkVersion { get; }
 
     /// <summary>
-    /// The project's output type.
+    ///   The project's output type.
     /// </summary>
     ProjectOutputType OutputType { get; }
 
     /// <summary>
-    /// A <see cref="IFileInfo"/> that represents the project's NuGet packages file.
+    ///   A <see cref="IFileInfo" /> that represents the project's NuGet packages file.
     /// </summary>
     IFileInfo NuGetPackagesFile { get; }
 
     /// <summary>
-    /// A collection of referenced <see cref="NuGetPackage"/>s.
+    ///   A collection of referenced <see cref="NuGetPackage" />s.
     /// </summary>
     IReadOnlyCollection<NuGetPackage> NuGetPackages { get; }
 
     /// <summary>
-    /// A collection of DLLs referenced from the GAC.
+    ///   A collection of DLLs referenced from the GAC.
     /// </summary>
     IReadOnlyCollection<GacReference> GacReferences { get; }
 
     /// <summary>
-    /// A collection of DLLs referenced from NuGet.
+    ///   A collection of DLLs referenced from NuGet.
     /// </summary>
     IReadOnlyCollection<NuGetReference> NuGetReferences { get; }
 
     /// <summary>
-    /// A collection of DLLs referenced from the file system.
+    ///   A collection of DLLs referenced from the file system.
     /// </summary>
     IReadOnlyCollection<FileReference> FileReferences { get; }
 
     /// <summary>
-    /// A collection of referenced projects.
+    ///   A collection of referenced projects.
     /// </summary>
     IReadOnlyCollection<ProjectReference> ProjectReferences { get; }
 
     /// <summary>
-    /// The solution the project is contained in.
+    ///   The solution the project is contained in.
     /// </summary>
     ISolution Solution { get; }
 
     /// <summary>
-    /// A collection of all project items contained in the project.
+    ///   A collection of all project items contained in the project.
     /// </summary>
     IReadOnlyCollection<IProjectItem> ProjectItems { get; }
 
     /// <summary>
-    /// The project configuration file (App.config/Web.config).
+    ///   The project configuration file (App.config/Web.config).
     /// </summary>
     IConfigurationProjectItem ConfigurationProjectItem { get; }
   }
@@ -114,9 +120,14 @@ namespace SolutionInspector.Api.ObjectModel
   internal sealed class Project : IProject
   {
     private readonly IMsBuildParsingConfiguration _msBuildParsingConfiguration;
-    private Lazy<ClassifiedReferences> _classifiedReferences; 
+    private Lazy<ClassifiedReferences> _classifiedReferences;
+    private Lazy<XDocument> _projectXml;
 
-    private Project(ISolution solution, ProjectInSolution projectInSolution, Microsoft.Build.Evaluation.Project project, IMsBuildParsingConfiguration msBuildParsingConfiguration)
+    private Project (
+        ISolution solution,
+        ProjectInSolution projectInSolution,
+        Microsoft.Build.Evaluation.Project project,
+        IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
       _msBuildParsingConfiguration = msBuildParsingConfiguration;
       Name = projectInSolution.ProjectName;
@@ -133,9 +144,11 @@ namespace SolutionInspector.Api.ObjectModel
       ProjectItems = BuildProjectItems(project.ItemsIgnoringCondition).ToArray();
 
       ConfigurationProjectItem = BuildConfigurationProjectItem();
+
+      _projectXml = new Lazy<XDocument>(() => XDocument.Load(ProjectFile.FullName));
     }
 
-    private IConfigurationProjectItem BuildConfigurationProjectItem()
+    private IConfigurationProjectItem BuildConfigurationProjectItem ()
     {
       var configurationItem = ProjectItems.SingleOrDefault(
           i =>
@@ -148,18 +161,18 @@ namespace SolutionInspector.Api.ObjectModel
       return new ConfigurationProjectItem(this, configurationItem);
     }
 
-    private IEnumerable<ProjectItem> BuildProjectItems(ICollection<Microsoft.Build.Evaluation.ProjectItem> msBuildProjectItems)
+    private IEnumerable<ProjectItem> BuildProjectItems (ICollection<Microsoft.Build.Evaluation.ProjectItem> msBuildProjectItems)
     {
       var projectItems =
           msBuildProjectItems.Where(i => !i.IsImported && _msBuildParsingConfiguration.IsValidProjectItem(i))
               .Select(p => ProjectItem.FromMsBuildProjectItem(this, p))
               .ToDictionary(i => i.Include);
 
-      foreach(var projectItem in projectItems.Values)
+      foreach (var projectItem in projectItems.Values)
       {
         var dependentUpon = projectItem.Metadata.GetValueOrDefault("DependentUpon");
 
-        if(dependentUpon != null)
+        if (dependentUpon != null)
         {
           var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.Include).AssertNotNull(), dependentUpon);
 
@@ -178,6 +191,7 @@ namespace SolutionInspector.Api.ObjectModel
     public string Name { get; }
     public string FolderName => Path.GetFileName(Advanced.MsBuildProject.DirectoryPath);
     public IFileInfo ProjectFile => new FileInfoWrap(Advanced.MsBuildProject.FullPath);
+    public XDocument ProjectXml => _projectXml.Value;
     public IFileInfo NuGetPackagesFile => new FileInfoWrap(Path.Combine(Advanced.MsBuildProject.DirectoryPath, "packages.config"));
 
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
@@ -194,14 +208,14 @@ namespace SolutionInspector.Api.ObjectModel
     public IReadOnlyCollection<FileReference> FileReferences => _classifiedReferences.Value.FileReferences;
     public IReadOnlyCollection<ProjectReference> ProjectReferences => _classifiedReferences.Value.ProjectReferences;
 
-    public IReadOnlyCollection<IProjectItem> ProjectItems { get; } 
+    public IReadOnlyCollection<IProjectItem> ProjectItems { get; }
 
     public IConfigurationProjectItem ConfigurationProjectItem { get; }
 
     string IRuleTarget.Identifier => Path.GetFileName(Advanced.MsBuildProject.FullPath);
     string IRuleTarget.FullPath => Advanced.MsBuildProject.FullPath;
 
-    private IEnumerable<NuGetPackage> BuildNuGetPackages(IFileInfo nuGetPackagesFile)
+    private IEnumerable<NuGetPackage> BuildNuGetPackages (IFileInfo nuGetPackagesFile)
     {
       if (!nuGetPackagesFile.Exists)
         yield break;
@@ -213,7 +227,7 @@ namespace SolutionInspector.Api.ObjectModel
         yield return NuGetPackage.FromXmlElement(packageElement);
     }
 
-    private ClassifiedReferences ClassifyReferences(
+    private ClassifiedReferences ClassifyReferences (
         Microsoft.Build.Evaluation.Project project,
         IReadOnlyCollection<NuGetPackage> nuGetPackages,
         ISolution solution)
@@ -242,7 +256,8 @@ namespace SolutionInspector.Api.ObjectModel
           continue;
         }
 
-        var matchingNuGetPackage = nuGetPackages.SingleOrDefault(p => reference.HintPath.StartsWith($@"..\packages\{p.PackageDirectoryName}", StringComparison.Ordinal));
+        var matchingNuGetPackage =
+            nuGetPackages.SingleOrDefault(p => reference.HintPath.StartsWith($@"..\packages\{p.PackageDirectoryName}", StringComparison.Ordinal));
 
         if (matchingNuGetPackage != null)
           nuGetReferences.Add(
@@ -258,9 +273,16 @@ namespace SolutionInspector.Api.ObjectModel
       return new ClassifiedReferences(gacReferences, fileReferences, nuGetReferences, projectReferences);
     }
 
-    public static Project FromSolution(ISolution solution, ProjectInSolution projectInSolution, IMsBuildParsingConfiguration msBuildParsingConfiguration)
+    public static Project FromSolution (
+        ISolution solution,
+        ProjectInSolution projectInSolution,
+        IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
-      return new Project(solution, projectInSolution, new Microsoft.Build.Evaluation.Project(projectInSolution.AbsolutePath), msBuildParsingConfiguration);
+      return new Project(
+          solution,
+          projectInSolution,
+          new Microsoft.Build.Evaluation.Project(projectInSolution.AbsolutePath),
+          msBuildParsingConfiguration);
     }
 
     private class ReferenceItem
@@ -271,7 +293,7 @@ namespace SolutionInspector.Api.ObjectModel
 
       public IReadOnlyDictionary<string, string> Metadata { get; }
 
-      public ReferenceItem(string include, IReadOnlyDictionary<string, string> metadata)
+      public ReferenceItem (string include, IReadOnlyDictionary<string, string> metadata)
       {
         AssemblyName = new AssemblyName(include);
         Metadata = metadata;
@@ -285,7 +307,7 @@ namespace SolutionInspector.Api.ObjectModel
       public IReadOnlyCollection<NuGetReference> NuGetReferences { get; }
       public IReadOnlyCollection<ProjectReference> ProjectReferences { get; }
 
-      public ClassifiedReferences(
+      public ClassifiedReferences (
           IEnumerable<GacReference> gacReferences,
           IEnumerable<FileReference> fileReferences,
           IEnumerable<NuGetReference> nuGetReferences,
