@@ -79,7 +79,7 @@ namespace SolutionInspector
               }
               )).As<IViolationReporterProxy>();
 
-      builder.RegisterType<CheckCommand>().As<ConsoleCommand>();
+      builder.RegisterType<InspectCommand>().As<ConsoleCommand>();
 
       return builder.Build();
     }

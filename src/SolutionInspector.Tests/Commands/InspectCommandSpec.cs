@@ -31,8 +31,8 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.Tests.Commands
 {
-  [Subject(typeof (CheckCommand))]
-  class CheckCommandSpec
+  [Subject(typeof (InspectCommand))]
+  class InspectCommandSpec
   {
     static ISolution Solution;
     static IProject Project;
@@ -50,7 +50,7 @@ namespace SolutionInspector.Tests.Commands
     static IProjectRule ProjectRule;
     static IProjectItemRule ProjectItemRule;
 
-    static CheckCommand SUT;
+    static InspectCommand SUT;
 
     Establish ctx = () =>
     {
@@ -78,7 +78,7 @@ namespace SolutionInspector.Tests.Commands
 
       ViolationReporterProxy = A.Fake<IViolationReporterProxy>();
 
-      SUT = new CheckCommand(Configuration, SolutionLoader, RuleCollectionBuilder, ViolationReporterProxy);
+      SUT = new InspectCommand(Configuration, SolutionLoader, RuleCollectionBuilder, ViolationReporterProxy);
     };
 
     class when_running_without_violations

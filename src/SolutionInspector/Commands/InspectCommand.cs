@@ -11,19 +11,19 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.Commands
 {
-  internal class CheckCommand : SolutionInspectorCommand<CheckCommand.RawArguments, CheckCommand.ParsedArguments>
+  internal class InspectCommand : SolutionInspectorCommand<InspectCommand.RawArguments, InspectCommand.ParsedArguments>
   {
     private readonly ISolutionInspectorConfiguration _configuration;
     private readonly ISolutionLoader _solutionLoader;
     private readonly IRuleCollectionBuilder _ruleCollectionBuilder;
     private readonly IViolationReporterProxy _violationReporterProxy;
 
-    public CheckCommand(
+    public InspectCommand(
         ISolutionInspectorConfiguration configuration,
         ISolutionLoader solutionLoader,
         IRuleCollectionBuilder ruleCollectionBuilder,
         IViolationReporterProxy violationReporterProxy)
-        : base("check", "Checks a given solution for rule violations.")
+        : base("inspect", "Inspects a given solution for rule violations.")
     {
       _configuration = configuration;
       _solutionLoader = solutionLoader;

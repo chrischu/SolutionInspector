@@ -2,7 +2,7 @@
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=LoopCanBeConvertedToQuery/@EntryIndexedValue">HINT</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RedundantArgumentName/@EntryIndexedValue">DO_NOT_SHOW</s:String>
 	<s:String x:Key="/Default/CodeInspection/Highlighting/InspectionSeverities/=RedundantArgumentNameForLiteralExpression/@EntryIndexedValue">DO_NOT_SHOW</s:String>
-	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=A6374B2FA9F6254DACE7E680A437E785/AbsolutePath/@EntryValue">C:\Users\Chris\Documents\Visual Studio 2015\Projects\SolutionChecker\MSpecTemplatesAndCodeInspections.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=A6374B2FA9F6254DACE7E680A437E785/AbsolutePath/@EntryValue">C:\Users\Chris\Documents\Visual Studio 2015\Projects\SolutionInspector\MSpecTemplatesAndCodeInspections.DotSettings</s:String>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=A6374B2FA9F6254DACE7E680A437E785/RelativePath/@EntryValue">..\MSpecTemplatesAndCodeInspections.DotSettings</s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=A6374B2FA9F6254DACE7E680A437E785/@KeyIndexDefined">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileA6374B2FA9F6254DACE7E680A437E785/@KeyIndexDefined">True</s:Boolean>
