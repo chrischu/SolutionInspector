@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/chrischu/SolutionInspector</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/chrischu/SolutionInspector/master/media/icon.png</iconUrl>
     <description>$description$</description>
-    <tags>solutionchecker solution check</tags>
+    <tags>solutioninspector solution rules inspect</tags>
   </metadata>
   <files>
     <!-- The wildcard is required to support using a referenced nuspec-file for building the nuget package 
