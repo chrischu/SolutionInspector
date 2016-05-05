@@ -835,7 +835,7 @@ public void TearDown ()
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E09D3EBDB0C41443B1C761E444199A8A/Text/@EntryValue">Machine.Specifications.Because of = () =&gt; Exception = Catch.Exception(() =&gt; SUT.$ACTION$);
 
 Machine.Specifications.It throws = () =&gt;
-    Exception.ShouldBe&lt;$EXCEPTIONTYPE$&gt;("$END$");
+    Exception.Should().Be&lt;$EXCEPTIONTYPE$&gt;("$END$");
     
 static Exception Exception;
 </s:String>
