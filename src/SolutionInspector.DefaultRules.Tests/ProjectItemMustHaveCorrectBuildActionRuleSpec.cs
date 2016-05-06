@@ -63,7 +63,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
       It returns_violation = () =>
           Result.ShouldAllBeEquivalentTo(
-              new RuleViolation(SUT, ProjectItem, $"Unexpected build action was 'None', but should be 'Compile'."));
+              new RuleViolation(SUT, ProjectItem, "Unexpected build action was \'None\', but should be \'Compile\'."));
 
       static IEnumerable<IRuleViolation> Result;
     }
