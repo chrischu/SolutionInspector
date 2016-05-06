@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using SystemInterface.IO;
 using SystemWrapper.IO;
 using JetBrains.Annotations;
@@ -17,6 +18,12 @@ namespace SolutionInspector.Api.ObjectModel
   public interface IProjectItem : IRuleTarget
   {
     /// <summary>
+    ///   The original MSBuild project item.
+    /// </summary>
+    Microsoft.Build.Evaluation.ProjectItem OriginalProjectItem { get; set; }
+
+
+    /// <summary>
     ///   The project the item is contained in.
     /// </summary>
     IProject Project { get; }
@@ -27,7 +34,13 @@ namespace SolutionInspector.Api.ObjectModel
     string Name { get; }
 
     /// <summary>
+    ///   The original (just as in the MSBuild file) include path (relative to the project file) of the project item.
+    /// </summary>
+    string OriginalInclude { get; }
+
+    /// <summary>
     ///   The path (relative to the project file) of the project item.
+    ///   Differs from <see cref="OriginalInclude" /> for links.
     /// </summary>
     string Include { get; }
 
@@ -71,13 +84,19 @@ namespace SolutionInspector.Api.ObjectModel
   internal class ProjectItem : IProjectItem
   {
     private readonly List<ProjectItem> _children = new List<ProjectItem>();
+    private Lazy<string> _identifier;
+
+    public Microsoft.Build.Evaluation.ProjectItem OriginalProjectItem { get; set; }
 
     public IProject Project { get; }
 
-    public string Name => Path.GetFileName(Include);
-    public string Identifier => Name;
+    public string Name => Path.GetFileName(OriginalInclude);
+
+    public string Identifier => _identifier.Value;
+
     public string FullPath => File.FullName;
 
+    public string OriginalInclude { get; }
     public string Include { get; }
 
     public ProjectItemBuildAction BuildAction { get; }
@@ -96,16 +115,37 @@ namespace SolutionInspector.Api.ObjectModel
 
     public ProjectItem (
         IProject project,
-        string include,
-        ProjectItemBuildAction buildAction,
-        IFileInfo file,
-        IReadOnlyDictionary<string, string> metadata)
+        Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
       Project = project;
-      Include = include;
-      BuildAction = buildAction;
-      File = file;
-      Metadata = metadata;
+      OriginalInclude = msBuildProjectItem.EvaluatedInclude;
+      OriginalProjectItem = msBuildProjectItem;
+
+      var linkMetadata = msBuildProjectItem.DirectMetadata.SingleOrDefault(d => d.Name == "Link");
+      Include = linkMetadata?.EvaluatedValue ?? OriginalInclude;
+
+      BuildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
+      var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
+      File = new FileInfoWrap(fullPath);
+      Metadata = msBuildProjectItem.Metadata.ToDictionary(m => m.Name, m => m.EvaluatedValue);
+
+      _identifier = new Lazy<string>(CreateIdentifier);
+    }
+
+    private string CreateIdentifier ()
+    {
+      var sb = new StringBuilder(Project.Identifier);
+      sb.Append('/');
+
+      if (Parent != null)
+      {
+        sb.Append(Parent.Identifier);
+        sb.Append('/');
+      }
+
+      sb.Append(Include.Replace('\\', '/'));
+
+      return sb.ToString();
     }
 
     internal void SetParent (ProjectItem parent)
@@ -116,13 +156,7 @@ namespace SolutionInspector.Api.ObjectModel
 
     public static ProjectItem FromMsBuildProjectItem (IProject project, Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
-      var buildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
-
-      var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
-      var file = new FileInfoWrap(fullPath);
-      var metadata = msBuildProjectItem.Metadata.ToDictionary(m => m.Name, m => m.EvaluatedValue);
-
-      return new ProjectItem(project, msBuildProjectItem.EvaluatedInclude, buildAction, file, metadata);
+      return new ProjectItem(project, msBuildProjectItem);
     }
   }
 }

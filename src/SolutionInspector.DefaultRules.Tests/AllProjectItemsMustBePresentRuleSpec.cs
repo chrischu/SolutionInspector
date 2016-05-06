@@ -36,7 +36,7 @@ namespace SolutionInspector.DefaultRules.Tests
     Establish ctx = () =>
     {
       ProjectItem = A.Fake<IProjectItem>();
-      A.CallTo(() => ProjectItem.Include).Returns("ProjectItem");
+      A.CallTo(() => ProjectItem.OriginalInclude).Returns("ProjectItem");
 
       Project = A.Fake<IProject>();
       A.CallTo(() => Project.ProjectItems).Returns(new[] { ProjectItem });
