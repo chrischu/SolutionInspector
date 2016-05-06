@@ -26,9 +26,9 @@ namespace SolutionInspector.DefaultRules
         else
         {
           var outputPath = properties["OutputPath"];
-          var expectedDocumentationFile = $"{outputPath}{target.Name}.XML";
+          var expectedDocumentationFile = $"{outputPath}{target.AssemblyName}.XML";
 
-          if (documentationFile != expectedDocumentationFile)
+          if (!string.Equals(documentationFile, expectedDocumentationFile, StringComparison.OrdinalIgnoreCase))
             yield return
                 new RuleViolation(
                     this,
