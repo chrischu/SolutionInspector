@@ -2,11 +2,11 @@
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
   <configSections xdt:Transform="InsertIfMissing">
     <sectionGroup xdt:Transform="InsertIfMissing" name="solutionInspector"
-                  type="SolutionInspector.Configuration.SolutionInspectorConfiguration, SolutionInspector.Api">
+                  type="SolutionInspector.Api.Configuration.SolutionInspectorConfiguration, SolutionInspector.Api">
       <section name="ruleAssemblyImports"
-               type="SolutionInspector.Configuration.RuleAssemblyImports.RuleAssemblyImportsConfigurationSection, SolutionInspector.Api" />
-      <section name="msBuildParsing" type="SolutionInspector.Configuration.MsBuildParsing.MsBuildParsingConfigurationSection, SolutionInspector.Api" />
-      <section name="rules" type="SolutionInspector.Configuration.Rules.RulesConfigurationSection, SolutionInspector.Api" />
+               type="SolutionInspector.Api.Configuration.RuleAssemblyImports.RuleAssemblyImportsConfigurationSection, SolutionInspector.Api" />
+      <section name="msBuildParsing" type="SolutionInspector.Api.Configuration.MsBuildParsing.MsBuildParsingConfigurationSection, SolutionInspector.Api" />
+      <section name="rules" type="SolutionInspector.Api.Configuration.Rules.RulesConfigurationSection, SolutionInspector.Api" />
     </sectionGroup>
   </configSections>
 
