@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using SystemInterface.IO;
+using SystemInterface.Reflection;
 using SystemWrapper.IO;
+using SystemWrapper.Reflection;
 using Autofac;
 using JetBrains.Annotations;
 using ManyConsole;
@@ -53,8 +55,12 @@ namespace SolutionInspector.Api
       builder.Register(ctx => configuration).As<ISolutionInspectorConfiguration>();
 
       builder.RegisterType<FileWrap>().As<IFile>();
+      builder.RegisterType<DirectoryWrap>().As<IDirectory>();
+      builder.RegisterType<AssemblyWrap>().As<IAssembly>();
 
       builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
+
+      builder.RegisterType<RuleAssemblyLoader>().As<IRuleAssemblyLoader>();
 
       builder.RegisterType<RuleCollectionBuilder>().As<IRuleCollectionBuilder>();
       builder.RegisterType<RuleTypeResolver>().As<IRuleTypeResolver>();
