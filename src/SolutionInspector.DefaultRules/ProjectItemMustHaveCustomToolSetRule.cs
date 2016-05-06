@@ -21,20 +21,20 @@ namespace SolutionInspector.DefaultRules
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
     {
-      if (target.CustomTool != Configuration.ExpectedCustomTool)
+      if ((target.CustomTool ?? "") != Configuration.ExpectedCustomTool)
         yield return
             new RuleViolation(
                 this,
                 target,
                 $"Unexpected value for custom tool, was '{target.CustomTool}' but should be '{Configuration.ExpectedCustomTool}'.");
 
-      if (target.CustomToolNamespace != Configuration.ExpectedCustomToolNamespace)
+      if ((target.CustomToolNamespace ?? "") != Configuration.ExpectedCustomToolNamespace)
         yield return
             new RuleViolation(
                 this,
                 target,
-                $"Unexpected value for custom tool namespace, was '{target.CustomToolNamespace}' but should be '{Configuration.ExpectedCustomToolNamespace}'.")
-            ;
+                $"Unexpected value for custom tool namespace, was '{target.CustomToolNamespace}' " +
+                $"but should be '{Configuration.ExpectedCustomToolNamespace}'.");
     }
   }
 
@@ -56,7 +56,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Expected custom tool namespace.
     /// </summary>
-    [ConfigurationProperty ("expectedCustomToolNamespace", DefaultValue = "")]
+    [ConfigurationProperty ("expectedCustomToolNamespace")]
     public string ExpectedCustomToolNamespace
     {
       get { return (string) this["expectedCustomToolNamespace"]; }
