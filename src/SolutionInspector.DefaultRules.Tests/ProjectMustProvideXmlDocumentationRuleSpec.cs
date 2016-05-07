@@ -28,7 +28,7 @@ namespace SolutionInspector.DefaultRules.Tests
   [Subject (typeof (ProjectMustProvideXmlDocumentationRule))]
   class ProjectMustProvideXmlDocumentationRuleSpec
   {
-    static string ProjectName;
+    static string ProjectAssemblyName;
     static IProject Project;
     static IAdvancedProject AdvancedProject;
 
@@ -41,8 +41,8 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Project = A.Fake<IProject>();
 
-      ProjectName = "Project";
-      A.CallTo(() => Project.Name).Returns(ProjectName);
+      ProjectAssemblyName = "Project.dll";
+      A.CallTo(() => Project.AssemblyName).Returns(ProjectAssemblyName);
 
       AdvancedProject = A.Fake<IAdvancedProject>();
       A.CallTo(() => Project.Advanced).Returns(AdvancedProject);
@@ -61,7 +61,27 @@ namespace SolutionInspector.DefaultRules.Tests
             new Dictionary<string, string>
             {
                 { "OutputPath", "outputPath\\" },
-                { "DocumentationFile", $"outputPath\\{ProjectName}.XML" }
+                { "DocumentationFile", $"outputPath\\{ProjectAssemblyName}.XML" }
+            });
+      };
+
+      Because of = () => Result = SUT.Evaluate(Project);
+
+      It does_not_return_violations = () =>
+          Result.Should().BeEmpty();
+
+      static IEnumerable<IRuleViolation> Result;
+    }
+
+    class when_xml_documentation_differs_only_in_casing
+    {
+      Establish ctx = () =>
+      {
+        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration]).Returns(
+            new Dictionary<string, string>
+            {
+                { "OutputPath", "OUTPUTPATH\\" },
+                { "DocumentationFile", $"OUTPUTPATH\\{ProjectAssemblyName}.xml" }
             });
       };
 
@@ -113,7 +133,7 @@ namespace SolutionInspector.DefaultRules.Tests
                   SUT,
                   Project,
                   $"In the build configuration '{BuildConfiguration}' the XML documentation configuration " +
-                  "is invalid (was: \'NOT_EXPECTED\', expected: \'outputPath\\Project.XML\')."));
+                  $"is invalid (was: \'NOT_EXPECTED\', expected: \'outputPath\\{Project.AssemblyName}.XML\')."));
 
       static IEnumerable<IRuleViolation> Result;
     }
