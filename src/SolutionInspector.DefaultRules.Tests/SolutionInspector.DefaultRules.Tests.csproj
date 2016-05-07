@@ -101,7 +101,6 @@
     <Compile Include="ProjectConfigFileShouldHaveCorrectFrameworkVersionRuleSpec.cs" />
     <Compile Include="ProjectXPathRuleSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NonDevelopmentNuGetPackagesMustAlsoBeRepresentedByAReferenceRuleSpec.cs" />
     <Compile Include="NuGetPackagesShouldHaveOneVersionAcrossSolutionRuleSpec.cs" />
     <Compile Include="ProjectBuildConfigurationDependentPropertyRuleSpec.cs" />
     <Compile Include="ProjectMustProvideXmlDocumentationRuleSpec.cs" />
