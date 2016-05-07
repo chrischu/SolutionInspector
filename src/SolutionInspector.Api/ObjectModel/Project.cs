@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -289,7 +290,7 @@ namespace SolutionInspector.Api.ObjectModel
     {
       public AssemblyName AssemblyName { get; }
 
-      public string HintPath => Metadata.GetValueOrDefault("HostName");
+      public string HintPath => Metadata.GetValueOrDefault("HintPath");
 
       public IReadOnlyDictionary<string, string> Metadata { get; }
 
