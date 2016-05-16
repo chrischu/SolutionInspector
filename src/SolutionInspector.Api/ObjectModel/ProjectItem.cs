@@ -134,16 +134,16 @@ namespace SolutionInspector.Api.ObjectModel
 
     private string CreateIdentifier ()
     {
-      var sb = new StringBuilder(Project.Identifier);
+      var sb = new StringBuilder();
+
+      sb.Append(Parent != null ? Parent.Identifier : Project.Identifier);
       sb.Append('/');
 
+      var include = Include.Replace('\\', '/');
       if (Parent != null)
-      {
-        sb.Append(Parent.Identifier);
-        sb.Append('/');
-      }
+        include = include.Split('/').Last();
 
-      sb.Append(Include.Replace('\\', '/'));
+      sb.Append(include);
 
       return sb.ToString();
     }

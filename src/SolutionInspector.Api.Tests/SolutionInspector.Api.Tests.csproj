@@ -114,8 +114,18 @@
     <Compile Include="Configuration\Rules\RuleAssemblyLoaderSpec.cs" />
     <Compile Include="Configuration\Rules\ProjectConfigRuleBaseSpec.cs" />
     <Compile Include="Configuration\Rules\RuleConfigurationElementSpec.cs" />
+    <Compile Include="ObjectModel\ProjectItemSpec.cs" />
     <Compile Include="ObjectModel\ProjectSpec.cs" />
     <Compile Include="ObjectModel\SolutionSpec.cs" />
+    <None Include="ObjectModel\TestData\ProjectItem\Link.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\ProjectItem\Project\Direct.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\ProjectItem\Project\Folder\Nested.Designer.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Utilities\NameFilterSpec.cs" />
     <Compile Include="Configuration\Rules\RulesConfigurationSectionSpec.cs" />
     <Compile Include="Commands\InspectCommandSpec.cs" />
@@ -146,6 +156,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ObjectModel\TestData\ProjectItem\Project\Project.csproj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\ProjectItem\TestSolution.sln">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="ObjectModel\TestData\Project\ProjectWithReferences\Dummy.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -167,6 +183,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="ObjectModel\TestData\Solution\TestSolution.sln">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ObjectModel\TestData\ProjectItem\Project\Folder\Nested.resx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

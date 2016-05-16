@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{61EF1F50-EA80-4164-AFF3-974C76A8D1E2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EmptyProject</RootNamespace>
+    <AssemblyName>EmptyProject</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <!-- The following property groups are just there for testing purposes -->
+  <PropertyGroup>
+    <DependentOnConfiguration Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">LOL</DependentOnConfiguration>
+    <DependentOnProperty Condition=" '$(Property)' == 'true' ">ROFL</DependentOnProperty>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Parent)' == 'true' ">
+    <ConditionFromParent>QWER</ConditionFromParent>
+    <ConditionFromSelf Condition=" '$(Self)' == 'true' ">ASDF</ConditionFromSelf>
+  </PropertyGroup>
+  <PropertyGroup Condition="5 != 7">
+    <ConditionalFromParentProperty>$(Configuration)</ConditionalFromParentProperty>
+    <ConditionalOverridingParentProperty Condition="'asdf' == 'jklö'">Value</ConditionalOverridingParentProperty>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ConditionalProperty Condition="true">7</ConditionalProperty>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Folder\Nested.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Nested.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Link.cs">
+      <Link>Link.cs</Link>
+    </Compile>
+    <Compile Include="Direct.cs">
+      <CustomMetadata>SomeCustomMetadata</CustomMetadata>
+      <Generator>SomeCustomTool</Generator>
+      <CustomToolNamespace>SomeCustomToolNamespace</CustomToolNamespace>
+    </Compile>
+    <Compile Include="Folder\Nested.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Nested.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
