@@ -1,21 +1,13 @@
-﻿Now:
-* Implement concept how to utilize SolutionInspector in a project:
-** Reference NuGet package in Console application project and derive from special base class, executing console app runs SolutionInspector. Additional rules can be added by referencing DLLs/NuGet packages.
-
-Soon:
+﻿Soon:
 * More solution & project rules
 ** NuGet references should have correct hint path
 ** (non-dev) NuGet references should have Private set
-* Concept for file rules
-** Check custom tool for a set of files (include/exclude), maybe only in special projects?
-** App.config rules
 * Test setup/rules for PersonRegister
 ** Generated files below Declaration (RN-specific)
 ** Generated files should be newer than Declaration change date (RN-specific)
 ** Should have nuspec (RN-specific)
 ** Project name/default namespace (RN-specific?)
-* Tests for object model
-* Second utilization concept: Pre-built version, additional rules have to be placed in a folder 'Rules' next to the executable.
+* More tests for object model
 
 Eventually:
 * File rules (maybe would be better to write R# inspections)
@@ -25,3 +17,4 @@ Eventually:
 * GUI Reporting
 * Fixes (Console & GUI)
 ** Enables immediately fixing a problem reported by a rule (not for all rules though)
+* GUI for configuring rules
