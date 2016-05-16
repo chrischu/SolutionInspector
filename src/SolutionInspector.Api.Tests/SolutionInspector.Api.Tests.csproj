@@ -116,6 +116,7 @@
     <Compile Include="Configuration\Rules\RuleConfigurationElementSpec.cs" />
     <Compile Include="ObjectModel\ProjectItemSpec.cs" />
     <Compile Include="ObjectModel\ProjectSpec.cs" />
+    <Compile Include="ObjectModel\NuGetPackageSpec.cs" />
     <Compile Include="ObjectModel\SolutionSpec.cs" />
     <None Include="ObjectModel\TestData\ProjectItem\Link.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
