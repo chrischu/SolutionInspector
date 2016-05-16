@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
-using Microsoft.Build.Evaluation;
 
 namespace SolutionInspector.Api.Configuration.MsBuildParsing
 {
@@ -14,15 +13,9 @@ namespace SolutionInspector.Api.Configuration.MsBuildParsing
   public interface IMsBuildParsingConfiguration
   {
     /// <summary>
-    ///   Collection of all the build actions applicable to a project item (e.g. None, Content, Compile).
+    ///   Returns <c>true</c> if the given <paramref name="projectItemType" /> is a valid project item type.
     /// </summary>
-    IReadOnlyCollection<string> ProjectBuildActions { get; }
-
-    /// <summary>
-    ///   Returns <c>true</c> if the given <paramref name="projectItem" /> is a valid project item (i.e. its build action is contained in
-    ///   <see cref="ProjectBuildActions" />.
-    /// </summary>
-    bool IsValidProjectItem (ProjectItem projectItem);
+    bool IsValidProjectItemType (string projectItemType);
   }
 
   internal class MsBuildParsingConfigurationSection : ConfigurationSection, IMsBuildParsingConfiguration
@@ -43,12 +36,10 @@ namespace SolutionInspector.Api.Configuration.MsBuildParsing
     [ConfigurationProperty ("projectBuildActions")]
     public ProjectBuildActionsConfigurationElement ProjectBuildActions => (ProjectBuildActionsConfigurationElement) this["projectBuildActions"];
 
-    public bool IsValidProjectItem (ProjectItem projectItem)
+    public bool IsValidProjectItemType(string projectItemType)
     {
-      return _projectBuildActionsHashSet.Value.Contains(projectItem.ItemType);
+      return _projectBuildActionsHashSet.Value.Contains(projectItemType);
     }
-
-    IReadOnlyCollection<string> IMsBuildParsingConfiguration.ProjectBuildActions => _projectBuildActionsHashSet.Value;
 
     public static MsBuildParsingConfigurationSection Load ()
     {

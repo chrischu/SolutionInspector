@@ -99,6 +99,7 @@
     <Compile Include="ProjectItemMustHaveCorrectBuildActionRuleSpec.cs" />
     <Compile Include="ProjectItemMustHaveCustomToolSetRuleSpec.cs" />
     <Compile Include="ProjectConfigFileShouldHaveCorrectFrameworkVersionRuleSpec.cs" />
+    <Compile Include="ProjectPropertyFakeUtility.cs" />
     <Compile Include="ProjectXPathRuleSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NuGetPackagesShouldHaveOneVersionAcrossSolutionRuleSpec.cs" />

@@ -91,7 +91,7 @@ namespace SolutionInspector.Api.ObjectModel
 
       var targetFramework = packageElement.GetAttribute("targetFramework");
 
-      var isDevelopmentDependency = packageElement.HasAttribute("targetElement") && packageElement.GetAttribute("targetElement") == "true";
+      var isDevelopmentDependency = packageElement.HasAttribute("developmentDependency") && packageElement.GetAttribute("developmentDependency") == "true";
 
       return new NuGetPackage(id, version, isPreRelease, preReleaseTag, targetFramework, isDevelopmentDependency);
     }

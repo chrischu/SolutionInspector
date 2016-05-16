@@ -116,6 +116,9 @@
     <Compile Include="Configuration\Rules\ProjectItemRulesConfigurationCollection.cs" />
     <Compile Include="Configuration\Rules\ProjectItemRuleGroupConfigurationElement.cs" />
     <Compile Include="ObjectModel\ConfigurationProjectItem.cs" />
+    <Compile Include="ObjectModel\ConditionalProjectProperty.cs" />
+    <Compile Include="ObjectModel\ProjectProperty.cs" />
+    <Compile Include="ObjectModel\ProjectPropertyExtensions.cs" />
     <Compile Include="Reporting\VisualStudioViolationReporter.cs" />
     <Compile Include="Rules\InvalidRuleAssemblyException.cs" />
     <Compile Include="Rules\RuleAssemblyLoader.cs" />

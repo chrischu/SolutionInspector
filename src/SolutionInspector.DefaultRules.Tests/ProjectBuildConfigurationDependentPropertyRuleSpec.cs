@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -75,8 +76,7 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration1])
-            .Returns(new Dictionary<string, string> { { Property, ExpectedValue } });
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, ExpectedValue);
       };
 
       Because of = () => Result = SUT.Evaluate(Project);
@@ -91,8 +91,7 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration1])
-            .Returns(new Dictionary<string, string> { { Property, "ActualValue" } });
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, "ActualValue");
       };
 
       Because of = () => Result = SUT.Evaluate(Project);
@@ -112,8 +111,8 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration1])
-            .Returns(new Dictionary<string, string>());
+        A.CallTo(() => AdvancedProject.GetPropertiesBasedOnCondition(BuildConfiguration1, null))
+            .Returns(new ReadOnlyDictionary<string, IProjectProperty>(new Dictionary<string, IProjectProperty>()));
       };
 
       Because of = () => Result = SUT.Evaluate(Project);
@@ -133,10 +132,8 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration1])
-            .Returns(new Dictionary<string, string> { { Property, ExpectedValue } });
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration2])
-            .Returns(new Dictionary<string, string> { { Property, "ActualValue" } });
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, ExpectedValue);
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration2, Property, "ActualValue");
       };
 
       Because of = () => Result = SUT.Evaluate(Project);
@@ -159,12 +156,9 @@ namespace SolutionInspector.DefaultRules.Tests
                 BuildConfigurationFilter = FilterIncludeOneAndTwo
             });
 
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration1])
-            .Returns(new Dictionary<string, string> { { Property, "ActualValue" } });
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration2])
-            .Returns(new Dictionary<string, string> { { Property, "ActualValue" } });
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration3])
-            .Returns(new Dictionary<string, string> { { Property, ExpectedValue } });
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, "ActualValue");
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration2, Property, "ActualValue");
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration3, Property, ExpectedValue);
       };
 
       Because of = () => Result = SUT.Evaluate(Project);

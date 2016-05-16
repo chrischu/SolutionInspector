@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 
@@ -24,25 +24,32 @@ namespace SolutionInspector.Api.ObjectModel
     Microsoft.Build.Evaluation.Project MsBuildProject { get; }
 
     /// <summary>
-    ///   A raw collection of all project properties.
+    ///   A collection of all (unconditional) project properties.
     /// </summary>
-    IReadOnlyDictionary<string, string> Properties { get; }
+    IReadOnlyDictionary<string, IProjectProperty> Properties { get; }
 
     /// <summary>
-    ///   A raw collection of all configuration-dependent (i.e. properties that depend on the configuration/platform of the build) project properties.
+    ///   A collection of all conditional project properties.
     /// </summary>
-    IReadOnlyDictionary<BuildConfiguration, IReadOnlyDictionary<string, string>> ConfigurationDependentProperties { get; }
+    IReadOnlyCollection<IConditionalProjectProperty> ConditionalProperties { get; }
 
     /// <summary>
-    ///   A raw collection of all conditional project properties.
+    ///   Gets all properties active under the given <paramref name="configuration" /> and when the <paramref name="properties" /> are set to the
+    ///   specified values.
     /// </summary>
-    IReadOnlyDictionary<string, ConditionalProperty> ConditionalProperties { get; }
+    IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (
+        BuildConfiguration configuration,
+        Dictionary<string, string> properties = null);
+
+    /// <summary>
+    ///   Gets all properties active when the <paramref name="properties" /> are set to the specified values.
+    /// </summary>
+    IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (Dictionary<string, string> properties);
   }
 
   [PublicAPI]
   internal class AdvancedProject : IAdvancedProject
   {
-    private const string c_configurationRegex = @"^\s*'\$\(Configuration\)\|\$\(Platform\)'\s*==\s*'(?<Configuration>\w+)\|(?<Platform>\w+)'\s*$";
     private readonly Project _project;
 
     public AdvancedProject (Project project, Microsoft.Build.Evaluation.Project msBuildProject, ProjectInSolution msBuildProjectInSolution)
@@ -51,73 +58,100 @@ namespace SolutionInspector.Api.ObjectModel
       _project = project;
       MsBuildProject = msBuildProject;
 
-      var projectProperties =
-          MsBuildProject.Properties.Where(p => !p.IsReservedProperty && !p.IsEnvironmentProperty && !p.IsGlobalProperty && !p.IsImported).ToArray();
+      var projectProperties = MsBuildProject.Xml.Properties.ToArray();
+      var classifiedProperties = ClassifyProperties(projectProperties);
 
-      var unconditionalProperties = projectProperties.Where(p => p.Xml.Parent.Condition == "" && p.Xml.Condition == "");
-      Properties = unconditionalProperties.ToDictionary(p => p.Name, p => p.EvaluatedValue);
+      Properties = new ReadOnlyDictionary<string, IProjectProperty>(classifiedProperties.UnconditionalProperties.ToDictionary(p => p.Name));
+      ConditionalProperties = classifiedProperties.ConditionalProperties;
+    }
 
-      var conditionalProperties = projectProperties.Where(p => p.Xml.Parent.Condition != "" && p.Xml.Condition != "")
-          .Select(p => new { Property = p, Condition = p.Xml.Condition != "" ? p.Xml.Condition : p.Xml.Parent.Condition }).ToArray();
+    private ClassifiedProperties ClassifyProperties (IReadOnlyCollection<ProjectPropertyElement> properties)
+    {
+      var unconditionalProperties = new List<ProjectProperty>();
+      var conditionalProperties = new List<ConditionalProjectProperty>();
 
-      ConfigurationDependentProperties = CreateConfigurationDependentProperties();
+      foreach (var property in properties)
+      {
+        if (string.IsNullOrWhiteSpace(property.Condition) && string.IsNullOrWhiteSpace(property.Parent?.Condition))
+          unconditionalProperties.Add(new ProjectProperty(property));
+        else
+          conditionalProperties.Add(new ConditionalProjectProperty(property));
+      }
 
-      ConditionalProperties = conditionalProperties
-          .Where(p => !Regex.IsMatch(p.Condition, c_configurationRegex))
-          .ToDictionary(p => p.Property.Name, p => new ConditionalProperty(p.Property.EvaluatedValue, p.Condition));
+      return new ClassifiedProperties(unconditionalProperties, conditionalProperties);
     }
 
     public ProjectInSolution MsBuildProjectInSolution { get; }
     public Microsoft.Build.Evaluation.Project MsBuildProject { get; }
 
-    public IReadOnlyDictionary<string, string> Properties { get; }
+    public IReadOnlyDictionary<string, IProjectProperty> Properties { get; }
+    public IReadOnlyCollection<IConditionalProjectProperty> ConditionalProperties { get; }
 
-    public IReadOnlyDictionary<BuildConfiguration, IReadOnlyDictionary<string, string>> ConfigurationDependentProperties { get; }
-
-    public IReadOnlyDictionary<string, ConditionalProperty> ConditionalProperties { get; }
-
-    private IReadOnlyDictionary<BuildConfiguration, IReadOnlyDictionary<string, string>> CreateConfigurationDependentProperties ()
+    public IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (
+        BuildConfiguration configuration,
+        Dictionary<string, string> properties = null)
     {
-      var dict = new Dictionary<BuildConfiguration, IReadOnlyDictionary<string, string>>();
+      properties = properties ?? new Dictionary<string, string>();
+      properties.Add("Configuration", configuration.ConfigurationName);
+      properties.Add("Platform", configuration.PlatformName);
+      return GetPropertiesBasedOnCondition(properties);
+    }
 
-      var configurationDependentProperties = MsBuildProject.Xml.PropertyGroups
-          .Select(g => new { PropertyGroup = g, Match = Regex.Match(g.Condition, c_configurationRegex) })
-          .Where(x => x.Match.Success)
-          .Select(
-              x =>
-                  new
-                  {
-                      Configuration = new BuildConfiguration(x.Match.Groups["Configuration"].Value, x.Match.Groups["Platform"].Value),
-                      Properties = x.PropertyGroup.Children.Cast<ProjectPropertyElement>().Select(p => p.Name)
-                  })
-          .GroupBy(x => x.Configuration, x => x.Properties)
-          // ReSharper disable once PossibleMultipleEnumeration
-          .ToDictionary(x => x.Key, x => x.SelectMany(y => y));
+    public IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (Dictionary<string, string> properties)
+    {
+      var result = new Dictionary<string, IProjectProperty>();
 
-      var previousConfiguration = MsBuildProject.GetPropertyValue("Configuration");
-      var previousPlatform = MsBuildProject.GetPropertyValue("Platform");
-
-      foreach (var configuration in _project.BuildConfigurations)
+      using (new MsBuildConditionContext(MsBuildProject, properties))
       {
-        MsBuildProject.SetProperty("Configuration", configuration.ConfigurationName);
-        MsBuildProject.SetProperty("Platform", configuration.PlatformName);
-        MsBuildProject.ReevaluateIfNecessary();
-
-        try
+        foreach (var property in ConditionalProperties)
         {
-          dict.Add(configuration, configurationDependentProperties[configuration].ToDictionary(s => s, s => MsBuildProject.GetPropertyValue(s)));
-        }
-        catch (Exception ex)
-        {
-          Console.WriteLine(ex);
+          var projectPropertyElement = MsBuildProject.GetProperty(property.Name)?.Xml;
+          if (projectPropertyElement != null)
+            result.Add(property.Name, new ProjectProperty(projectPropertyElement));
         }
       }
 
-      MsBuildProject.SetProperty("Configuration", previousConfiguration);
-      MsBuildProject.SetProperty("Platform", previousPlatform);
-      MsBuildProject.ReevaluateIfNecessary();
+      return result;
+    }
 
-      return dict;
+    private class MsBuildConditionContext : IDisposable
+    {
+      private readonly Microsoft.Build.Evaluation.Project _msBuildProject;
+      private readonly Dictionary<string, string> _previousPropertyValues = new Dictionary<string, string>();
+
+      public MsBuildConditionContext (Microsoft.Build.Evaluation.Project msBuildProject, Dictionary<string, string> propertyValues)
+      {
+        _msBuildProject = msBuildProject;
+        foreach (var propertyValue in propertyValues)
+        {
+          _previousPropertyValues.Add(propertyValue.Key, _msBuildProject.GetPropertyValue(propertyValue.Key));
+          _msBuildProject.SetProperty(propertyValue.Key, propertyValue.Value);
+        }
+
+        _msBuildProject.ReevaluateIfNecessary();
+      }
+
+      public void Dispose ()
+      {
+        foreach (var propertyValue in _previousPropertyValues)
+          _msBuildProject.SetProperty(propertyValue.Key, propertyValue.Value);
+
+        _msBuildProject.ReevaluateIfNecessary();
+      }
+    }
+
+    private class ClassifiedProperties
+    {
+      public IReadOnlyCollection<IProjectProperty> UnconditionalProperties { get; }
+      public IReadOnlyCollection<IConditionalProjectProperty> ConditionalProperties { get; }
+
+      public ClassifiedProperties (
+          IReadOnlyCollection<IProjectProperty> unconditionalProperties,
+          IReadOnlyCollection<IConditionalProjectProperty> conditionalProperties)
+      {
+        UnconditionalProperties = unconditionalProperties;
+        ConditionalProperties = conditionalProperties;
+      }
     }
   }
 }

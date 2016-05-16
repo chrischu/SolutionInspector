@@ -5,7 +5,6 @@ using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration.Infrastructure;
-using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
@@ -33,9 +32,9 @@ namespace SolutionInspector.DefaultRules
 
         foreach (var matchingBuildConfig in matchingBuildConfigs)
         {
-          var properties = target.Advanced.ConfigurationDependentProperties[matchingBuildConfig];
+          var properties = target.Advanced.GetPropertiesBasedOnCondition(matchingBuildConfig);
 
-          var defineConstants = properties.GetValueOrDefault("DefineConstants");
+          var defineConstants = properties.GetPropertyValueOrNull("DefineConstants");
           var actualSymbols = new HashSet<string>(defineConstants?.Split(';') ?? Enumerable.Empty<string>());
 
           foreach (var requiredSymbol in config.RequiredCompilationSymbols)
@@ -53,6 +52,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Configuration for the <see cref="RequiredCompilationSymbolsProjectRule" />.
   /// </summary>
+  [UsedImplicitly /* by configuration */]
   public class RequiredCompilationSymbolsProjectRuleConfiguration
       : KeyedConfigurationElementCollectionBase<RequiredCompilationSymbolsConfigurationElement, BuildConfigurationFilter>
   {
@@ -76,7 +76,7 @@ namespace SolutionInspector.DefaultRules
     public BuildConfigurationFilter BuildConfigurationFilter
     {
       get { return (BuildConfigurationFilter) this["buildConfigurationFilter"]; }
-      set { this["buildConfigurationFilter"] = value; }
+      [UsedImplicitly] set { this["buildConfigurationFilter"] = value; }
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ namespace SolutionInspector.DefaultRules
     public CommaDelimitedStringCollection RequiredCompilationSymbols
     {
       get { return (CommaDelimitedStringCollection) this["requiredCompilationSymbols"]; }
-      set { this["requiredCompilationSymbols"] = value; }
+      [UsedImplicitly] set { this["requiredCompilationSymbols"] = value; }
     }
   }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
-using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
@@ -29,9 +28,9 @@ namespace SolutionInspector.DefaultRules
 
       foreach (var matchingBuildConfig in matchingBuildConfigs)
       {
-        var properties = target.Advanced.ConfigurationDependentProperties[matchingBuildConfig];
+        var properties = target.Advanced.GetPropertiesBasedOnCondition(matchingBuildConfig);
 
-        var actualValue = properties.GetValueOrDefault(Configuration.Property);
+        var actualValue = properties.GetPropertyValueOrNull(Configuration.Property);
 
         if (actualValue != Configuration.ExpectedValue)
           yield return

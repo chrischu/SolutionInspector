@@ -35,7 +35,10 @@ namespace SolutionInspector.Api.Tests.Configuration.MsBuildParsing
       Because of = () => ConfigurationHelper.DeserializeSection((ConfigurationSection) SUT, MsBuildParsingConfigurationSection.ExampleConfiguration);
 
       It reads_project_build_actions = () =>
-          SUT.ProjectBuildActions.Should().BeEquivalentTo(@"None");
+      {
+        SUT.IsValidProjectItemType("None").Should().BeTrue();
+        SUT.IsValidProjectItemType("Something").Should().BeFalse();
+      };
     }
   }
 }

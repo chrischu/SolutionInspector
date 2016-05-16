@@ -9,6 +9,7 @@ using SystemInterface.IO;
 using SystemWrapper.IO;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
+using Microsoft.Build.Evaluation;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
@@ -164,7 +165,7 @@ namespace SolutionInspector.Api.ObjectModel
     private IEnumerable<ProjectItem> BuildProjectItems (ICollection<Microsoft.Build.Evaluation.ProjectItem> msBuildProjectItems)
     {
       var projectItems =
-          msBuildProjectItems.Where(i => !i.IsImported && _msBuildParsingConfiguration.IsValidProjectItem(i))
+          msBuildProjectItems.Where(i => !i.IsImported && _msBuildParsingConfiguration.IsValidProjectItemType(i.ItemType))
               .Select(p => ProjectItem.FromMsBuildProjectItem(this, p))
               .ToDictionary(i => i.OriginalInclude);
 
@@ -196,10 +197,12 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 
-    public string DefaultNamespace => Advanced.Properties["RootNamespace"];
-    public string AssemblyName => Advanced.Properties["AssemblyName"];
-    public Version TargetFrameworkVersion => Version.Parse(Advanced.Properties["TargetFrameworkVersion"].TrimStart('v'));
-    public ProjectOutputType OutputType => Advanced.Properties["OutputType"] == "Exe" ? ProjectOutputType.Executable : ProjectOutputType.Library;
+    public string DefaultNamespace => Advanced.Properties.GetPropertyValueOrNull("RootNamespace");
+    public string AssemblyName => Advanced.Properties.GetPropertyValueOrNull("AssemblyName");
+    public Version TargetFrameworkVersion => Version.Parse(Advanced.Properties.GetPropertyValueOrNull("TargetFrameworkVersion").TrimStart('v'));
+
+    public ProjectOutputType OutputType
+      => Advanced.Properties.GetPropertyValueOrNull("OutputType") == "Exe" ? ProjectOutputType.Executable : ProjectOutputType.Library;
 
     public IReadOnlyCollection<NuGetPackage> NuGetPackages { get; }
 
@@ -264,7 +267,7 @@ namespace SolutionInspector.Api.ObjectModel
               new NuGetReference(
                   matchingNuGetPackage,
                   reference.AssemblyName,
-                  reference.Metadata.ContainsKey("IsPrivate") && reference.Metadata["IsPrivate"] == "True",
+                  reference.Metadata.GetValueOrDefault("Private") == "True",
                   reference.HintPath));
         else
           fileReferences.Add(new FileReference(reference.AssemblyName, reference.HintPath));
@@ -278,11 +281,16 @@ namespace SolutionInspector.Api.ObjectModel
         ProjectInSolution projectInSolution,
         IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
-      return new Project(
+      var msBuildProject = new Microsoft.Build.Evaluation.Project(projectInSolution.AbsolutePath);
+      var project = new Project(
           solution,
           projectInSolution,
-          new Microsoft.Build.Evaluation.Project(projectInSolution.AbsolutePath),
+          msBuildProject,
           msBuildParsingConfiguration);
+
+      // This is necessary to make sure projects are loadable multiple times.
+      ProjectCollection.GlobalProjectCollection.UnloadProject(msBuildProject);
+      return project;
     }
 
     private class ReferenceItem

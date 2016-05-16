@@ -74,6 +74,7 @@
       <HintPath>..\packages\ManyConsole.0.4.2.19\lib\ManyConsole.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Build" />
     <Reference Include="NDesk.Options, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
       <Private>True</Private>
@@ -113,6 +114,8 @@
     <Compile Include="Configuration\Rules\RuleAssemblyLoaderSpec.cs" />
     <Compile Include="Configuration\Rules\ProjectConfigRuleBaseSpec.cs" />
     <Compile Include="Configuration\Rules\RuleConfigurationElementSpec.cs" />
+    <Compile Include="ObjectModel\ProjectSpec.cs" />
+    <Compile Include="ObjectModel\SolutionSpec.cs" />
     <Compile Include="Utilities\NameFilterSpec.cs" />
     <Compile Include="Configuration\Rules\RulesConfigurationSectionSpec.cs" />
     <Compile Include="Commands\InspectCommandSpec.cs" />
@@ -124,6 +127,12 @@
     <Compile Include="Utilities\CollectionDifferenceFinderSpec.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ObjectModel\TestData\Project\ExecutableProject\App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\Project\ProjectWithReferences\packages.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +144,31 @@
       <Project>{84eb4f29-70f0-462b-ba37-da6f9261c8c8}</Project>
       <Name>SolutionInspector.Api</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ObjectModel\TestData\Project\ProjectWithReferences\Dummy.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ObjectModel\TestData\Project\EmptyProject\EmptyProject.csproj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\Project\ExecutableProject\ExecutableProject.csproj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\Project\ProjectWithReferences\ProjectWithReferences.csproj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\Project\TestSolution.sln">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\Solution\EmptyProject.csproj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\Solution\TestSolution.sln">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />

@@ -50,8 +50,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_property_with_same_value
     {
-      Establish ctx =
-          () => { A.CallTo(() => AdvancedProject.Properties).Returns(new Dictionary<string, string> { { "Property", "ExpectedValue" } }); };
+      Establish ctx = () => { ProjectPropertyFakeUtility.SetupFakeProperty(AdvancedProject, "Property", "ExpectedValue"); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -63,7 +62,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_property_with_different_value
     {
-      Establish ctx = () => { A.CallTo(() => AdvancedProject.Properties).Returns(new Dictionary<string, string> { { "Property", "ActualValue" } }); };
+      Establish ctx = () => { ProjectPropertyFakeUtility.SetupFakeProperty(AdvancedProject, "Property", "ActualValue"); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -76,7 +75,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_non_existing_property
     {
-      Establish ctx = () => { A.CallTo(() => AdvancedProject.Properties).Returns(new Dictionary<string, string>()); };
+      Establish ctx = () => { ProjectPropertyFakeUtility.SetupFakeProperty(AdvancedProject, "Property", null); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 

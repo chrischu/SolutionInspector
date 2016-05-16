@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 
@@ -21,7 +20,7 @@ namespace SolutionInspector.DefaultRules
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
-      var actualValue = target.Advanced.Properties.GetValueOrDefault(Configuration.Property);
+      var actualValue = target.Advanced.Properties.GetPropertyValueOrNull(Configuration.Property);
 
       if (actualValue != Configuration.ExpectedValue)
         yield return

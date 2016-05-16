@@ -57,7 +57,9 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration]).Returns(
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperties(
+            AdvancedProject,
+            BuildConfiguration,
             new Dictionary<string, string>
             {
                 { "OutputPath", "outputPath\\" },
@@ -77,7 +79,9 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration]).Returns(
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperties(
+            AdvancedProject,
+            BuildConfiguration,
             new Dictionary<string, string>
             {
                 { "OutputPath", "OUTPUTPATH\\" },
@@ -95,11 +99,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_xml_documentation_configuration_is_missing
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration]).Returns(
-            new Dictionary<string, string>());
-      };
+      Establish ctx = () => { ProjectPropertyFakeUtility.SetupEmptyBuildConfigurationDependentProperties(AdvancedProject, BuildConfiguration); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -117,7 +117,9 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => AdvancedProject.ConfigurationDependentProperties[BuildConfiguration]).Returns(
+        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperties(
+            AdvancedProject,
+            BuildConfiguration,
             new Dictionary<string, string>
             {
                 { "OutputPath", "outputPath\\" },
