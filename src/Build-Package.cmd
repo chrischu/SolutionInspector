@@ -6,7 +6,7 @@ REM DEBT: Duplication with Build.cmd
 set git="C:\Program Files\Git\bin\git.exe"
 for /f "delims=" %%a in ('%git% rev-parse HEAD') do @set commitHash=%%a
 
-Build\OutputSplitter.exe "powershell" "-NonInteractive -Command "" & { . .\Build.ps1 -Mode "Local" -Version ""0.0.0"" -CommitHash "%commitHash%" -RunTests $False -RunFxCopCodeAnalysis $False -RunReSharperCodeInspection $False -CreateNuGetPackages $True -IsPreReleaseBuild $True }""" "Build.log"
+Build\OutputSplitter.exe "powershell" "-NonInteractive -Command "" & { . .\Build.ps1 -Mode "Local" -Version ""0.0.0"" -CommitHash "%commitHash%" -RunTests $False -RunFxCopCodeAnalysis $False -RunReSharperCodeInspection $False -CreateNuGetPackages $True -CreateArchives $True -IsPreReleaseBuild $True }""" "Build.log"
 if not %ERRORLEVEL%==0 goto build_failed
 goto build_succeeded
 

@@ -9,7 +9,7 @@ Param (
   [Parameter()]
   [string] $CommitHash,
   [Parameter()]
-  [string] $Configuration = "Debug",
+  [string] $Configuration = "Release",
   [Parameter()]
   [bool] $RunTests = $True,
   [Parameter()]
@@ -20,6 +20,8 @@ Param (
   [bool] $RunReSharperCodeInspection = $True,
   [Parameter()]
   [bool] $CreateNuGetPackages = $False,
+  [Parameter()]
+  [bool] $CreateArchives = $False,
   [Parameter()]
   [bool]$PushNuGetPackages = $False,
   [Parameter()]
@@ -91,6 +93,7 @@ function Run() {
     Run-Tests -Condition $RunTests
     Create-NuGetPackages -Condition $CreateNuGetPackages
     Push-Packages -Condition ($PushNuGetPackages -And $CreateNuGetPackages)
+    Create-Archives -Condition $CreateArchives
   } finally {
     Restore-AssemblyInfos
   }
@@ -147,6 +150,13 @@ BuildTask Create-NuGetPackages {
 
 BuildTask Push-Packages {
    Push-AllNuGetPackages $NuGetPackagesDirectory $TargetNuGetFeed $NuGetApiKey
+}
+
+BuildTask Create-Archives {
+  $archivePath = Join-Path $BuildOutputDirectory "SolutionInspector-$AssemblyInformationalVersion.zip"
+  $sourceDirectory = Join-Path $SolutionDirectory "SolutionInspector\bin\$Configuration"
+  Zip-Directory -ZipFilePath $archivePath -SourceDirectory $sourceDirectory
+  Report-Archive $archivePath
 }
 
 Run

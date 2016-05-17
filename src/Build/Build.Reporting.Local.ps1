@@ -18,6 +18,11 @@ function Report-NuGetPackage {
   Param([Parameter(Mandatory)] [string] $nuGetPackagePath)
 }
 
+function Report-Archive {
+  [CmdletBinding()]
+  Param([Parameter(Mandatory)] [string] $archivePath)
+}
+
 function Report-TestError {
   [CmdletBinding()]
   Param([Parameter(Mandatory)] $error)

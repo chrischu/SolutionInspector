@@ -64,6 +64,7 @@ build_script:
       -Configuration "Release" `
       -CreateNuGetPackages $True `
       -PushNuGetPackages $PushNuGetPackages `
+      -CreateArchives $True `
       -IsPreReleaseBuild $IsPreReleaseBuild `
       -NuGetApiKey "$env:NuGetApiKey"
 
@@ -73,6 +74,7 @@ deploy:
 - provider: GitHub
   auth_token:
     secure: Lp2YKeJITl6VZV0SSdpSrbnuPujRolIyat9yAIq7W3xNkSZ36PGrPwRMrPBK4V11
+  artifact: SolutionInspector.zip
   draft: true
   prerelease: true
   on:

@@ -127,3 +127,15 @@ function Ensure-StringEndsWith {
 
   return $string + $char
 }
+
+Add-Type -As System.IO.Compression.FileSystem
+
+function Zip-Directory {
+  [CmdletBinding()]
+  Param(
+      [Parameter(Mandatory)] [string] $zipFilePath, 
+      [Parameter(Mandatory)] [string] $sourceDirectory, 
+      [System.IO.Compression.CompressionLevel] $compression = "Fastest")
+
+  [System.IO.Compression.ZipFile]::CreateFromDirectory($sourceDirectory, $zipFilePath, $compression, $false)
+}

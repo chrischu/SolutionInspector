@@ -5,7 +5,7 @@ REM this seems to be the default way in cmd
 set git="C:\Program Files\Git\bin\git.exe"
 for /f "delims=" %%a in ('%git% rev-parse HEAD') do @set commitHash=%%a
 
-Build\OutputSplitter.exe "powershell" "-NonInteractive -Command "" & { . .\Build.ps1 -Mode "Local" -Version ""0.0.1"" -CommitHash ""%commitHash%"" -CreateNuGetPackages $True }""" "Build.log"
+Build\OutputSplitter.exe "powershell" "-NonInteractive -Command "" & { . .\Build.ps1 -Mode "Local" -Version ""0.0.1"" -CommitHash ""%commitHash%"" -CreateNuGetPackages $True -CreateArchives $True }""" "Build.log"
 if not %ERRORLEVEL%==0 goto build_failed
 goto build_succeeded
 
