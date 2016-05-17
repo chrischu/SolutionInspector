@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace SolutionInspector.Api.Rules
@@ -20,7 +21,8 @@ namespace SolutionInspector.Api.Rules
     /// <summary>
     ///   Serialization constructor.
     /// </summary>
-    protected RuleAssemblyNotFoundException (SerializationInfo info, StreamingContext context)
+    [ExcludeFromCodeCoverage /* Serialization ctor */]
+    protected RuleAssemblyNotFoundException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

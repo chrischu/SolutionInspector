@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Xml.XPath;
 using SolutionInspector.Api.ObjectModel;
@@ -50,6 +51,7 @@ namespace SolutionInspector.DefaultRules
       /// <summary>
       ///   Serialization constructor.
       /// </summary>
+      [ExcludeFromCodeCoverage /* Serialization ctor */]
       protected InvalidXPathExpressionException (SerializationInfo info, StreamingContext context)
           : base(info, context)
       {
