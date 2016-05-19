@@ -106,7 +106,8 @@ namespace SolutionInspector.Api.ObjectModel
         foreach (var property in ConditionalProperties)
         {
           var projectPropertyElement = MsBuildProject.GetProperty(property.Name)?.Xml;
-          if (projectPropertyElement != null)
+          // TODO: Remove the ContainsKey workaround after figuring out a good way to handle conditional properties.
+          if (projectPropertyElement != null && !result.ContainsKey(property.Name))
             result.Add(property.Name, new ProjectProperty(projectPropertyElement));
         }
       }
