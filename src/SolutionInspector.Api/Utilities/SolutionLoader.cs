@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using SystemInterface.IO;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
