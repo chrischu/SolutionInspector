@@ -183,6 +183,7 @@
     <Compile Include="Utilities\ConsoleTableWriterCharacters.cs" />
     <Compile Include="Utilities\ConsoleTableWriterOptions.cs" />
     <Compile Include="Utilities\SolutionLoader.cs" />
+    <Compile Include="Utilities\SolutionNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\SharedTemplate.nuspec">

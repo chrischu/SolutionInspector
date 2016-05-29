@@ -25,7 +25,7 @@ namespace SolutionInspector.Api.Utilities
     public ISolution Load (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
       if (!_file.Exists(solutionPath))
-        throw new FileNotFoundException($"Could not find solution file at '{solutionPath}'.");
+        throw new SolutionNotFoundException(solutionPath);
 
       return Solution.Load(solutionPath, msBuildParsingConfiguration);
     }

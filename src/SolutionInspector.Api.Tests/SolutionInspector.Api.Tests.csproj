@@ -127,6 +127,7 @@
     <None Include="ObjectModel\TestData\ProjectItem\Project\Folder\Nested.Designer.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Utilities\SolutionLoaderSpec.cs" />
     <Compile Include="Utilities\NameFilterSpec.cs" />
     <Compile Include="Configuration\Rules\RulesConfigurationSectionSpec.cs" />
     <Compile Include="Commands\InspectCommandSpec.cs" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.Build.Exceptions;
 using SolutionInspector.Api.Configuration;
@@ -56,13 +55,17 @@ namespace SolutionInspector.Api.Commands
       {
         return _solutionLoader.Load(arguments.SolutionFilePath, _configuration.MsBuildParsing);
       }
-      catch (FileNotFoundException)
+      catch (SolutionNotFoundException)
       {
         throw reportError($"Given solution file '{arguments.SolutionFilePath}' could not be found.");
       }
       catch (InvalidProjectFileException)
       {
         throw reportError($"Given file '{arguments.SolutionFilePath}' is not a valid solution file.");
+      }
+      catch (Exception ex)
+      {
+        throw reportError($"Unexpected error when loading solution file '{arguments.SolutionFilePath}: {ex}");
       }
     }
 
