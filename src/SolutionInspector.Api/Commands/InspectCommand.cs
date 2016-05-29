@@ -36,7 +36,7 @@ namespace SolutionInspector.Api.Commands
           .Option<ViolationReportFormat>(
               "report",
               "r",
-              "Writes a report of all violations to the console in the given format (Xml|Table)",
+              "Writes a report of all violations to the console in the given format (Xml|Table|VisualStudio)",
               (a, v) => a.ReportFormat = v)
           .Values(c => c.Value("solutionFilePath", (a, v) => a.SolutionFilePath = v));
     }
@@ -75,8 +75,7 @@ namespace SolutionInspector.Api.Commands
 
       if (violations.Any())
       {
-        if (arguments.ReportFormat != null)
-          _violationReporterProxy.Report(arguments.ReportFormat.Value, violations);
+        _violationReporterProxy.Report(arguments.ReportFormat, violations);
         return 1;
       }
 
@@ -105,16 +104,16 @@ namespace SolutionInspector.Api.Commands
     public class RawArguments
     {
       public string SolutionFilePath { get; set; }
-      public ViolationReportFormat? ReportFormat { get; set; }
+      public ViolationReportFormat ReportFormat { get; set; }
     }
 
     public class ParsedArguments
     {
       public ISolution Solution { get; }
       public IRuleCollection Rules { get; }
-      public ViolationReportFormat? ReportFormat { get; }
+      public ViolationReportFormat ReportFormat { get; }
 
-      public ParsedArguments (ISolution solution, IRuleCollection rules, ViolationReportFormat? reportFormat)
+      public ParsedArguments (ISolution solution, IRuleCollection rules, ViolationReportFormat reportFormat)
       {
         Solution = solution;
         Rules = rules;
