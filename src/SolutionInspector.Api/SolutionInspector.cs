@@ -10,6 +10,7 @@ using SystemWrapper.Reflection;
 using Autofac;
 using JetBrains.Annotations;
 using ManyConsole;
+using NLog;
 using SolutionInspector.Api.Commands;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
@@ -24,11 +25,15 @@ namespace SolutionInspector.Api
   [PublicAPI]
   public static class SolutionInspector
   {
+    private static Logger s_logger = LogManager.GetCurrentClassLogger();
+
     /// <summary>
     ///   Runs the SolutionInspector with the given console <paramref name="args" />.
     /// </summary>
     public static int Run (string[] args)
     {
+      s_logger.Debug($"SolutionInspector was run with the following arguments: [{string.Join(", ", args)}].");
+
       CheckMsBuildToolsInstallation();
 
       using (var container = SetupContainer())
@@ -46,7 +51,9 @@ namespace SolutionInspector.Api
     {
       try
       {
+        s_logger.Info("Checking for 'MSBuild Tools 2015'...");
         Assembly.Load("Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+        s_logger.Info("Check successful, 'MSBuild Tools 2015' are installed.");
       }
       catch (FileNotFoundException)
       {
