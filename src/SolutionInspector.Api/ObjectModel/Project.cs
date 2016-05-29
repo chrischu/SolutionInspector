@@ -153,8 +153,8 @@ namespace SolutionInspector.Api.ObjectModel
     {
       var configurationItem = ProjectItems.SingleOrDefault(
           i =>
-              string.Equals(i.OriginalInclude, "App.config", StringComparison.InvariantCultureIgnoreCase)
-              || string.Equals(i.OriginalInclude, "Web.config", StringComparison.InvariantCultureIgnoreCase));
+              string.Equals(i.OriginalInclude.Unevaluated, "App.config", StringComparison.InvariantCultureIgnoreCase)
+              || string.Equals(i.OriginalInclude.Unevaluated, "Web.config", StringComparison.InvariantCultureIgnoreCase));
 
       if (configurationItem == null)
         return null;
@@ -167,22 +167,24 @@ namespace SolutionInspector.Api.ObjectModel
       var projectItems =
           msBuildProjectItems.Where(i => !i.IsImported && _msBuildParsingConfiguration.IsValidProjectItemType(i.ItemType))
               .Select(p => ProjectItem.FromMsBuildProjectItem(this, p))
-              .ToDictionary(i => i.OriginalInclude);
+              .Distinct()
+              .ToLookup(i => i.OriginalInclude.Evaluated);
 
-      foreach (var projectItem in projectItems.Values)
+      foreach (var projectItem in projectItems.SelectMany(g => g))
       {
         var dependentUpon = projectItem.Metadata.GetValueOrDefault("DependentUpon");
 
         if (dependentUpon != null)
         {
-          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.OriginalInclude).AssertNotNull(), dependentUpon);
+          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.OriginalInclude.Evaluated).AssertNotNull(), dependentUpon);
 
-          var parent = projectItems[dependentUponInclude];
-          projectItem.SetParent(parent);
+          var parents = projectItems[dependentUponInclude];
+          foreach (var parent in parents)
+            projectItem.SetParent(parent);
         }
       }
 
-      return projectItems.Values;
+      return projectItems.SelectMany(g => g);
     }
 
     public IAdvancedProject Advanced { get; }

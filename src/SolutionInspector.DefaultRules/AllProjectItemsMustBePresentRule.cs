@@ -15,7 +15,7 @@ namespace SolutionInspector.DefaultRules
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       return target.ProjectItems.Where(i => !i.File.Exists)
-          .Select(i => new RuleViolation(this, target, $"Could not find project item '{i.OriginalInclude}'."));
+          .Select(i => new RuleViolation(this, target, $"Could not find project item '{i.OriginalInclude.Evaluated}'."));
     }
   }
 }
