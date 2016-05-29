@@ -283,7 +283,12 @@ namespace SolutionInspector.Api.ObjectModel
         ProjectInSolution projectInSolution,
         IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
-      var msBuildProject = new Microsoft.Build.Evaluation.Project(projectInSolution.AbsolutePath);
+      var msBuildProject = new Microsoft.Build.Evaluation.Project(
+          projectInSolution.AbsolutePath,
+          null,
+          null,
+          ProjectCollection.GlobalProjectCollection,
+          ProjectLoadSettings.IgnoreMissingImports);
       var project = new Project(
           solution,
           projectInSolution,
