@@ -1,42 +1,41 @@
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using JetBrains.Annotations;
-using Microsoft.Build.Construction;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
-  /// Represents a property of a <see cref="IProject"/> that is dependent on a <see cref="Condition"/>.
+  /// Represents a property of a <see cref="IProject"/> that has different values depending on a condition.
   /// </summary>
   [PublicAPI]
-  public interface IConditionalProjectProperty : IProjectProperty
+  public interface IConditionalProjectProperty
   {
     /// <summary>
-    /// The property's condition. This must be true for the property to be active.
+    /// The property's name.
     /// </summary>
-    string Condition { get; }
+    string Name { get; }
 
     /// <summary>
-    /// The parent condition. This must also be true for the property to be active.
+    /// The property's values along with their conditions.
     /// </summary>
-    string ParentCondition { get; }
+    IReadOnlyCollection<IConditionalProjectPropertyValue> Values { get; }
   }
 
-  [DebuggerDisplay("{Name} = {Value} (when {Condition} and {ParentCondition})")]
-  internal class ConditionalProjectProperty : ProjectProperty, IConditionalProjectProperty
+ internal class ConditionalProjectProperty : IConditionalProjectProperty
   {
-    public string Condition { get; }
-    public string ParentCondition { get; }
+    private readonly List<IConditionalProjectPropertyValue> _values = new List<IConditionalProjectPropertyValue>();
 
-    public ConditionalProjectProperty(ProjectPropertyElement property) : base(property.Name, property.Value)
+    public string Name { get; }
+    public IReadOnlyCollection<IConditionalProjectPropertyValue> Values => _values;
+
+    public ConditionalProjectProperty (string name)
     {
-      Condition = ConvertCondition(property.Condition);
-      ParentCondition = ConvertCondition(property.Parent?.Condition);
+      Name = name;
     }
 
-    private string ConvertCondition([CanBeNull] string condition)
+    public void AddValue(IProjectPropertyCondition condition, string value)
     {
-      return string.IsNullOrWhiteSpace(condition) ? null : condition;
+      _values.Add(new ConditionalProjectPropertyValue(condition, value));
     }
   }
 }

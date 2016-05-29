@@ -68,17 +68,23 @@ namespace SolutionInspector.Api.ObjectModel
     private ClassifiedProperties ClassifyProperties (IReadOnlyCollection<ProjectPropertyElement> properties)
     {
       var unconditionalProperties = new List<ProjectProperty>();
-      var conditionalProperties = new List<ConditionalProjectProperty>();
+      var conditionalProperties = new Dictionary<string,ConditionalProjectProperty>();
 
       foreach (var property in properties)
       {
         if (string.IsNullOrWhiteSpace(property.Condition) && string.IsNullOrWhiteSpace(property.Parent?.Condition))
           unconditionalProperties.Add(new ProjectProperty(property));
         else
-          conditionalProperties.Add(new ConditionalProjectProperty(property));
+        {
+          ConditionalProjectProperty conditionalProperty;
+          if (!conditionalProperties.TryGetValue(property.Name, out conditionalProperty))
+            conditionalProperty = conditionalProperties[property.Name] = new ConditionalProjectProperty(property.Name);
+
+          conditionalProperty.AddValue(new ProjectPropertyCondition(property.Condition, property.Parent?.Condition), property.Value);
+        }
       }
 
-      return new ClassifiedProperties(unconditionalProperties, conditionalProperties);
+      return new ClassifiedProperties(unconditionalProperties, conditionalProperties.Values);
     }
 
     public ProjectInSolution MsBuildProjectInSolution { get; }
@@ -106,8 +112,7 @@ namespace SolutionInspector.Api.ObjectModel
         foreach (var property in ConditionalProperties)
         {
           var projectPropertyElement = MsBuildProject.GetProperty(property.Name)?.Xml;
-          // TODO: Remove the ContainsKey workaround after figuring out a good way to handle conditional properties.
-          if (projectPropertyElement != null && !result.ContainsKey(property.Name))
+          if (projectPropertyElement != null)
             result.Add(property.Name, new ProjectProperty(projectPropertyElement));
         }
       }

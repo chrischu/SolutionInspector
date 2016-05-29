@@ -22,7 +22,10 @@
     <ConditionFromParent>QWER</ConditionFromParent>
     <ConditionFromSelf Condition=" '$(Self)' == 'true' ">ASDF</ConditionFromSelf>
   </PropertyGroup>
-  
+  <PropertyGroup>
+    <Multiple Condition=" '$(Value)' == '3'">Three</Multiple>
+    <Multiple Condition=" '$(Value)' == '5'">Five</Multiple>
+  </PropertyGroup>
   <PropertyGroup Condition="5 != 7">
     <ConditionalFromParentProperty>$(Configuration)</ConditionalFromParentProperty>
     <ConditionalOverridingParentProperty Condition="'asdf' == 'jklö'">Value</ConditionalOverridingParentProperty>

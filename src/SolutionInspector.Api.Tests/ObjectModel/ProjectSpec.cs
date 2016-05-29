@@ -85,9 +85,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
             new
             {
                 Name = propertyName,
-                Value = "LOL",
-                Condition = " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ",
-                ParentCondition = (string) null
+                Values = new[]
+                         {
+                             new
+                             {
+                                 Condition = new { Self = " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ", Parent = (string) null },
+                                 Value = "LOL"
+                             }
+                         }
             });
 
         Result.Advanced.GetPropertiesBasedOnCondition(new BuildConfiguration("Debug", "AnyCPU"))[propertyName].Value.Should().Be("LOL");
@@ -106,9 +111,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
             new
             {
                 Name = propertyName,
-                Value = "ROFL",
-                Condition = " '$(Property)' == 'true' ",
-                ParentCondition = (string) null
+                Values = new[]
+                         {
+                             new
+                             {
+                                 Condition = new { Self = " '$(Property)' == 'true' ", Parent = (string) null },
+                                 Value = "ROFL"
+                             }
+                         }
             });
 
         var propertiesBasedOnTrueCondition =
@@ -128,9 +138,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
             new
             {
                 Name = propertyName,
-                Value = "QWER",
-                Condition = (string) null,
-                ParentCondition = " '$(Parent)' == 'true' "
+                Values = new[]
+                         {
+                             new
+                             {
+                                 Condition = new { Self = (string) null, Parent = " '$(Parent)' == 'true' " },
+                                 Value = "QWER"
+                             }
+                         }
             });
 
         var propertiesBasedOnTrueCondition =
@@ -150,9 +165,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
             new
             {
                 Name = propertyName,
-                Value = "ASDF",
-                Condition = " '$(Self)' == 'true' ",
-                ParentCondition = " '$(Parent)' == 'true' "
+                Values = new[]
+                         {
+                             new
+                             {
+                                 Condition = new { Self = " '$(Self)' == 'true' ", Parent = " '$(Parent)' == 'true' " },
+                                 Value = "ASDF"
+                             }
+                         }
             });
 
         var propertiesBasedOnTrueCondition =
@@ -166,6 +186,38 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         var propertiesBasedOnFalseCondition2 =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "false" } });
         propertiesBasedOnFalseCondition2.GetValueOrDefault(propertyName).Should().BeNull();
+      };
+
+      It parses_property_that_is_contained_more_than_once_with_differing_conditions = () =>
+      {
+        const string propertyName = "Multiple";
+
+        Result.Advanced.ConditionalProperties.Single(p => p.Name == propertyName).ShouldBeEquivalentTo(
+            new
+            {
+              Name = propertyName,
+              Values = new[]
+                         {
+                             new
+                             {
+                                 Condition = new { Self = " '$(Value)' == '3'", Parent = (string)null },
+                                 Value = "Three"
+                             },
+                             new
+                             {
+                                 Condition = new { Self = " '$(Value)' == '5'", Parent = (string)null },
+                                 Value = "Five"
+                             }
+                         }
+            });
+
+        var propertiesBasedOnFirstValue =
+            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Value", "3" } });
+        propertiesBasedOnFirstValue[propertyName].Value.Should().Be("Three");
+
+        var propertiesBasedOnSecondValue =
+            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Value", "5" } });
+        propertiesBasedOnSecondValue[propertyName].Value.Should().Be("Five");
       };
 
       static string ProjectName;
