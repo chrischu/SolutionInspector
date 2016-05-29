@@ -21,7 +21,7 @@ namespace SolutionInspector.Api.ObjectModel
   }
 
   [DebuggerDisplay ("{Name} = {Value}")]
-  internal class ProjectProperty : IProjectProperty
+  internal sealed class ProjectProperty : IProjectProperty, IEquatable<ProjectProperty>
   {
     public string Name { get; }
     public string Value { get; }
@@ -33,10 +33,48 @@ namespace SolutionInspector.Api.ObjectModel
       Value = property.Value;
     }
 
-    protected ProjectProperty (string name, string value)
+    private ProjectProperty (string name, string value)
     {
       Name = name;
       Value = value;
+    }
+
+    public bool Equals (ProjectProperty other)
+    {
+      if (ReferenceEquals(null, other))
+        return false;
+      if (ReferenceEquals(this, other))
+        return true;
+      return string.Equals(Name, other.Name) && string.Equals(Value, other.Value);
+    }
+
+    public override bool Equals (object obj)
+    {
+      if (ReferenceEquals(null, obj))
+        return false;
+      if (ReferenceEquals(this, obj))
+        return true;
+      if (obj.GetType() != typeof (ProjectProperty))
+        return false;
+      return Equals((ProjectProperty) obj);
+    }
+
+    public override int GetHashCode ()
+    {
+      unchecked
+      {
+        return (Name.GetHashCode() * 397) ^ Value.GetHashCode();
+      }
+    }
+
+    public static bool operator == (ProjectProperty left, ProjectProperty right)
+    {
+      return Equals(left, right);
+    }
+
+    public static bool operator != (ProjectProperty left, ProjectProperty right)
+    {
+      return !Equals(left, right);
     }
   }
 }
