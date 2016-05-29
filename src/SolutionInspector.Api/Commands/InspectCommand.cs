@@ -78,17 +78,20 @@ namespace SolutionInspector.Api.Commands
 
     protected override int Run (ParsedArguments arguments)
     {
-      s_logger.Info($"Inspecting solution '{arguments.Solution.FullPath}'...");
-
-      var violations = GetRuleViolations(arguments.Solution, arguments.Rules).ToArray();
-
-      if (violations.Any())
+      using (var solution = arguments.Solution)
       {
-        _violationReporterProxy.Report(arguments.ReportFormat, violations);
-        return 1;
-      }
+        s_logger.Info($"Inspecting solution '{solution.FullPath}'...");
 
-      return 0;
+        var violations = GetRuleViolations(solution, arguments.Rules).ToArray();
+
+        if (violations.Any())
+        {
+          _violationReporterProxy.Report(arguments.ReportFormat, violations);
+          return 1;
+        }
+
+        return 0;
+      }
     }
 
     private IEnumerable<IRuleViolation> GetRuleViolations (ISolution solution, IRuleCollection rules)

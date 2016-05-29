@@ -15,7 +15,7 @@ namespace SolutionInspector.Api.ObjectModel
   ///   Represents a VisualStudio solution.
   /// </summary>
   [PublicAPI]
-  public interface ISolution : IRuleTarget
+  public interface ISolution : IRuleTarget, IDisposable
   {
     /// <summary>
     ///   The solution's name.
@@ -69,6 +69,12 @@ namespace SolutionInspector.Api.ObjectModel
     {
       var fullPath = Path.GetFullPath(solutionFilePath);
       return new Solution(fullPath, msBuildParsingConfiguration);
+    }
+
+    public void Dispose ()
+    {
+      foreach (var project in Projects)
+        project.Dispose();
     }
   }
 }

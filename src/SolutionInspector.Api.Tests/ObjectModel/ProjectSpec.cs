@@ -251,8 +251,8 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       Establish ctx = () =>
       {
         ProjectName = "ProjectWithReferences";
-        ReferencedNuGetPackage1 = new NuGetPackage("Newtonsoft.Json", new Version(8, 0, 3), false, null, "net461", isDevelopmentDependency: false);
-        ReferencedNuGetPackage2 = new NuGetPackage("Dapper", new Version(1, 50, 0), true, "-beta9", "net461", isDevelopmentDependency: true);
+        ReferencedNuGetPackage1 = new NuGetPackage("Newtonsoft.Json", new Version(8, 0, 3), false, null, "net452", isDevelopmentDependency: false);
+        ReferencedNuGetPackage2 = new NuGetPackage("Dapper", new Version(1, 50, 0), true, "-beta9", "net452", isDevelopmentDependency: true);
       };
 
       Because of = () => Result = LoadProject(ProjectName);

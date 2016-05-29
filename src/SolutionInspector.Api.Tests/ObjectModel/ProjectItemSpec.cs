@@ -169,7 +169,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
       Because of = () => Result = LoadProjectItems(ProjectItemName).ToArray();
 
-      It parses_botH_items = () =>
+      It parses_both_items = () =>
       {
         Result[0].OriginalInclude.Evaluated.Should().Be("AlmostDuplicate.cs");
         Result[0].Metadata["Metadata"].Should().Be("3");

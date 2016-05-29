@@ -113,6 +113,15 @@
     <None Include="ObjectModel\TestData\ProjectItem\Project\Folder\Nested.Designer.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="ObjectModel\TestData\ProjectItem\Project\AlmostDuplicate.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\ProjectItem\Project\Duplicate.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\Project\ExecutableProject\Program.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Utilities\SolutionLoaderSpec.cs" />
     <Compile Include="Utilities\NameFilterSpec.cs" />
     <Compile Include="Configuration\Rules\RulesConfigurationSectionSpec.cs" />
@@ -123,6 +132,9 @@
     <Compile Include="Rules\RuleTypeResolverSpec.cs" />
     <Compile Include="Rules\RuleTypeUtilitySpec.cs" />
     <Compile Include="Utilities\CollectionDifferenceFinderSpec.cs" />
+    <None Include="ObjectModel\TestData\Project\ExecutableProject\App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
