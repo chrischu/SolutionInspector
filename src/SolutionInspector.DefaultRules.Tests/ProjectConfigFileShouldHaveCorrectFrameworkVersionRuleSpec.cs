@@ -115,5 +115,32 @@ namespace SolutionInspector.DefaultRules.Tests
 
       static IEnumerable<IRuleViolation> Result;
     }
+
+    class when_evaluating_project_with_framework_config_without_sku_and_version
+    {
+      Establish ctx = () =>
+      {
+        var configurationXml =
+            XDocument.Parse(
+                @"<configuration><startup><supportedRuntime /></startup></configuration>");
+
+        A.CallTo(() => ConfigurationProjectItem.ConfigurationXml).Returns(configurationXml);
+      };
+
+      Because of = () => Result = SUT.Evaluate(Project);
+
+      It returns_violations = () =>
+          Result.ShouldAllBeEquivalentTo(
+              new RuleViolation(
+                  SUT,
+                  ConfigurationProjectItem,
+                  "Unexpected value for supported runtime version, was '' but should be 'Version'."),
+              new RuleViolation(
+                  SUT,
+                  ConfigurationProjectItem,
+                  "Unexpected value for supported runtime SKU, was '' but should be 'SKU'."));
+
+      static IEnumerable<IRuleViolation> Result;
+    }
   }
 }
