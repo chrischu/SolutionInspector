@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SolutionInspector.DefaultRules.Tests</RootNamespace>
     <AssemblyName>SolutionInspector.DefaultRules.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -82,6 +82,10 @@
       <HintPath>..\packages\SystemWrapper.Interfaces.0.10.1.44\lib\net45\SystemInterface.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SystemWrapper, Version=0.10.1.44, Culture=neutral, PublicKeyToken=fbc3a63dd3cf8960, processorArchitecture=MSIL">
+      <HintPath>..\packages\SystemWrapper.Wrappers.0.10.1.44\lib\net45\SystemWrapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -111,9 +115,6 @@
     <Compile Include="SolutionBuildConfigurationsRuleSpec.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj">
       <Project>{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}</Project>
       <Name>SolutionInspector.DefaultRules</Name>
@@ -126,6 +127,9 @@
       <Project>{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}</Project>
       <Name>SolutionInspector.Api</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />

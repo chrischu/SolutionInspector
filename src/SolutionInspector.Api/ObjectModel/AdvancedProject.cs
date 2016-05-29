@@ -84,7 +84,7 @@ namespace SolutionInspector.Api.ObjectModel
         }
       }
 
-      return new ClassifiedProperties(unconditionalProperties, conditionalProperties.Values);
+      return new ClassifiedProperties(unconditionalProperties.ToArray(), conditionalProperties.Values.ToArray());
     }
 
     public ProjectInSolution MsBuildProjectInSolution { get; }
