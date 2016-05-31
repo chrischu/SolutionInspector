@@ -99,6 +99,7 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="ProjectShouldNotContainProjectPropertiesWithDuplicateNameRuleSpec.cs" />
     <Compile Include="ProjectShouldNotContainProjectItemsWithDuplicateIncludesRuleSpec.cs" />
     <Compile Include="AllProjectItemsMustBePresentRuleSpec.cs" />
     <Compile Include="ProjectItemMustHaveCorrectBuildActionRuleSpec.cs" />

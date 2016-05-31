@@ -15,6 +15,9 @@
                 type="SolutionInspector.DefaultRules.ProjectShouldNotContainProjectItemsWithDuplicateIncludesRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
