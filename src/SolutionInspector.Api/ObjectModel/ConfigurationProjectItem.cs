@@ -17,7 +17,6 @@ namespace SolutionInspector.Api.ObjectModel
   internal class ConfigurationProjectItem : ProjectItem, IConfigurationProjectItem
   {
     public ConfigurationProjectItem (IProject project, IProjectItem projectItem)
-      // TODO: Create a special constructor to avoid processing the MSBuild ProjectItem twice.
         : base(project, projectItem.OriginalProjectItem)
     {
       string xmlString;
