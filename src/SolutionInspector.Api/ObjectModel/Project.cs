@@ -172,7 +172,6 @@ namespace SolutionInspector.Api.ObjectModel
       var projectItems =
           msBuildProjectItems.Where(i => !i.IsImported && _msBuildParsingConfiguration.IsValidProjectItemType(i.ItemType))
               .Select(p => ProjectItem.FromMsBuildProjectItem(this, p))
-              .Distinct()
               .ToLookup(i => i.OriginalInclude.Evaluated);
 
       foreach (var projectItem in projectItems.SelectMany(g => g))

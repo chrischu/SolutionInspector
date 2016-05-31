@@ -156,8 +156,8 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
       Because of = () => Result = LoadProjectItems(ProjectItemName).ToArray();
 
-      It only_returns_1_item = () =>
-          Result.Should().HaveCount(1);
+      It returns_both = () =>
+          Result.Should().HaveCount(2);
 
       static string ProjectItemName;
       static IProjectItem[] Result;
