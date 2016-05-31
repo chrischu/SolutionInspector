@@ -74,6 +74,7 @@
     <Compile Include="ProjectMustProvideXmlDocumentationRule.cs" />
     <Compile Include="ProjectItemMustHaveCustomToolSetRule.cs" />
     <Compile Include="ProjectPropertyRule.cs" />
+    <Compile Include="ProjectShouldNotContainDuplicateProjectItemsRule.cs" />
     <Compile Include="ProjectXPathRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequiredCompilationSymbolsProjectRule.cs" />

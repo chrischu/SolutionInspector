@@ -20,6 +20,9 @@
       <projectRules xdt:Transform="InsertIfMissing">
         <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)" appliesTo="*">
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectShouldNotContainProjectItemsWithDuplicateIncludesRule, SolutionInspector.DefaultRules" />
+          
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
