@@ -56,6 +56,11 @@ namespace SolutionInspector.Api.ObjectModel
     IFileInfo File { get; }
 
     /// <summary>
+    ///   The project item's location inside the project file.
+    /// </summary>
+    IProjectLocation Location { get; }
+
+    /// <summary>
     ///   Metadata for the project item.
     /// </summary>
     IReadOnlyDictionary<string, string> Metadata { get; }
@@ -105,6 +110,8 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IFileInfo File { get; }
 
+    public IProjectLocation Location { get; }
+
     public IReadOnlyDictionary<string, string> Metadata { get; }
 
     public string CustomTool => Metadata.GetValueOrDefault("Generator");
@@ -129,6 +136,8 @@ namespace SolutionInspector.Api.ObjectModel
       BuildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
       var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
       File = new FileInfoWrap(fullPath);
+
+      Location = new ProjectLocation(msBuildProjectItem.Xml.Location.Line, msBuildProjectItem.Xml.Location.Column);
       Metadata = msBuildProjectItem.Metadata.ToDictionary(m => m.Name, m => m.EvaluatedValue);
 
       _identifier = new Lazy<string>(CreateIdentifier);
@@ -181,11 +190,10 @@ namespace SolutionInspector.Api.ObjectModel
     public override int GetHashCode ()
     {
       return HashCodeHelper.GetHashCode(
-          this,
-          x => x.OriginalInclude.GetHashCode(),
-          x => x.Include.GetHashCode(),
-          x => x.BuildAction.GetHashCode(),
-          x => _dictionaryEqualityComparer.GetHashCode(x.Metadata));
+          OriginalInclude.GetHashCode(),
+          Include.GetHashCode(),
+          BuildAction.GetHashCode(),
+          _dictionaryEqualityComparer.GetHashCode(Metadata));
     }
 
     public static bool operator == (ProjectItem left, ProjectItem right)

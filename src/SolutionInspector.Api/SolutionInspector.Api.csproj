@@ -122,6 +122,8 @@
     <Compile Include="ObjectModel\ConditionalProjectPropertyValue.cs" />
     <Compile Include="ObjectModel\ConfigurationProjectItem.cs" />
     <Compile Include="ObjectModel\ConditionalProjectProperty.cs" />
+    <Compile Include="ObjectModel\ProjectPropertyBase.cs" />
+    <Compile Include="ObjectModel\ProjectLocation.cs" />
     <Compile Include="Utilities\DictionaryEqualityComparer.cs" />
     <Compile Include="Utilities\HashCodeHelper.cs" />
     <Compile Include="ObjectModel\ProjectItemInclude.cs" />

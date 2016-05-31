@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Microsoft.Build.Construction;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -8,29 +9,22 @@ namespace SolutionInspector.Api.ObjectModel
   /// Represents a property of a <see cref="IProject"/> that has different values depending on a condition.
   /// </summary>
   [PublicAPI]
-  public interface IConditionalProjectProperty
+  public interface IConditionalProjectProperty : IProjectPropertyBase
   {
-    /// <summary>
-    /// The property's name.
-    /// </summary>
-    string Name { get; }
-
     /// <summary>
     /// The property's values along with their conditions.
     /// </summary>
     IReadOnlyCollection<IConditionalProjectPropertyValue> Values { get; }
   }
 
- internal class ConditionalProjectProperty : IConditionalProjectProperty
+ internal class ConditionalProjectProperty : ProjectPropertyBase, IConditionalProjectProperty
   {
     private readonly List<IConditionalProjectPropertyValue> _values = new List<IConditionalProjectPropertyValue>();
 
-    public string Name { get; }
     public IReadOnlyCollection<IConditionalProjectPropertyValue> Values => _values;
 
-    public ConditionalProjectProperty (string name)
+    public ConditionalProjectProperty (ProjectPropertyElement property) : base(property)
     {
-      Name = name;
     }
 
     public void AddValue(IProjectPropertyCondition condition, string value)

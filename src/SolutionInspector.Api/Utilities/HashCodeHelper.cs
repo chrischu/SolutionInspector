@@ -1,18 +1,24 @@
 using System;
+using System.Linq;
 
 namespace SolutionInspector.Api.Utilities
 {
   internal static class HashCodeHelper
   {
-    public static int GetHashCode<T> (T obj, params Func<T, int>[] hashCodeSelectors)
+    public static int GetHashCode (params int[] hashCodes)
     {
       unchecked
       {
-        var hashCode = 0;
-        foreach (var hashCodeSelector in hashCodeSelectors)
-          hashCode = hashCode * 1 + hashCodeSelector(obj);
-        return hashCode;
+        var totalHash = 17;
+        foreach (var hashCode in hashCodes)
+          totalHash = totalHash * 23 + hashCode;
+        return totalHash;
       }
+    }
+
+    public static int GetHashCode(params object[] objects)
+    {
+      return GetHashCode(objects.Select(o => o.GetHashCode()).ToArray());
     }
   }
 }

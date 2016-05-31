@@ -67,8 +67,8 @@ namespace SolutionInspector.Api.ObjectModel
 
     private ClassifiedProperties ClassifyProperties (IReadOnlyCollection<ProjectPropertyElement> properties)
     {
-      var unconditionalProperties = new HashSet<IProjectProperty>();
-      var conditionalProperties = new Dictionary<string,ConditionalProjectProperty>();
+      var unconditionalProperties = new List<IProjectProperty>();
+      var conditionalProperties = new Dictionary<string, ConditionalProjectProperty>();
 
       foreach (var property in properties)
       {
@@ -78,7 +78,7 @@ namespace SolutionInspector.Api.ObjectModel
         {
           ConditionalProjectProperty conditionalProperty;
           if (!conditionalProperties.TryGetValue(property.Name, out conditionalProperty))
-            conditionalProperty = conditionalProperties[property.Name] = new ConditionalProjectProperty(property.Name);
+            conditionalProperty = conditionalProperties[property.Name] = new ConditionalProjectProperty(property);
 
           conditionalProperty.AddValue(new ProjectPropertyCondition(property.Condition, property.Parent?.Condition), property.Value);
         }

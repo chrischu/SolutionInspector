@@ -65,6 +65,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.Parent.Should().BeNull();
         Result.Children.Should().BeEmpty();
         Result.Identifier.Should().Be($"Project.csproj/{ProjectItemName}");
+        Result.Location.Should().Be(new ProjectLocation(54, 5));
         Result.FullPath.Should().Be(projectItemPath);
       };
 
@@ -91,6 +92,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.Parent.Name.Should().Be("Nested.resx");
         Result.Children.Should().BeEmpty();
         Result.Identifier.Should().Be($"Project.csproj/Folder/Nested.resx/{ProjectItemName}");
+        Result.Location.Should().Be(new ProjectLocation(59, 5));
         Result.FullPath.Should().Be(projectItemPath);
       };
 
@@ -117,6 +119,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.Parent.Should().BeNull();
         Result.Children.Single().Name.Should().Be("Nested.Designer.cs");
         Result.Identifier.Should().Be($"Project.csproj/Folder/{ProjectItemName}");
+        Result.Location.Should().Be(new ProjectLocation(45, 5));
         Result.FullPath.Should().Be(projectItemPath);
       };
 
@@ -143,6 +146,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.Parent.Should().BeNull();
         Result.Children.Should().BeEmpty();
         Result.Identifier.Should().Be($"Project.csproj/{ProjectItemName}");
+        Result.Location.Should().Be(new ProjectLocation(51, 5));
         Result.FullPath.Should().Be(projectItemPath);
       };
 

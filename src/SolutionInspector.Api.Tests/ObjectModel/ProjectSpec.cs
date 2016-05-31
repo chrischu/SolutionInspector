@@ -75,7 +75,16 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       };
 
       It parses_unconditional_properties = () =>
-          Result.Advanced.Properties.GetPropertyValueOrNull("FileAlignment").Should().Be("512");
+      {
+        // We only need to check one exemplary property.
+        Result.Advanced.Properties["FileAlignment"].ShouldBeEquivalentTo(
+            new
+            {
+                Name = "FileAlignment",
+                Value = "512",
+                Location = new ProjectLocation(13, 5)
+            });
+      };
 
       It parses_build_configuration_dependent_properties = () =>
       {
@@ -92,7 +101,8 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                                  Condition = new { Self = " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ", Parent = (string) null },
                                  Value = "LOL"
                              }
-                         }
+                         },
+                Location = new ProjectLocation(18, 5)
             });
 
         Result.Advanced.GetPropertiesBasedOnCondition(new BuildConfiguration("Debug", "AnyCPU"))[propertyName].Value.Should().Be("LOL");
@@ -118,7 +128,8 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                                  Condition = new { Self = " '$(Property)' == 'true' ", Parent = (string) null },
                                  Value = "ROFL"
                              }
-                         }
+                         },
+                Location = new ProjectLocation(19, 5)
             });
 
         var propertiesBasedOnTrueCondition =
@@ -145,7 +156,8 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                                  Condition = new { Self = (string) null, Parent = " '$(Parent)' == 'true' " },
                                  Value = "QWER"
                              }
-                         }
+                         },
+                Location = new ProjectLocation(22, 5)
             });
 
         var propertiesBasedOnTrueCondition =
@@ -172,7 +184,8 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                                  Condition = new { Self = " '$(Self)' == 'true' ", Parent = " '$(Parent)' == 'true' " },
                                  Value = "ASDF"
                              }
-                         }
+                         },
+                Location = new ProjectLocation(23, 5)
             });
 
         var propertiesBasedOnTrueCondition =
@@ -195,20 +208,21 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.Advanced.ConditionalProperties.Single(p => p.Name == propertyName).ShouldBeEquivalentTo(
             new
             {
-              Name = propertyName,
-              Values = new[]
+                Name = propertyName,
+                Values = new[]
                          {
                              new
                              {
-                                 Condition = new { Self = " '$(Value)' == '3'", Parent = (string)null },
+                                 Condition = new { Self = " '$(Value)' == '3'", Parent = (string) null },
                                  Value = "Three"
                              },
                              new
                              {
-                                 Condition = new { Self = " '$(Value)' == '5'", Parent = (string)null },
+                                 Condition = new { Self = " '$(Value)' == '5'", Parent = (string) null },
                                  Value = "Five"
                              }
-                         }
+                         },
+                Location = new ProjectLocation(26, 5)
             });
 
         var propertiesBasedOnFirstValue =
