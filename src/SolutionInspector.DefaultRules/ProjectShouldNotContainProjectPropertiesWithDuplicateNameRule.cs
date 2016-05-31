@@ -15,7 +15,7 @@ namespace SolutionInspector.DefaultRules
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate(IProject target)
     {
-      var allProperties = target.Advanced.Properties.Values.Cast<IProjectPropertyBase>().Concat(target.Advanced.ConditionalProperties);
+      var allProperties = target.Advanced.Properties.Cast<IProjectPropertyBase>().Concat(target.Advanced.ConditionalProperties);
 
       return allProperties.GroupBy(p => p.Name).Where(g => g.ContainsMoreThanOne()).Select(
           group => new RuleViolation(

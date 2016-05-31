@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -112,7 +111,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Establish ctx = () =>
       {
         A.CallTo(() => AdvancedProject.GetPropertiesBasedOnCondition(BuildConfiguration1, null))
-            .Returns(new ReadOnlyDictionary<string, IProjectProperty>(new Dictionary<string, IProjectProperty>()));
+            .Returns(new IProjectProperty[0]);
       };
 
       Because of = () => Result = SUT.Evaluate(Project);

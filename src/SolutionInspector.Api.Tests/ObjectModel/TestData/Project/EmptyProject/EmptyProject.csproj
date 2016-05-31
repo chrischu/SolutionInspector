@@ -11,9 +11,12 @@
     <AssemblyName>EmptyProject</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    
   </PropertyGroup>
   <!-- The following property groups are just there for testing purposes -->
+  <PropertyGroup>
+    <Duplicate>1</Duplicate>
+    <Duplicate>2</Duplicate>
+  </PropertyGroup>
   <PropertyGroup>
     <DependentOnConfiguration Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">LOL</DependentOnConfiguration>
     <DependentOnProperty Condition=" '$(Property)' == 'true' ">ROFL</DependentOnProperty>

@@ -77,7 +77,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       It parses_unconditional_properties = () =>
       {
         // We only need to check one exemplary property.
-        Result.Advanced.Properties["FileAlignment"].ShouldBeEquivalentTo(
+        Result.Advanced.Properties.Single(p => p.Name == "FileAlignment").ShouldBeEquivalentTo(
             new
             {
                 Name = "FileAlignment",
@@ -102,15 +102,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                                  Value = "LOL"
                              }
                          },
-                Location = new ProjectLocation(18, 5)
+                Location = new ProjectLocation(21, 5)
             });
 
-        Result.Advanced.GetPropertiesBasedOnCondition(new BuildConfiguration("Debug", "AnyCPU"))[propertyName].Value.Should().Be("LOL");
+        var debugProperties = Result.Advanced.GetPropertiesBasedOnCondition(new BuildConfiguration("Debug", "AnyCPU"));
+        debugProperties.Single(p => p.Name == propertyName).Value.Should().Be("LOL");
 
-        Result.Advanced.GetPropertiesBasedOnCondition(new BuildConfiguration("Release", "AnyCPU"))
-            .GetValueOrDefault(propertyName)
-            .Should()
-            .BeNull();
+        var releaseProperties = Result.Advanced.GetPropertiesBasedOnCondition(new BuildConfiguration("Release", "AnyCPU"));
+        releaseProperties.Any(p => p.Name == propertyName).Should().BeFalse();
       };
 
       It parses_property_dependent_properties = () =>
@@ -129,16 +128,16 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                                  Value = "ROFL"
                              }
                          },
-                Location = new ProjectLocation(19, 5)
+                Location = new ProjectLocation(22, 5)
             });
 
         var propertiesBasedOnTrueCondition =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Property", "true" } });
-        propertiesBasedOnTrueCondition[propertyName].Value.Should().Be("ROFL");
+        propertiesBasedOnTrueCondition.Single(p => p.Name == propertyName).Value.Should().Be("ROFL");
 
         var propertiesBasedOnFalseCondition =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Property", "false" } });
-        propertiesBasedOnFalseCondition.GetValueOrDefault(propertyName).Should().BeNull();
+        propertiesBasedOnFalseCondition.Any(p => p.Name == propertyName).Should().BeFalse();
       };
 
       It parses_property_without_condition_but_with_conditional_parent = () =>
@@ -157,16 +156,16 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                                  Value = "QWER"
                              }
                          },
-                Location = new ProjectLocation(22, 5)
+                Location = new ProjectLocation(25, 5)
             });
 
         var propertiesBasedOnTrueCondition =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "true" } });
-        propertiesBasedOnTrueCondition[propertyName].Value.Should().Be("QWER");
+        propertiesBasedOnTrueCondition.Single(p => p.Name == propertyName).Value.Should().Be("QWER");
 
         var propertiesBasedOnFalseCondition =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "false" } });
-        propertiesBasedOnFalseCondition.GetValueOrDefault(propertyName).Should().BeNull();
+        propertiesBasedOnFalseCondition.Any(p => p.Name == propertyName).Should().BeFalse();
       };
 
       It parses_property_with_condition_and_with_conditional_parent = () =>
@@ -185,20 +184,20 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                                  Value = "ASDF"
                              }
                          },
-                Location = new ProjectLocation(23, 5)
+                Location = new ProjectLocation(26, 5)
             });
 
         var propertiesBasedOnTrueCondition =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "true" } });
-        propertiesBasedOnTrueCondition[propertyName].Value.Should().Be("ASDF");
+        propertiesBasedOnTrueCondition.Single(p => p.Name == propertyName).Value.Should().Be("ASDF");
 
         var propertiesBasedOnFalseCondition1 =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "false" } });
-        propertiesBasedOnFalseCondition1.GetValueOrDefault(propertyName).Should().BeNull();
+        propertiesBasedOnFalseCondition1.Any(p => p.Name == propertyName).Should().BeFalse();
 
         var propertiesBasedOnFalseCondition2 =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "false" } });
-        propertiesBasedOnFalseCondition2.GetValueOrDefault(propertyName).Should().BeNull();
+        propertiesBasedOnFalseCondition2.Any(p => p.Name == propertyName).Should().BeFalse();
       };
 
       It parses_property_that_is_contained_more_than_once_with_differing_conditions = () =>
@@ -222,16 +221,38 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                                  Value = "Five"
                              }
                          },
-                Location = new ProjectLocation(26, 5)
+                Location = new ProjectLocation(29, 5)
             });
 
         var propertiesBasedOnFirstValue =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Value", "3" } });
-        propertiesBasedOnFirstValue[propertyName].Value.Should().Be("Three");
+        propertiesBasedOnFirstValue.Single(p => p.Name == propertyName).Value.Should().Be("Three");
 
         var propertiesBasedOnSecondValue =
             Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Value", "5" } });
-        propertiesBasedOnSecondValue[propertyName].Value.Should().Be("Five");
+        propertiesBasedOnSecondValue.Single(p => p.Name == propertyName).Value.Should().Be("Five");
+      };
+
+      It parses_duplicate_property = () =>
+      {
+        const string propertyName = "Duplicate";
+
+        Result.Advanced.Properties.Where(p => p.Name == propertyName).ShouldAllBeEquivalentTo(
+            new[]
+            {
+                new
+                {
+                    Name = propertyName,
+                    Value = "1",
+                    Location = new ProjectLocation(17, 5)
+                },
+                new
+                {
+                    Name = propertyName,
+                    Value = "2",
+                    Location = new ProjectLocation(18, 5)
+                }
+            });
       };
 
       static string ProjectName;

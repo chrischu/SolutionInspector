@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
@@ -26,7 +25,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   A collection of all (unconditional) project properties.
     /// </summary>
-    IReadOnlyDictionary<string, IProjectProperty> Properties { get; }
+    IReadOnlyCollection<IProjectProperty> Properties { get; }
 
     /// <summary>
     ///   A collection of all conditional project properties.
@@ -37,14 +36,14 @@ namespace SolutionInspector.Api.ObjectModel
     ///   Gets all properties active under the given <paramref name="configuration" /> and when the <paramref name="properties" /> are set to the
     ///   specified values.
     /// </summary>
-    IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (
+    IReadOnlyCollection<IProjectProperty> GetPropertiesBasedOnCondition (
         BuildConfiguration configuration,
         Dictionary<string, string> properties = null);
 
     /// <summary>
     ///   Gets all properties active when the <paramref name="properties" /> are set to the specified values.
     /// </summary>
-    IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (Dictionary<string, string> properties);
+    IReadOnlyCollection<IProjectProperty> GetPropertiesBasedOnCondition (Dictionary<string, string> properties);
   }
 
   [PublicAPI]
@@ -61,7 +60,7 @@ namespace SolutionInspector.Api.ObjectModel
       var projectProperties = MsBuildProject.Xml.Properties.ToArray();
       var classifiedProperties = ClassifyProperties(projectProperties);
 
-      Properties = new ReadOnlyDictionary<string, IProjectProperty>(classifiedProperties.UnconditionalProperties.ToDictionary(p => p.Name));
+      Properties = classifiedProperties.UnconditionalProperties;
       ConditionalProperties = classifiedProperties.ConditionalProperties;
     }
 
@@ -90,10 +89,10 @@ namespace SolutionInspector.Api.ObjectModel
     public ProjectInSolution MsBuildProjectInSolution { get; }
     public Microsoft.Build.Evaluation.Project MsBuildProject { get; }
 
-    public IReadOnlyDictionary<string, IProjectProperty> Properties { get; }
+    public IReadOnlyCollection<IProjectProperty> Properties { get; }
     public IReadOnlyCollection<IConditionalProjectProperty> ConditionalProperties { get; }
 
-    public IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (
+    public IReadOnlyCollection<IProjectProperty> GetPropertiesBasedOnCondition (
         BuildConfiguration configuration,
         Dictionary<string, string> properties = null)
     {
@@ -103,9 +102,9 @@ namespace SolutionInspector.Api.ObjectModel
       return GetPropertiesBasedOnCondition(properties);
     }
 
-    public IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (Dictionary<string, string> properties)
+    public IReadOnlyCollection<IProjectProperty> GetPropertiesBasedOnCondition (Dictionary<string, string> properties)
     {
-      var result = new Dictionary<string, IProjectProperty>();
+      var result = new List<IProjectProperty>();
 
       using (new MsBuildConditionContext(MsBuildProject, properties))
       {
@@ -113,7 +112,7 @@ namespace SolutionInspector.Api.ObjectModel
         {
           var projectPropertyElement = MsBuildProject.GetProperty(property.Name)?.Xml;
           if (projectPropertyElement != null)
-            result.Add(property.Name, new ProjectProperty(projectPropertyElement));
+            result.Add(new ProjectProperty(projectPropertyElement));
         }
       }
 

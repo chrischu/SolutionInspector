@@ -62,10 +62,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     static void SetupUnconditionalProperties (params Tuple<string, string>[] nameAndLocation)
     {
-      var properties = nameAndLocation.ToDictionary(
-          x => x.Item1,
-          x => SetupPropertyBase<IProjectProperty>(x.Item1, x.Item2));
-
+      var properties = nameAndLocation.Select(x => SetupPropertyBase<IProjectProperty>(x.Item1, x.Item2)).ToArray();
       A.CallTo(() => AdvancedProject.Properties).Returns(properties);
     }
 
