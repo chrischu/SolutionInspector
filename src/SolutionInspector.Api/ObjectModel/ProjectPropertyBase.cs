@@ -31,7 +31,7 @@ namespace SolutionInspector.Api.ObjectModel
     public string Name { get; }
     public IProjectLocation Location { get; }
 
-    public bool Equals(ProjectPropertyBase other)
+    protected bool Equals(ProjectPropertyBase other)
     {
       if (ReferenceEquals(null, other))
         return false;

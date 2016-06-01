@@ -20,7 +20,7 @@ namespace SolutionInspector.Api.Extensions
     /// <summary>
     /// Checks if the given <paramref name="enumerable"/> contains more than <paramref name="count"/> elements.
     /// </summary>
-    public static bool ContainsMoreThan<T>(this IEnumerable<T> enumerable, int count)
+    private static bool ContainsMoreThan<T>(this IEnumerable<T> enumerable, int count)
     {
       return enumerable.Skip(count).Any();
     }

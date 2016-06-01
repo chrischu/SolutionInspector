@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using SolutionInspector.Api.Utilities;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -6,6 +7,7 @@ namespace SolutionInspector.Api.ObjectModel
   /// <summary>
   ///   Represents the location (line/column) of an <see cref="IProjectItem" />/<see cref="IProjectPropertyBase" /> in a project file.
   /// </summary>
+  [PublicAPI]
   public interface IProjectLocation
   {
     /// <summary>
