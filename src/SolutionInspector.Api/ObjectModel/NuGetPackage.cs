@@ -38,7 +38,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The package's directory name (relative to the NuGet packages folder)".
     /// </summary>
-    public string PackageDirectoryName => $@"{Id}.{FullVersionString}";
+    public string PackageDirectoryName => $"{Id}.{FullVersionString}";
 
     /// <summary>
     ///   The package's target framework.

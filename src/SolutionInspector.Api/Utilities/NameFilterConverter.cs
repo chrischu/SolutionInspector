@@ -37,7 +37,7 @@ namespace SolutionInspector.Api.Utilities
 
       var filterString = (string) data;
       var partRegex = @"((\+?|-)[\w.*]+)";
-      var regex = new Regex($@"^{partRegex}(;{partRegex})*$");
+      var regex = new Regex($"^{partRegex}(;{partRegex})*$");
 
       if (!regex.IsMatch(filterString))
         throw new FormatException($"The filter string '{filterString}' is not in the correct format.");

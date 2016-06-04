@@ -26,7 +26,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectConfigFileShouldHaveCorrectFrameworkVersionRule))]
+  [Subject (typeof(ProjectConfigFileShouldHaveCorrectFrameworkVersionRule))]
   class ProjectConfigFileShouldHaveCorrectFrameworkVersionRuleSpec
   {
     static IProject Project;
@@ -54,7 +54,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Establish ctx = () =>
       {
         var configurationXml =
-            XDocument.Parse(@"<configuration></configuration>");
+            XDocument.Parse("<configuration></configuration>");
 
         A.CallTo(() => ConfigurationProjectItem.ConfigurationXml).Returns(configurationXml);
       };
@@ -120,10 +120,7 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        var configurationXml =
-            XDocument.Parse(
-                @"<configuration><startup><supportedRuntime /></startup></configuration>");
-
+        var configurationXml = XDocument.Parse("<configuration><startup><supportedRuntime /></startup></configuration>");
         A.CallTo(() => ConfigurationProjectItem.ConfigurationXml).Returns(configurationXml);
       };
 

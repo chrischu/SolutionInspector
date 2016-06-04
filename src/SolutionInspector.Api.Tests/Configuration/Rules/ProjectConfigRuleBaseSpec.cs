@@ -7,7 +7,6 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 

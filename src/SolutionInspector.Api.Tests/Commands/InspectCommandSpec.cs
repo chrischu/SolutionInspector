@@ -32,7 +32,7 @@ using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Api.Tests.Commands
 {
-  [Subject (typeof (InspectCommand))]
+  [Subject (typeof(InspectCommand))]
   class InspectCommandSpec
   {
     static ISolution Solution;
@@ -132,7 +132,8 @@ namespace SolutionInspector.Api.Tests.Commands
       Behaves_like<it_executes_the_command_correctly> _;
 
       It calls_the_violation_reporter = () =>
-          A.CallTo(() => ViolationReporterProxy.Report(ViolationReportFormat.Table, new[] { SolutionRuleViolation, ProjectRuleViolation }));
+          A.CallTo(() => ViolationReporterProxy.Report(ViolationReportFormat.Table, new[] { SolutionRuleViolation, ProjectRuleViolation }))
+              .MustHaveHappened();
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
@@ -159,7 +160,8 @@ namespace SolutionInspector.Api.Tests.Commands
       Behaves_like<it_executes_the_command_correctly> _;
 
       It calls_the_violation_reporter = () =>
-          A.CallTo(() => ViolationReporterProxy.Report(ViolationReportFormat.Xml, new[] { SolutionRuleViolation, ProjectRuleViolation }));
+          A.CallTo(() => ViolationReporterProxy.Report(ViolationReportFormat.Xml, new[] { SolutionRuleViolation, ProjectRuleViolation }))
+              .MustHaveHappened();
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
