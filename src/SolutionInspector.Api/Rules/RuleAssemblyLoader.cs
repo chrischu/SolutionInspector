@@ -61,7 +61,7 @@ namespace SolutionInspector.Api.Rules
         throw new InvalidRuleAssemblyException(ruleAssemblyPath, ex);
       }
 
-      var ruleTypes = assembly.GetExportedTypes().Where(t => typeof (IRule).IsAssignableFrom(t));
+      var ruleTypes = assembly.GetExportedTypes().Where(t => typeof(IRule).IsAssignableFrom(t));
       if (!ruleTypes.Any())
         throw new InvalidRuleAssemblyException(ruleAssemblyPath);
     }

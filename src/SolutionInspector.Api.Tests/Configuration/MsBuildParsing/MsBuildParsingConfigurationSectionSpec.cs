@@ -23,7 +23,7 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Configuration.MsBuildParsing
 {
-  [Subject (typeof (MsBuildParsingConfigurationSection))]
+  [Subject (typeof(MsBuildParsingConfigurationSection))]
   class MsBuildParsingConfigurationSectionSpec
   {
     static IMsBuildParsingConfiguration SUT;

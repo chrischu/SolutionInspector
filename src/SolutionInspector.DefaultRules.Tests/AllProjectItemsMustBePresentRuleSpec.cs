@@ -5,7 +5,6 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -25,9 +24,10 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (AllProjectItemsMustBePresentRule))]
+  [Subject (typeof(AllProjectItemsMustBePresentRule))]
   class AllProjectItemsMustBePresentRuleSpec
   {
+    static IProjectItemInclude ProjectItemInclude;
     static IProjectItem ProjectItem;
     static IProject Project;
 
@@ -36,7 +36,11 @@ namespace SolutionInspector.DefaultRules.Tests
     Establish ctx = () =>
     {
       ProjectItem = A.Fake<IProjectItem>();
-      A.CallTo(() => ProjectItem.OriginalInclude).Returns("ProjectItem");
+
+      ProjectItemInclude = A.Fake<IProjectItemInclude>();
+      A.CallTo(() => ProjectItemInclude.Evaluated).Returns("ProjectItem");
+
+      A.CallTo(() => ProjectItem.OriginalInclude).Returns(ProjectItemInclude);
 
       Project = A.Fake<IProject>();
       A.CallTo(() => Project.ProjectItems).Returns(new[] { ProjectItem });

@@ -5,7 +5,6 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -25,7 +24,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectMustProvideXmlDocumentationRule))]
+  [Subject (typeof(ProjectMustProvideXmlDocumentationRule))]
   class ProjectMustProvideXmlDocumentationRuleSpec
   {
     static string ProjectAssemblyName;

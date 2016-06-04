@@ -51,7 +51,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   A list of expected configurations (e.g. Build, Release).
     /// </summary>
-    [TypeConverter (typeof (CommaDelimitedStringCollectionConverter))]
+    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("expectedConfigurations", DefaultValue = "", IsRequired = true)]
     public CommaDelimitedStringCollection Configurations
     {
@@ -62,7 +62,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   A list of expected platforms (e.g. AnyCPU, x64).
     /// </summary>
-    [TypeConverter (typeof (CommaDelimitedStringCollectionConverter))]
+    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("expectedPlatforms", DefaultValue = "", IsRequired = true)]
     public CommaDelimitedStringCollection Platforms
     {

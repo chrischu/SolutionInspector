@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using SystemInterface.IO;
 using SystemInterface.Reflection;
 using SystemWrapper.IO;
@@ -7,6 +10,7 @@ using SystemWrapper.Reflection;
 using Autofac;
 using JetBrains.Annotations;
 using ManyConsole;
+using NLog;
 using SolutionInspector.Api.Commands;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
@@ -21,20 +25,16 @@ namespace SolutionInspector.Api
   [PublicAPI]
   public static class SolutionInspector
   {
+    private static Logger s_logger = LogManager.GetCurrentClassLogger();
+
     /// <summary>
     ///   Runs the SolutionInspector with the given console <paramref name="args" />.
     /// </summary>
     public static int Run (string[] args)
     {
-      ////var solution =
-      ////    Solution.Load(@"C:\Users\Chris\Documents\Visual Studio 2015\Projects\SolutionInspector.TestSolution\SolutionInspector.TestSolution.sln");
+      s_logger.Debug($"SolutionInspector was run with the following arguments: [{string.Join(", ", args)}].");
 
-      //var solution =
-      //    Solution.Load(@"D:\Development\SolutionInspector\SolutionInspector.sln");
-
-      //// "D:\Development\SolutionInspector\SolutionInspector.sln"
-
-      //var project = solution.Projects.Single(p => p.Name == "SolutionInspector");
+      CheckMsBuildToolsInstallation();
 
       using (var container = SetupContainer())
       {
@@ -44,6 +44,25 @@ namespace SolutionInspector.Api
 
         var commands = container.Resolve<IEnumerable<ConsoleCommand>>();
         return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
+      }
+    }
+
+    private static void CheckMsBuildToolsInstallation ()
+    {
+      try
+      {
+        s_logger.Info("Checking for 'MSBuild Tools 2015'...");
+        Assembly.Load("Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+        s_logger.Info("Check successful, 'MSBuild Tools 2015' are installed.");
+      }
+      catch (FileNotFoundException)
+      {
+        Console.Error.WriteLine(
+            "Could not find MSBuild assemblies in version 14.0 this most likely means that 'MSBuild Tools 2015' was not installed.");
+        Console.Error.WriteLine("Just press any key to open a browser with the download page of the 'MSBuild Tools 2015'...");
+        Console.ReadKey();
+        Process.Start("https://www.microsoft.com/en-us/download/details.aspx?id=48159");
+        Environment.Exit(1);
       }
     }
 

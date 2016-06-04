@@ -23,7 +23,7 @@ using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Api.Tests.ObjectModel
 {
-  [Subject (typeof (NuGetPackage))]
+  [Subject (typeof(NuGetPackage))]
   class NuGetPackageSpec
   {
     Establish ctx = () => { };

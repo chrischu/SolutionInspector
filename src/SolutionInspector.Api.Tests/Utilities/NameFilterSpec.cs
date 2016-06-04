@@ -24,7 +24,7 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Utilities
 {
-  [Subject (typeof (NameFilter))]
+  [Subject (typeof(NameFilter))]
   class NameFilterSpec
   {
     class when_parsing_explicit_include

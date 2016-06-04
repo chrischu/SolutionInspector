@@ -30,7 +30,7 @@ namespace SolutionInspector.DefaultRules
         yield return new RuleViolation(this, target, "No explicit configuration for the supported runtime version/SKU could be found.");
       else
       {
-        var version = supportedRuntimeElement.Attribute("version").Value;
+        var version = supportedRuntimeElement.Attribute("version")?.Value;
         if (version != Configuration.ExpectedVersion)
           yield return
               new RuleViolation(
@@ -38,7 +38,7 @@ namespace SolutionInspector.DefaultRules
                   target,
                   $"Unexpected value for supported runtime version, was '{version}' but should be '{Configuration.ExpectedVersion}'.");
 
-        var sku = supportedRuntimeElement.Attribute("sku").Value;
+        var sku = supportedRuntimeElement.Attribute("sku")?.Value;
         if (sku != Configuration.ExpectedSKU)
           yield return
               new RuleViolation(

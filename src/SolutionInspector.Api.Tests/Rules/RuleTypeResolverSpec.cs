@@ -26,7 +26,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
-  [Subject (typeof (RuleTypeResolver))]
+  [Subject (typeof(RuleTypeResolver))]
   class RuleTypeResolverSpec
   {
     static IRuleTypeResolver SUT;
@@ -35,23 +35,23 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_resolving_rule_contained_in_assembly
     {
-      Because of = () => Result = SUT.Resolve(typeof (Rule).AssemblyQualifiedName.AssertNotNull());
+      Because of = () => Result = SUT.Resolve(typeof(Rule).AssemblyQualifiedName.AssertNotNull());
 
       It returns_rule_type = () =>
-          Result.RuleType.Should().Be(typeof (Rule));
+          Result.RuleType.Should().Be(typeof(Rule));
 
       It returns_null_for_configuration_type = () =>
           Result.ConfigurationType.Should().BeNull();
 
       It retrieves_constructor = () =>
-          Result.Constructor.Should().BeSameAs(typeof (Rule).GetConstructors().Single());
+          Result.Constructor.Should().BeSameAs(typeof(Rule).GetConstructors().Single());
 
       static RuleTypeInfo Result;
     }
 
     class when_resolving_rule_contained_in_assembly_without_public_constructor
     {
-      Because of = () => Exception = Catch.Exception(() => SUT.Resolve(typeof (RuleWithoutPublicCtor).AssemblyQualifiedName.AssertNotNull()));
+      Because of = () => Exception = Catch.Exception(() => SUT.Resolve(typeof(RuleWithoutPublicCtor).AssemblyQualifiedName.AssertNotNull()));
 
       It throws = () =>
           Exception.Should()
@@ -63,32 +63,32 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_resolving_rule_contained_in_assembly_with_multiple_constructors
     {
-      Because of = () => Result = SUT.Resolve(typeof (RuleWithMultipleCtors).AssemblyQualifiedName.AssertNotNull());
+      Because of = () => Result = SUT.Resolve(typeof(RuleWithMultipleCtors).AssemblyQualifiedName.AssertNotNull());
 
       It returns_rule_type = () =>
-          Result.RuleType.Should().Be(typeof (RuleWithMultipleCtors));
+          Result.RuleType.Should().Be(typeof(RuleWithMultipleCtors));
 
       It returns_null_for_configuration_type = () =>
           Result.ConfigurationType.Should().BeNull();
 
       It retrieves_constructor = () =>
-          Result.Constructor.Should().BeSameAs(typeof (RuleWithMultipleCtors).GetConstructors().Single(c => c.GetParameters().Length == 0));
+          Result.Constructor.Should().BeSameAs(typeof(RuleWithMultipleCtors).GetConstructors().Single(c => c.GetParameters().Length == 0));
 
       static RuleTypeInfo Result;
     }
 
     class when_resolving_configurable_rule_contained_in_assembly
     {
-      Because of = () => Result = SUT.Resolve(typeof (ConfigurableRule).AssemblyQualifiedName.AssertNotNull());
+      Because of = () => Result = SUT.Resolve(typeof(ConfigurableRule).AssemblyQualifiedName.AssertNotNull());
 
       It returns_rule_type = () =>
-          Result.RuleType.Should().Be(typeof (ConfigurableRule));
+          Result.RuleType.Should().Be(typeof(ConfigurableRule));
 
       It returns_configuration_type = () =>
-          Result.ConfigurationType.Should().Be(typeof (ConfigurableRuleConfiguration));
+          Result.ConfigurationType.Should().Be(typeof(ConfigurableRuleConfiguration));
 
       It retrieves_constructor = () =>
-          Result.Constructor.Should().BeSameAs(typeof (ConfigurableRule).GetConstructors().Single());
+          Result.Constructor.Should().BeSameAs(typeof(ConfigurableRule).GetConstructors().Single());
 
       static RuleTypeInfo Result;
     }
@@ -96,7 +96,7 @@ namespace SolutionInspector.Api.Tests.Rules
     class when_resolving_configurable_rule_contained_in_assembly_without_correct_constructor
     {
       Because of =
-          () => Exception = Catch.Exception(() => SUT.Resolve(typeof (ConfigurableRuleWithoutCorrectCtor).AssemblyQualifiedName.AssertNotNull()));
+          () => Exception = Catch.Exception(() => SUT.Resolve(typeof(ConfigurableRuleWithoutCorrectCtor).AssemblyQualifiedName.AssertNotNull()));
 
       It throws = () =>
           Exception.Should()
@@ -110,17 +110,17 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_resolving_configurable_rule_contained_in_assembly_with_multiple_constructors
     {
-      Because of = () => Result = SUT.Resolve(typeof (ConfigurableRuleWithMultipleCtors).AssemblyQualifiedName.AssertNotNull());
+      Because of = () => Result = SUT.Resolve(typeof(ConfigurableRuleWithMultipleCtors).AssemblyQualifiedName.AssertNotNull());
 
       It returns_rule_type = () =>
-          Result.RuleType.Should().Be(typeof (ConfigurableRuleWithMultipleCtors));
+          Result.RuleType.Should().Be(typeof(ConfigurableRuleWithMultipleCtors));
 
       It returns_configuration_type = () =>
-          Result.ConfigurationType.Should().Be(typeof (ConfigurableRuleConfiguration));
+          Result.ConfigurationType.Should().Be(typeof(ConfigurableRuleConfiguration));
 
       It retrieves_correct_constructor = () =>
           Result.Constructor.Should()
-              .BeSameAs(typeof (ConfigurableRuleWithMultipleCtors).GetConstructors().Single(c => c.GetParameters().Length == 1));
+              .BeSameAs(typeof(ConfigurableRuleWithMultipleCtors).GetConstructors().Single(c => c.GetParameters().Length == 1));
 
       static RuleTypeInfo Result;
     }
@@ -139,7 +139,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_resolving_rule_that_does_not_implement_IRule
     {
-      Because of = () => Exception = Catch.Exception(() => SUT.Resolve(typeof (string).AssemblyQualifiedName.AssertNotNull()));
+      Because of = () => Exception = Catch.Exception(() => SUT.Resolve(typeof(string).AssemblyQualifiedName.AssertNotNull()));
 
       It throws = () =>
           Exception.Should().Be<RuleTypeResolvingException>().WithMessage("The type 'String' is not a valid rule type.");

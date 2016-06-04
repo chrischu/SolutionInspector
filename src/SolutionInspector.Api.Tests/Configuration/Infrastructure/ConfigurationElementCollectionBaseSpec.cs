@@ -24,7 +24,7 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Configuration.Infrastructure
 {
-  [Subject (typeof (KeyedConfigurationElementCollectionBase<,>))]
+  [Subject (typeof(KeyedConfigurationElementCollectionBase<,>))]
   class ConfigurationElementCollectionBaseSpec
   {
     static DummyConfigurationElementCollection SUT;

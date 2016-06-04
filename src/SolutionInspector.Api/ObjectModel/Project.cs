@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +21,7 @@ namespace SolutionInspector.Api.ObjectModel
   ///   Represents a MSBuild project.
   /// </summary>
   [PublicAPI]
-  public interface IProject : IRuleTarget
+  public interface IProject : IRuleTarget, IDisposable
   {
     /// <summary>
     ///   Contains advanced/raw properties of the underlying MSBuild file.
@@ -120,16 +121,20 @@ namespace SolutionInspector.Api.ObjectModel
 
   internal sealed class Project : IProject
   {
+    private readonly ProjectCollection _projectCollection;
     private readonly IMsBuildParsingConfiguration _msBuildParsingConfiguration;
     private Lazy<ClassifiedReferences> _classifiedReferences;
     private Lazy<XDocument> _projectXml;
 
     private Project (
+        ProjectCollection projectCollection,
         ISolution solution,
         ProjectInSolution projectInSolution,
         Microsoft.Build.Evaluation.Project project,
         IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
+      _projectCollection = projectCollection;
+
       _msBuildParsingConfiguration = msBuildParsingConfiguration;
       Name = projectInSolution.ProjectName;
 
@@ -153,8 +158,8 @@ namespace SolutionInspector.Api.ObjectModel
     {
       var configurationItem = ProjectItems.SingleOrDefault(
           i =>
-              string.Equals(i.OriginalInclude, "App.config", StringComparison.InvariantCultureIgnoreCase)
-              || string.Equals(i.OriginalInclude, "Web.config", StringComparison.InvariantCultureIgnoreCase));
+              string.Equals(i.OriginalInclude.Unevaluated, "App.config", StringComparison.InvariantCultureIgnoreCase)
+              || string.Equals(i.OriginalInclude.Unevaluated, "Web.config", StringComparison.InvariantCultureIgnoreCase));
 
       if (configurationItem == null)
         return null;
@@ -167,22 +172,23 @@ namespace SolutionInspector.Api.ObjectModel
       var projectItems =
           msBuildProjectItems.Where(i => !i.IsImported && _msBuildParsingConfiguration.IsValidProjectItemType(i.ItemType))
               .Select(p => ProjectItem.FromMsBuildProjectItem(this, p))
-              .ToDictionary(i => i.OriginalInclude);
+              .ToLookup(i => i.OriginalInclude.Evaluated);
 
-      foreach (var projectItem in projectItems.Values)
+      foreach (var projectItem in projectItems.SelectMany(g => g))
       {
         var dependentUpon = projectItem.Metadata.GetValueOrDefault("DependentUpon");
 
         if (dependentUpon != null)
         {
-          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.OriginalInclude).AssertNotNull(), dependentUpon);
+          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.OriginalInclude.Evaluated).AssertNotNull(), dependentUpon);
 
-          var parent = projectItems[dependentUponInclude];
-          projectItem.SetParent(parent);
+          var parents = projectItems[dependentUponInclude];
+          foreach (var parent in parents)
+            projectItem.SetParent(parent);
         }
       }
 
-      return projectItems.Values;
+      return projectItems.SelectMany(g => g);
     }
 
     public IAdvancedProject Advanced { get; }
@@ -197,12 +203,20 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 
-    public string DefaultNamespace => Advanced.Properties.GetPropertyValueOrNull("RootNamespace");
-    public string AssemblyName => Advanced.Properties.GetPropertyValueOrNull("AssemblyName");
-    public Version TargetFrameworkVersion => Version.Parse(Advanced.Properties.GetPropertyValueOrNull("TargetFrameworkVersion").TrimStart('v'));
+    public string DefaultNamespace => Advanced.Properties.GetValueOrDefault("RootNamespace")?.DefaultValue;
+    public string AssemblyName => Advanced.Properties.GetValueOrDefault("AssemblyName")?.DefaultValue;
+
+    public Version TargetFrameworkVersion
+    {
+      get
+      {
+        var targetFrameworkVersion = Advanced.Properties.GetValueOrDefault("TargetFrameworkVersion")?.DefaultValue;
+        return targetFrameworkVersion != null ? Version.Parse(targetFrameworkVersion.TrimStart('v')) : null;
+      }
+    }
 
     public ProjectOutputType OutputType
-      => Advanced.Properties.GetPropertyValueOrNull("OutputType") == "Exe" ? ProjectOutputType.Executable : ProjectOutputType.Library;
+      => Advanced.Properties.GetValueOrDefault("OutputType")?.DefaultValue == "Exe" ? ProjectOutputType.Executable : ProjectOutputType.Library;
 
     public IReadOnlyCollection<NuGetPackage> NuGetPackages { get; }
 
@@ -276,20 +290,27 @@ namespace SolutionInspector.Api.ObjectModel
       return new ClassifiedReferences(gacReferences, fileReferences, nuGetReferences, projectReferences);
     }
 
+    [SuppressMessage ("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposal happens in Dispose().")]
     public static Project FromSolution (
         ISolution solution,
         ProjectInSolution projectInSolution,
         IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
-      var msBuildProject = new Microsoft.Build.Evaluation.Project(projectInSolution.AbsolutePath);
+      var projectCollection = new ProjectCollection();
+      var msBuildProject = new Microsoft.Build.Evaluation.Project(
+          projectInSolution.AbsolutePath,
+          null,
+          null,
+          projectCollection,
+          ProjectLoadSettings.IgnoreMissingImports);
+
       var project = new Project(
+          projectCollection,
           solution,
           projectInSolution,
           msBuildProject,
           msBuildParsingConfiguration);
 
-      // This is necessary to make sure projects are loadable multiple times.
-      ProjectCollection.GlobalProjectCollection.UnloadProject(msBuildProject);
       return project;
     }
 
@@ -326,6 +347,12 @@ namespace SolutionInspector.Api.ObjectModel
         NuGetReferences = nuGetReferences.ToArray();
         ProjectReferences = projectReferences.ToArray();
       }
+    }
+
+    public void Dispose ()
+    {
+      _projectCollection.UnloadAllProjects();
+      _projectCollection.Dispose();
     }
   }
 }

@@ -12,6 +12,12 @@
       <projectRules>
         <projectRuleGroup xdt:Locator="Match(appliesTo)" appliesTo="_All">
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectShouldNotContainProjectItemsWithDuplicateIncludesRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"

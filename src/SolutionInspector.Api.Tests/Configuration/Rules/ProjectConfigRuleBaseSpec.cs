@@ -7,7 +7,6 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -28,7 +27,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.Configuration.Rules
 {
-  [Subject (typeof (ProjectConfigRuleBase<>))]
+  [Subject (typeof(ProjectConfigRuleBase<>))]
   class ProjectConfigRuleBaseSpec
   {
     static DummyProjectConfigRule SUT;

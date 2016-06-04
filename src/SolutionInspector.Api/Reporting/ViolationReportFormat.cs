@@ -4,8 +4,8 @@ namespace SolutionInspector.Api.Reporting
 {
   internal enum ViolationReportFormat
   {
+    Xml = 0,
     Table,
-    Xml,
     VisualStudio
   }
 }

@@ -11,17 +11,45 @@ namespace SolutionInspector.Api.Commands
   [PublicAPI]
   internal interface IArgumentsBuilderWithSetValues<out TArguments>
   {
-    IArgumentsBuilderWithSetValues<TArguments> Option (string longKey, string shortKey, string description, Action<TArguments, string> setValue);
-    IArgumentsBuilderWithSetValues<TArguments> Option<T> (string longKey, string shortKey, string description, Action<TArguments, T> setValue);
+    IArgumentsBuilderWithSetValues<TArguments> Option (
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, string> setValue,
+        string defaultValue = null);
+
+    IArgumentsBuilderWithSetValues<TArguments> Option<T> (
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, T> setValue,
+        T defaultValue = default(T));
+
     IArgumentsBuilderWithSetValues<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
   }
 
   [PublicAPI]
   internal interface IArgumentsBuilder<out TArguments>
   {
-    IArgumentsBuilder<TArguments> Option (string longKey, string shortKey, string description, Action<TArguments, string> setValue);
-    IArgumentsBuilder<TArguments> Option<T> (string longKey, string shortKey, string description, Action<TArguments, T> setValue);
-    IArgumentsBuilder<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
+    IArgumentsBuilder<TArguments> Option (
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, string> setValue,
+        string defaultValue = null);
+
+    IArgumentsBuilder<TArguments> Option<T> (
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, T> setValue,
+        T defaultValue = default(T));
+
+    IArgumentsBuilder<TArguments> Flag (
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, bool> setValue);
 
     IArgumentsBuilderWithSetValues<TArguments> Values (Action<IValueArgumentsBuilder<TArguments>> configureValueArguments);
   }
@@ -82,14 +110,26 @@ namespace SolutionInspector.Api.Commands
         _arguments = arguments;
       }
 
-      public IArgumentsBuilder<TArguments> Option (string longKey, string shortKey, string description, Action<TArguments, string> setValue)
+      public IArgumentsBuilder<TArguments> Option (
+          string longKey,
+          string shortKey,
+          string description,
+          Action<TArguments, string> setValue,
+          string defaultValue = null)
       {
+        setValue(_arguments, defaultValue);
         _command.HasOption($"{shortKey}|{longKey}=", description, v => setValue(_arguments, v));
         return this;
       }
 
-      public IArgumentsBuilder<TArguments> Option<T> (string longKey, string shortKey, string description, Action<TArguments, T> setValue)
+      public IArgumentsBuilder<TArguments> Option<T> (
+          string longKey,
+          string shortKey,
+          string description,
+          Action<TArguments, T> setValue,
+          T defaultValue = default(T))
       {
+        setValue(_arguments, defaultValue);
         _command.HasOption<T>($"{shortKey}|{longKey}=", description, v => setValue(_arguments, v));
         return this;
       }
@@ -112,7 +152,8 @@ namespace SolutionInspector.Api.Commands
           string longKey,
           string shortKey,
           string description,
-          Action<TArguments, string> setValue)
+          Action<TArguments, string> setValue,
+          string defaultValue)
       {
         return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
       }
@@ -121,7 +162,8 @@ namespace SolutionInspector.Api.Commands
           string longKey,
           string shortKey,
           string description,
-          Action<TArguments, T> setValue)
+          Action<TArguments, T> setValue,
+          T defaultValue)
       {
         return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
       }

@@ -42,7 +42,7 @@ namespace SolutionInspector.TestInfrastructure
 
     public static T Enum<T> ()
     {
-      var values = System.Enum.GetValues(typeof (T));
+      var values = System.Enum.GetValues(typeof(T));
       return (T) values.GetValue(Random.Next(values.Length));
     }
 

@@ -7,14 +7,14 @@ namespace SolutionInspector.Api.Rules
   {
     public static Type GetConfigurationType (Type ruleType)
     {
-      if (!typeof (IRule).IsAssignableFrom(ruleType))
+      if (!typeof(IRule).IsAssignableFrom(ruleType))
         throw new ArgumentException($"Given type '{ruleType}' is not a valid rule type.", nameof(ruleType));
 
-      if (!typeof (IConfigurableRule).IsAssignableFrom(ruleType))
+      if (!typeof(IConfigurableRule).IsAssignableFrom(ruleType))
         return null;
 
       return ruleType.GetInterfaces()
-          .Single(i => i.IsConstructedGenericType && i.GetGenericTypeDefinition() == typeof (IConfigurableRule<,>))
+          .Single(i => i.IsConstructedGenericType && i.GetGenericTypeDefinition() == typeof(IConfigurableRule<,>))
           .GenericTypeArguments[1];
     }
   }

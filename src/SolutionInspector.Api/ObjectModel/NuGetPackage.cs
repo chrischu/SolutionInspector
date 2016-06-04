@@ -38,7 +38,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The package's directory name (relative to the NuGet packages folder)".
     /// </summary>
-    public string PackageDirectoryName => $@"{Id}.{FullVersionString}";
+    public string PackageDirectoryName => $"{Id}.{FullVersionString}";
 
     /// <summary>
     ///   The package's target framework.
@@ -91,7 +91,8 @@ namespace SolutionInspector.Api.ObjectModel
 
       var targetFramework = packageElement.GetAttribute("targetFramework");
 
-      var isDevelopmentDependency = packageElement.HasAttribute("developmentDependency") && packageElement.GetAttribute("developmentDependency") == "true";
+      var isDevelopmentDependency = packageElement.HasAttribute("developmentDependency")
+                                    && packageElement.GetAttribute("developmentDependency") == "true";
 
       return new NuGetPackage(id, version, isPreRelease, preReleaseTag, targetFramework, isDevelopmentDependency);
     }

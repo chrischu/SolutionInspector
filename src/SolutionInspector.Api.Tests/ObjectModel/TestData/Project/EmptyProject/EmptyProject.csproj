@@ -11,9 +11,15 @@
     <AssemblyName>EmptyProject</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    
+  </PropertyGroup>
+  <PropertyGroup>
+    <Property>Value1</Property>
   </PropertyGroup>
   <!-- The following property groups are just there for testing purposes -->
+  <PropertyGroup>
+    <Duplicate>1</Duplicate>
+    <Duplicate>2</Duplicate>
+  </PropertyGroup>
   <PropertyGroup>
     <DependentOnConfiguration Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">LOL</DependentOnConfiguration>
     <DependentOnProperty Condition=" '$(Property)' == 'true' ">ROFL</DependentOnProperty>
@@ -22,7 +28,10 @@
     <ConditionFromParent>QWER</ConditionFromParent>
     <ConditionFromSelf Condition=" '$(Self)' == 'true' ">ASDF</ConditionFromSelf>
   </PropertyGroup>
-  
+  <PropertyGroup>
+    <Multiple Condition=" '$(Value)' == '3'">Three</Multiple>
+    <Multiple Condition=" '$(Value)' == '5'">Five</Multiple>
+  </PropertyGroup>
   <PropertyGroup Condition="5 != 7">
     <ConditionalFromParentProperty>$(Configuration)</ConditionalFromParentProperty>
     <ConditionalOverridingParentProperty Condition="'asdf' == 'jklö'">Value</ConditionalOverridingParentProperty>
@@ -40,9 +49,21 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
+  <PropertyGroup>
+    <Property>Value2 $(OtherProperty)</Property>
+  </PropertyGroup>
+  <Target Name="Test">
+    <PropertyGroup>
+      <Property>Value3</Property>
+    </PropertyGroup>
+  </Target>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <PropertyGroup>
+    <OtherProperty>$(Property)</OtherProperty>
+    <!-- <Property>Value4</Property> -->
+  </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

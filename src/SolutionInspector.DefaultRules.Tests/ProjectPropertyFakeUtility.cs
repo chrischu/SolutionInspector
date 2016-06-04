@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using FakeItEasy;
 using JetBrains.Annotations;
@@ -30,27 +29,29 @@ namespace SolutionInspector.DefaultRules.Tests
         Dictionary<string, string> properties)
     {
       var projectProperties = properties.ToDictionary(
-          p => p.Key,
-          p =>
+          kvp => kvp.Key,
+          kvp =>
           {
-            var projectProperty = A.Fake<IProjectProperty>();
-            A.CallTo(() => projectProperty.Name).Returns(p.Key);
-            A.CallTo(() => projectProperty.Value).Returns(p.Value);
-            return projectProperty;
+            var evaluatedProjectPropertyValue = A.Fake<IEvaluatedProjectPropertyValue>();
+
+            A.CallTo(() => evaluatedProjectPropertyValue.SourceOccurrence).Returns(A.Dummy<IProjectPropertyOccurrence>());
+            A.CallTo(() => evaluatedProjectPropertyValue.Value).Returns(kvp.Value);
+
+            return evaluatedProjectPropertyValue;
           });
 
-      A.CallTo(() => advancedProject.GetPropertiesBasedOnCondition(buildConfiguration, null))
-          .Returns(new ReadOnlyDictionary<string, IProjectProperty>(projectProperties));
+      A.CallTo(() => advancedProject.EvaluateProperties(buildConfiguration, null))
+          .Returns(projectProperties);
     }
 
     public static void SetupFakeProperty (IAdvancedProject advancedProject, string property, [CanBeNull] string value)
     {
       var projectProperty = A.Fake<IProjectProperty>();
       A.CallTo(() => projectProperty.Name).Returns(property);
-      A.CallTo(() => projectProperty.Value).Returns(value);
+      A.CallTo(() => projectProperty.DefaultValue).Returns(value);
 
       A.CallTo(() => advancedProject.Properties)
-          .Returns(new ReadOnlyDictionary<string, IProjectProperty>(new Dictionary<string, IProjectProperty> { { property, projectProperty } }));
+          .Returns(new Dictionary<string, IProjectProperty> { { property, projectProperty } });
     }
   }
 }

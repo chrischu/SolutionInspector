@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration.Infrastructure;
+using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
@@ -32,9 +33,9 @@ namespace SolutionInspector.DefaultRules
 
         foreach (var matchingBuildConfig in matchingBuildConfigs)
         {
-          var properties = target.Advanced.GetPropertiesBasedOnCondition(matchingBuildConfig);
+          var properties = target.Advanced.EvaluateProperties(matchingBuildConfig);
 
-          var defineConstants = properties.GetPropertyValueOrNull("DefineConstants");
+          var defineConstants = properties.GetValueOrDefault("DefineConstants")?.Value;
           var actualSymbols = new HashSet<string>(defineConstants?.Split(';') ?? Enumerable.Empty<string>());
 
           foreach (var requiredSymbol in config.RequiredCompilationSymbols)
@@ -71,7 +72,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Filter that controlls which build configuration this <see cref="RequiredCompilationSymbolsConfigurationElement" /> applies to.
     /// </summary>
-    [TypeConverter (typeof (BuildConfigurationFilterConverter))]
+    [TypeConverter (typeof(BuildConfigurationFilterConverter))]
     [ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
@@ -82,7 +83,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   All the compilation symbols that are required and are therefore checked.
     /// </summary>
-    [TypeConverter (typeof (CommaDelimitedStringCollectionConverter))]
+    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("requiredCompilationSymbols", DefaultValue = "", IsRequired = true)]
     public CommaDelimitedStringCollection RequiredCompilationSymbols
     {

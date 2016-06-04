@@ -36,7 +36,7 @@ namespace SolutionInspector.Api.Configuration.MsBuildParsing
     [ConfigurationProperty ("projectBuildActions")]
     public ProjectBuildActionsConfigurationElement ProjectBuildActions => (ProjectBuildActionsConfigurationElement) this["projectBuildActions"];
 
-    public bool IsValidProjectItemType(string projectItemType)
+    public bool IsValidProjectItemType (string projectItemType)
     {
       return _projectBuildActionsHashSet.Value.Contains(projectItemType);
     }

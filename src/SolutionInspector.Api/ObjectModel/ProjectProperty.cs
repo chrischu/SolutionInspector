@@ -1,42 +1,70 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Build.Construction;
 
 namespace SolutionInspector.Api.ObjectModel
 {
+  ///// <summary>
+  /////   Represents an property of a <see cref="IProject" />.
+  ///// </summary>
+  //public interface IProjectProperty : IProjectPropertyBase
+  //{
+  //  /// <summary>
+  //  ///   The property's value. Variables contained in the value are not expanded.
+  //  /// </summary>
+  //  string Value { get; }
+  //}
+
   /// <summary>
-  /// Represents a property of a <see cref="IProject"/>.
+  ///   Represents an property of a <see cref="IProject" /> and its (possibly multiple) occurrences in the MSBuild file.
   /// </summary>
   public interface IProjectProperty
   {
     /// <summary>
-    /// The property's name.
+    ///   The property's name.
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    /// The property's value. Variables contained in the value are not expanded.
+    ///   The property's value given all other properties have their default values.
     /// </summary>
-    string Value { get; }
+    string DefaultValue { get; }
+
+    /// <summary>
+    ///   The property's (possibly multiple) occurrences.
+    /// </summary>
+    IReadOnlyCollection<IProjectPropertyOccurrence> Occurrences { get; }
   }
 
-  [DebuggerDisplay ("{Name} = {Value}")]
-  internal class ProjectProperty : IProjectProperty
+  [DebuggerDisplay ("{Name}")]
+  internal class ProjectProperty : IProjectProperty, IEnumerable<IProjectPropertyOccurrence>
   {
+    private readonly List<IProjectPropertyOccurrence> _occurrences = new List<IProjectPropertyOccurrence>();
+
     public string Name { get; }
-    public string Value { get; }
+    public string DefaultValue { get; }
+    public IReadOnlyCollection<IProjectPropertyOccurrence> Occurrences => _occurrences;
 
-    public ProjectProperty (ProjectPropertyElement property)
-        : this(property.Name, property.Value)
-    {
-      Name = property.Name;
-      Value = property.Value;
-    }
-
-    protected ProjectProperty (string name, string value)
+    public ProjectProperty (string name, string defaultValue)
     {
       Name = name;
-      Value = value;
+      DefaultValue = defaultValue;
+    }
+
+    public void Add (IProjectPropertyOccurrence occurence)
+    {
+      _occurrences.Add(occurence);
+    }
+
+    public IEnumerator<IProjectPropertyOccurrence> GetEnumerator ()
+    {
+      return _occurrences.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator ()
+    {
+      return GetEnumerator();
     }
   }
 }

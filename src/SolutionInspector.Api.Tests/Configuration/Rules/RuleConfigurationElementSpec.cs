@@ -23,7 +23,7 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Configuration.Rules
 {
-  [Subject (typeof (RuleConfigurationElement))]
+  [Subject (typeof(RuleConfigurationElement))]
   class RuleConfigurationElementSpec
   {
     static RuleConfigurationElement SUT;

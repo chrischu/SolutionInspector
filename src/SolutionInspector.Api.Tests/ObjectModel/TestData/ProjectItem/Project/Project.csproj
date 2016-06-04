@@ -61,6 +61,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Nested.resx</DependentUpon>
     </Compile>
+    <None Include="Duplicate.cs" />
+    <None Include="Duplicate.cs" />
+    <None Include="AlmostDuplicate.cs">
+      <Metadata>3</Metadata>
+    </None>
+    <None Include="AlmostDuplicate.cs">
+      <Metadata>5</Metadata>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

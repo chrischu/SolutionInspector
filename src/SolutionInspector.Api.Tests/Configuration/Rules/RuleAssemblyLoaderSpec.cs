@@ -28,7 +28,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.Configuration.Rules
 {
-  [Subject (typeof (RuleAssemblyLoader))]
+  [Subject (typeof(RuleAssemblyLoader))]
   class RuleAssemblyLoaderSpec
   {
     static IFile File;
@@ -46,7 +46,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
       Assembly = A.Fake<IAssembly>();
 
       LoadedAssembly = A.Fake<IAssembly>();
-      A.CallTo(() => LoadedAssembly.GetExportedTypes()).Returns(new[] { typeof (DummyRule) });
+      A.CallTo(() => LoadedAssembly.GetExportedTypes()).Returns(new[] { typeof(DummyRule) });
 
       A.CallTo(() => Assembly.LoadFrom(A<string>._)).Returns(LoadedAssembly);
 
@@ -106,7 +106,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
 
     class when_loading_an_assembly_without_rules
     {
-      Establish ctx = () => { A.CallTo(() => LoadedAssembly.GetExportedTypes()).Returns(new[] { typeof (string) }); };
+      Establish ctx = () => { A.CallTo(() => LoadedAssembly.GetExportedTypes()).Returns(new[] { typeof(string) }); };
 
       Because of = () => Exception = Catch.Exception(() => SUT.LoadRuleAssemblies(new[] { "File.dll" }));
 

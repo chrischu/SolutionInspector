@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -27,7 +28,7 @@ using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.Api.Tests.ObjectModel
 {
-  [Subject (typeof (ProjectItem))]
+  [Subject (typeof(ProjectItem))]
   class ProjectItemSpec
   {
     static string SolutionPath;
@@ -47,15 +48,15 @@ namespace SolutionInspector.Api.Tests.ObjectModel
     {
       Establish ctx = () => { ProjectItemName = "Direct.cs"; };
 
-      Because of = () => Result = LoadProjectItem(ProjectItemName);
+      Because of = () => Result = LoadProjectItems(ProjectItemName).Single();
 
       It parses_project_item = () =>
       {
         var projectItemPath = GetProjectItemPath(ProjectItemName);
 
         Result.Name.Should().Be(ProjectItemName);
-        Result.OriginalInclude.Should().Be(ProjectItemName);
-        Result.Include.Should().Be(ProjectItemName);
+        Result.OriginalInclude.Should().Be(new ProjectItemInclude(ProjectItemName, ProjectItemName));
+        Result.Include.Should().Be(new ProjectItemInclude(ProjectItemName, ProjectItemName));
         Result.BuildAction.Should().Be(ProjectItemBuildAction.Compile);
         Result.File.FullName.Should().Be(projectItemPath);
         Result.Metadata["CustomMetadata"].Should().Be("SomeCustomMetadata");
@@ -64,6 +65,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.Parent.Should().BeNull();
         Result.Children.Should().BeEmpty();
         Result.Identifier.Should().Be($"Project.csproj/{ProjectItemName}");
+        Result.Location.Should().Be(new ProjectLocation(54, 5));
         Result.FullPath.Should().Be(projectItemPath);
       };
 
@@ -75,7 +77,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
     {
       Establish ctx = () => { ProjectItemName = "Nested.Designer.cs"; };
 
-      Because of = () => Result = LoadProjectItem(ProjectItemName);
+      Because of = () => Result = LoadProjectItems(ProjectItemName).Single();
 
       It parses_project_item = () =>
       {
@@ -83,13 +85,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         var projectItemPath = GetProjectItemPath(include);
 
         Result.Name.Should().Be(ProjectItemName);
-        Result.OriginalInclude.Should().Be(include);
-        Result.Include.Should().Be(include);
+        Result.OriginalInclude.Should().Be(new ProjectItemInclude(include, include));
+        Result.Include.Should().Be(new ProjectItemInclude(include, include));
         Result.BuildAction.Should().Be(ProjectItemBuildAction.Compile);
         Result.File.FullName.Should().Be(projectItemPath);
         Result.Parent.Name.Should().Be("Nested.resx");
         Result.Children.Should().BeEmpty();
         Result.Identifier.Should().Be($"Project.csproj/Folder/Nested.resx/{ProjectItemName}");
+        Result.Location.Should().Be(new ProjectLocation(59, 5));
         Result.FullPath.Should().Be(projectItemPath);
       };
 
@@ -101,7 +104,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
     {
       Establish ctx = () => { ProjectItemName = "Nested.resx"; };
 
-      Because of = () => Result = LoadProjectItem(ProjectItemName);
+      Because of = () => Result = LoadProjectItems(ProjectItemName).Single();
 
       It parses_project_item = () =>
       {
@@ -109,13 +112,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         var projectItemPath = GetProjectItemPath(include);
 
         Result.Name.Should().Be(ProjectItemName);
-        Result.OriginalInclude.Should().Be(include);
-        Result.Include.Should().Be(include);
+        Result.OriginalInclude.Should().Be(new ProjectItemInclude(include, include));
+        Result.Include.Should().Be(new ProjectItemInclude(include, include));
         Result.BuildAction.Should().Be(ProjectItemBuildAction.EmbeddedResource);
         Result.File.FullName.Should().Be(projectItemPath);
         Result.Parent.Should().BeNull();
         Result.Children.Single().Name.Should().Be("Nested.Designer.cs");
         Result.Identifier.Should().Be($"Project.csproj/Folder/{ProjectItemName}");
+        Result.Location.Should().Be(new ProjectLocation(45, 5));
         Result.FullPath.Should().Be(projectItemPath);
       };
 
@@ -127,7 +131,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
     {
       Establish ctx = () => { ProjectItemName = "Link.cs"; };
 
-      Because of = () => Result = LoadProjectItem(ProjectItemName);
+      Because of = () => Result = LoadProjectItems(ProjectItemName).Single();
 
       It parses_project_item = () =>
       {
@@ -135,13 +139,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         var projectItemPath = Path.Combine(Path.GetDirectoryName(SolutionPath).AssertNotNull(), ProjectItemName);
 
         Result.Name.Should().Be(ProjectItemName);
-        Result.OriginalInclude.Should().Be("..\\Link.cs");
-        Result.Include.Should().Be(include);
+        Result.OriginalInclude.Should().Be(new ProjectItemInclude("..\\Link.cs", "..\\Link.cs"));
+        Result.Include.Should().Be(new ProjectItemInclude(include, include));
         Result.BuildAction.Should().Be(ProjectItemBuildAction.Compile);
         Result.File.FullName.Should().Be(projectItemPath);
         Result.Parent.Should().BeNull();
         Result.Children.Should().BeEmpty();
         Result.Identifier.Should().Be($"Project.csproj/{ProjectItemName}");
+        Result.Location.Should().Be(new ProjectLocation(51, 5));
         Result.FullPath.Should().Be(projectItemPath);
       };
 
@@ -149,12 +154,44 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       static IProjectItem Result;
     }
 
-    static IProjectItem LoadProjectItem (string itemName)
+    class when_loading_a_duplicate_project_item
+    {
+      Establish ctx = () => { ProjectItemName = "Duplicate.cs"; };
+
+      Because of = () => Result = LoadProjectItems(ProjectItemName).ToArray();
+
+      It returns_both = () =>
+          Result.Should().HaveCount(2);
+
+      static string ProjectItemName;
+      static IProjectItem[] Result;
+    }
+
+    class when_loading_a_project_item_with_duplicate_name_but_differing_somehow
+    {
+      Establish ctx = () => { ProjectItemName = "AlmostDuplicate.cs"; };
+
+      Because of = () => Result = LoadProjectItems(ProjectItemName).ToArray();
+
+      It parses_both_items = () =>
+      {
+        Result[0].OriginalInclude.Evaluated.Should().Be("AlmostDuplicate.cs");
+        Result[0].Metadata["Metadata"].Should().Be("3");
+
+        Result[1].OriginalInclude.Evaluated.Should().Be("AlmostDuplicate.cs");
+        Result[1].Metadata["Metadata"].Should().Be("5");
+      };
+
+      static string ProjectItemName;
+      static IProjectItem[] Result;
+    }
+
+    static IEnumerable<IProjectItem> LoadProjectItems (string itemName)
     {
       var solution = Solution.Load(SolutionPath, MsBuildParsingConfiguration);
       var project = solution.Projects.Single();
 
-      return project.ProjectItems.Single(i => i.Name == itemName);
+      return project.ProjectItems.Where(i => i.Name == itemName);
     }
 
     static string GetProjectItemPath (string itemName)

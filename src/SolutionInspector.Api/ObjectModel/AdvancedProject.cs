@@ -24,27 +24,23 @@ namespace SolutionInspector.Api.ObjectModel
     Microsoft.Build.Evaluation.Project MsBuildProject { get; }
 
     /// <summary>
-    ///   A collection of all (unconditional) project properties.
+    ///   A collection of all project properties as they appear in the project file.
     /// </summary>
     IReadOnlyDictionary<string, IProjectProperty> Properties { get; }
 
     /// <summary>
-    ///   A collection of all conditional project properties.
+    ///   Evaluates all the properties with the given <paramref name="configuration" /> and <paramref name="propertyValues" />.
+    ///   Only properties with a true <see cref="IProjectPropertyCondition" /> are included.
     /// </summary>
-    IReadOnlyCollection<IConditionalProjectProperty> ConditionalProperties { get; }
-
-    /// <summary>
-    ///   Gets all properties active under the given <paramref name="configuration" /> and when the <paramref name="properties" /> are set to the
-    ///   specified values.
-    /// </summary>
-    IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (
+    IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (
         BuildConfiguration configuration,
-        Dictionary<string, string> properties = null);
+        Dictionary<string, string> propertyValues = null);
 
     /// <summary>
-    ///   Gets all properties active when the <paramref name="properties" /> are set to the specified values.
+    ///   Evaluates all the properties with the given <paramref name="propertyValues" />.
+    ///   Only properties with a true <see cref="IProjectPropertyCondition" /> are included.
     /// </summary>
-    IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (Dictionary<string, string> properties);
+    IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (Dictionary<string, string> propertyValues);
   }
 
   [PublicAPI]
@@ -58,57 +54,54 @@ namespace SolutionInspector.Api.ObjectModel
       _project = project;
       MsBuildProject = msBuildProject;
 
-      var projectProperties = MsBuildProject.Xml.Properties.ToArray();
-      var classifiedProperties = ClassifyProperties(projectProperties);
-
-      Properties = new ReadOnlyDictionary<string, IProjectProperty>(classifiedProperties.UnconditionalProperties.ToDictionary(p => p.Name));
-      ConditionalProperties = classifiedProperties.ConditionalProperties;
+      Properties = ProcessProperties(MsBuildProject.Xml.Properties);
     }
 
-    private ClassifiedProperties ClassifyProperties (IReadOnlyCollection<ProjectPropertyElement> properties)
+    private IReadOnlyDictionary<string, IProjectProperty> ProcessProperties (IEnumerable<ProjectPropertyElement> propertyElements)
     {
-      var unconditionalProperties = new List<ProjectProperty>();
-      var conditionalProperties = new List<ConditionalProjectProperty>();
+      var result = new Dictionary<string, ProjectProperty>();
 
-      foreach (var property in properties)
+      foreach (var propertyElement in propertyElements)
       {
-        if (string.IsNullOrWhiteSpace(property.Condition) && string.IsNullOrWhiteSpace(property.Parent?.Condition))
-          unconditionalProperties.Add(new ProjectProperty(property));
-        else
-          conditionalProperties.Add(new ConditionalProjectProperty(property));
+        ProjectProperty property;
+
+        if (!result.TryGetValue(propertyElement.Name, out property))
+          property = result[propertyElement.Name] = new ProjectProperty(propertyElement.Name, MsBuildProject.GetPropertyValue(propertyElement.Name));
+
+        property.Add(new ProjectPropertyOccurrence(propertyElement));
       }
 
-      return new ClassifiedProperties(unconditionalProperties, conditionalProperties);
+      return new ReadOnlyDictionary<string, IProjectProperty>(result.ToDictionary(x => x.Key, x => (IProjectProperty) x.Value));
     }
 
     public ProjectInSolution MsBuildProjectInSolution { get; }
     public Microsoft.Build.Evaluation.Project MsBuildProject { get; }
 
     public IReadOnlyDictionary<string, IProjectProperty> Properties { get; }
-    public IReadOnlyCollection<IConditionalProjectProperty> ConditionalProperties { get; }
 
-    public IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (
+    public IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (
         BuildConfiguration configuration,
-        Dictionary<string, string> properties = null)
+        Dictionary<string, string> propertyValues = null)
     {
-      properties = properties ?? new Dictionary<string, string>();
-      properties.Add("Configuration", configuration.ConfigurationName);
-      properties.Add("Platform", configuration.PlatformName);
-      return GetPropertiesBasedOnCondition(properties);
+      propertyValues = propertyValues ?? new Dictionary<string, string>();
+      propertyValues.Add("Configuration", configuration.ConfigurationName);
+      propertyValues.Add("Platform", configuration.PlatformName);
+      return EvaluateProperties(propertyValues);
     }
 
-    public IReadOnlyDictionary<string, IProjectProperty> GetPropertiesBasedOnCondition (Dictionary<string, string> properties)
+    public IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (Dictionary<string, string> propertyValues = null)
     {
-      var result = new Dictionary<string, IProjectProperty>();
+      var result = new Dictionary<string, IEvaluatedProjectPropertyValue>();
 
-      using (new MsBuildConditionContext(MsBuildProject, properties))
+      using (new MsBuildConditionContext(MsBuildProject, propertyValues))
       {
-        foreach (var property in ConditionalProperties)
+        foreach (var property in Properties.Values)
         {
           var projectPropertyElement = MsBuildProject.GetProperty(property.Name)?.Xml;
-          // TODO: Remove the ContainsKey workaround after figuring out a good way to handle conditional properties.
-          if (projectPropertyElement != null && !result.ContainsKey(property.Name))
-            result.Add(property.Name, new ProjectProperty(projectPropertyElement));
+          if (projectPropertyElement != null)
+            result.Add(
+                property.Name,
+                new EvaluatedProjectPropertyValue(projectPropertyElement.Value, new ProjectPropertyOccurrence(projectPropertyElement)));
         }
       }
 
@@ -118,15 +111,15 @@ namespace SolutionInspector.Api.ObjectModel
     private class MsBuildConditionContext : IDisposable
     {
       private readonly Microsoft.Build.Evaluation.Project _msBuildProject;
-      private readonly Dictionary<string, string> _previousPropertyValues = new Dictionary<string, string>();
+      private readonly List<string> _setPropertyNames = new List<string>();
 
       public MsBuildConditionContext (Microsoft.Build.Evaluation.Project msBuildProject, Dictionary<string, string> propertyValues)
       {
         _msBuildProject = msBuildProject;
         foreach (var propertyValue in propertyValues)
         {
-          _previousPropertyValues.Add(propertyValue.Key, _msBuildProject.GetPropertyValue(propertyValue.Key));
-          _msBuildProject.SetProperty(propertyValue.Key, propertyValue.Value);
+          _setPropertyNames.Add(propertyValue.Key);
+          _msBuildProject.SetGlobalProperty(propertyValue.Key, propertyValue.Value);
         }
 
         _msBuildProject.ReevaluateIfNecessary();
@@ -134,24 +127,10 @@ namespace SolutionInspector.Api.ObjectModel
 
       public void Dispose ()
       {
-        foreach (var propertyValue in _previousPropertyValues)
-          _msBuildProject.SetProperty(propertyValue.Key, propertyValue.Value);
+        foreach (var propertyName in _setPropertyNames)
+          _msBuildProject.RemoveGlobalProperty(propertyName);
 
         _msBuildProject.ReevaluateIfNecessary();
-      }
-    }
-
-    private class ClassifiedProperties
-    {
-      public IReadOnlyCollection<IProjectProperty> UnconditionalProperties { get; }
-      public IReadOnlyCollection<IConditionalProjectProperty> ConditionalProperties { get; }
-
-      public ClassifiedProperties (
-          IReadOnlyCollection<IProjectProperty> unconditionalProperties,
-          IReadOnlyCollection<IConditionalProjectProperty> conditionalProperties)
-      {
-        UnconditionalProperties = unconditionalProperties;
-        ConditionalProperties = conditionalProperties;
       }
     }
   }

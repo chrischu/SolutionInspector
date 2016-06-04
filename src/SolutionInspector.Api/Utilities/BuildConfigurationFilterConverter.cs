@@ -21,8 +21,8 @@ namespace SolutionInspector.Api.Utilities
       if (value == null)
         return null;
 
-      if (value.GetType() != typeof (BuildConfigurationFilter))
-        throw new ArgumentException($"Unsupported type '{value.GetType()}', expected type '{typeof (BuildConfigurationFilter)}'.", nameof(value));
+      if (value.GetType() != typeof(BuildConfigurationFilter))
+        throw new ArgumentException($"Unsupported type '{value.GetType()}', expected type '{typeof(BuildConfigurationFilter)}'.", nameof(value));
 
       return value.ToString();
     }

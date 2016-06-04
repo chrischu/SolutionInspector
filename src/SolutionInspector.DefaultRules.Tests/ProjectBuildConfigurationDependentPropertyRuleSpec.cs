@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -27,7 +26,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectBuildConfigurationDependentPropertyRule))]
+  [Subject (typeof(ProjectBuildConfigurationDependentPropertyRule))]
   class ProjectBuildConfigurationDependentPropertyRuleSpec
   {
     static IProject Project;
@@ -74,10 +73,11 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_property_with_same_value
     {
-      Establish ctx = () =>
-      {
-        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, ExpectedValue);
-      };
+      Establish ctx =
+          () =>
+          {
+            ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, ExpectedValue);
+          };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -89,10 +89,11 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_property_with_different_value
     {
-      Establish ctx = () =>
-      {
-        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, "ActualValue");
-      };
+      Establish ctx =
+          () =>
+          {
+            ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, "ActualValue");
+          };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -111,8 +112,8 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => AdvancedProject.GetPropertiesBasedOnCondition(BuildConfiguration1, null))
-            .Returns(new ReadOnlyDictionary<string, IProjectProperty>(new Dictionary<string, IProjectProperty>()));
+        A.CallTo(() => AdvancedProject.EvaluateProperties(BuildConfiguration1, null))
+            .Returns(new Dictionary<string, IEvaluatedProjectPropertyValue>());
       };
 
       Because of = () => Result = SUT.Evaluate(Project);
