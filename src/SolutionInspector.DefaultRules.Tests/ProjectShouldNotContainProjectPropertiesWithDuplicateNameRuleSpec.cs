@@ -46,11 +46,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_and_there_are_no_duplicates
     {
-      Establish ctx = () =>
-      {
-        SetupUnconditionalProperties(Tuple.Create("One", "1"));
-        SetupConditionalProperties(Tuple.Create("Two", "2"));
-      };
+      Establish ctx = () => { SetupProperties(FakeProperty("One", "1"), FakeProperty("Two", "2")); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -60,25 +56,9 @@ namespace SolutionInspector.DefaultRules.Tests
       static IEnumerable<IRuleViolation> Result;
     }
 
-    static void SetupUnconditionalProperties (params Tuple<string, string>[] nameAndLocation)
-    {
-      var properties = nameAndLocation.Select(x => SetupPropertyBase<IProjectProperty>(x.Item1, x.Item2)).ToArray();
-      A.CallTo(() => AdvancedProject.Properties).Returns(properties);
-    }
-
-    static void SetupConditionalProperties (params Tuple<string, string>[] name)
-    {
-      var properties = name.Select(x => SetupPropertyBase<IConditionalProjectProperty>(x.Item1, x.Item2)).ToArray();
-      A.CallTo(() => AdvancedProject.ConditionalProperties).Returns(properties);
-    }
-
     class when_evaluating_and_there_are_duplicates
     {
-      Establish ctx = () =>
-      {
-        SetupUnconditionalProperties(Tuple.Create("One", "1"));
-        SetupConditionalProperties(Tuple.Create("One", "2"), Tuple.Create("One", "3"));
-      };
+      Establish ctx = () => { SetupProperties(FakeProperty("One", "1", "2", "3")); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -89,16 +69,30 @@ namespace SolutionInspector.DefaultRules.Tests
       static IEnumerable<IRuleViolation> Result;
     }
 
-    static T SetupPropertyBase<T> (string name, string locationString)
-        where T : IProjectPropertyBase
+    static void SetupProperties (params IProjectProperty[] properties)
     {
-      var property = A.Fake<T>();
+      A.CallTo(() => AdvancedProject.Properties).Returns(properties.ToDictionary(p => p.Name));
+    }
+
+    static IProjectProperty FakeProperty (string name, params string[] locationStrings)
+    {
+      var property = A.Fake<IProjectProperty>();
 
       A.CallTo(() => property.Name).Returns(name);
 
-      var location = A.Fake<IProjectLocation>();
-      A.CallTo(() => location.ToString()).Returns(locationString);
-      A.CallTo(() => property.Location).Returns(location);
+      var occurrences = locationStrings.Select(
+          l =>
+          {
+            var location = A.Fake<IProjectLocation>();
+            A.CallTo(() => location.ToString()).Returns(l);
+
+            var occurrence = A.Fake<IProjectPropertyOccurrence>();
+            A.CallTo(() => occurrence.Location).Returns(location);
+
+            return occurrence;
+          }).ToArray();
+
+      A.CallTo(() => property.Occurrences).Returns(occurrences);
 
       return property;
     }

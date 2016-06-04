@@ -1,63 +1,70 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.Build.Construction;
-using SolutionInspector.Api.Utilities;
 
 namespace SolutionInspector.Api.ObjectModel
 {
+  ///// <summary>
+  /////   Represents an property of a <see cref="IProject" />.
+  ///// </summary>
+  //public interface IProjectProperty : IProjectPropertyBase
+  //{
+  //  /// <summary>
+  //  ///   The property's value. Variables contained in the value are not expanded.
+  //  /// </summary>
+  //  string Value { get; }
+  //}
+
   /// <summary>
-  ///   Represents an property of a <see cref="IProject" />.
+  ///   Represents an property of a <see cref="IProject" /> and its (possibly multiple) occurrences in the MSBuild file.
   /// </summary>
-  public interface IProjectProperty : IProjectPropertyBase
+  public interface IProjectProperty
   {
     /// <summary>
-    ///   The property's value. Variables contained in the value are not expanded.
+    /// The property's name.
     /// </summary>
-    string Value { get; }
+    string Name { get; }
+
+    /// <summary>
+    /// The property's value given all other properties have their default values.
+    /// </summary>
+    string DefaultValue { get; }
+
+    /// <summary>
+    /// The property's (possibly multiple) occurrences.
+    /// </summary>
+    IReadOnlyCollection<IProjectPropertyOccurrence> Occurrences { get; }
   }
 
-  [DebuggerDisplay ("{Name} = {Value} {Location}")]
-  internal sealed class ProjectProperty : ProjectPropertyBase, IEquatable<ProjectProperty>, IProjectProperty
+  [DebuggerDisplay ("{Name}")]
+  internal class ProjectProperty : IProjectProperty, IEnumerable<IProjectPropertyOccurrence>
   {
-    public string Value { get; }
+    private readonly List<IProjectPropertyOccurrence> _occurrences = new List<IProjectPropertyOccurrence>();
 
-    public ProjectProperty (ProjectPropertyElement property)
-        : base(property)
+    public string Name { get; }
+    public string DefaultValue { get; }
+    public IReadOnlyCollection<IProjectPropertyOccurrence> Occurrences => _occurrences;
+
+    public ProjectProperty (string name, string defaultValue)
     {
-      Value = property.Value;
+      Name = name;
+      DefaultValue = defaultValue;
     }
 
-    public bool Equals (ProjectProperty other)
+    public void Add (IProjectPropertyOccurrence occurence)
     {
-      if (ReferenceEquals(null, other))
-        return false;
-      if (ReferenceEquals(this, other))
-        return true;
-      return base.Equals(other) && string.Equals(Value, other.Value);
+      _occurrences.Add(occurence);
     }
 
-    public override bool Equals (object obj)
+    public IEnumerator<IProjectPropertyOccurrence> GetEnumerator ()
     {
-      if (ReferenceEquals(null, obj))
-        return false;
-      if (ReferenceEquals(this, obj))
-        return true;
-      return obj is ProjectProperty && Equals((ProjectProperty) obj);
+      return _occurrences.GetEnumerator();
     }
 
-    public override int GetHashCode ()
+    IEnumerator IEnumerable.GetEnumerator ()
     {
-      return HashCodeHelper.GetHashCode(base.GetHashCode(), Value.GetHashCode());
-    }
-
-    public static bool operator == (ProjectProperty left, ProjectProperty right)
-    {
-      return Equals(left, right);
-    }
-
-    public static bool operator != (ProjectProperty left, ProjectProperty right)
-    {
-      return !Equals(left, right);
+      return GetEnumerator();
     }
   }
 }

@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration.Infrastructure;
+using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
@@ -32,9 +33,9 @@ namespace SolutionInspector.DefaultRules
 
         foreach (var matchingBuildConfig in matchingBuildConfigs)
         {
-          var properties = target.Advanced.GetPropertiesBasedOnCondition(matchingBuildConfig);
+          var properties = target.Advanced.EvaluateProperties(matchingBuildConfig);
 
-          var defineConstants = properties.GetPropertyValueOrNull("DefineConstants");
+          var defineConstants = properties.GetValueOrDefault("DefineConstants")?.Value;
           var actualSymbols = new HashSet<string>(defineConstants?.Split(';') ?? Enumerable.Empty<string>());
 
           foreach (var requiredSymbol in config.RequiredCompilationSymbols)

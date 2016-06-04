@@ -28,16 +28,19 @@ namespace SolutionInspector.DefaultRules.Tests
         BuildConfiguration buildConfiguration,
         Dictionary<string, string> properties)
     {
-      var projectProperties = properties.Select(
-          p =>
+      var projectProperties = properties.ToDictionary(
+          kvp => kvp.Key,
+          kvp =>
           {
-            var projectProperty = A.Fake<IProjectProperty>();
-            A.CallTo(() => projectProperty.Name).Returns(p.Key);
-            A.CallTo(() => projectProperty.Value).Returns(p.Value);
-            return projectProperty;
-          }).ToArray();
+            var evaluatedProjectPropertyValue = A.Fake<IEvaluatedProjectPropertyValue>();
 
-      A.CallTo(() => advancedProject.GetPropertiesBasedOnCondition(buildConfiguration, null))
+            A.CallTo(() => evaluatedProjectPropertyValue.SourceOccurrence).Returns(A.Dummy<IProjectPropertyOccurrence>());
+            A.CallTo(() => evaluatedProjectPropertyValue.Value).Returns(kvp.Value);
+
+            return evaluatedProjectPropertyValue;
+          });
+
+      A.CallTo(() => advancedProject.EvaluateProperties(buildConfiguration, null))
           .Returns(projectProperties);
     }
 
@@ -45,10 +48,10 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       var projectProperty = A.Fake<IProjectProperty>();
       A.CallTo(() => projectProperty.Name).Returns(property);
-      A.CallTo(() => projectProperty.Value).Returns(value);
+      A.CallTo(() => projectProperty.DefaultValue).Returns(value);
 
       A.CallTo(() => advancedProject.Properties)
-          .Returns(new[] { projectProperty });
+          .Returns(new Dictionary<string, IProjectProperty> { { property, projectProperty } });
     }
   }
 }

@@ -77,6 +77,7 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="AssertionExtensions\DictionaryAssertionExtensions.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="AssertionExtensions\ExceptionTestingExtensions.cs" />
     <Compile Include="AssertionExtensions\ObjectStructuralEqualityExtensions.cs" />

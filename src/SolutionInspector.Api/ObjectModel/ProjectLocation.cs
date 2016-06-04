@@ -1,11 +1,12 @@
 using System;
 using JetBrains.Annotations;
+using Microsoft.Build.Construction;
 using SolutionInspector.Api.Utilities;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
-  ///   Represents the location (line/column) of an <see cref="IProjectItem" />/<see cref="IProjectPropertyBase" /> in a project file.
+  ///   Represents the location (line/column) of an <see cref="IProjectItem" />/<see cref="IProjectProperty" /> in a project file.
   /// </summary>
   [PublicAPI]
   public interface IProjectLocation
@@ -30,6 +31,11 @@ namespace SolutionInspector.Api.ObjectModel
     {
       Column = column;
       Line = line;
+    }
+
+    public ProjectLocation (ProjectElement projectElement)
+      :this(projectElement.Location.Line, projectElement.Location.Column)
+    {
     }
 
     public bool Equals (ProjectLocation other)

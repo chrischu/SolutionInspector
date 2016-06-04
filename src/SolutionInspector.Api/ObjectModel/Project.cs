@@ -203,12 +203,19 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 
-    public string DefaultNamespace => Advanced.Properties.GetPropertyValueOrNull("RootNamespace");
-    public string AssemblyName => Advanced.Properties.GetPropertyValueOrNull("AssemblyName");
-    public Version TargetFrameworkVersion => Version.Parse(Advanced.Properties.GetPropertyValueOrNull("TargetFrameworkVersion").TrimStart('v'));
+    public string DefaultNamespace => Advanced.Properties.GetValueOrDefault("RootNamespace")?.DefaultValue;
+    public string AssemblyName => Advanced.Properties.GetValueOrDefault("AssemblyName")?.DefaultValue;
+    public Version TargetFrameworkVersion
+    {
+      get
+      {
+        var targetFrameworkVersion = Advanced.Properties.GetValueOrDefault("TargetFrameworkVersion")?.DefaultValue;
+        return targetFrameworkVersion != null ? Version.Parse(targetFrameworkVersion.TrimStart('v')) : null;
+      }
+    }
 
     public ProjectOutputType OutputType
-      => Advanced.Properties.GetPropertyValueOrNull("OutputType") == "Exe" ? ProjectOutputType.Executable : ProjectOutputType.Library;
+      => Advanced.Properties.GetValueOrDefault("OutputType")?.DefaultValue == "Exe" ? ProjectOutputType.Executable : ProjectOutputType.Library;
 
     public IReadOnlyCollection<NuGetPackage> NuGetPackages { get; }
 

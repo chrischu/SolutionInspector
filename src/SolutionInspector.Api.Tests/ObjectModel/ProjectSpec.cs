@@ -10,6 +10,7 @@ using Machine.Specifications;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -66,192 +67,132 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.TargetFrameworkVersion.Should().Be(Version.Parse("4.6.1"));
         Result.Identifier.Should().Be($"{ProjectName}.csproj");
         Result.FullPath.Should().Be(projectPath);
-        Result.BuildConfigurations.ShouldAllBeEquivalentTo(
-            new[]
-            {
-                new BuildConfiguration("Debug", "AnyCPU"),
-                new BuildConfiguration("Release", "AnyCPU")
-            });
+        Result.BuildConfigurations.ShouldAllBeEquivalentTo(new BuildConfiguration("Debug", "AnyCPU"), new BuildConfiguration("Release", "AnyCPU"));
       };
 
       It parses_unconditional_properties = () =>
       {
         // We only need to check one exemplary property.
-        Result.Advanced.Properties.Single(p => p.Name == "FileAlignment").ShouldBeEquivalentTo(
-            new
-            {
-                Name = "FileAlignment",
-                Value = "512",
-                Location = new ProjectLocation(13, 5)
-            });
+        Result.Advanced.Properties["FileAlignment"].ShouldBeEquivalentTo(
+            new ProjectProperty("FileAlignment", "512") { new ProjectPropertyOccurrence("512", null, new ProjectLocation(13, 5)) });
       };
 
       It parses_build_configuration_dependent_properties = () =>
       {
         const string propertyName = "DependentOnConfiguration";
 
-        Result.Advanced.ConditionalProperties.Single(p => p.Name == propertyName).ShouldBeEquivalentTo(
-            new
+        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+            new ProjectProperty(propertyName, "LOL")
             {
-                Name = propertyName,
-                Values = new[]
-                         {
-                             new
-                             {
-                                 Condition = new { Self = " '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ", Parent = (string) null },
-                                 Value = "LOL"
-                             }
-                         },
-                Location = new ProjectLocation(21, 5)
+                new ProjectPropertyOccurrence(
+                    "LOL",
+                    new ProjectPropertyCondition(" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ", null),
+                    new ProjectLocation(24, 5))
             });
 
-        var debugProperties = Result.Advanced.GetPropertiesBasedOnCondition(new BuildConfiguration("Debug", "AnyCPU"));
-        debugProperties.Single(p => p.Name == propertyName).Value.Should().Be("LOL");
+        var debugProperties = Result.Advanced.EvaluateProperties(new BuildConfiguration("Debug", "AnyCPU"));
+        debugProperties[propertyName].Value.Should().Be("LOL");
 
-        var releaseProperties = Result.Advanced.GetPropertiesBasedOnCondition(new BuildConfiguration("Release", "AnyCPU"));
-        releaseProperties.Any(p => p.Name == propertyName).Should().BeFalse();
+        var releaseProperties = Result.Advanced.EvaluateProperties(new BuildConfiguration("Release", "AnyCPU"));
+        releaseProperties.ShouldNotContainKey(propertyName);
       };
 
       It parses_property_dependent_properties = () =>
       {
         const string propertyName = "DependentOnProperty";
 
-        Result.Advanced.ConditionalProperties.Single(p => p.Name == propertyName).ShouldBeEquivalentTo(
-            new
+        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+            new ProjectProperty(propertyName, "")
             {
-                Name = propertyName,
-                Values = new[]
-                         {
-                             new
-                             {
-                                 Condition = new { Self = " '$(Property)' == 'true' ", Parent = (string) null },
-                                 Value = "ROFL"
-                             }
-                         },
-                Location = new ProjectLocation(22, 5)
+                new ProjectPropertyOccurrence(
+                    "ROFL",
+                    new ProjectPropertyCondition(" '$(Property)' == 'true' ", null),
+                    new ProjectLocation(25, 5))
             });
 
         var propertiesBasedOnTrueCondition =
-            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Property", "true" } });
-        propertiesBasedOnTrueCondition.Single(p => p.Name == propertyName).Value.Should().Be("ROFL");
+            Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Property", "true" } });
+        propertiesBasedOnTrueCondition[propertyName].Value.Should().Be("ROFL");
 
         var propertiesBasedOnFalseCondition =
-            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Property", "false" } });
-        propertiesBasedOnFalseCondition.Any(p => p.Name == propertyName).Should().BeFalse();
+            Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Property", "false" } });
+        propertiesBasedOnFalseCondition.ShouldNotContainKey(propertyName);
       };
 
       It parses_property_without_condition_but_with_conditional_parent = () =>
       {
         const string propertyName = "ConditionFromParent";
 
-        Result.Advanced.ConditionalProperties.Single(p => p.Name == propertyName).ShouldBeEquivalentTo(
-            new
+        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+            new ProjectProperty(propertyName, "")
             {
-                Name = propertyName,
-                Values = new[]
-                         {
-                             new
-                             {
-                                 Condition = new { Self = (string) null, Parent = " '$(Parent)' == 'true' " },
-                                 Value = "QWER"
-                             }
-                         },
-                Location = new ProjectLocation(25, 5)
+                new ProjectPropertyOccurrence("QWER", new ProjectPropertyCondition(null, " '$(Parent)' == 'true' "), new ProjectLocation(28, 5))
             });
 
         var propertiesBasedOnTrueCondition =
-            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "true" } });
-        propertiesBasedOnTrueCondition.Single(p => p.Name == propertyName).Value.Should().Be("QWER");
+            Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "true" } });
+        propertiesBasedOnTrueCondition[propertyName].Value.Should().Be("QWER");
 
         var propertiesBasedOnFalseCondition =
-            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "false" } });
-        propertiesBasedOnFalseCondition.Any(p => p.Name == propertyName).Should().BeFalse();
+            Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "false" } });
+        propertiesBasedOnFalseCondition.ShouldNotContainKey(propertyName);
       };
 
       It parses_property_with_condition_and_with_conditional_parent = () =>
       {
         const string propertyName = "ConditionFromSelf";
 
-        Result.Advanced.ConditionalProperties.Single(p => p.Name == propertyName).ShouldBeEquivalentTo(
-            new
+        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+            new ProjectProperty(propertyName, "")
             {
-                Name = propertyName,
-                Values = new[]
-                         {
-                             new
-                             {
-                                 Condition = new { Self = " '$(Self)' == 'true' ", Parent = " '$(Parent)' == 'true' " },
-                                 Value = "ASDF"
-                             }
-                         },
-                Location = new ProjectLocation(26, 5)
+                new ProjectPropertyOccurrence(
+                    "ASDF",
+                    new ProjectPropertyCondition(" '$(Self)' == 'true' ", " '$(Parent)' == 'true' "),
+                    new ProjectLocation(29, 5))
             });
 
         var propertiesBasedOnTrueCondition =
-            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "true" } });
-        propertiesBasedOnTrueCondition.Single(p => p.Name == propertyName).Value.Should().Be("ASDF");
+            Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "true" } });
+        propertiesBasedOnTrueCondition[propertyName].Value.Should().Be("ASDF");
 
         var propertiesBasedOnFalseCondition1 =
-            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "false" } });
-        propertiesBasedOnFalseCondition1.Any(p => p.Name == propertyName).Should().BeFalse();
+            Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "false" } });
+        propertiesBasedOnFalseCondition1.ShouldNotContainKey(propertyName);
 
         var propertiesBasedOnFalseCondition2 =
-            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "false" } });
-        propertiesBasedOnFalseCondition2.Any(p => p.Name == propertyName).Should().BeFalse();
+            Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "false" } });
+        propertiesBasedOnFalseCondition2.ShouldNotContainKey(propertyName);
       };
 
       It parses_property_that_is_contained_more_than_once_with_differing_conditions = () =>
       {
         const string propertyName = "Multiple";
 
-        Result.Advanced.ConditionalProperties.Single(p => p.Name == propertyName).ShouldBeEquivalentTo(
-            new
+        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+            new ProjectProperty(propertyName, "")
             {
-                Name = propertyName,
-                Values = new[]
-                         {
-                             new
-                             {
-                                 Condition = new { Self = " '$(Value)' == '3'", Parent = (string) null },
-                                 Value = "Three"
-                             },
-                             new
-                             {
-                                 Condition = new { Self = " '$(Value)' == '5'", Parent = (string) null },
-                                 Value = "Five"
-                             }
-                         },
-                Location = new ProjectLocation(29, 5)
+                new ProjectPropertyOccurrence("Three", new ProjectPropertyCondition(" '$(Value)' == '3'", null), new ProjectLocation(32, 5)),
+                new ProjectPropertyOccurrence("Five", new ProjectPropertyCondition(" '$(Value)' == '5'", null), new ProjectLocation(33, 5))
             });
-
+       
         var propertiesBasedOnFirstValue =
-            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Value", "3" } });
-        propertiesBasedOnFirstValue.Single(p => p.Name == propertyName).Value.Should().Be("Three");
+            Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Value", "3" } });
+        propertiesBasedOnFirstValue[propertyName].Value.Should().Be("Three");
 
         var propertiesBasedOnSecondValue =
-            Result.Advanced.GetPropertiesBasedOnCondition(new Dictionary<string, string> { { "Value", "5" } });
-        propertiesBasedOnSecondValue.Single(p => p.Name == propertyName).Value.Should().Be("Five");
+            Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Value", "5" } });
+        propertiesBasedOnSecondValue[propertyName].Value.Should().Be("Five");
       };
 
       It parses_duplicate_property = () =>
       {
         const string propertyName = "Duplicate";
 
-        Result.Advanced.Properties.Where(p => p.Name == propertyName).ShouldAllBeEquivalentTo(
-            new[]
+        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+            new ProjectProperty(propertyName, "2")
             {
-                new
-                {
-                    Name = propertyName,
-                    Value = "1",
-                    Location = new ProjectLocation(17, 5)
-                },
-                new
-                {
-                    Name = propertyName,
-                    Value = "2",
-                    Location = new ProjectLocation(18, 5)
-                }
+                new ProjectPropertyOccurrence("1", null, new ProjectLocation(20, 5)),
+                new ProjectPropertyOccurrence("2", null, new ProjectLocation(21, 5))
             });
       };
 
@@ -318,7 +259,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         var packagesConfigPath = Path.Combine(Path.GetDirectoryName(projectPath).AssertNotNull(), "packages.config");
         Result.NuGetPackagesFile.FullName.Should().Be(packagesConfigPath);
 
-        Result.NuGetPackages.ShouldAllBeEquivalentTo(new[] { ReferencedNuGetPackage1, ReferencedNuGetPackage2 });
+        Result.NuGetPackages.ShouldAllBeEquivalentTo(ReferencedNuGetPackage1, ReferencedNuGetPackage2);
       };
 
       It parses_project_references = () =>

@@ -110,8 +110,8 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => AdvancedProject.GetPropertiesBasedOnCondition(BuildConfiguration1, null))
-            .Returns(new IProjectProperty[0]);
+        A.CallTo(() => AdvancedProject.EvaluateProperties(BuildConfiguration1, null))
+            .Returns(new Dictionary<string, IEvaluatedProjectPropertyValue>());
       };
 
       Because of = () => Result = SUT.Evaluate(Project);
