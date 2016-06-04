@@ -34,7 +34,7 @@ namespace SolutionInspector.Api.ObjectModel
     }
 
     public ProjectLocation (ProjectElement projectElement)
-      :this(projectElement.Location.Line, projectElement.Location.Column)
+        : this(projectElement.Location.Line, projectElement.Location.Column)
     {
     }
 

@@ -24,7 +24,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (RequiredNuGetPackagesRule))]
+  [Subject (typeof(RequiredNuGetPackagesRule))]
   class RequiredNuGetPackagesRuleSpec
   {
     static IProject Project;

@@ -31,7 +31,7 @@ using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
-  [Subject (typeof (RuleCollectionBuilder))]
+  [Subject (typeof(RuleCollectionBuilder))]
   class RuleCollectionBuilderSpec
   {
     static IRuleTypeResolver RuleTypeResolver;
@@ -45,7 +45,7 @@ namespace SolutionInspector.Api.Tests.Rules
       RuleConfigurationInstantiator = A.Fake<IRuleConfigurationInstantiator>();
 
       A.CallTo(() => RuleTypeResolver.Resolve(A<string>._))
-          .Returns(new RuleTypeInfo(typeof (Rule), null, typeof (Rule).GetConstructors().Single()));
+          .Returns(new RuleTypeInfo(typeof(Rule), null, typeof(Rule).GetConstructors().Single()));
 
       SUT = new RuleCollectionBuilder(RuleTypeResolver, RuleConfigurationInstantiator);
     };
@@ -137,7 +137,7 @@ namespace SolutionInspector.Api.Tests.Rules
     static void AssertProjectRuleProxy<TRule> (IRule rule, string include, string exclude = null)
     {
       var projectRuleProxyType =
-          typeof (RuleCollectionBuilder).GetNestedTypes(BindingFlags.NonPublic).Single(t => t.Name == "FilteringProjectRuleProxy");
+          typeof(RuleCollectionBuilder).GetNestedTypes(BindingFlags.NonPublic).Single(t => t.Name == "FilteringProjectRuleProxy");
       rule.Should().BeOfType(projectRuleProxyType);
 
       rule.GetFieldValue("_rule").Should().BeOfType<TRule>();
@@ -157,7 +157,7 @@ namespace SolutionInspector.Api.Tests.Rules
     static void AssertProjectItemRuleProxy<TRule> (IRule rule, string appliesTo, string inProject)
     {
       var projectRuleProxyType =
-          typeof (RuleCollectionBuilder).GetNestedTypes(BindingFlags.NonPublic).Single(t => t.Name == "FilteringProjectItemRuleProxy");
+          typeof(RuleCollectionBuilder).GetNestedTypes(BindingFlags.NonPublic).Single(t => t.Name == "FilteringProjectItemRuleProxy");
       rule.Should().BeOfType(projectRuleProxyType);
 
       rule.GetFieldValue("_rule").Should().BeOfType<TRule>();

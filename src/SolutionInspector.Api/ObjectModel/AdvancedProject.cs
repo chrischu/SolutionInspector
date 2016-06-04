@@ -29,16 +29,16 @@ namespace SolutionInspector.Api.ObjectModel
     IReadOnlyDictionary<string, IProjectProperty> Properties { get; }
 
     /// <summary>
-    /// Evaluates all the properties with the given <paramref name="configuration"/> and <paramref name="propertyValues"/>.
-    /// Only properties with a true <see cref="IProjectPropertyCondition"/> are included.
+    ///   Evaluates all the properties with the given <paramref name="configuration" /> and <paramref name="propertyValues" />.
+    ///   Only properties with a true <see cref="IProjectPropertyCondition" /> are included.
     /// </summary>
     IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (
         BuildConfiguration configuration,
         Dictionary<string, string> propertyValues = null);
 
     /// <summary>
-    /// Evaluates all the properties with the given <paramref name="propertyValues"/>.
-    /// Only properties with a true <see cref="IProjectPropertyCondition"/> are included.
+    ///   Evaluates all the properties with the given <paramref name="propertyValues" />.
+    ///   Only properties with a true <see cref="IProjectPropertyCondition" /> are included.
     /// </summary>
     IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (Dictionary<string, string> propertyValues);
   }
@@ -73,13 +73,13 @@ namespace SolutionInspector.Api.ObjectModel
 
       return new ReadOnlyDictionary<string, IProjectProperty>(result.ToDictionary(x => x.Key, x => (IProjectProperty) x.Value));
     }
-    
+
     public ProjectInSolution MsBuildProjectInSolution { get; }
     public Microsoft.Build.Evaluation.Project MsBuildProject { get; }
 
     public IReadOnlyDictionary<string, IProjectProperty> Properties { get; }
 
-    public IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties(
+    public IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (
         BuildConfiguration configuration,
         Dictionary<string, string> propertyValues = null)
     {
@@ -89,7 +89,7 @@ namespace SolutionInspector.Api.ObjectModel
       return EvaluateProperties(propertyValues);
     }
 
-    public IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties(Dictionary<string, string> propertyValues = null)
+    public IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (Dictionary<string, string> propertyValues = null)
     {
       var result = new Dictionary<string, IEvaluatedProjectPropertyValue>();
 

@@ -50,7 +50,7 @@ namespace SolutionInspector.Api.Rules
       if (ruleType == null)
         throw new RuleTypeResolvingException($"Could not resolve rule type '{ruleTypeName}'.");
 
-      if (!typeof (IRule).IsAssignableFrom(ruleType))
+      if (!typeof(IRule).IsAssignableFrom(ruleType))
         throw new RuleTypeResolvingException($"The type '{ruleType.Name}' is not a valid rule type.");
 
       return ruleType;
@@ -58,11 +58,11 @@ namespace SolutionInspector.Api.Rules
 
     private Type ResolveConfigurationType (Type ruleType)
     {
-      if (!typeof (IConfigurableRule).IsAssignableFrom(ruleType))
+      if (!typeof(IConfigurableRule).IsAssignableFrom(ruleType))
         return null;
 
       return ruleType.GetInterfaces()
-          .Single(i => i.IsConstructedGenericType && i.GetGenericTypeDefinition() == typeof (IConfigurableRule<,>))
+          .Single(i => i.IsConstructedGenericType && i.GetGenericTypeDefinition() == typeof(IConfigurableRule<,>))
           .GenericTypeArguments[1];
     }
   }

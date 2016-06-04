@@ -24,7 +24,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectShouldNotContainProjectItemsWithDuplicateIncludesRule))]
+  [Subject (typeof(ProjectShouldNotContainProjectItemsWithDuplicateIncludesRule))]
   class ProjectShouldNotContainProjectItemsWithDuplicateIncludesRuleSpec
   {
     static IProject Project;

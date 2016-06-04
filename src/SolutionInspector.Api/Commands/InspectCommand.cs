@@ -113,8 +113,8 @@ namespace SolutionInspector.Api.Commands
         foreach (var projectRule in rules.ProjectRules)
           ruleViolations.AddRange(projectRule.Evaluate(project));
         s_logger.Info(
-          $"Finished checking for project rule violations in project '{project.FullPath}': " +
-          $"Found {ruleViolations.Count - previousViolationCount} violations.");
+            $"Finished checking for project rule violations in project '{project.FullPath}': " +
+            $"Found {ruleViolations.Count - previousViolationCount} violations.");
       }
 
       foreach (var project in solution.Projects)
@@ -130,8 +130,8 @@ namespace SolutionInspector.Api.Commands
         }
 
         s_logger.Info(
-          $"Finished checking for project item rule violations in project '{project.FullPath}': " +
-          $"Found {ruleViolations.Count - previousViolationCount} violations.");
+            $"Finished checking for project item rule violations in project '{project.FullPath}': " +
+            $"Found {ruleViolations.Count - previousViolationCount} violations.");
       }
 
       s_logger.Info(

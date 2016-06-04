@@ -22,17 +22,17 @@ namespace SolutionInspector.Api.ObjectModel
   public interface IProjectProperty
   {
     /// <summary>
-    /// The property's name.
+    ///   The property's name.
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    /// The property's value given all other properties have their default values.
+    ///   The property's value given all other properties have their default values.
     /// </summary>
     string DefaultValue { get; }
 
     /// <summary>
-    /// The property's (possibly multiple) occurrences.
+    ///   The property's (possibly multiple) occurrences.
     /// </summary>
     IReadOnlyCollection<IProjectPropertyOccurrence> Occurrences { get; }
   }

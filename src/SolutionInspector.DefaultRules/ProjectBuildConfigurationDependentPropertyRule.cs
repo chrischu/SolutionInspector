@@ -52,7 +52,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Controlls in which build configurations the <see cref="Property" /> is checked against the <see cref="ExpectedValue" />.
     /// </summary>
-    [TypeConverter (typeof (BuildConfigurationFilterConverter))]
+    [TypeConverter (typeof(BuildConfigurationFilterConverter))]
     [ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
     public BuildConfigurationFilter BuildConfigurationFilter
     {

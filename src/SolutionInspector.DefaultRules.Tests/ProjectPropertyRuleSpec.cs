@@ -24,7 +24,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectPropertyRule))]
+  [Subject (typeof(ProjectPropertyRule))]
   class ProjectPropertyRuleSpec
   {
     static IProject Project;

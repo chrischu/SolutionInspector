@@ -22,7 +22,7 @@ using SolutionInspector.Api.Utilities;
 
 namespace SolutionInspector.Api.Tests.Utilities
 {
-  [Subject (typeof (CollectionDifferenceFinder))]
+  [Subject (typeof(CollectionDifferenceFinder))]
   class CollectionDifferenceFinderSpec
   {
     static IEnumerable<int> Collection1;

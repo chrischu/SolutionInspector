@@ -24,7 +24,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (NuGetPackagesShouldHaveOneVersionAcrossSolutionRule))]
+  [Subject (typeof(NuGetPackagesShouldHaveOneVersionAcrossSolutionRule))]
   class NuGetPackagesShouldHaveOneVersionAcrossSolutionRuleSpec
   {
     static ISolution Solution;

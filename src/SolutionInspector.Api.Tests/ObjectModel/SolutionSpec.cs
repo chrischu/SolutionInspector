@@ -27,7 +27,7 @@ using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.Api.Tests.ObjectModel
 {
-  [Subject (typeof (Solution))]
+  [Subject (typeof(Solution))]
   class SolutionSpec
   {
     static string SolutionPath;

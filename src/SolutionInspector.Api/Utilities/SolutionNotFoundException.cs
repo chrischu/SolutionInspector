@@ -13,7 +13,7 @@ namespace SolutionInspector.Api.Utilities
     /// <summary>
     ///   Creates a new <see cref="SolutionNotFoundException" />
     /// </summary>
-    public SolutionNotFoundException(string solutionPath, Exception innerException = null)
+    public SolutionNotFoundException (string solutionPath, Exception innerException = null)
         : base($"Could not find solution file at '{solutionPath}'.", innerException)
     {
     }
@@ -22,7 +22,7 @@ namespace SolutionInspector.Api.Utilities
     ///   Serialization constructor.
     /// </summary>
     [ExcludeFromCodeCoverage /* Serialization ctor */]
-    protected SolutionNotFoundException(SerializationInfo info, StreamingContext context)
+    protected SolutionNotFoundException (SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

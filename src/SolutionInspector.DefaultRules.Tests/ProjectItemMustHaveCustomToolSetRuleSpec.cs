@@ -25,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectItemMustHaveCustomToolSetRule))]
+  [Subject (typeof(ProjectItemMustHaveCustomToolSetRule))]
   class ProjectItemMustHaveCustomToolSetRuleSpec
   {
     static IProjectItem ProjectItem;

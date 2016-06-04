@@ -12,7 +12,7 @@ namespace SolutionInspector.DefaultRules
   public class ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule : ProjectRule
   {
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate(IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       return target.Advanced.Properties.Values.Where(p => p.Occurrences.Count > 1).Select(
           property => new RuleViolation(

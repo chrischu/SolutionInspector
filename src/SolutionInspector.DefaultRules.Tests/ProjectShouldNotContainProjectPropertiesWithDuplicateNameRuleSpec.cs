@@ -25,7 +25,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule))]
+  [Subject (typeof(ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule))]
   class ProjectShouldNotContainProjectPropertiesWithDuplicateNameRuleSpec
   {
     static IAdvancedProject AdvancedProject;

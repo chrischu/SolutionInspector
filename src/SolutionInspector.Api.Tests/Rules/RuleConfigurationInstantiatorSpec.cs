@@ -24,7 +24,7 @@ using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
-  [Subject (typeof (RuleConfigurationInstantiator))]
+  [Subject (typeof(RuleConfigurationInstantiator))]
   class RuleConfigurationInstantiatorSpec
   {
     static string AssemblyName;
@@ -48,10 +48,10 @@ namespace SolutionInspector.Api.Tests.Rules
         Configuration = (XmlElement) doc.FirstChild;
       };
 
-      Because of = () => Result = SUT.Instantiate(typeof (RuleConfiguration), Configuration);
+      Because of = () => Result = SUT.Instantiate(typeof(RuleConfiguration), Configuration);
 
       It returns_correct_type = () =>
-          Result.Should().BeOfType(typeof (RuleConfiguration));
+          Result.Should().BeOfType(typeof(RuleConfiguration));
 
       It sets_property = () =>
           Result.As<RuleConfiguration>().Property.Should().Be("value");

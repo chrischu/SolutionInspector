@@ -72,7 +72,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Filter that controlls which build configuration this <see cref="RequiredCompilationSymbolsConfigurationElement" /> applies to.
     /// </summary>
-    [TypeConverter (typeof (BuildConfigurationFilterConverter))]
+    [TypeConverter (typeof(BuildConfigurationFilterConverter))]
     [ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
@@ -83,7 +83,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   All the compilation symbols that are required and are therefore checked.
     /// </summary>
-    [TypeConverter (typeof (CommaDelimitedStringCollectionConverter))]
+    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("requiredCompilationSymbols", DefaultValue = "", IsRequired = true)]
     public CommaDelimitedStringCollection RequiredCompilationSymbols
     {

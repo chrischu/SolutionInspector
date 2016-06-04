@@ -25,7 +25,7 @@ namespace SolutionInspector.DefaultRules
     {
       var result = target.ProjectXml.XPathEvaluate(Configuration.XPath);
 
-      if (result.GetType() != typeof (bool))
+      if (result.GetType() != typeof(bool))
         throw new InvalidXPathExpressionException(Configuration.XPath);
 
       var boolResult = (bool) result;

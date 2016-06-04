@@ -26,22 +26,22 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
-  [Subject (typeof (RuleTypeUtility))]
+  [Subject (typeof(RuleTypeUtility))]
   class RuleTypeUtilitySpec
   {
     class when_getting_configuration_type_from_non_rule_type
     {
-      Because of = () => Exception = Catch.Exception(() => RuleTypeUtility.GetConfigurationType(typeof (object)));
+      Because of = () => Exception = Catch.Exception(() => RuleTypeUtility.GetConfigurationType(typeof(object)));
 
       It throws = () =>
-          Exception.Should().BeArgumentException($"Given type '{typeof (object)}' is not a valid rule type.", "ruleType");
+          Exception.Should().BeArgumentException($"Given type '{typeof(object)}' is not a valid rule type.", "ruleType");
 
       static Exception Exception;
     }
 
     class when_getting_configuration_type_from_non_configurable_rule_type
     {
-      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof (Rule));
+      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof(Rule));
 
       It returns_null = () =>
           Result.Should().BeNull();
@@ -51,20 +51,20 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_getting_configuration_type_from_configurable_rule_type
     {
-      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof (ConfigurableRule));
+      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof(ConfigurableRule));
 
       It returns_configuration_type = () =>
-          Result.Should().Be(typeof (ConfigurableRuleConfiguration));
+          Result.Should().Be(typeof(ConfigurableRuleConfiguration));
 
       static Type Result;
     }
 
     class when_getting_configuration_type_from_indirectly_configurable_rule_type
     {
-      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof (IndirectlyConfigurableRule));
+      Because of = () => Result = RuleTypeUtility.GetConfigurationType(typeof(IndirectlyConfigurableRule));
 
       It returns_configuration_type = () =>
-          Result.Should().Be(typeof (ConfigurableRuleConfiguration));
+          Result.Should().Be(typeof(ConfigurableRuleConfiguration));
 
       static Type Result;
     }

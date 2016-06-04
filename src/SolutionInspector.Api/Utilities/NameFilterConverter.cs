@@ -21,8 +21,8 @@ namespace SolutionInspector.Api.Utilities
       if (value == null)
         return null;
 
-      if (value.GetType() != typeof (NameFilterConverter))
-        throw new ArgumentException($"Unsupported type '{value.GetType()}', expected type '{typeof (NameFilterConverter)}'.", nameof(value));
+      if (value.GetType() != typeof(NameFilterConverter))
+        throw new ArgumentException($"Unsupported type '{value.GetType()}', expected type '{typeof(NameFilterConverter)}'.", nameof(value));
 
       return value.ToString();
     }

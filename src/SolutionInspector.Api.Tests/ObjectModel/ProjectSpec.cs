@@ -30,7 +30,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.ObjectModel
 {
-  [Subject (typeof (Project))]
+  [Subject (typeof(Project))]
   class ProjectSpec
   {
     static string SolutionPath;
@@ -174,7 +174,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
                 new ProjectPropertyOccurrence("Three", new ProjectPropertyCondition(" '$(Value)' == '3'", null), new ProjectLocation(32, 5)),
                 new ProjectPropertyOccurrence("Five", new ProjectPropertyCondition(" '$(Value)' == '5'", null), new ProjectLocation(33, 5))
             });
-       
+
         var propertiesBasedOnFirstValue =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Value", "3" } });
         propertiesBasedOnFirstValue[propertyName].Value.Should().Be("Three");

@@ -24,7 +24,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (AllProjectItemsMustBePresentRule))]
+  [Subject (typeof(AllProjectItemsMustBePresentRule))]
   class AllProjectItemsMustBePresentRuleSpec
   {
     static IProjectItemInclude ProjectItemInclude;

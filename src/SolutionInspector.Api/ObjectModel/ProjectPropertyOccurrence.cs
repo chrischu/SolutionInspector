@@ -53,7 +53,7 @@ namespace SolutionInspector.Api.ObjectModel
     private static ProjectPropertyCondition CreateCondition (ProjectPropertyElement property)
     {
       var condition = new ProjectPropertyCondition(property);
-      if(condition.Parent != null || condition.Self != null)
+      if (condition.Parent != null || condition.Self != null)
         return condition;
 
       return null;

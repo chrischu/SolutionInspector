@@ -24,7 +24,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectMustProvideXmlDocumentationRule))]
+  [Subject (typeof(ProjectMustProvideXmlDocumentationRule))]
   class ProjectMustProvideXmlDocumentationRuleSpec
   {
     static string ProjectAssemblyName;

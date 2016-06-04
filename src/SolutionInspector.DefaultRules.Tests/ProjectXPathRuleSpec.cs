@@ -27,7 +27,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectXPathRule))]
+  [Subject (typeof(ProjectXPathRule))]
   class ProjectXPathRuleSpec
   {
     static IProject Project;

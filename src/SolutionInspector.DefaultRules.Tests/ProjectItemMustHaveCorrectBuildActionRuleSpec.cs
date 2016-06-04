@@ -24,7 +24,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectItemMustHaveCorrectBuildActionRule))]
+  [Subject (typeof(ProjectItemMustHaveCorrectBuildActionRule))]
   class ProjectItemMustHaveCorrectBuildActionRuleSpec
   {
     static IProjectItem ProjectItem;

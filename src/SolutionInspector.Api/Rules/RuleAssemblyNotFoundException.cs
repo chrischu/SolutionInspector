@@ -22,7 +22,7 @@ namespace SolutionInspector.Api.Rules
     ///   Serialization constructor.
     /// </summary>
     [ExcludeFromCodeCoverage /* Serialization ctor */]
-    protected RuleAssemblyNotFoundException(SerializationInfo info, StreamingContext context)
+    protected RuleAssemblyNotFoundException (SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

@@ -17,7 +17,7 @@ namespace SolutionInspector.Api.Utilities
     }
 
     // ReSharper disable once UnusedMember.Global
-    public static int GetHashCode(params object[] objects)
+    public static int GetHashCode (params object[] objects)
     {
       return GetHashCode(objects.Select(o => o.GetHashCode()).ToArray());
     }

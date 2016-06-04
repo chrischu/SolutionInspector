@@ -25,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.Utilities
 {
-  [Subject (typeof (SolutionLoader))]
+  [Subject (typeof(SolutionLoader))]
   class SolutionLoaderSpec
   {
     static IFile File;

@@ -205,6 +205,7 @@ namespace SolutionInspector.Api.ObjectModel
 
     public string DefaultNamespace => Advanced.Properties.GetValueOrDefault("RootNamespace")?.DefaultValue;
     public string AssemblyName => Advanced.Properties.GetValueOrDefault("AssemblyName")?.DefaultValue;
+
     public Version TargetFrameworkVersion
     {
       get

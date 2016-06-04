@@ -49,7 +49,7 @@ namespace SolutionInspector.DefaultRules.Tests
       var projectProperty = A.Fake<IProjectProperty>();
       A.CallTo(() => projectProperty.Name).Returns(property);
       A.CallTo(() => projectProperty.DefaultValue).Returns(value);
-      
+
       A.CallTo(() => advancedProject.Properties)
           .Returns(new Dictionary<string, IProjectProperty> { { property, projectProperty } });
     }

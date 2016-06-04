@@ -27,7 +27,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (SolutionBuildConfigurationsRule))]
+  [Subject (typeof(SolutionBuildConfigurationsRule))]
   class SolutionBuildConfigurationsRuleSpec
   {
     static ISolution Solution;

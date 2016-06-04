@@ -27,7 +27,7 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.Api.Tests.Configuration.Rules
 {
-  [Subject (typeof (ProjectConfigRuleBase<>))]
+  [Subject (typeof(ProjectConfigRuleBase<>))]
   class ProjectConfigRuleBaseSpec
   {
     static DummyProjectConfigRule SUT;

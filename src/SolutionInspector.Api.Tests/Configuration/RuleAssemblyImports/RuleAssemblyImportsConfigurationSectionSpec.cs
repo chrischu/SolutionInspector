@@ -23,7 +23,7 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Configuration.RuleAssemblyImports
 {
-  [Subject (typeof (RuleAssemblyImportsConfigurationSection))]
+  [Subject (typeof(RuleAssemblyImportsConfigurationSection))]
   class RuleAssemblyImportsConfigurationSectionSpec
   {
     static IRuleAssemblyImportsConfiguration SUT;

@@ -17,7 +17,7 @@ namespace SolutionInspector.Api.Utilities
     bool IsMatch (string name);
   }
 
-  [TypeConverter (typeof (NameFilterConverter))]
+  [TypeConverter (typeof(NameFilterConverter))]
   internal class NameFilter : INameFilter
   {
     private readonly Regex[] _includeFilters;

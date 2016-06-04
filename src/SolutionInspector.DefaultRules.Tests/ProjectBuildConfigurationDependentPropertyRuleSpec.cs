@@ -26,7 +26,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof (ProjectBuildConfigurationDependentPropertyRule))]
+  [Subject (typeof(ProjectBuildConfigurationDependentPropertyRule))]
   class ProjectBuildConfigurationDependentPropertyRuleSpec
   {
     static IProject Project;
@@ -73,10 +73,11 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_property_with_same_value
     {
-      Establish ctx = () =>
-      {
-        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, ExpectedValue);
-      };
+      Establish ctx =
+          () =>
+          {
+            ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, ExpectedValue);
+          };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -88,10 +89,11 @@ namespace SolutionInspector.DefaultRules.Tests
 
     class when_evaluating_property_with_different_value
     {
-      Establish ctx = () =>
-      {
-        ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, "ActualValue");
-      };
+      Establish ctx =
+          () =>
+          {
+            ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, "ActualValue");
+          };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
