@@ -54,12 +54,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="SystemInterface, Version=0.10.1.44, Culture=neutral, PublicKeyToken=fbc3a63dd3cf8960, processorArchitecture=MSIL">
-      <HintPath>..\packages\SystemWrapper.Interfaces.0.10.1.44\lib\net45\SystemInterface.dll</HintPath>
+    <Reference Include="SystemInterface, Version=0.11.0.49, Culture=neutral, PublicKeyToken=fbc3a63dd3cf8960, processorArchitecture=MSIL">
+      <HintPath>..\packages\SystemWrapper.Interfaces.0.11.0.49\lib\net45\SystemInterface.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SystemWrapper, Version=0.10.1.44, Culture=neutral, PublicKeyToken=fbc3a63dd3cf8960, processorArchitecture=MSIL">
-      <HintPath>..\packages\SystemWrapper.Wrappers.0.10.1.44\lib\net45\SystemWrapper.dll</HintPath>
+    <Reference Include="SystemWrapper, Version=0.11.0.49, Culture=neutral, PublicKeyToken=fbc3a63dd3cf8960, processorArchitecture=MSIL">
+      <HintPath>..\packages\SystemWrapper.Wrappers.0.11.0.49\lib\net45\SystemWrapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
