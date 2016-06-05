@@ -15,7 +15,7 @@
               type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules" />
         <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.SolutionBuildConfigurationsRule, SolutionInspector.DefaultRules"
-              expectedConfigurations="Debug,Release" expectedPlatforms="AnyCPU" />
+              expectedConfigurations="Debug,Release" expectedPlatforms="Any CPU" />
       </solutionRules>
       <projectRules xdt:Transform="InsertIfMissing">
         <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)" appliesTo="*">
