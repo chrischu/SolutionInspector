@@ -25,11 +25,7 @@ namespace SolutionInspector.Api.Configuration.RuleAssemblyImports
 
     [UsedImplicitly]
     [ConfigurationProperty ("", IsRequired = true, IsKey = false, IsDefaultCollection = true)]
-    public RuleAssemblyImportsConfigurationCollection Imports
-    {
-      get { return (RuleAssemblyImportsConfigurationCollection) base[""]; }
-      set { base[""] = value; }
-    }
+    public RuleAssemblyImportsConfigurationCollection Imports => (RuleAssemblyImportsConfigurationCollection) base[""];
 
     IReadOnlyCollection<string> IRuleAssemblyImportsConfiguration.Imports => Imports.Select(i => i.Path).ToArray();
   }

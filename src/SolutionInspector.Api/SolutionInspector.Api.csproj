@@ -122,7 +122,6 @@
     <Compile Include="Configuration\Rules\ProjectItemRulesConfigurationCollection.cs" />
     <Compile Include="Configuration\Rules\ProjectItemRuleGroupConfigurationElement.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
-    <Compile Include="ObjectModel\ConditionalProjectPropertyValue.cs" />
     <Compile Include="ObjectModel\ConfigurationProjectItem.cs" />
     <Compile Include="ObjectModel\EvaluatedProjectPropertyValue.cs" />
     <Compile Include="ObjectModel\ProjectLocation.cs" />

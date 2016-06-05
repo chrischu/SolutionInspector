@@ -60,6 +60,24 @@ namespace SolutionInspector.Api.Tests.Rules
       static ConfigurationElement Result;
     }
 
+    class when_instantiating_with_null
+    {
+      Establish ctx = () =>
+      {
+        var doc = new XmlDocument();
+        doc.LoadXml(@"<rule property=""value"" />");
+        Configuration = (XmlElement)doc.FirstChild;
+      };
+
+      Because of = () => Result = SUT.Instantiate(null, Configuration);
+
+      It returns_null = () =>
+          Result.Should().BeNull();
+
+      static XmlElement Configuration;
+      static ConfigurationElement Result;
+    }
+
     class RuleConfiguration : ConfigurationElement
     {
       [ConfigurationProperty ("property", DefaultValue = "", IsRequired = true)]
