@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using SystemInterface.IO;
 using SystemInterface.Reflection;
 using SystemWrapper.IO;
@@ -34,8 +32,6 @@ namespace SolutionInspector.Api
     {
       s_logger.Debug($"SolutionInspector was run with the following arguments: [{string.Join(", ", args)}].");
 
-      CheckMsBuildToolsInstallation();
-
       using (var container = SetupContainer())
       {
         var ruleAssemblyLoader = container.Resolve<IRuleAssemblyLoader>();
@@ -47,26 +43,7 @@ namespace SolutionInspector.Api
       }
     }
 
-    private static void CheckMsBuildToolsInstallation ()
-    {
-      try
-      {
-        s_logger.Info("Checking for 'MSBuild Tools 2015'...");
-        Assembly.Load("Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-        s_logger.Info("Check successful, 'MSBuild Tools 2015' are installed.");
-      }
-      catch (FileNotFoundException)
-      {
-        Console.Error.WriteLine(
-            "Could not find MSBuild assemblies in version 14.0 this most likely means that 'MSBuild Tools 2015' was not installed.");
-        Console.Error.WriteLine("Just press any key to open a browser with the download page of the 'MSBuild Tools 2015'...");
-        Console.ReadKey();
-        Process.Start("https://www.microsoft.com/en-us/download/details.aspx?id=48159");
-        Environment.Exit(1);
-      }
-    }
-
-    private static IContainer SetupContainer ()
+   private static IContainer SetupContainer ()
     {
       var builder = new ContainerBuilder();
 
@@ -90,23 +67,21 @@ namespace SolutionInspector.Api
 
       builder.Register(
           ctx =>
-              new ConsoleTableWriter(
-                  Console.Out,
-                  new ConsoleTableWriterOptions { PreferredTableWidth = 200, Characters = ConsoleTableWriterCharacters.AdvancedAscii })
-          ).As<IConsoleTableWriter>();
+              new TableWriter(new TableWriterOptions { PreferredTableWidth = 200, Characters = ConsoleTableWriterCharacters.AdvancedAscii })
+          ).As<ITableWriter>();
 
       builder.Register(
-          ctx => new ViolationReporterProxy(
-              new Dictionary<ViolationReportFormat, IViolationReporter>
+          ctx => new ViolationReporterFactory(
+              new Dictionary<ViolationReportFormat, Func<TextWriter, IViolationReporter>>
               {
                   {
                       ViolationReportFormat.Table,
-                      new TableViolationReporter(ctx.Resolve<IRuleViolationViewModelConverter>(), ctx.Resolve<IConsoleTableWriter>())
+                      writer =>
+                      new TableViolationReporter(writer, ctx.Resolve<IRuleViolationViewModelConverter>(), ctx.Resolve<ITableWriter>())
                   },
-                  { ViolationReportFormat.Xml, new XmlViolationReporter(Console.Out, ctx.Resolve<IRuleViolationViewModelConverter>()) },
-                  { ViolationReportFormat.VisualStudio, new VisualStudioViolationReporter() }
-              }
-              )).As<IViolationReporterProxy>();
+                  { ViolationReportFormat.Xml, writer => new XmlViolationReporter(writer, ctx.Resolve<IRuleViolationViewModelConverter>()) },
+                  { ViolationReportFormat.VisualStudio, writer => new VisualStudioViolationReporter(writer) }
+              })).As<IViolationReporterFactory>();
 
       builder.RegisterType<InspectCommand>().As<ConsoleCommand>();
 

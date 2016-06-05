@@ -1,25 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
 
 namespace SolutionInspector.Api.Reporting
 {
-  internal class TableViolationReporter : IViolationReporter
+  internal class TableViolationReporter : ViolationReporterBase
   {
     private readonly IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
-    private readonly IConsoleTableWriter _tableWriter;
+    private readonly ITableWriter _tableWriter;
 
-    public TableViolationReporter (IRuleViolationViewModelConverter ruleViolationViewModelConverter, IConsoleTableWriter tableWriter)
+    public TableViolationReporter (TextWriter writer, IRuleViolationViewModelConverter ruleViolationViewModelConverter, ITableWriter tableWriter) : base(writer)
     {
       _ruleViolationViewModelConverter = ruleViolationViewModelConverter;
       _tableWriter = tableWriter;
     }
 
-    public void Report (IEnumerable<IRuleViolation> violations)
+    protected override void Report (TextWriter writer, IEnumerable<IRuleViolation> violations)
     {
       var violationModels = _ruleViolationViewModelConverter.Convert(violations);
-      _tableWriter.Write(violationModels, v => v.Index, v => v.Rule, v => v.Target, v => v.Message);
+      _tableWriter.Write(writer, violationModels, v => v.Index, v => v.Rule, v => v.Target, v => v.Message);
     }
   }
 }

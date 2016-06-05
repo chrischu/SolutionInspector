@@ -7,18 +7,16 @@ using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.Api.Reporting
 {
-  internal class XmlViolationReporter : IViolationReporter
+  internal class XmlViolationReporter : ViolationReporterBase
   {
-    private readonly TextWriter _outWriter;
     private readonly IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
 
-    public XmlViolationReporter (TextWriter outWriter, IRuleViolationViewModelConverter ruleViolationViewModelConverter)
+    public XmlViolationReporter (TextWriter writer, IRuleViolationViewModelConverter ruleViolationViewModelConverter) : base(writer)
     {
-      _outWriter = outWriter;
       _ruleViolationViewModelConverter = ruleViolationViewModelConverter;
     }
 
-    public void Report (IEnumerable<IRuleViolation> violations)
+    protected override void Report (TextWriter writer, IEnumerable<IRuleViolation> violations)
     {
       var violationModels = _ruleViolationViewModelConverter.Convert(violations);
 
@@ -37,7 +35,7 @@ namespace SolutionInspector.Api.Reporting
         vio.AddElement("message", violation.Message);
       }
 
-      doc.WriteTo(new XmlTextWriter(_outWriter) { Formatting = Formatting.Indented });
+      doc.WriteTo(new XmlTextWriter(writer) { Formatting = Formatting.Indented });
     }
   }
 }

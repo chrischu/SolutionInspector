@@ -17,6 +17,8 @@ using SolutionInspector.TestInfrastructure;
 
 #region R# preamble for Machine.Specifications files
 
+#pragma warning disable 414
+
 // ReSharper disable ArrangeTypeMemberModifiers
 // ReSharper disable ClassNeverInstantiated.Local
 // ReSharper disable InconsistentNaming
@@ -42,7 +44,8 @@ namespace SolutionInspector.Api.Tests.Commands
 
     static ISolutionLoader SolutionLoader;
     static IRuleCollectionBuilder RuleCollectionBuilder;
-    static IViolationReporterProxy ViolationReporterProxy;
+    static IViolationReporter ViolationReporter;
+    static IViolationReporterFactory ViolationReporterFactory;
 
     static ISolutionInspectorConfiguration Configuration;
     static IRulesConfiguration RulesConfiguration;
@@ -50,6 +53,8 @@ namespace SolutionInspector.Api.Tests.Commands
     static ISolutionRule SolutionRule;
     static IProjectRule ProjectRule;
     static IProjectItemRule ProjectItemRule;
+
+    static TextWriter TextWriter;
 
     static InspectCommand SUT;
 
@@ -77,9 +82,15 @@ namespace SolutionInspector.Api.Tests.Commands
       RulesConfiguration = A.Fake<IRulesConfiguration>();
       A.CallTo(() => Configuration.Rules).Returns(RulesConfiguration);
 
-      ViolationReporterProxy = A.Fake<IViolationReporterProxy>();
+      ViolationReporterFactory = A.Fake<IViolationReporterFactory>();
 
-      SUT = new InspectCommand(Configuration, SolutionLoader, RuleCollectionBuilder, ViolationReporterProxy);
+      ViolationReporter = A.Fake<IViolationReporter>();
+      A.CallTo(() => ViolationReporterFactory.CreateConsoleReporter(A<ViolationReportFormat>._)).Returns(ViolationReporter);
+      A.CallTo(() => ViolationReporterFactory.CreateFileReporter(A<ViolationReportFormat>._, A<string>._)).Returns(ViolationReporter);
+
+      TextWriter = new StringWriter();
+
+      SUT = new InspectCommand(Configuration, SolutionLoader, RuleCollectionBuilder, ViolationReporterFactory);
     };
 
     class when_running_without_violations
@@ -87,7 +98,7 @@ namespace SolutionInspector.Api.Tests.Commands
       Because of = () => Result = RunCommand(SUT, "solution");
 
       Behaves_like<it_executes_the_command_correctly> _;
-      Behaves_like<it_does_not_call_the_violation_reporter> __;
+      Behaves_like<it_does_not_create_a_violation_reporter> __;
 
       It returns_exit_code = () =>
           Result.Should().Be(0);
@@ -100,84 +111,141 @@ namespace SolutionInspector.Api.Tests.Commands
     {
       Establish ctx = () =>
       {
-        A.CallTo(() => SolutionRule.Evaluate(A<ISolution>._)).Returns(new[] { new RuleViolation(SolutionRule, Solution, Some.String()) });
-        A.CallTo(() => ProjectRule.Evaluate(A<IProject>._)).Returns(new[] { new RuleViolation(ProjectRule, Project, Some.String()) });
+        ExpectedReportFormat = ViolationReportFormat.Xml;
+        ExpectedViolations = SetupSomeViolations();
       };
 
       Because of = () => Result = RunCommand(SUT, "solution");
 
       Behaves_like<it_executes_the_command_correctly> _;
-      Behaves_like<it_does_not_call_the_violation_reporter> __;
+      Behaves_like<it_creates_and_calls_a_console_violation_reporter_with_the_expected_format> __;
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
 
       protected static string ExpectedConfigurationFile;
+      protected static ViolationReportFormat ExpectedReportFormat;
+      protected static IEnumerable<IRuleViolation> ExpectedViolations;
       static int Result;
     }
 
-    class when_running_with_violations_with_table_report
+    class when_running_with_violations_with_table_report_to_console
     {
       Establish ctx = () =>
       {
-        SolutionRuleViolation = new RuleViolation(SolutionRule, Solution, Some.String());
-        A.CallTo(() => SolutionRule.Evaluate(A<ISolution>._)).Returns(new[] { SolutionRuleViolation });
-
-        ProjectRuleViolation = new RuleViolation(ProjectRule, Project, Some.String());
-        A.CallTo(() => ProjectRule.Evaluate(A<IProject>._)).Returns(new[] { ProjectRuleViolation });
+        ExpectedReportFormat = ViolationReportFormat.Table;
+        ExpectedViolations = SetupSomeViolations();
       };
 
-      Because of = () => Result = RunCommand(SUT, "--report=Table", "solution");
+      Because of = () => Result = RunCommand(SUT, $"--reportFormat={ExpectedReportFormat}", "solution");
 
       Behaves_like<it_executes_the_command_correctly> _;
-
-      It calls_the_violation_reporter = () =>
-          A.CallTo(
-              () =>
-                  ViolationReporterProxy.Report(
-                      ViolationReportFormat.Table,
-                      A<IEnumerable<IRuleViolation>>.That.IsSameSequenceAs(new[] { SolutionRuleViolation, ProjectRuleViolation })))
-              .MustHaveHappened();
+      Behaves_like<it_creates_and_calls_a_console_violation_reporter_with_the_expected_format> __;
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
 
       protected static string ExpectedConfigurationFile;
-      static RuleViolation SolutionRuleViolation;
-      static RuleViolation ProjectRuleViolation;
+      protected static ViolationReportFormat ExpectedReportFormat;
+      protected static IEnumerable<IRuleViolation> ExpectedViolations;
       static int Result;
     }
 
-    class when_running_with_violations_with_xml_report
+    class when_running_with_violations_with_table_report_to_file
     {
       Establish ctx = () =>
       {
-        SolutionRuleViolation = new RuleViolation(SolutionRule, Solution, Some.String());
-        A.CallTo(() => SolutionRule.Evaluate(A<ISolution>._)).Returns(new[] { SolutionRuleViolation });
-
-        ProjectRuleViolation = new RuleViolation(ProjectRule, Project, Some.String());
-        A.CallTo(() => ProjectRule.Evaluate(A<IProject>._)).Returns(new[] { ProjectRuleViolation });
+        ExpectedReportFormat = ViolationReportFormat.Table;
+        ExpectedFilePath = "SomeFile.log";
+        ExpectedViolations = SetupSomeViolations();
       };
 
-      Because of = () => Result = RunCommand(SUT, "--report=Xml", "solution");
+      Because of = () => Result = RunCommand(SUT, $"--reportFormat={ExpectedReportFormat}", $"--reportOutputFile={ExpectedFilePath}", "solution");
 
       Behaves_like<it_executes_the_command_correctly> _;
-
-      It calls_the_violation_reporter = () =>
-          A.CallTo(
-              () =>
-                  ViolationReporterProxy.Report(
-                      ViolationReportFormat.Xml,
-                      A<IEnumerable<IRuleViolation>>.That.IsSameSequenceAs(new[] { SolutionRuleViolation, ProjectRuleViolation })))
-              .MustHaveHappened();
+      Behaves_like<it_creates_and_calls_a_file_violation_reporter_with_the_expected_format> __;
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
 
       protected static string ExpectedConfigurationFile;
-      static RuleViolation SolutionRuleViolation;
-      static RuleViolation ProjectRuleViolation;
+      protected static ViolationReportFormat ExpectedReportFormat;
+      protected static string ExpectedFilePath;
+      protected static IEnumerable<IRuleViolation> ExpectedViolations;
       static int Result;
+    }
+
+    class when_running_with_violations_with_xml_report_to_console
+    {
+      Establish ctx = () =>
+      {
+        ExpectedReportFormat = ViolationReportFormat.Xml;
+        ExpectedViolations = SetupSomeViolations();
+      };
+
+      Because of = () => Result = RunCommand(SUT, $"-f {ExpectedReportFormat}", "solution");
+
+      Behaves_like<it_executes_the_command_correctly> _;
+      Behaves_like<it_creates_and_calls_a_console_violation_reporter_with_the_expected_format> __;
+
+      It returns_exit_code = () =>
+          Result.Should().Be(1);
+
+      protected static string ExpectedConfigurationFile;
+      protected static ViolationReportFormat ExpectedReportFormat;
+      protected static IEnumerable<IRuleViolation> ExpectedViolations;
+      static int Result;
+    }
+
+    class when_running_with_violations_with_xml_report_to_file
+    {
+      Establish ctx = () =>
+      {
+        ExpectedReportFormat = ViolationReportFormat.Xml;
+        ExpectedFilePath = "SomeFile.log";
+        ExpectedViolations = SetupSomeViolations();
+      };
+
+      Because of = () => Result = RunCommand(SUT, $"--reportFormat={ExpectedReportFormat}", $"-o {ExpectedFilePath}", "solution");
+
+      Behaves_like<it_executes_the_command_correctly> _;
+      Behaves_like<it_creates_and_calls_a_file_violation_reporter_with_the_expected_format> __;
+
+      It returns_exit_code = () =>
+          Result.Should().Be(1);
+
+      protected static string ExpectedConfigurationFile;
+      protected static ViolationReportFormat ExpectedReportFormat;
+      protected static string ExpectedFilePath;
+      protected static IEnumerable<IRuleViolation> ExpectedViolations;
+      static int Result;
+    }
+
+    class when_running_with_invalid_report_format
+    {
+      Because of = () => Result = RunCommand(SUT, "--reportFormat=DOES_NOT_EXIST");
+
+      It shows_error = () =>
+          TextWriter.ToString().Should().Contain("Could not convert string `DOES_NOT_EXIST' to type ViolationReportFormat");
+
+      It returns_exit_code = () =>
+          Result.Should().Be(-1);
+
+      static int Result;
+    }
+
+    static IEnumerable<IRuleViolation> SetupSomeViolations ()
+    {
+      var solutionRuleViolation = new RuleViolation(SolutionRule, Solution, Some.String());
+      A.CallTo(() => SolutionRule.Evaluate(A<ISolution>._)).Returns(new[] { solutionRuleViolation });
+
+      var projectRuleViolation = new RuleViolation(ProjectRule, Project, Some.String());
+      A.CallTo(() => ProjectRule.Evaluate(A<IProject>._)).Returns(new[] { projectRuleViolation });
+
+      var projectItemRuleViolation = new RuleViolation(ProjectItemRule, ProjectItem, Some.String());
+      A.CallTo(() => ProjectItemRule.Evaluate(A<IProjectItem>._)).Returns(new[] { projectItemRuleViolation });
+
+      return new[] { solutionRuleViolation, projectRuleViolation, projectItemRuleViolation };
     }
 
     [Behaviors]
@@ -202,15 +270,41 @@ namespace SolutionInspector.Api.Tests.Commands
     }
 
     [Behaviors]
-    class it_does_not_call_the_violation_reporter
+    class it_does_not_create_a_violation_reporter
     {
-      It does_not_call_the_violation_reporter = () =>
-          A.CallTo(() => ViolationReporterProxy.Report(A<ViolationReportFormat>._, A<IEnumerable<RuleViolation>>._)).MustNotHaveHappened();
+      It does_not_create_a_violation_reporter = () => A.CallTo(ViolationReporterFactory).MustNotHaveHappened();
+    }
+
+    [Behaviors]
+    class it_creates_and_calls_a_file_violation_reporter_with_the_expected_format
+    {
+      It creates_a_file_violation_reporter_with_the_expected_format = () =>
+          A.CallTo(() => ViolationReporterFactory.CreateFileReporter(ExpectedReportFormat, ExpectedFilePath)).MustHaveHappened();
+
+      It calls_the_file_violation_reporter = () =>
+          A.CallTo(() => ViolationReporter.Report(A<IEnumerable<IRuleViolation>>.That.IsSameSequenceAs(ExpectedViolations))).MustHaveHappened();
+
+      protected static ViolationReportFormat ExpectedReportFormat;
+      protected static string ExpectedFilePath;
+      protected static IEnumerable<IRuleViolation> ExpectedViolations;
+    }
+
+    [Behaviors]
+    class it_creates_and_calls_a_console_violation_reporter_with_the_expected_format
+    {
+      It creates_a_file_violation_reporter_with_the_expected_format = () =>
+          A.CallTo(() => ViolationReporterFactory.CreateConsoleReporter(ExpectedReportFormat)).MustHaveHappened();
+
+      It calls_the_file_violation_reporter = () =>
+          A.CallTo(() => ViolationReporter.Report(A<IEnumerable<IRuleViolation>>.That.IsSameSequenceAs(ExpectedViolations))).MustHaveHappened();
+
+      protected static ViolationReportFormat ExpectedReportFormat;
+      protected static IEnumerable<IRuleViolation> ExpectedViolations;
     }
 
     static int RunCommand (ConsoleCommand command, params string[] arguments)
     {
-      return ConsoleCommandDispatcher.DispatchCommand(command, arguments, TextWriter.Null);
+      return ConsoleCommandDispatcher.DispatchCommand(command, arguments, TextWriter);
     }
   }
 }
