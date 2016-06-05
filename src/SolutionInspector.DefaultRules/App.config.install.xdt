@@ -66,7 +66,7 @@
         </projectRuleGroup>
       </projectRules>
       <projectItemRules xdt:Transform="InsertIfMissing">
-        <projectItemRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo,inProject)" appliesTo="*.resx" inProject="*">
+        <projectItemRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo,inProject)" appliesTo="*.filextension" inProject="*">
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectItemMustHaveCustomToolSetRule, SolutionInspector.DefaultRules"
                 expectedCustomTool="CustomTool" expectedCustomToolNamespace="CustomToolNamespace" />
