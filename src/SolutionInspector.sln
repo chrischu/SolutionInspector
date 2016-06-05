@@ -14,7 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Shared", ".Shared", "{9406
 		AssemblyInfoShared.cs = AssemblyInfoShared.cs
 		FodyWeavers.xml = FodyWeavers.xml
 		FxCop.ruleset = FxCop.ruleset
-		..\RoadMap.txt = ..\RoadMap.txt
 		SharedTemplate.nuspec = SharedTemplate.nuspec
 	EndProjectSection
 EndProject

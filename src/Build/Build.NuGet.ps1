@@ -1,4 +1,3 @@
-# PLANNED RN-696: Refactor to a PS 5 class:
 Add-Type @"
 public struct NuGetPackProject {
   public string CsProjFile;
@@ -30,14 +29,13 @@ BuildStep Create-NuGetPackagesFromSolution -LogMessage 'Create-NuGetPackagesFrom
     foreach ($nuGetPackProject in $nuGetPackProjects) {
       # IDEA: Add parameter for excludes
       $csProjFile = $nuGetPackProject.CsProjFile
-      $outputPath = $nuGetPackProject.OutputPath # PLANNED RN-696: This is a workaround, because when using the var. content in the Exec _inline_, we get a NullReferenceException in .ExpandString()
+      $outputPath = $nuGetPackProject.OutputPath
       Exec { 
         & $NuGetExecutable pack $csProjFile `
           -Version $version `
           -Properties "Configuration=$configuration;OutputDir=$outputPath" `
           -IncludeReferencedProjects `
           -OutputDirectory $resultsDirectory `
-          -Exclude Content\chosen-sprite@2x.png # PLANNED RN-698: This is a workaround for https://github.com/NuGet/Home/issues/2389 (necessary e.g. in the RegisterNova.UI project)
       } -ErrorMessage "Could not create NuGet package for '$csProjFile'"
     }
   } finally {
@@ -188,8 +186,6 @@ function _Remove-DummyNuSpecAndDirectoriesForNuGet {
 function _Create-DummyNuSpecFiles {
   [CmdletBinding()]
   Param([Parameter(Mandatory)] [NuGetPackProject[]] $nuGetPackProjects)
-
-  # See https://wiki.rubicon.eu/display/RN/Packaging#Packaging-Nupkgcreationinre-motion for why we need a dummy NuSpec file
 
   foreach ($nuGetPackProject in $nuGetPackProjects) {
     $dummyNuSpecFile = [System.IO.Path]::ChangeExtension($nuGetPackProject.CsProjFile, "nuspec")

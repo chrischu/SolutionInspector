@@ -3,6 +3,7 @@ branches:
   only:
   - master
   - develop
+image: Visual Studio 2015
 environment:
   NuGetApiKey:
     secure: Q2iw3AS2EBEcG4wVWDZY/ruR0Whvs50gTeCleO/uypdP7G7ajODYw030N3sOONtP
@@ -68,10 +69,13 @@ build_script:
       -IsPreReleaseBuild $IsPreReleaseBuild `
       -NuGetApiKey "$env:NuGetApiKey"
 
+    $env:DeploymentVersion = "$($Version.Major).$($Version.Minor).$($Version.Build)"
+
     Pop-Location
 test: off
 deploy:
 - provider: GitHub
+  release: SolutionInspector $(DeploymentVersion)
   auth_token:
     secure: Lp2YKeJITl6VZV0SSdpSrbnuPujRolIyat9yAIq7W3xNkSZ36PGrPwRMrPBK4V11
   artifact: SolutionInspector.zip
@@ -79,3 +83,4 @@ deploy:
   prerelease: true
   on:
     branch: master
+    APPVEYOR_REPO_TAG: true
