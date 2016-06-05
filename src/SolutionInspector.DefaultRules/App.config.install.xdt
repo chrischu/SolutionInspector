@@ -48,7 +48,7 @@
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectXPathRule, SolutionInspector.DefaultRules"
-                xPath="boolean(//Content)" />
+                xPath="boolean(//Compile)" ignoreNamespaces="true" />
         </projectRuleGroup>
         <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)"
                           appliesTo="+*;-*Tests;-*TestInfrastructure">

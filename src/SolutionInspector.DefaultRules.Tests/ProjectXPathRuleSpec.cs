@@ -104,5 +104,49 @@ namespace SolutionInspector.DefaultRules.Tests
 
       static Exception Exception;
     }
+
+    class when_evaluating_with_document_with_namespaces
+    {
+      Establish ctx = () =>
+      {
+        SUT = new ProjectXPathRule(
+            new ProjectXPathRuleConfiguration
+            {
+              XPath = "boolean(//element)"
+            });
+
+        A.CallTo(() => Project.ProjectXml).Returns(XDocument.Parse("<xml xmlns=\"http://some.namespace\"><element /></xml>"));
+      };
+
+      Because of = () => Result = SUT.Evaluate(Project);
+
+      It does_not_return_violations = () =>
+          Result.Should().BeEmpty();
+
+      static IEnumerable<IRuleViolation> Result;
+    }
+
+    class when_evaluating_with_document_with_namespaces_and_namespace_ignoring_is_disabled
+    {
+      Establish ctx = () =>
+      {
+        SUT = new ProjectXPathRule(
+            new ProjectXPathRuleConfiguration
+            {
+              XPath = "boolean(//element)",
+              IgnoreNamespaces = false
+            });
+
+        A.CallTo(() => Project.ProjectXml).Returns(XDocument.Parse("<xml xmlns=\"http://some.namespace\"><element /></xml>"));
+      };
+
+      Because of = () => Result = SUT.Evaluate(Project);
+
+      It returns_violation = () =>
+          Result.ShouldAllBeLike(
+              new RuleViolation(SUT, Project, $"The XPath expression '{SUT.Configuration.XPath}' did not evaluate to 'true', but to 'false'."));
+
+      static IEnumerable<IRuleViolation> Result;
+    }
   }
 }
