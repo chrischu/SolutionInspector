@@ -69,18 +69,19 @@ build_script:
       -IsPreReleaseBuild $IsPreReleaseBuild `
       -NuGetApiKey "$env:NuGetApiKey"
 
-    $env:DeploymentVersion = "$($Version.Major).$($Version.Minor).$($Version.Build)"
+    $env:DeploymentVersion = "v$($Version.Major).$($Version.Minor).$($Version.Build)"
 
     Pop-Location
 test: off
 deploy:
 - provider: GitHub
-  release: SolutionInspector $(DeploymentVersion)
+  tag: $(DeploymentVersion)
+  release: $(DeploymentVersion)
   auth_token:
     secure: Lp2YKeJITl6VZV0SSdpSrbnuPujRolIyat9yAIq7W3xNkSZ36PGrPwRMrPBK4V11
   artifact: SolutionInspector.zip
-  draft: true
-  prerelease: true
+  draft: false
+  prerelease: false
   on:
     branch: master
     APPVEYOR_REPO_TAG: true
