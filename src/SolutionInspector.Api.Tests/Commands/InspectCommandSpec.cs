@@ -5,6 +5,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
 using ManyConsole;
+using Microsoft.Build.Exceptions;
 using SolutionInspector.Api.Commands;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
@@ -103,7 +104,6 @@ namespace SolutionInspector.Api.Tests.Commands
       It returns_exit_code = () =>
           Result.Should().Be(0);
 
-      protected static string ExpectedConfigurationFile;
       static int Result;
     }
 
@@ -123,7 +123,6 @@ namespace SolutionInspector.Api.Tests.Commands
       It returns_exit_code = () =>
           Result.Should().Be(1);
 
-      protected static string ExpectedConfigurationFile;
       protected static ViolationReportFormat ExpectedReportFormat;
       protected static IEnumerable<IRuleViolation> ExpectedViolations;
       static int Result;
@@ -145,7 +144,6 @@ namespace SolutionInspector.Api.Tests.Commands
       It returns_exit_code = () =>
           Result.Should().Be(1);
 
-      protected static string ExpectedConfigurationFile;
       protected static ViolationReportFormat ExpectedReportFormat;
       protected static IEnumerable<IRuleViolation> ExpectedViolations;
       static int Result;
@@ -168,7 +166,6 @@ namespace SolutionInspector.Api.Tests.Commands
       It returns_exit_code = () =>
           Result.Should().Be(1);
 
-      protected static string ExpectedConfigurationFile;
       protected static ViolationReportFormat ExpectedReportFormat;
       protected static string ExpectedFilePath;
       protected static IEnumerable<IRuleViolation> ExpectedViolations;
@@ -191,7 +188,6 @@ namespace SolutionInspector.Api.Tests.Commands
       It returns_exit_code = () =>
           Result.Should().Be(1);
 
-      protected static string ExpectedConfigurationFile;
       protected static ViolationReportFormat ExpectedReportFormat;
       protected static IEnumerable<IRuleViolation> ExpectedViolations;
       static int Result;
@@ -214,7 +210,6 @@ namespace SolutionInspector.Api.Tests.Commands
       It returns_exit_code = () =>
           Result.Should().Be(1);
 
-      protected static string ExpectedConfigurationFile;
       protected static ViolationReportFormat ExpectedReportFormat;
       protected static string ExpectedFilePath;
       protected static IEnumerable<IRuleViolation> ExpectedViolations;
@@ -231,6 +226,74 @@ namespace SolutionInspector.Api.Tests.Commands
       It returns_exit_code = () =>
           Result.Should().Be(-1);
 
+      static int Result;
+    }
+
+    class when_running_with_non_existing_solution
+    {
+      Establish ctx =
+          () =>
+          {
+            A.CallTo(() => SolutionLoader.Load(A<string>._, A<IMsBuildParsingConfiguration>._))
+                .Throws(new SolutionNotFoundException("DOES_NOT_EXIST"));
+          };
+
+      Because of = () => Result = RunCommand(SUT, "DOES_NOT_EXIST");
+
+      Behaves_like<it_does_not_create_a_violation_reporter> _;
+
+      It shows_error = () =>
+          TextWriter.ToString().Should().Contain("Given solution file 'DOES_NOT_EXIST' could not be found.");
+
+      It returns_exit_code = () =>
+          Result.Should().Be(-1);
+
+      static int Result;
+    }
+
+    class when_running_with_non_solution_containing_invalid_project
+    {
+      Establish ctx = () =>
+      {
+        A.CallTo(() => SolutionLoader.Load(A<string>._, A<IMsBuildParsingConfiguration>._))
+            .Throws(new InvalidProjectFileException("projectFile", 0, 0, 0, 0, "message", null, null, null));
+      };
+
+      Because of = () => Result = RunCommand(SUT, "solution");
+
+      Behaves_like<it_does_not_create_a_violation_reporter> _;
+
+      It shows_error = () =>
+          TextWriter.ToString()
+              .Should()
+              .Contain($"Given solution file 'solution' contains an invalid project file '{Environment.CurrentDirectory}\\projectFile'.");
+
+      It returns_exit_code = () =>
+          Result.Should().Be(-1);
+
+      static int Result;
+    }
+
+    class when_running_and_solution_loader_throws_unexpected_exception
+    {
+      Establish ctx = () =>
+      {
+        ThrownException = Some.Exception;
+        A.CallTo(() => SolutionLoader.Load(A<string>._, A<IMsBuildParsingConfiguration>._))
+            .Throws(ThrownException);
+      };
+
+      Because of = () => Result = RunCommand(SUT, "solution");
+
+      Behaves_like<it_does_not_create_a_violation_reporter> _;
+
+      It shows_error = () =>
+          TextWriter.ToString().Should().Contain($"Unexpected error when loading solution file 'solution': {ThrownException.Message}");
+
+      It returns_exit_code = () =>
+          Result.Should().Be(-1);
+
+      static Exception ThrownException;
       static int Result;
     }
 
@@ -265,8 +328,6 @@ namespace SolutionInspector.Api.Tests.Commands
 
       It calls_project_item_rule = () =>
           A.CallTo(() => ProjectItemRule.Evaluate(ProjectItem)).MustHaveHappened(Repeated.Exactly.Once);
-
-      protected static string ExpectedConfigurationFile;
     }
 
     [Behaviors]

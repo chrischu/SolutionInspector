@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using FakeItEasy;
 using Fasterflect;
@@ -136,8 +135,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     static void AssertProjectRuleProxy<TRule> (IRule rule, string include, string exclude = null)
     {
-      var projectRuleProxyType =
-          typeof(RuleCollectionBuilder).GetNestedTypes(BindingFlags.NonPublic).Single(t => t.Name == "FilteringProjectRuleProxy");
+      var projectRuleProxyType = typeof(FilteringProjectRuleProxy);
       rule.Should().BeOfType(projectRuleProxyType);
 
       rule.GetFieldValue("_rule").Should().BeOfType<TRule>();
@@ -156,8 +154,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     static void AssertProjectItemRuleProxy<TRule> (IRule rule, string appliesTo, string inProject)
     {
-      var projectRuleProxyType =
-          typeof(RuleCollectionBuilder).GetNestedTypes(BindingFlags.NonPublic).Single(t => t.Name == "FilteringProjectItemRuleProxy");
+      var projectRuleProxyType = typeof(FilteringProjectItemRuleProxy);
       rule.Should().BeOfType(projectRuleProxyType);
 
       rule.GetFieldValue("_rule").Should().BeOfType<TRule>();

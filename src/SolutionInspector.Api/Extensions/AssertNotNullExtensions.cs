@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 
 namespace SolutionInspector.Api.Extensions
@@ -7,6 +8,7 @@ namespace SolutionInspector.Api.Extensions
   /// <summary>
   ///   Extensions that make it more convenient to assert that a value is not <c>null</c>.
   /// </summary>
+  [ExcludeFromCodeCoverage]
   public static class AssertNotNullExtensions
   {
     /// <summary>

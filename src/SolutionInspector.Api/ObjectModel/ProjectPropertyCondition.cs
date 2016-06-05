@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using SolutionInspector.Api.Utilities;
@@ -50,6 +51,7 @@ namespace SolutionInspector.Api.ObjectModel
       return string.IsNullOrWhiteSpace(condition) ? null : condition;
     }
 
+    [ExcludeFromCodeCoverage]
     private string DebuggerDisplay
     {
       get
@@ -64,7 +66,7 @@ namespace SolutionInspector.Api.ObjectModel
       }
     }
 
-    public bool Equals (ProjectPropertyCondition other)
+    public bool Equals ([CanBeNull] ProjectPropertyCondition other)
     {
       if (ReferenceEquals(null, other))
         return false;
@@ -73,7 +75,7 @@ namespace SolutionInspector.Api.ObjectModel
       return string.Equals(Self, other.Self) && string.Equals(Parent, other.Parent);
     }
 
-    public override bool Equals (object obj)
+    public override bool Equals ([CanBeNull] object obj)
     {
       if (ReferenceEquals(null, obj))
         return false;
@@ -82,6 +84,7 @@ namespace SolutionInspector.Api.ObjectModel
       return obj is ProjectPropertyCondition && Equals((ProjectPropertyCondition) obj);
     }
 
+    [ExcludeFromCodeCoverage]
     public override int GetHashCode ()
     {
       return HashCodeHelper.GetHashCode(Self, Parent);

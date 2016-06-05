@@ -11,7 +11,7 @@ namespace SolutionInspector.Api.Utilities
     ISolution Load (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration);
   }
 
-  [UsedImplicitly ( /* by container */)]
+  [UsedImplicitly /* by container */]
   internal class SolutionLoader : ISolutionLoader
   {
     private readonly IFile _file;

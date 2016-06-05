@@ -90,6 +90,49 @@ namespace SolutionInspector.Api.Tests.ObjectModel
               .BeFalse();
     }
 
+    class when_comparing_equality
+    {
+      Establish ctx = () =>
+      {
+        A = new NuGetPackage(Some.String(), Some.Version, Some.Boolean, Some.String(), Some.String(), Some.Boolean);
+        EqualToA = new NuGetPackage(A.Id, A.Version, A.IsPreRelease, A.PreReleaseTag, A.TargetFramework, A.IsDevelopmentDependency);
+        DifferentFromA = new NuGetPackage(Some.String(), Some.Version, Some.Boolean, Some.String(), Some.String(), Some.Boolean);
+      };
+
+      Because of = () =>
+      {
+        /* Actual tests are in the its. */
+      };
+
+      It works_with_same_reference = () =>
+          A.Equals(A).Should().BeTrue();
+
+      It works_with_null = () =>
+          A.Equals(null).Should().BeFalse();
+
+      It works_with_equal_instances = () =>
+          A.Equals(EqualToA).Should().BeTrue();
+
+      It works_with_differing_instances = () =>
+          A.Equals(DifferentFromA).Should().BeFalse();
+
+      It works_with_same_reference_as_object = () =>
+          A.Equals((object)A).Should().BeTrue();
+
+      It works_with_null_as_object = () =>
+          A.Equals((object)null).Should().BeFalse();
+
+      It works_with_equality_operator = () =>
+          (A == EqualToA).Should().BeTrue();
+
+      It works_with_inequality_operator = () =>
+          (A != EqualToA).Should().BeFalse();
+
+      static NuGetPackage A;
+      static NuGetPackage EqualToA;
+      static NuGetPackage DifferentFromA;
+    }
+    
     static XmlElement CreateXmlElement (string xml)
     {
       var doc = new XmlDocument();

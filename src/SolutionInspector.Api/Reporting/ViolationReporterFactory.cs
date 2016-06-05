@@ -13,6 +13,7 @@ namespace SolutionInspector.Api.Reporting
   }
 
   [UsedImplicitly /* by Autofac container */]
+  [ExcludeFromCodeCoverage]
   internal class ViolationReporterFactory : IViolationReporterFactory
   {
     private readonly IIndex<ViolationReportFormat, Func<TextWriter, IViolationReporter>> _violationReporterFactories;

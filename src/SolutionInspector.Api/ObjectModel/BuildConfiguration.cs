@@ -8,7 +8,7 @@ namespace SolutionInspector.Api.ObjectModel
   ///   Represents a MSBuild build configuration consisting of the configuration (e.g. Debug) and the platform (e.g. AnyCPU).
   /// </summary>
   [PublicAPI]
-  public class BuildConfiguration : IEquatable<BuildConfiguration>
+  public sealed class BuildConfiguration : IEquatable<BuildConfiguration>
   {
     private static Regex s_regex = new Regex(@"[A-Za-z0-9 *]+\|[A-Za-z0-9 *]+", RegexOptions.Compiled);
 
@@ -59,9 +59,7 @@ namespace SolutionInspector.Api.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      if (obj.GetType() != GetType())
-        return false;
-      return Equals((BuildConfiguration) obj);
+      return obj is BuildConfiguration && Equals((BuildConfiguration) obj);
     }
 
     /// <inheritdoc />
@@ -79,7 +77,7 @@ namespace SolutionInspector.Api.ObjectModel
     public static BuildConfiguration Parse (string s)
     {
       if (!s_regex.IsMatch(s))
-        throw new ArgumentException($"The value '{s}' is not a valid string representation of a {nameof(BuildConfiguration)}");
+        throw new ArgumentException($"The value '{s}' is not a valid string representation of a {nameof(BuildConfiguration)}.", nameof(s));
 
       var split = s.Split('|');
       return new BuildConfiguration(split[0], split[1]);

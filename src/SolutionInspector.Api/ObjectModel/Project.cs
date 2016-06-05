@@ -135,6 +135,8 @@ namespace SolutionInspector.Api.ObjectModel
     {
       _projectCollection = projectCollection;
 
+      Solution = solution;
+
       _msBuildParsingConfiguration = msBuildParsingConfiguration;
       Name = projectInSolution.ProjectName;
 

@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using SystemInterface.IO;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
+using SolutionInspector.Api.Extensions;
+using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Utilities;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
@@ -52,6 +56,26 @@ namespace SolutionInspector.Api.Tests.Utilities
           Exception.Should().Be<SolutionNotFoundException>().WithMessage("Could not find solution file at 'DOESNOTEXIST'.");
 
       static Exception Exception;
+    }
+
+    class when_loading_an_existing_solution
+    {
+      Establish ctx = () =>
+      {
+        SolutionPath = Path.Combine(
+          Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath).AssertNotNull(),
+          @"ObjectModel\TestData\Solution\TestSolution.sln");
+
+        A.CallTo(() => File.Exists(SolutionPath)).Returns(true);
+      };
+
+      Because of = () => Result = SUT.Load(SolutionPath, MsBuildParsingConfiguration);
+
+      It loads_solution = () =>
+          Result.Name.Should().Be("TestSolution");
+
+      static string SolutionPath;
+      static ISolution Result;
     }
   }
 }

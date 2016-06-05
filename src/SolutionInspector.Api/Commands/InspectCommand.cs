@@ -72,13 +72,13 @@ namespace SolutionInspector.Api.Commands
       {
         s_logger.Error(ex, "Error while loading solution.");
         throw reportError(
-            $"Given file '{arguments.SolutionFilePath}' is not a valid solution file " +
+            $"Given solution file '{arguments.SolutionFilePath}' contains an invalid project file '{ex.ProjectFile}'." +
             "(for detailed error information see the log file 'SolutionInspector.log').");
       }
       catch (Exception ex)
       {
         s_logger.Error(ex, "Error while loading solution.");
-        throw reportError($"Unexpected error when loading solution file '{arguments.SolutionFilePath}: {ex}");
+        throw reportError($"Unexpected error when loading solution file '{arguments.SolutionFilePath}': {ex.Message}.");
       }
     }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using JetBrains.Annotations;
 
@@ -8,7 +9,7 @@ namespace SolutionInspector.Api.ObjectModel
   ///   Represents a NuGet package referenced by a project.
   /// </summary>
   [PublicAPI]
-  public class NuGetPackage : IEquatable<NuGetPackage>
+  public sealed class NuGetPackage : IEquatable<NuGetPackage>
   {
     /// <summary>
     ///   The package's id.
@@ -114,13 +115,11 @@ namespace SolutionInspector.Api.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      if (obj.GetType() != GetType())
-        return false;
-      return Equals((NuGetPackage) obj);
+      return obj is NuGetPackage && Equals((NuGetPackage) obj);
     }
 
-    /// <inheritdoc />
-    public override int GetHashCode ()
+    [ExcludeFromCodeCoverage]
+    public override int GetHashCode()
     {
       return PackageDirectoryName.GetHashCode();
     }

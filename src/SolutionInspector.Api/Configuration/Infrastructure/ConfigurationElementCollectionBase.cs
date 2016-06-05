@@ -54,7 +54,7 @@ namespace SolutionInspector.Api.Configuration.Infrastructure
     /// <inheritdoc />
     protected override bool OnDeserializeUnrecognizedElement (string elementName, XmlReader reader)
     {
-      if (elementName != ElementName)
+      if (!IsElementName(elementName))
         return false;
 
       var element = CreateNewElement();

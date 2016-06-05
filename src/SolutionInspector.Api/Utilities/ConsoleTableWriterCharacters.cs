@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 
 namespace SolutionInspector.Api.Utilities
 {
   [PublicAPI]
+  [ExcludeFromCodeCoverage]
   internal class ConsoleTableWriterCharacters
   {
     public static readonly ConsoleTableWriterCharacters AdvancedAscii = new ConsoleTableWriterCharacters

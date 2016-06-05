@@ -68,7 +68,9 @@
       <HintPath>..\packages\ManyConsole.0.4.2.19\lib\ManyConsole.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="NDesk.Options, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
       <Private>True</Private>
@@ -99,12 +101,21 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="Configuration\Infrastructure\ConfigurationElementCollectionBaseSpec.cs" />
+    <Compile Include="Configuration\Infrastructure\KeyedConfigurationElementCollectionBaseSpec.cs" />
     <Compile Include="Configuration\MsBuildParsing\MsBuildParsingConfigurationSectionSpec.cs" />
     <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportsConfigurationSectionSpec.cs" />
     <Compile Include="Configuration\Rules\RuleAssemblyLoaderSpec.cs" />
     <Compile Include="Configuration\Rules\ProjectConfigRuleBaseSpec.cs" />
     <Compile Include="Configuration\Rules\RuleConfigurationElementSpec.cs" />
+    <Compile Include="Extensions\EnumerableExtensionsSpec.cs" />
+    <Compile Include="Extensions\DictionaryExtensionsSpec.cs" />
+    <Compile Include="Extensions\XmlExtensionsSpec.cs" />
+    <Compile Include="ObjectModel\ProjectPropertyConditionSpec.cs" />
+    <Compile Include="ObjectModel\ProjectItemIncludeSpec.cs" />
+    <Compile Include="ObjectModel\ProjectLocationSpec.cs" />
+    <Compile Include="ObjectModel\ProjectItemBuildActionSpec.cs" />
     <Compile Include="ObjectModel\ProjectItemSpec.cs" />
+    <Compile Include="ObjectModel\BuildConfigurationSpec.cs" />
     <Compile Include="ObjectModel\ProjectSpec.cs" />
     <Compile Include="ObjectModel\NuGetPackageSpec.cs" />
     <Compile Include="ObjectModel\SolutionSpec.cs" />
@@ -126,6 +137,8 @@
     <None Include="ObjectModel\TestData\Project\ExecutableProject\Program.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Rules\FilteringProjectRuleProxySpec.cs" />
+    <Compile Include="Rules\FilteringProjectItemRuleProxySpec.cs" />
     <Compile Include="Utilities\SolutionLoaderSpec.cs" />
     <Compile Include="Utilities\NameFilterSpec.cs" />
     <Compile Include="Configuration\Rules\RulesConfigurationSectionSpec.cs" />

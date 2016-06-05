@@ -8,7 +8,6 @@ using SystemWrapper.IO;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -87,9 +86,8 @@ namespace SolutionInspector.Api.ObjectModel
   }
 
   [PublicAPI]
-  internal class ProjectItem : IProjectItem, IEquatable<ProjectItem>
+  internal class ProjectItem : IProjectItem
   {
-    private readonly DictionaryEqualityComparer<string, string> _dictionaryEqualityComparer = new DictionaryEqualityComparer<string, string>();
     private readonly List<ProjectItem> _children = new List<ProjectItem>();
     private Lazy<string> _identifier;
 
@@ -168,42 +166,6 @@ namespace SolutionInspector.Api.ObjectModel
     public static ProjectItem FromMsBuildProjectItem (IProject project, Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
       return new ProjectItem(project, msBuildProjectItem);
-    }
-
-    public bool Equals (ProjectItem other)
-    {
-      return Equals(OriginalInclude, other.OriginalInclude)
-             && Equals(Include, other.Include)
-             && _dictionaryEqualityComparer.Equals(Metadata, other.Metadata)
-             && BuildAction == other.BuildAction;
-    }
-
-    public override bool Equals (object obj)
-    {
-      if (ReferenceEquals(null, obj))
-        return false;
-      if (ReferenceEquals(this, obj))
-        return true;
-      return obj.GetType() == GetType() && Equals((ProjectItem) obj);
-    }
-
-    public override int GetHashCode ()
-    {
-      return HashCodeHelper.GetHashCode(
-          OriginalInclude.GetHashCode(),
-          Include.GetHashCode(),
-          BuildAction.GetHashCode(),
-          _dictionaryEqualityComparer.GetHashCode(Metadata));
-    }
-
-    public static bool operator == (ProjectItem left, ProjectItem right)
-    {
-      return Equals(left, right);
-    }
-
-    public static bool operator != (ProjectItem left, ProjectItem right)
-    {
-      return !Equals(left, right);
     }
   }
 }

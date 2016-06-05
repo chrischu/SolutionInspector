@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using SystemInterface.IO;
 using SystemInterface.Reflection;
 using SystemWrapper.IO;
@@ -20,6 +21,7 @@ namespace SolutionInspector.Api
   ///   Entry point for a SolutionInspector run.
   /// </summary>
   [PublicAPI]
+  [ExcludeFromCodeCoverage]
   public static class SolutionInspector
   {
     private static Logger s_logger = LogManager.GetCurrentClassLogger();

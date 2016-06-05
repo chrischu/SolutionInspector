@@ -59,5 +59,20 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
       static ISolution Result;
     }
+
+    class when_loading_and_disposing
+    {
+      Establish ctx = () =>
+      {
+        Solution = Api.ObjectModel.Solution.Load(SolutionPath, MsBuildParsingConfiguration);
+      };
+
+      Because of = () => Solution.Dispose();
+
+      It disposes_all_projects = () =>
+          Solution.Projects.All(p => p.Advanced.MsBuildProject.ProjectCollection.LoadedProjects.Count == 0).Should().BeTrue();
+
+      static ISolution Solution;
+    }
   }
 }

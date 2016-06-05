@@ -32,7 +32,7 @@ namespace SolutionInspector.Api.Rules
     public IRule Rule { get; }
 
     /// <inheritdoc />
-    public IRuleTarget Target { get; set; }
+    public IRuleTarget Target { get; }
 
     /// <inheritdoc />
     public string Message { get; }

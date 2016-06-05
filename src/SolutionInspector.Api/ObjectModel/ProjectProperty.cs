@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -57,11 +58,13 @@ namespace SolutionInspector.Api.ObjectModel
       _occurrences.Add(occurence);
     }
 
+    [ExcludeFromCodeCoverage]
     public IEnumerator<IProjectPropertyOccurrence> GetEnumerator ()
     {
       return _occurrences.GetEnumerator();
     }
 
+    [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator ()
     {
       return GetEnumerator();

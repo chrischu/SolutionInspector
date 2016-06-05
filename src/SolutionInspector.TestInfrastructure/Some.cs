@@ -29,6 +29,8 @@ namespace SolutionInspector.TestInfrastructure
       return StringBetween(1, c_SomeStringDefaultMaxLength);
     }
 
+    public static Version Version => new Version(PositiveInteger, PositiveInteger, PositiveInteger, PositiveInteger);
+
     private static string StringBetween (int minLength, int maxLength)
     {
       return new string(Enumerable.Range(1, NextRandomBetweenInclusive(minLength, maxLength)).Select(x => Char).ToArray());

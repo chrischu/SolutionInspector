@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SolutionInspector.Api.Configuration.Infrastructure;
 using SolutionInspector.Api.Utilities;
@@ -32,9 +33,12 @@ namespace SolutionInspector.Api.Configuration.Rules
 
     public IReadOnlyCollection<IRuleConfiguration> Rules => this.ToArray();
 
+    [ExcludeFromCodeCoverage]
     INameFilter IProjectRuleGroupConfiguration.AppliesTo => AppliesTo;
 
     public string Key => AppliesTo.ToString();
+
+    [ExcludeFromCodeCoverage]
     public string KeyName => "appliesTo";
   }
 }

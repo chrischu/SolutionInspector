@@ -70,6 +70,12 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.BuildConfigurations.ShouldAllBeLike(new BuildConfiguration("Debug", "AnyCPU"), new BuildConfiguration("Release", "AnyCPU"));
       };
 
+      It sets_project_in_solution = () =>
+          Result.Advanced.MsBuildProjectInSolution.ProjectName.Should().Be("EmptyProject");
+
+      It sets_solution = () =>
+          Result.Solution.Name.Should().Be("TestSolution");
+
       It parses_unconditional_properties = () =>
       {
         // We only need to check one exemplary property.
@@ -81,17 +87,18 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         const string propertyName = "DependentOnConfiguration";
 
+        var occurrence = new ProjectPropertyOccurrence(
+            "LOL",
+            new ProjectPropertyCondition(" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ", null),
+            new ProjectLocation(24, 5));
         Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
             new ProjectProperty(propertyName, "LOL")
             {
-                new ProjectPropertyOccurrence(
-                    "LOL",
-                    new ProjectPropertyCondition(" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ", null),
-                    new ProjectLocation(24, 5))
+                occurrence
             });
 
         var debugProperties = Result.Advanced.EvaluateProperties(new BuildConfiguration("Debug", "AnyCPU"));
-        debugProperties[propertyName].Value.Should().Be("LOL");
+        debugProperties[propertyName].Should().BeLike(new EvaluatedProjectPropertyValue("LOL", occurrence));
 
         var releaseProperties = Result.Advanced.EvaluateProperties(new BuildConfiguration("Release", "AnyCPU"));
         releaseProperties.ShouldNotContainKey(propertyName);
@@ -101,18 +108,16 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         const string propertyName = "DependentOnProperty";
 
-        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
-            new ProjectProperty(propertyName, "")
-            {
-                new ProjectPropertyOccurrence(
-                    "ROFL",
-                    new ProjectPropertyCondition(" '$(Property)' == 'true' ", null),
-                    new ProjectLocation(25, 5))
-            });
+        var occurrence = new ProjectPropertyOccurrence(
+            "ROFL",
+            new ProjectPropertyCondition(" '$(Property)' == 'true' ", null),
+            new ProjectLocation(25, 5));
+
+        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(new ProjectProperty(propertyName, "") { occurrence });
 
         var propertiesBasedOnTrueCondition =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Property", "true" } });
-        propertiesBasedOnTrueCondition[propertyName].Value.Should().Be("ROFL");
+        propertiesBasedOnTrueCondition[propertyName].Should().BeLike(new EvaluatedProjectPropertyValue("ROFL", occurrence));
 
         var propertiesBasedOnFalseCondition =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Property", "false" } });
@@ -123,15 +128,17 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         const string propertyName = "ConditionFromParent";
 
+        var occurrence = new ProjectPropertyOccurrence(
+            "QWER",
+            new ProjectPropertyCondition(null, " '$(Parent)' == 'true' "),
+            new ProjectLocation(28, 5));
+
         Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
-            new ProjectProperty(propertyName, "")
-            {
-                new ProjectPropertyOccurrence("QWER", new ProjectPropertyCondition(null, " '$(Parent)' == 'true' "), new ProjectLocation(28, 5))
-            });
+            new ProjectProperty(propertyName, "") { occurrence });
 
         var propertiesBasedOnTrueCondition =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "true" } });
-        propertiesBasedOnTrueCondition[propertyName].Value.Should().Be("QWER");
+        propertiesBasedOnTrueCondition[propertyName].Should().BeLike(new EvaluatedProjectPropertyValue("QWER", occurrence));
 
         var propertiesBasedOnFalseCondition =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "false" } });
@@ -142,18 +149,16 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         const string propertyName = "ConditionFromSelf";
 
-        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
-            new ProjectProperty(propertyName, "")
-            {
-                new ProjectPropertyOccurrence(
-                    "ASDF",
-                    new ProjectPropertyCondition(" '$(Self)' == 'true' ", " '$(Parent)' == 'true' "),
-                    new ProjectLocation(29, 5))
-            });
+        var occurrence = new ProjectPropertyOccurrence(
+            "ASDF",
+            new ProjectPropertyCondition(" '$(Self)' == 'true' ", " '$(Parent)' == 'true' "),
+            new ProjectLocation(29, 5));
+
+        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(new ProjectProperty(propertyName, "") { occurrence });
 
         var propertiesBasedOnTrueCondition =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "true" } });
-        propertiesBasedOnTrueCondition[propertyName].Value.Should().Be("ASDF");
+        propertiesBasedOnTrueCondition[propertyName].Should().BeLike(new EvaluatedProjectPropertyValue("ASDF", occurrence));
 
         var propertiesBasedOnFalseCondition1 =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "false" } });
@@ -168,20 +173,26 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         const string propertyName = "Multiple";
 
+        var occurrenceWithThree = new ProjectPropertyOccurrence(
+            "Three",
+            new ProjectPropertyCondition(" '$(Value)' == '3'", null),
+            new ProjectLocation(32, 5));
+
+        var occurrenceWithFive = new ProjectPropertyOccurrence(
+            "Five",
+            new ProjectPropertyCondition(" '$(Value)' == '5'", null),
+            new ProjectLocation(33, 5));
+
         Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
-            new ProjectProperty(propertyName, "")
-            {
-                new ProjectPropertyOccurrence("Three", new ProjectPropertyCondition(" '$(Value)' == '3'", null), new ProjectLocation(32, 5)),
-                new ProjectPropertyOccurrence("Five", new ProjectPropertyCondition(" '$(Value)' == '5'", null), new ProjectLocation(33, 5))
-            });
+            new ProjectProperty(propertyName, "") { occurrenceWithThree, occurrenceWithFive });
 
         var propertiesBasedOnFirstValue =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Value", "3" } });
-        propertiesBasedOnFirstValue[propertyName].Value.Should().Be("Three");
+        propertiesBasedOnFirstValue[propertyName].Should().BeLike(new EvaluatedProjectPropertyValue("Three", occurrenceWithThree));
 
         var propertiesBasedOnSecondValue =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Value", "5" } });
-        propertiesBasedOnSecondValue[propertyName].Value.Should().Be("Five");
+        propertiesBasedOnSecondValue[propertyName].Should().BeLike(new EvaluatedProjectPropertyValue("Five", occurrenceWithFive));
       };
 
       It parses_duplicate_property = () =>
@@ -269,6 +280,18 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       static NuGetPackage ReferencedNuGetPackage1;
       static NuGetPackage ReferencedNuGetPackage2;
       static IProject Result;
+    }
+
+    class when_loading_and_disposing
+    {
+      Establish ctx = () => { Project = LoadProject("EmptyProject"); };
+
+      Because of = () => Project.Dispose();
+
+      It unloads_projects = () =>
+          Project.Advanced.MsBuildProject.ProjectCollection.LoadedProjects.Should().BeEmpty();
+
+      static IProject Project;
     }
 
     static IProject LoadProject (string projectName)
