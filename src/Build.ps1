@@ -154,8 +154,14 @@ BuildTask Push-Packages {
 
 BuildTask Create-Archives {
   $archivePath = Join-Path $BuildOutputDirectory "SolutionInspector-$AssemblyInformationalVersion.zip"
-  $sourceDirectory = Join-Path $SolutionDirectory "SolutionInspector\bin\$Configuration"
+
+  $buildDirectory = Join-Path $SolutionDirectory "SolutionInspector\bin\$Configuration"
+  $sourceDirectory = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid())
+  New-Item -ItemType Directory -Path $sourceDirectory
+  Copy-Item -Path "${buildDirectory}\*" -Destination $sourceDirectory -Exclude "Microsoft.Build*.dll","*CodeAnalysisLog.xml","*.lastcodeanalysissucceeded"
   Zip-Directory -ZipFilePath $archivePath -SourceDirectory $sourceDirectory
+  Remove-Item $sourceDirectory -Recurse
+
   Report-Archive $archivePath
 }
 
