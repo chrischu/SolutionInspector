@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Autofac.Features.Indexed;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Api.Reporting
 {
@@ -11,11 +12,12 @@ namespace SolutionInspector.Api.Reporting
     IViolationReporter CreateFileReporter (ViolationReportFormat reportFormat, string filePath);
   }
 
+  [UsedImplicitly /* by Autofac container */]
   internal class ViolationReporterFactory : IViolationReporterFactory
   {
-    private readonly Dictionary<ViolationReportFormat, Func<TextWriter, IViolationReporter>> _violationReporterFactories;
+    private readonly IIndex<ViolationReportFormat, Func<TextWriter, IViolationReporter>> _violationReporterFactories;
 
-    public ViolationReporterFactory (Dictionary<ViolationReportFormat, Func<TextWriter, IViolationReporter>> violationReporterFactories)
+    public ViolationReporterFactory (IIndex<ViolationReportFormat, Func<TextWriter, IViolationReporter>> violationReporterFactories)
     {
       _violationReporterFactories = violationReporterFactories;
     }

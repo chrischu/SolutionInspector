@@ -127,6 +127,7 @@
     <Compile Include="ObjectModel\EvaluatedProjectPropertyValue.cs" />
     <Compile Include="ObjectModel\ProjectLocation.cs" />
     <Compile Include="ObjectModel\ProjectPropertyOccurrence.cs" />
+    <Compile Include="Reporting\ViolationReporterRegistrationExtensions.cs" />
     <Compile Include="Utilities\DictionaryEqualityComparer.cs" />
     <Compile Include="Utilities\HashCodeHelper.cs" />
     <Compile Include="ObjectModel\ProjectItemInclude.cs" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using SystemInterface.IO;
 using SystemInterface.Reflection;
 using SystemWrapper.IO;
@@ -43,7 +42,7 @@ namespace SolutionInspector.Api
       }
     }
 
-   private static IContainer SetupContainer ()
+    private static IContainer SetupContainer ()
     {
       var builder = new ContainerBuilder();
 
@@ -70,18 +69,19 @@ namespace SolutionInspector.Api
               new TableWriter(new TableWriterOptions { PreferredTableWidth = 200, Characters = ConsoleTableWriterCharacters.AdvancedAscii })
           ).As<ITableWriter>();
 
-      builder.Register(
-          ctx => new ViolationReporterFactory(
-              new Dictionary<ViolationReportFormat, Func<TextWriter, IViolationReporter>>
-              {
-                  {
-                      ViolationReportFormat.Table,
-                      writer =>
-                      new TableViolationReporter(writer, ctx.Resolve<IRuleViolationViewModelConverter>(), ctx.Resolve<ITableWriter>())
-                  },
-                  { ViolationReportFormat.Xml, writer => new XmlViolationReporter(writer, ctx.Resolve<IRuleViolationViewModelConverter>()) },
-                  { ViolationReportFormat.VisualStudio, writer => new VisualStudioViolationReporter(writer) }
-              })).As<IViolationReporterFactory>();
+      builder.RegisterViolationReporter(
+          ViolationReportFormat.Table,
+          ctx => tw => new TableViolationReporter(tw, ctx.Resolve<IRuleViolationViewModelConverter>(), ctx.Resolve<ITableWriter>()));
+
+      builder.RegisterViolationReporter(
+          ViolationReportFormat.Xml,
+          ctx => tw => new XmlViolationReporter(tw, ctx.Resolve<IRuleViolationViewModelConverter>()));
+
+      builder.RegisterViolationReporter(
+          ViolationReportFormat.VisualStudio,
+          ctx => tw => new VisualStudioViolationReporter(tw));
+
+      builder.RegisterType<ViolationReporterFactory>().As<IViolationReporterFactory>();
 
       builder.RegisterType<InspectCommand>().As<ConsoleCommand>();
 
