@@ -6,3 +6,7 @@
 [![License](https://img.shields.io/github/license/chrischu/SolutionInspector.svg?style=flat)](https://raw.githubusercontent.com/chrischu/SolutionInspector/master/LICENSE)
 
 Inspects VisualStudio solutions against violations against a plethora of different rules to keep your solution tidy.
+
+## Roadmap
+
+See [Roadmap](https://github.com/chrischu/SolutionInspector/wiki/Roadmap).
