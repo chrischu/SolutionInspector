@@ -5,6 +5,7 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -62,7 +63,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violation = () =>
-          Result.ShouldAllBeEquivalentTo(
+          Result.ShouldAllBeLike(
               new RuleViolation(SUT, Project, "There are multiple project items with include 'One' in the following locations: 1, 2, 3."));
 
       static IEnumerable<IRuleViolation> Result;

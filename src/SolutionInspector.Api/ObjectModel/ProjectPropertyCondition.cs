@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
+using SolutionInspector.Api.Utilities;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -25,7 +26,7 @@ namespace SolutionInspector.Api.ObjectModel
   }
 
   [DebuggerDisplay ("{DebuggerDisplay,nq}")]
-  internal class ProjectPropertyCondition : IProjectPropertyCondition
+  internal sealed class ProjectPropertyCondition : IProjectPropertyCondition, IEquatable<ProjectPropertyCondition>
   {
     [CanBeNull]
     public string Self { get; }
@@ -61,6 +62,39 @@ namespace SolutionInspector.Api.ObjectModel
 
         return $"{Parent} AND {Self}";
       }
+    }
+
+    public bool Equals (ProjectPropertyCondition other)
+    {
+      if (ReferenceEquals(null, other))
+        return false;
+      if (ReferenceEquals(this, other))
+        return true;
+      return string.Equals(Self, other.Self) && string.Equals(Parent, other.Parent);
+    }
+
+    public override bool Equals (object obj)
+    {
+      if (ReferenceEquals(null, obj))
+        return false;
+      if (ReferenceEquals(this, obj))
+        return true;
+      return obj is ProjectPropertyCondition && Equals((ProjectPropertyCondition) obj);
+    }
+
+    public override int GetHashCode ()
+    {
+      return HashCodeHelper.GetHashCode(Self, Parent);
+    }
+
+    public static bool operator == (ProjectPropertyCondition left, ProjectPropertyCondition right)
+    {
+      return Equals(left, right);
+    }
+
+    public static bool operator != (ProjectPropertyCondition left, ProjectPropertyCondition right)
+    {
+      return !Equals(left, right);
     }
   }
 }

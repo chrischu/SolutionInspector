@@ -75,7 +75,9 @@
       <HintPath>..\packages\ManyConsole.0.4.2.19\lib\ManyConsole.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="NDesk.Options, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
       <Private>True</Private>
@@ -125,6 +127,7 @@
     <Compile Include="ObjectModel\EvaluatedProjectPropertyValue.cs" />
     <Compile Include="ObjectModel\ProjectLocation.cs" />
     <Compile Include="ObjectModel\ProjectPropertyOccurrence.cs" />
+    <Compile Include="Reporting\ViolationReporterRegistrationExtensions.cs" />
     <Compile Include="Utilities\DictionaryEqualityComparer.cs" />
     <Compile Include="Utilities\HashCodeHelper.cs" />
     <Compile Include="ObjectModel\ProjectItemInclude.cs" />
@@ -159,7 +162,7 @@
     <Compile Include="Reporting\RuleViolationViewModel.cs" />
     <Compile Include="Reporting\RuleViolationViewModelConverter.cs" />
     <Compile Include="Reporting\TableViolationReporter.cs" />
-    <Compile Include="Reporting\ViolationReporterProxy.cs" />
+    <Compile Include="Reporting\ViolationReporterFactory.cs" />
     <Compile Include="Reporting\ViolationReportFormat.cs" />
     <Compile Include="Reporting\XmlViolationReporter.cs" />
     <Compile Include="Commands\SolutionInspectorCommand.cs" />
@@ -191,7 +194,7 @@
     <Compile Include="Utilities\CollectionDifferences.cs" />
     <Compile Include="Utilities\ConsoleTableWriter.cs" />
     <Compile Include="Utilities\ConsoleTableWriterCharacters.cs" />
-    <Compile Include="Utilities\ConsoleTableWriterOptions.cs" />
+    <Compile Include="Utilities\TableWriterOptions.cs" />
     <Compile Include="Utilities\SolutionLoader.cs" />
     <Compile Include="Utilities\SolutionNotFoundException.cs" />
   </ItemGroup>

@@ -8,6 +8,7 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -98,7 +99,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Solution);
 
       It returns_violations = () =>
-          Result.ShouldAllBeEquivalentTo(new RuleViolation(SUT, Solution, "Unexpected build configuration 'Unex|pected' found."));
+          Result.ShouldAllBeLike(new RuleViolation(SUT, Solution, "Unexpected build configuration 'Unex|pected' found."));
 
       static IEnumerable<IRuleViolation> Result;
     }
@@ -110,7 +111,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Solution);
 
       It returns_violations = () =>
-          Result.ShouldAllBeEquivalentTo(new RuleViolation(SUT, Solution, "Build configuration 'Configuration|Platform' could not be found."));
+          Result.ShouldAllBeLike(new RuleViolation(SUT, Solution, "Build configuration 'Configuration|Platform' could not be found."));
 
       static IEnumerable<IRuleViolation> Result;
     }

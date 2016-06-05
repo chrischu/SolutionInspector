@@ -15,7 +15,7 @@
               type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules" />
         <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.SolutionBuildConfigurationsRule, SolutionInspector.DefaultRules"
-              expectedConfigurations="Debug,Release" expectedPlatforms="AnyCPU" />
+              expectedConfigurations="Debug,Release" expectedPlatforms="Any CPU" />
       </solutionRules>
       <projectRules xdt:Transform="InsertIfMissing">
         <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)" appliesTo="*">
@@ -43,12 +43,12 @@
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.RequiredNuGetPackagesRule, SolutionInspector.DefaultRules">
-            <nuGetPackage id="log4net" />
+            <nuGetPackage id="SomeNuGetPackage" />
           </rule>
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectXPathRule, SolutionInspector.DefaultRules"
-                xPath="boolean(//Content)" />
+                xPath="boolean(//Compile)" ignoreNamespaces="true" />
         </projectRuleGroup>
         <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)"
                           appliesTo="+*;-*Tests;-*TestInfrastructure">
@@ -66,7 +66,7 @@
         </projectRuleGroup>
       </projectRules>
       <projectItemRules xdt:Transform="InsertIfMissing">
-        <projectItemRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo,inProject)" appliesTo="*" inProject="*">
+        <projectItemRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo,inProject)" appliesTo="*.filextension" inProject="*">
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectItemMustHaveCustomToolSetRule, SolutionInspector.DefaultRules"
                 expectedCustomTool="CustomTool" expectedCustomToolNamespace="CustomToolNamespace" />

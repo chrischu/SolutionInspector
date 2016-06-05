@@ -8,6 +8,7 @@ using Machine.Specifications;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -50,12 +51,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         Result.Name.Should().Be("TestSolution");
         Result.SolutionDirectory.FullName.Should().Be(Path.GetDirectoryName(SolutionPath));
-        Result.BuildConfigurations.ShouldAllBeEquivalentTo(
-            new[]
-            {
-                new BuildConfiguration("Debug", "Any CPU"),
-                new BuildConfiguration("Release", "Any CPU")
-            });
+        Result.BuildConfigurations.ShouldAllBeLike(new BuildConfiguration("Debug", "Any CPU"), new BuildConfiguration("Release", "Any CPU"));
         Result.Projects.Single().Name.Should().Be("EmptyProject");
         Result.Identifier.Should().Be("TestSolution.sln");
         Result.FullPath.Should().Be(SolutionPath);

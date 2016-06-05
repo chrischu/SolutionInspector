@@ -96,6 +96,7 @@
     <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
       <Project>{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}</Project>
       <Name>SolutionInspector.Api</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

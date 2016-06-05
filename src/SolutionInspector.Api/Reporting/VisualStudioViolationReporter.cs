@@ -1,17 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.Api.Reporting
 {
-  internal class VisualStudioViolationReporter : IViolationReporter
+  internal class VisualStudioViolationReporter : ViolationReporterBase
   {
-    public void Report (IEnumerable<IRuleViolation> violations)
+    public VisualStudioViolationReporter (TextWriter writer) : base(writer)
+    {
+    }
+
+    protected override void Report (TextWriter writer, IEnumerable<IRuleViolation> violations)
     {
       foreach (var violation in violations)
-      {
-        Console.Error.WriteLine($"{violation.Target.FullPath}: SolutionInspector warning SI0000: {violation.Message} ({violation.Rule})");
-      }
+        writer.WriteLine($"{violation.Target.FullPath}: SolutionInspector warning SI0000: {violation.Message} ({violation.Rule})");
     }
   }
 }

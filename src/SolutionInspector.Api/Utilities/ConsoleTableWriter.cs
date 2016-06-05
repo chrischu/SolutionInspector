@@ -11,36 +11,34 @@ using SolutionInspector.Api.Extensions;
 namespace SolutionInspector.Api.Utilities
 {
   [PublicAPI]
-  internal interface IConsoleTableWriter
+  internal interface ITableWriter
   {
-    void Write<T> (IEnumerable<T> rows, params Expression<Func<T, object>>[] columnSelectors);
-    void Write<T> (IEnumerable<T> rows, string[] headers, params Func<T, object>[] columnSelectors);
+    void Write<T> (TextWriter writer, IEnumerable<T> rows, params Expression<Func<T, object>>[] columnSelectors);
+    void Write<T> (TextWriter writer, IEnumerable<T> rows, string[] headers, params Func<T, object>[] columnSelectors);
   }
 
-  internal class ConsoleTableWriter : IConsoleTableWriter
+  internal class TableWriter : ITableWriter
   {
-    private readonly TextWriter _consoleOut;
-    private readonly ConsoleTableWriterOptions _options;
+    private readonly TableWriterOptions _options;
 
-    public ConsoleTableWriter (TextWriter consoleOut, ConsoleTableWriterOptions options = null)
+    public TableWriter (TableWriterOptions options = null)
     {
-      _consoleOut = consoleOut;
-      _options = options ?? new ConsoleTableWriterOptions();
+      _options = options ?? new TableWriterOptions();
     }
 
-    public void Write<T> (IEnumerable<T> rows, params Expression<Func<T, object>>[] columnSelectors)
+    public void Write<T> (TextWriter writer, IEnumerable<T> rows, params Expression<Func<T, object>>[] columnSelectors)
     {
       var headers = columnSelectors.Select(GetMemberName).ToArray();
       var selectors = columnSelectors.Select(exp => exp.Compile()).ToArray();
-      Write(rows, headers, selectors);
+      Write(writer, rows, headers, selectors);
     }
 
-    public void Write<T> (IEnumerable<T> rows, string[] headers, params Func<T, object>[] columnSelectors)
+    public void Write<T> (TextWriter writer, IEnumerable<T> rows, string[] headers, params Func<T, object>[] columnSelectors)
     {
-      Write(rows.ToArray(), headers, columnSelectors);
+      Write(writer, rows.ToArray(), headers, columnSelectors);
     }
 
-    private void Write<T> (T[] rows, string[] headers, Func<T, object>[] columnSelectors)
+    private void Write<T> (TextWriter writer, T[] rows, string[] headers, Func<T, object>[] columnSelectors)
     {
       Trace.Assert(headers.Length == columnSelectors.Length);
 
@@ -63,38 +61,38 @@ namespace SolutionInspector.Api.Utilities
         }
       }
 
-      Write(cells);
+      Write(writer, cells);
     }
 
-    private void Write (string[,] cells)
+    private void Write (TextWriter writer, string[,] cells)
     {
       var columnWidthRanges = CalculatePreferredColumnWidthRanges(cells);
       var availableWidth = CalculateAvailableWidth(cells, columnWidthRanges);
       var columnWidths = CalculateColumnWidths(columnWidthRanges, availableWidth);
 
-      WriteRowSeparator(columnWidths, -1);
+      WriteRowSeparator(writer, columnWidths, -1);
 
-      WriteHeaderRow(cells, columnWidths);
-      WriteRowSeparator(columnWidths, 0);
+      WriteHeaderRow(writer, cells, columnWidths);
+      WriteRowSeparator(writer, columnWidths, 0);
 
       for (int rowIndex = 1; rowIndex < cells.GetLength(0); rowIndex++)
       {
-        WriteRow(cells, rowIndex, columnWidths);
+        WriteRow(writer, cells, rowIndex, columnWidths);
 
         if (rowIndex + 1 < cells.GetLength(0))
-          WriteRowSeparator(columnWidths, 0);
+          WriteRowSeparator(writer, columnWidths, 0);
       }
 
-      WriteRowSeparator(columnWidths, 1);
+      WriteRowSeparator(writer, columnWidths, 1);
     }
 
-    private void WriteHeaderRow (string[,] cells, int[] columnWidths)
+    private void WriteHeaderRow (TextWriter writer, string[,] cells, int[] columnWidths)
     {
-      _consoleOut.Write(_options.Characters.Vertical);
+      writer.Write(_options.Characters.Vertical);
 
       for (int colIndex = 0; colIndex < columnWidths.Length; colIndex++)
       {
-        _consoleOut.Write(' ');
+        writer.Write(' ');
 
         var header = cells[0, colIndex];
         var excessWidth = columnWidths[colIndex] - header.Length;
@@ -107,18 +105,18 @@ namespace SolutionInspector.Api.Utilities
           right = excessWidth - left;
         }
 
-        _consoleOut.Write(new string(' ', left));
-        _consoleOut.Write(header);
-        _consoleOut.Write(new string(' ', right));
+        writer.Write(new string(' ', left));
+        writer.Write(header);
+        writer.Write(new string(' ', right));
 
-        _consoleOut.Write(' ');
-        _consoleOut.Write(_options.Characters.Vertical);
+        writer.Write(' ');
+        writer.Write(_options.Characters.Vertical);
       }
 
-      _consoleOut.WriteLine();
+      writer.WriteLine();
     }
 
-    private void WriteRow (string[,] cells, int rowIndex, int[] columnWidths)
+    private void WriteRow (TextWriter writer, string[,] cells, int rowIndex, int[] columnWidths)
     {
       var row = new string[cells.GetLength(1)][];
 
@@ -128,22 +126,22 @@ namespace SolutionInspector.Api.Utilities
       var lineCount = row.Max(r => r.Length);
       for (int lineIndex = 0; lineIndex < lineCount; lineIndex++)
       {
-        _consoleOut.Write(_options.Characters.Vertical);
+        writer.Write(_options.Characters.Vertical);
 
         for (int colIndex = 0; colIndex < row.Length; colIndex++)
         {
-          _consoleOut.Write(' ');
+          writer.Write(' ');
 
-          _consoleOut.Write(
+          writer.Write(
               lineIndex >= row[colIndex].Length
                   ? new string(' ', columnWidths[colIndex])
                   : row[colIndex][lineIndex].PadRight(columnWidths[colIndex]));
 
-          _consoleOut.Write(' ');
-          _consoleOut.Write(_options.Characters.Vertical);
+          writer.Write(' ');
+          writer.Write(_options.Characters.Vertical);
         }
 
-        _consoleOut.WriteLine();
+        writer.WriteLine();
       }
     }
 
@@ -172,7 +170,7 @@ namespace SolutionInspector.Api.Utilities
       yield return sb.ToString();
     }
 
-    private void WriteRowSeparator (int[] columnWidths, int indicator)
+    private void WriteRowSeparator (TextWriter writer, int[] columnWidths, int indicator)
     {
       var start = indicator < 0
           ? _options.Characters.TopLeftCorner
@@ -182,16 +180,16 @@ namespace SolutionInspector.Api.Utilities
           : indicator > 0 ? _options.Characters.BottomRightCorner : _options.Characters.RightMiddle;
       var cross = indicator < 0 ? _options.Characters.TopMiddle : indicator > 0 ? _options.Characters.BottomMiddle : _options.Characters.Cross;
 
-      _consoleOut.Write(start);
+      writer.Write(start);
 
       for (int i = 0; i < columnWidths.Length; i++)
       {
-        _consoleOut.Write(new string(_options.Characters.Horizontal, columnWidths[i] + 2));
+        writer.Write(new string(_options.Characters.Horizontal, columnWidths[i] + 2));
         if (i + 1 < columnWidths.Length)
-          _consoleOut.Write(cross);
+          writer.Write(cross);
       }
 
-      _consoleOut.WriteLine(end);
+      writer.WriteLine(end);
     }
 
     private int[] CalculateColumnWidths (WidthRange[] columnWidthRanges, int availableWidth)

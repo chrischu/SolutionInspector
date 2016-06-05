@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.Build.Exceptions;
 using NLog;
 using SolutionInspector.Api.Configuration;
@@ -18,29 +19,34 @@ namespace SolutionInspector.Api.Commands
     private readonly ISolutionInspectorConfiguration _configuration;
     private readonly ISolutionLoader _solutionLoader;
     private readonly IRuleCollectionBuilder _ruleCollectionBuilder;
-    private readonly IViolationReporterProxy _violationReporterProxy;
+    private readonly IViolationReporterFactory _violationReporterFactory;
 
     public InspectCommand (
         ISolutionInspectorConfiguration configuration,
         ISolutionLoader solutionLoader,
         IRuleCollectionBuilder ruleCollectionBuilder,
-        IViolationReporterProxy violationReporterProxy)
+        IViolationReporterFactory violationReporterFactory)
         : base("inspect", "Inspects a given solution for rule violations.")
     {
       _configuration = configuration;
       _solutionLoader = solutionLoader;
       _ruleCollectionBuilder = ruleCollectionBuilder;
-      _violationReporterProxy = violationReporterProxy;
+      _violationReporterFactory = violationReporterFactory;
     }
 
     protected override void SetupArguments (IArgumentsBuilder<RawArguments> argumentsBuilder)
     {
       argumentsBuilder
           .Option<ViolationReportFormat>(
-              "report",
-              "r",
-              "Writes a report of all violations to the console in the given format (Xml|Table|VisualStudio)",
+              "reportFormat",
+              "f",
+              $"Controls the format of the violation report ({string.Join("|", Enum.GetNames(typeof(ViolationReportFormat)))}).",
               (a, v) => a.ReportFormat = v)
+          .Option<string>(
+              "reportOutputFile",
+              "o",
+              "Writes the violation report to the given file instead of to the console.",
+              (a, v) => a.ReportOutputFile = v != null ? v.Trim() : null)
           .Values(c => c.Value("solutionFilePath", (a, v) => a.SolutionFilePath = v));
     }
 
@@ -49,7 +55,7 @@ namespace SolutionInspector.Api.Commands
       var solution = ValidateAndParseSolution(arguments, reportError);
       var rules = _ruleCollectionBuilder.Build(_configuration.Rules);
 
-      return new ParsedArguments(solution, rules, arguments.ReportFormat);
+      return new ParsedArguments(solution, rules, arguments.ReportFormat, arguments.ReportOutputFile);
     }
 
     private ISolution ValidateAndParseSolution (RawArguments arguments, Func<string, Exception> reportError)
@@ -86,12 +92,21 @@ namespace SolutionInspector.Api.Commands
 
         if (violations.Any())
         {
-          _violationReporterProxy.Report(arguments.ReportFormat, violations);
+          using (var reporter = CreateViolationReporter(arguments))
+            reporter.Report(violations);
           return 1;
         }
 
         return 0;
       }
+    }
+
+    private IViolationReporter CreateViolationReporter (ParsedArguments arguments)
+    {
+      if (arguments.ReportOutputFile != null)
+        return _violationReporterFactory.CreateFileReporter(arguments.ReportFormat, arguments.ReportOutputFile);
+
+      return _violationReporterFactory.CreateConsoleReporter(arguments.ReportFormat);
     }
 
     private IEnumerable<IRuleViolation> GetRuleViolations (ISolution solution, IRuleCollection rules)
@@ -144,6 +159,7 @@ namespace SolutionInspector.Api.Commands
     {
       public string SolutionFilePath { get; set; }
       public ViolationReportFormat ReportFormat { get; set; }
+      public string ReportOutputFile { get; set; }
     }
 
     public class ParsedArguments
@@ -151,12 +167,18 @@ namespace SolutionInspector.Api.Commands
       public ISolution Solution { get; }
       public IRuleCollection Rules { get; }
       public ViolationReportFormat ReportFormat { get; }
+      public string ReportOutputFile { get; }
 
-      public ParsedArguments (ISolution solution, IRuleCollection rules, ViolationReportFormat reportFormat)
+      public ParsedArguments (
+          ISolution solution,
+          IRuleCollection rules,
+          ViolationReportFormat reportFormat,
+          [CanBeNull] string reportOutputFile)
       {
         Solution = solution;
         Rules = rules;
         ReportFormat = reportFormat;
+        ReportOutputFile = reportOutputFile;
       }
     }
   }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 
@@ -14,12 +15,19 @@ namespace SolutionInspector.DefaultRules
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
-      return target.Advanced.Properties.Values.Where(p => p.Occurrences.Count > 1).Select(
-          property => new RuleViolation(
+      foreach (var property in target.Advanced.Properties.Values)
+      {
+        var groupedByCondition = property.Occurrences.GroupBy(o => o.Condition);
+
+        foreach (var group in groupedByCondition.Where(g => g.ContainsMoreThanOne()))
+        {
+          yield return new RuleViolation(
               this,
               target,
-              $"There are multiple project properties with name '{property.Name}' in the following locations: " +
-              $"{string.Join(", ", property.Occurrences.Select(i => i.Location))}."));
+              $"There are multiple project properties with name '{property.Name}' and the same conditions in the following locations: " +
+              $"{string.Join(", ", group.Select(i => i.Location))}.");
+        }
+      }
     }
   }
 }
