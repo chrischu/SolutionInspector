@@ -43,7 +43,7 @@
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.RequiredNuGetPackagesRule, SolutionInspector.DefaultRules">
-            <nuGetPackage id="log4net" />
+            <nuGetPackage id="SomeNuGetPackage" />
           </rule>
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
