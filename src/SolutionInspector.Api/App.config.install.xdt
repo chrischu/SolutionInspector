@@ -19,6 +19,8 @@
       <!-- Example: <import path="Directory" /> -->
     </ruleAssemblyImports>
     <msBuildParsing>
+      <!-- Since MSBuild does provide no way to identify actual project items from references it is necessary to list the types of project items
+           here. In most cases this configuration does not have to be changed. -->
       <projectBuildActions>
         <projectBuildAction name="None" />
         <projectBuildAction name="Compile" />
