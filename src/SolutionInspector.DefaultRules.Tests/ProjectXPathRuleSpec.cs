@@ -79,7 +79,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violation = () =>
-          Result.ShouldAllBeEquivalentTo(
+          Result.ShouldAllBeLike(
               new RuleViolation(SUT, Project, $"The XPath expression '{SUT.Configuration.XPath}' did not evaluate to 'true', but to 'false'."));
 
       static IEnumerable<IRuleViolation> Result;

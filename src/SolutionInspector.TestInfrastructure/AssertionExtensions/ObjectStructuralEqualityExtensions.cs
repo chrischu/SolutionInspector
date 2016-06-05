@@ -20,12 +20,12 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
         Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> config,
         params object[] expectation)
     {
-      FluentAssertions.AssertionExtensions.ShouldAllBeEquivalentTo(subject, expectation, config);
+      subject.ShouldAllBeEquivalentTo(expectation, config);
     }
 
     public static void ShouldAllBeLike<T> (this IEnumerable<T> subject, params object[] expectation)
     {
-      subject.ShouldAllBeEquivalentTo(options => options.ExcludingMissingMembers(), expectation);
+      subject.ShouldAllBeEquivalentTo(expectation, options => options.ExcludingMissingMembers());
     }
 
     public static void BeLike (this ObjectAssertions objectAssertions, object expectation)

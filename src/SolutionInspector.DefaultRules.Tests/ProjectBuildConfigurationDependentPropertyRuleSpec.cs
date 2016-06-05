@@ -98,7 +98,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violation = () =>
-          Result.ShouldAllBeEquivalentTo(
+          Result.ShouldAllBeLike(
               new RuleViolation(
                   SUT,
                   Project,
@@ -119,7 +119,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violation = () =>
-          Result.ShouldAllBeEquivalentTo(
+          Result.ShouldAllBeLike(
               new RuleViolation(
                   SUT,
                   Project,
@@ -165,7 +165,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violations_from_evaluated_configurations = () =>
-          Result.ShouldAllBeEquivalentTo(
+          Result.ShouldAllBeLike(
               new RuleViolation(
                   SUT,
                   Project,

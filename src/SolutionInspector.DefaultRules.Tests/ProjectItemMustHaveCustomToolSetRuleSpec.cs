@@ -71,7 +71,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(ProjectItem);
 
       It returns_violation = () =>
-          Result.ShouldAllBeEquivalentTo(
+          Result.ShouldAllBeLike(
               new RuleViolation(SUT, ProjectItem, "Unexpected value for custom tool, was 'DIFFERENT' but should be 'CustomTool'."),
               new RuleViolation(
                   SUT,

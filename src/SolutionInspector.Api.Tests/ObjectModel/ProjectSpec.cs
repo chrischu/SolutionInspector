@@ -67,7 +67,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.TargetFrameworkVersion.Should().Be(Version.Parse("4.6.1"));
         Result.Identifier.Should().Be($"{ProjectName}.csproj");
         Result.FullPath.Should().Be(projectPath);
-        Result.BuildConfigurations.ShouldAllBeEquivalentTo(new BuildConfiguration("Debug", "AnyCPU"), new BuildConfiguration("Release", "AnyCPU"));
+        Result.BuildConfigurations.ShouldAllBeLike(new BuildConfiguration("Debug", "AnyCPU"), new BuildConfiguration("Release", "AnyCPU"));
       };
 
       It parses_unconditional_properties = () =>
@@ -259,7 +259,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         var packagesConfigPath = Path.Combine(Path.GetDirectoryName(projectPath).AssertNotNull(), "packages.config");
         Result.NuGetPackagesFile.FullName.Should().Be(packagesConfigPath);
 
-        Result.NuGetPackages.ShouldAllBeEquivalentTo(ReferencedNuGetPackage1, ReferencedNuGetPackage2);
+        Result.NuGetPackages.ShouldAllBeLike(ReferencedNuGetPackage1, ReferencedNuGetPackage2);
       };
 
       It parses_project_references = () =>

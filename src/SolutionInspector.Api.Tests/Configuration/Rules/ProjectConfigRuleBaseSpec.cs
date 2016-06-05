@@ -7,6 +7,7 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -72,8 +73,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
           () => Result = SUT.Evaluate(Project);
 
       It returns_violation = () =>
-          Result.ShouldAllBeEquivalentTo(
-              new RuleViolation(SUT, Project, "For the project 'Project' no configuration file could be found."));
+          Result.ShouldAllBeLike(new RuleViolation(SUT, Project, "For the project 'Project' no configuration file could be found."));
 
       static IEnumerable<IRuleViolation> Result;
     }
