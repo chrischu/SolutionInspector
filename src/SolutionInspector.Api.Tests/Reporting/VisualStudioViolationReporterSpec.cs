@@ -5,6 +5,7 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -54,9 +55,9 @@ namespace SolutionInspector.Api.Tests.Reporting
       Because of = () => SUT.Report(RuleViolations);
 
       It reports = () =>
-          TextWriter.ToString().Should().Be(@"TP1: SolutionInspector warning SI0000: MSG1 (Some)
-TP2: SolutionInspector warning SI0000: MSG2 (Some)
-");
+          TextWriter.ToString().Should().BeWithDiff(@"
+TP1: SolutionInspector warning SI0000: MSG1 (Some)
+TP2: SolutionInspector warning SI0000: MSG2 (Some)");
 
       static IEnumerable<IRuleViolation> RuleViolations;
     }

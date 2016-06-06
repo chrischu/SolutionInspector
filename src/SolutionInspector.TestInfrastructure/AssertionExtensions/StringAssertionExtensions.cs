@@ -14,7 +14,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 
       try
       {
-        actualTrimmed.Should().Be(expectedTrimmed);
+        actualTrimmed.Should().BeIgnoringDifferentLineEnds(expectedTrimmed);
       }
       catch (SpecificationException ex)
       {
@@ -25,6 +25,14 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {ex.Message}";
         throw new SpecificationException(message);
       }
+    }
+
+    private static void BeIgnoringDifferentLineEnds(this StringAssertions stringAssertions, string expected)
+    {
+      var actualWithReplacedLineEndings = stringAssertions.Subject.Replace("\r\n", "\n");
+      var expectedWithReplacedLineEndings = expected.Replace("\r\n", "\n");
+
+      actualWithReplacedLineEndings.Should().Be(expectedWithReplacedLineEndings);
     }
   }
 }

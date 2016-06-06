@@ -6,6 +6,7 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -63,7 +64,7 @@ namespace SolutionInspector.Api.Tests.Reporting
           A.CallTo(() => RuleViolationViewModelConverter.Convert(RuleViolations)).MustHaveHappened();
 
       It writes_xml = () =>
-          TextWriter.ToString().Should().Be(@"
+          TextWriter.ToString().Should().BeWithDiff(@"
 <violations>
   <violation index=""1"" rule=""Rule1"" target=""Target1"">
     <message>Message1</message>
