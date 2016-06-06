@@ -139,6 +139,9 @@
     </None>
     <Compile Include="Rules\FilteringProjectRuleProxySpec.cs" />
     <Compile Include="Rules\FilteringProjectItemRuleProxySpec.cs" />
+    <Compile Include="Utilities\BuildConfigurationFilterConverterSpec.cs" />
+    <Compile Include="Utilities\NameFilterConverterSpec.cs" />
+    <Compile Include="Utilities\HashCodeHelperSpec.cs" />
     <Compile Include="Utilities\SolutionLoaderSpec.cs" />
     <Compile Include="Utilities\NameFilterSpec.cs" />
     <Compile Include="Configuration\Rules\RulesConfigurationSectionSpec.cs" />
