@@ -17,8 +17,6 @@ namespace SolutionInspector.Api.Commands
         string description,
         Action<TArguments, T> setValue,
         T defaultValue = default(T));
-
-    IArgumentsBuilderWithSetValues<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
   }
 
   [PublicAPI]
@@ -30,8 +28,6 @@ namespace SolutionInspector.Api.Commands
         string description,
         Action<TArguments, T> setValue,
         T defaultValue = default(T));
-
-    IArgumentsBuilder<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
 
     IArgumentsBuilderWithSetValues<TArguments> Values (Action<IValueArgumentsBuilder<TArguments>> configureValueArguments);
   }
@@ -113,13 +109,6 @@ namespace SolutionInspector.Api.Commands
         return this;
       }
 
-
-      public IArgumentsBuilder<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue)
-      {
-        _command.HasOption($"{shortKey}|{longKey}", description, v => setValue(_arguments, v != null));
-        return this;
-      }
-
       public IArgumentsBuilderWithSetValues<TArguments> Values (Action<IValueArgumentsBuilder<TArguments>> configureValueArguments)
       {
         configureValueArguments(_valueArgumentsBuilder);
@@ -136,16 +125,6 @@ namespace SolutionInspector.Api.Commands
           T defaultValue)
       {
         return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
-      }
-
-      [ExcludeFromCodeCoverage]
-      IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Flag (
-          string longKey,
-          string shortKey,
-          string description,
-          Action<TArguments, bool> setValue)
-      {
-        return (IArgumentsBuilderWithSetValues<TArguments>) Flag(longKey, shortKey, description, setValue);
       }
 
       private class ValueArgumentsBuilder : IValueArgumentsBuilder<TArguments>
