@@ -48,6 +48,7 @@ namespace SolutionInspector.Api.Tests.Commands
     static IViolationReporter ViolationReporter;
     static IViolationReporterFactory ViolationReporterFactory;
 
+    static IMsBuildInstallationChecker MsBuildInstallationChecker;
     static ISolutionInspectorConfiguration Configuration;
     static IRulesConfiguration RulesConfiguration;
 
@@ -79,6 +80,9 @@ namespace SolutionInspector.Api.Tests.Commands
       Rules = new RuleCollection(new[] { SolutionRule }, new[] { ProjectRule }, new[] { ProjectItemRule });
       A.CallTo(() => RuleCollectionBuilder.Build(A<IRulesConfiguration>._)).Returns(Rules);
 
+      MsBuildInstallationChecker = A.Fake<IMsBuildInstallationChecker>();
+      A.CallTo(() => MsBuildInstallationChecker.IsMsBuildInstalled()).Returns(true);
+
       Configuration = A.Fake<ISolutionInspectorConfiguration>();
       RulesConfiguration = A.Fake<IRulesConfiguration>();
       A.CallTo(() => Configuration.Rules).Returns(RulesConfiguration);
@@ -91,7 +95,7 @@ namespace SolutionInspector.Api.Tests.Commands
 
       TextWriter = new StringWriter();
 
-      SUT = new InspectCommand(Configuration, SolutionLoader, RuleCollectionBuilder, ViolationReporterFactory);
+      SUT = new InspectCommand(MsBuildInstallationChecker, Configuration, SolutionLoader, RuleCollectionBuilder, ViolationReporterFactory);
     };
 
     class when_running_without_violations

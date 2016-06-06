@@ -7,6 +7,6 @@ namespace SolutionInspector.Api.Utilities
   internal class TableWriterOptions
   {
     public int PreferredTableWidth { get; set; } = 120;
-    public ConsoleTableWriterCharacters Characters { get; set; } = new ConsoleTableWriterCharacters();
+    public TableWriterCharacters Characters { get; set; } = new TableWriterCharacters();
   }
 }

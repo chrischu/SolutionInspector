@@ -2,12 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using JetBrains.Annotations;
 using ManyConsole;
-using NLog;
 
 namespace SolutionInspector.Api.Commands
 {
@@ -48,14 +45,15 @@ namespace SolutionInspector.Api.Commands
   internal abstract class SolutionInspectorCommand<TRawArguments, TParsedArguments> : ConsoleCommand
       where TRawArguments : new()
   {
-    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+    private readonly IMsBuildInstallationChecker _msBuildInstallationChecker;
     private readonly TRawArguments _rawArguments;
     private readonly ArgumentsBuilder<TRawArguments> _rawArgumentsBuilder;
     private TParsedArguments _parsedArguments;
 
     [SuppressMessage ("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    protected SolutionInspectorCommand (string command, string description)
+    protected SolutionInspectorCommand (IMsBuildInstallationChecker msBuildInstallationChecker, string command, string description)
     {
+      _msBuildInstallationChecker = msBuildInstallationChecker;
       IsCommand(command, description);
       SkipsCommandSummaryBeforeRunning();
       _rawArguments = new TRawArguments();
@@ -70,37 +68,15 @@ namespace SolutionInspector.Api.Commands
     {
       _rawArgumentsBuilder.HandleRemainingArguments(remainingArguments);
 
-      if (!TryLoadingMsBuildToolsAssembly())
+      if (!_msBuildInstallationChecker.IsMsBuildInstalled())
       {
-        _logger.Error(
-            "Could not find MSBuild assemblies in version 14.0. This most likely means that 'MSBuild Tools 2015' was not installed."
-            + Environment.NewLine
-            + "Just press the RETURN key to open a browser with the download page of the 'MSBuild Tools 2015' or press ESCAPE or any other key to cancel...");
-        var key = Console.ReadKey();
-        if (key.Key == ConsoleKey.Enter)
-          Process.Start("https://www.microsoft.com/en-us/download/details.aspx?id=48159");
-
+        _msBuildInstallationChecker.SuggestInstallation();
         return 1;
       }
 
       _parsedArguments = ValidateAndParseArguments(_rawArguments, message => new ConsoleHelpAsException(message));
 
       return base.OverrideAfterHandlingArgumentsBeforeRun(remainingArguments);
-    }
-
-    private bool TryLoadingMsBuildToolsAssembly ()
-    {
-      try
-      {
-        _logger.Info("Checking for 'MSBuild Tools 2015'...");
-        Assembly.Load("Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-        _logger.Info("Check successful, 'MSBuild Tools 2015' are installed.");
-        return true;
-      }
-      catch (FileNotFoundException)
-      {
-        return false;
-      }
     }
 
     protected abstract TParsedArguments ValidateAndParseArguments (TRawArguments arguments, Func<string, Exception> reportError);

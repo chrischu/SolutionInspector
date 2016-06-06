@@ -34,6 +34,10 @@
     <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DiffPlex, Version=1.2.0.0, Culture=neutral, PublicKeyToken=1d35e91d1bd7bc0f, processorArchitecture=MSIL">
+      <HintPath>..\packages\DiffPlex.1.2.1\lib\portable-net40+sl50+win+wpa81+wp80\DiffPlex.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FakeItEasy, Version=2.0.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
       <HintPath>..\packages\FakeItEasy.2.0.0\lib\net40\FakeItEasy.dll</HintPath>
       <Private>True</Private>
@@ -78,6 +82,8 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="AssertionExtensions\DictionaryAssertionExtensions.cs" />
+    <Compile Include="AssertionExtensions\DiffFormatter.cs" />
+    <Compile Include="AssertionExtensions\StringAssertionExtensions.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="AssertionExtensions\ExceptionTestingExtensions.cs" />
     <Compile Include="AssertionExtensions\ObjectStructuralEqualityExtensions.cs" />

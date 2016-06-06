@@ -22,11 +22,12 @@ namespace SolutionInspector.Api.Commands
     private readonly IViolationReporterFactory _violationReporterFactory;
 
     public InspectCommand (
+        IMsBuildInstallationChecker msBuildInstallationChecker,
         ISolutionInspectorConfiguration configuration,
         ISolutionLoader solutionLoader,
         IRuleCollectionBuilder ruleCollectionBuilder,
         IViolationReporterFactory violationReporterFactory)
-        : base("inspect", "Inspects a given solution for rule violations.")
+        : base(msBuildInstallationChecker, "inspect", "Inspects a given solution for rule violations.")
     {
       _configuration = configuration;
       _solutionLoader = solutionLoader;
@@ -46,7 +47,7 @@ namespace SolutionInspector.Api.Commands
               "reportOutputFile",
               "o",
               "Writes the violation report to the given file instead of to the console.",
-              (a, v) => a.ReportOutputFile = v != null ? v.Trim() : null)
+              (a, v) => a.ReportOutputFile = v?.Trim())
           .Values(c => c.Value("solutionFilePath", (a, v) => a.SolutionFilePath = v));
     }
 

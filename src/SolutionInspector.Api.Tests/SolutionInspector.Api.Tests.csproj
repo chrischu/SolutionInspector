@@ -100,6 +100,7 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="Commands\SolutionInspectorCommandSpec.cs" />
     <Compile Include="Configuration\Infrastructure\ConfigurationElementCollectionBaseSpec.cs" />
     <Compile Include="Configuration\Infrastructure\KeyedConfigurationElementCollectionBaseSpec.cs" />
     <Compile Include="Configuration\MsBuildParsing\MsBuildParsingConfigurationSectionSpec.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Configuration\Rules\RuleConfigurationElementSpec.cs" />
     <Compile Include="Extensions\EnumerableExtensionsSpec.cs" />
     <Compile Include="Extensions\DictionaryExtensionsSpec.cs" />
+    <Compile Include="Extensions\StringExtensionsSpec.cs" />
     <Compile Include="Extensions\XmlExtensionsSpec.cs" />
     <Compile Include="ObjectModel\ProjectPropertyConditionSpec.cs" />
     <Compile Include="ObjectModel\ProjectItemIncludeSpec.cs" />
@@ -137,9 +139,16 @@
     <None Include="ObjectModel\TestData\Project\ExecutableProject\Program.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Reporting\RuleViolationObjectMother.cs" />
+    <Compile Include="Reporting\VisualStudioViolationReporterSpec.cs" />
+    <Compile Include="Reporting\TableViolationReporterSpec.cs" />
+    <Compile Include="Reporting\XmlViolationReporterSpec.cs" />
+    <Compile Include="Reporting\ViolationReporterBaseSpec.cs" />
+    <Compile Include="Reporting\RuleViolationViewModelConverterSpec.cs" />
     <Compile Include="Rules\FilteringProjectRuleProxySpec.cs" />
     <Compile Include="Rules\FilteringProjectItemRuleProxySpec.cs" />
     <Compile Include="Utilities\BuildConfigurationFilterConverterSpec.cs" />
+    <Compile Include="Utilities\TableWriterSpec.cs" />
     <Compile Include="Utilities\NameFilterConverterSpec.cs" />
     <Compile Include="Utilities\HashCodeHelperSpec.cs" />
     <Compile Include="Utilities\SolutionLoaderSpec.cs" />

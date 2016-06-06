@@ -109,6 +109,7 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="MsBuildInstallationChecker.cs" />
     <Compile Include="Commands\InspectCommand.cs" />
     <Compile Include="Configuration\Infrastructure\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\Infrastructure\KeyedConfigurationElement.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Configuration\Rules\ProjectItemRulesConfigurationCollection.cs" />
     <Compile Include="Configuration\Rules\ProjectItemRuleGroupConfigurationElement.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="ObjectModel\ConfigurationProjectItem.cs" />
     <Compile Include="ObjectModel\EvaluatedProjectPropertyValue.cs" />
     <Compile Include="ObjectModel\ProjectLocation.cs" />
@@ -192,8 +194,8 @@
     <Compile Include="Utilities\BuildConfigurationFilterConverter.cs" />
     <Compile Include="Utilities\CollectionDifferenceFinder.cs" />
     <Compile Include="Utilities\CollectionDifferences.cs" />
-    <Compile Include="Utilities\ConsoleTableWriter.cs" />
-    <Compile Include="Utilities\ConsoleTableWriterCharacters.cs" />
+    <Compile Include="Utilities\TableWriter.cs" />
+    <Compile Include="Utilities\TableWriterCharacters.cs" />
     <Compile Include="Utilities\TableWriterOptions.cs" />
     <Compile Include="Utilities\SolutionLoader.cs" />
     <Compile Include="Utilities\SolutionNotFoundException.cs" />

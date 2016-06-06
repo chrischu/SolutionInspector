@@ -6,9 +6,9 @@ namespace SolutionInspector.Api.Utilities
 {
   [PublicAPI]
   [ExcludeFromCodeCoverage]
-  internal class ConsoleTableWriterCharacters
+  internal class TableWriterCharacters
   {
-    public static readonly ConsoleTableWriterCharacters AdvancedAscii = new ConsoleTableWriterCharacters
+    public static readonly TableWriterCharacters AdvancedAscii = new TableWriterCharacters
                                                                         {
                                                                             TopLeftCorner = '┌',
                                                                             BottomLeftCorner = '└',

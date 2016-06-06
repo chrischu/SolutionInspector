@@ -68,7 +68,7 @@ namespace SolutionInspector.Api
 
       builder.Register(
           ctx =>
-              new TableWriter(new TableWriterOptions { PreferredTableWidth = 200, Characters = ConsoleTableWriterCharacters.AdvancedAscii })
+              new TableWriter(new TableWriterOptions { PreferredTableWidth = 200, Characters = TableWriterCharacters.AdvancedAscii })
           ).As<ITableWriter>();
 
       builder.RegisterViolationReporter(
@@ -86,6 +86,8 @@ namespace SolutionInspector.Api
       builder.RegisterType<ViolationReporterFactory>().As<IViolationReporterFactory>();
 
       builder.RegisterType<InspectCommand>().As<ConsoleCommand>();
+
+      builder.RegisterType<MsBuildInstallationChecker>().As<IMsBuildInstallationChecker>();
 
       return builder.Build();
     }
