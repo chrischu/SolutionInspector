@@ -95,10 +95,7 @@ namespace SolutionInspector.Api.Tests.Extensions
 
     class when_removing_attributes_where_and_there_are_none
     {
-      Establish ctx = () =>
-      {
-        XmlElement = CreateXmlElement("element");
-      };
+      Establish ctx = () => { XmlElement = CreateXmlElement("element"); };
 
       Because of = () => Exception = Catch.Exception(() => XmlElement.RemoveAttributesWhere(a => a.Name == Some.String()));
 

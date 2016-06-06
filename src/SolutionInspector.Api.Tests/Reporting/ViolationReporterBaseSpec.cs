@@ -43,10 +43,7 @@ namespace SolutionInspector.Api.Tests.Reporting
 
     class when_reporting
     {
-      Establish ctx = () =>
-      {
-        RuleViolations = A.Dummy<IEnumerable<IRuleViolation>>();
-      };
+      Establish ctx = () => { RuleViolations = A.Dummy<IEnumerable<IRuleViolation>>(); };
 
       Because of = () => SUT.Report(RuleViolations);
 
@@ -72,7 +69,7 @@ namespace SolutionInspector.Api.Tests.Reporting
 
       static Action DisposeAction;
     }
-    
+
     class DummyViolationReporter : ViolationReporterBase
     {
       readonly Action<TextWriter, IEnumerable<IRuleViolation>> _report;

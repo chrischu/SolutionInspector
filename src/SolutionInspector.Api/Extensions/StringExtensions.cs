@@ -11,7 +11,7 @@ namespace SolutionInspector.Api.Extensions
     /// <summary>
     /// Removes the given <paramref name="suffix"/> from the string.
     /// </summary>
-    public static string RemoveSuffix([CanBeNull] this string s, string suffix)
+    public static string RemoveSuffix ([CanBeNull] this string s, string suffix)
     {
       if (s == null)
         return null;

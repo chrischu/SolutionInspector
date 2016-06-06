@@ -33,7 +33,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Infrastructure
     {
       Establish ctx = () => { SUT = new DummyConfigurationElementCollection(); };
 
-      Because of = () =>ConfigurationHelper.DeserializeElement(SUT, @"<collection><element value=""a"" /><element value=""b"" /></collection>");
+      Because of = () => ConfigurationHelper.DeserializeElement(SUT, @"<collection><element value=""a"" /><element value=""b"" /></collection>");
 
       It deserializes_everything = () =>
           SUT.ShouldAllBeLike(new { Value = "a" }, new { Value = "b" });
@@ -43,7 +43,10 @@ namespace SolutionInspector.Api.Tests.Configuration.Infrastructure
     {
       Establish ctx = () => { SUT = new DummyConfigurationElementCollection(); };
 
-      Because of = () => Exception = Catch.Exception(() => ConfigurationHelper.DeserializeElement(SUT, @"<collection><element value=""a"" /><UNRECOGNIZED /></collection>"));
+      Because of = () => Exception = Catch.Exception(
+          () => ConfigurationHelper.DeserializeElement(
+              SUT,
+              @"<collection><element value=""a"" /><UNRECOGNIZED /></collection>"));
 
       It throws = () =>
           Exception.Should().Be<ConfigurationErrorsException>().WithMessage("Unrecognized element 'UNRECOGNIZED'.");

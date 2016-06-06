@@ -29,10 +29,7 @@ namespace SolutionInspector.Api.Tests.Utilities
   {
     static ITableWriter SUT;
 
-    Establish ctx = () =>
-    {
-      SUT = new TableWriter();
-    };
+    Establish ctx = () => { SUT = new TableWriter(); };
 
     class when_writing
     {
@@ -74,7 +71,7 @@ namespace SolutionInspector.Api.Tests.Utilities
                };
       };
 
-      Because of = () => SUT.Write(TextWriter, Rows, new[] {"HEADER"}, x => x.A);
+      Because of = () => SUT.Write(TextWriter, Rows, new[] { "HEADER" }, x => x.A);
 
       It writes_table = () =>
           TextWriter.ToString().Should().BeWithDiff(@"

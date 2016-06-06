@@ -51,12 +51,12 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
     class when_comparing_equality
     {
-      Establish ctx = () =>
-      {
-        BuildConfiguration = new BuildConfiguration(Some.String(), Some.String());
-      };
+      Establish ctx = () => { BuildConfiguration = new BuildConfiguration(Some.String(), Some.String()); };
 
-      Because of = () => { /* Actual tests are in the its. */ };
+      Because of = () =>
+      {
+        /* Actual tests are in the its. */
+      };
 
       It works_with_same_reference = () =>
           BuildConfiguration.Equals(BuildConfiguration).Should().BeTrue();
@@ -71,10 +71,10 @@ namespace SolutionInspector.Api.Tests.ObjectModel
           BuildConfiguration.Equals(new BuildConfiguration(BuildConfiguration.ConfigurationName, "DIFFERENT")).Should().BeFalse();
 
       It works_with_same_reference_as_object = () =>
-          BuildConfiguration.Equals((object)BuildConfiguration).Should().BeTrue();
+          BuildConfiguration.Equals((object) BuildConfiguration).Should().BeTrue();
 
       It works_with_null_as_object = () =>
-          BuildConfiguration.Equals((object)null).Should().BeFalse();
+          BuildConfiguration.Equals((object) null).Should().BeFalse();
 
       static BuildConfiguration BuildConfiguration;
     }

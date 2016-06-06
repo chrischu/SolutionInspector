@@ -26,7 +26,10 @@ namespace SolutionInspector.Api.Tests.Extensions
   {
     class when_removing_suffix
     {
-      Because of = () => { /* Actual tests are in the its */ };
+      Because of = () =>
+      {
+        /* Actual tests are in the its */
+      };
 
       It works_with_suffix = () =>
           "StuffSuffix".RemoveSuffix("Suffix").Should().Be("Stuff");

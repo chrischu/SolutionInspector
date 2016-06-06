@@ -35,7 +35,7 @@ namespace SolutionInspector.Api.Utilities
       if (data == null)
         return null;
 
-      if(data.GetType() != typeof(string))
+      if (data.GetType() != typeof(string))
         throw new ArgumentException($"Unsupported type '{data.GetType()}', expected type '{typeof(string)}'.", nameof(data));
 
       var filterString = (string) data;

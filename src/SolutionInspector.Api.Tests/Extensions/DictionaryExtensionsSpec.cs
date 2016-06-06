@@ -27,10 +27,7 @@ namespace SolutionInspector.Api.Tests.Extensions
   {
     class when_getting_value_or_default_and_value_exists
     {
-      Establish ctx = () =>
-      {
-        Dictionary = new Dictionary<string, int> { { "key", 7 } };
-      };
+      Establish ctx = () => { Dictionary = new Dictionary<string, int> { { "key", 7 } }; };
 
       Because of = () => Result = Dictionary.GetValueOrDefault("key");
 
@@ -44,10 +41,7 @@ namespace SolutionInspector.Api.Tests.Extensions
 
     class when_getting_value_or_default_and_value_does_not_exist
     {
-      Establish ctx = () =>
-      {
-        Dictionary = new Dictionary<string, int>();
-      };
+      Establish ctx = () => { Dictionary = new Dictionary<string, int>(); };
 
       Because of = () => Result = Dictionary.GetValueOrDefault("key");
 

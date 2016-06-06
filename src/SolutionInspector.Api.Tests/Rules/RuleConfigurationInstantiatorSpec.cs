@@ -66,7 +66,7 @@ namespace SolutionInspector.Api.Tests.Rules
       {
         var doc = new XmlDocument();
         doc.LoadXml(@"<rule property=""value"" />");
-        Configuration = (XmlElement)doc.FirstChild;
+        Configuration = (XmlElement) doc.FirstChild;
       };
 
       Because of = () => Result = SUT.Instantiate(null, Configuration);

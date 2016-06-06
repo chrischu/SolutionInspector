@@ -33,8 +33,10 @@ namespace SolutionInspector.Api.Tests.Configuration.Infrastructure
     {
       Establish ctx = () => { SUT = new DummyConfigurationElementCollection(); };
 
-      Because of = () =>
-          Exception = Catch.Exception(() => ConfigurationHelper.DeserializeElement(SUT, @"<collection><add key=""a"" /><add key=""a"" /></collection>"));
+      Because of = () => Exception = Catch.Exception(
+          () => ConfigurationHelper.DeserializeElement(
+              SUT,
+              @"<collection><add key=""a"" /><add key=""a"" /></collection>"));
 
       It throws = () =>
           Exception.Should().Be<ConfigurationErrorsException>()

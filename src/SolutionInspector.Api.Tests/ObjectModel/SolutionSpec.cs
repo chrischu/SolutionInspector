@@ -62,10 +62,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
     class when_loading_and_disposing
     {
-      Establish ctx = () =>
-      {
-        Solution = Api.ObjectModel.Solution.Load(SolutionPath, MsBuildParsingConfiguration);
-      };
+      Establish ctx = () => { Solution = Api.ObjectModel.Solution.Load(SolutionPath, MsBuildParsingConfiguration); };
 
       Because of = () => Solution.Dispose();
 

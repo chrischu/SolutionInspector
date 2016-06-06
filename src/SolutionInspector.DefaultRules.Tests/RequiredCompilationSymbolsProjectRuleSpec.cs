@@ -27,7 +27,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject(typeof(RequiredCompilationSymbolsProjectRule))]
+  [Subject (typeof(RequiredCompilationSymbolsProjectRule))]
   class RequiredCompilationSymbolsProjectRuleSpec
   {
     static IProject Project;

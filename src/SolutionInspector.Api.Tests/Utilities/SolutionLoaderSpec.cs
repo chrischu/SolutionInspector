@@ -63,8 +63,8 @@ namespace SolutionInspector.Api.Tests.Utilities
       Establish ctx = () =>
       {
         SolutionPath = Path.Combine(
-          Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath).AssertNotNull(),
-          @"ObjectModel\TestData\Solution\TestSolution.sln");
+            Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath).AssertNotNull(),
+            @"ObjectModel\TestData\Solution\TestSolution.sln");
 
         A.CallTo(() => File.Exists(SolutionPath)).Returns(true);
       };

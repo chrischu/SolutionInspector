@@ -32,10 +32,7 @@ namespace SolutionInspector.Api.Tests.Utilities
 
     class when_converting_to
     {
-      Establish ctx = () =>
-      {
-        NameFilter = new NameFilter(new[] { "A", "B" }, new[] { "C", "D" });
-      };
+      Establish ctx = () => { NameFilter = new NameFilter(new[] { "A", "B" }, new[] { "C", "D" }); };
 
       Because of = () => Result = ConvertTo(NameFilter);
 

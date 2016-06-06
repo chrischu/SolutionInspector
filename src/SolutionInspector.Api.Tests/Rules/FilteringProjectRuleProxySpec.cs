@@ -56,10 +56,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_evaluating_and_project_name_matches
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => ProjectNameFilter.IsMatch(A<string>._)).Returns(true);
-      };
+      Establish ctx = () => { A.CallTo(() => ProjectNameFilter.IsMatch(A<string>._)).Returns(true); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -77,10 +74,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_evaluating_and_project_name_does_not_match
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => ProjectNameFilter.IsMatch(A<string>._)).Returns(false);
-      };
+      Establish ctx = () => { A.CallTo(() => ProjectNameFilter.IsMatch(A<string>._)).Returns(false); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 

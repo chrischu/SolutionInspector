@@ -68,22 +68,22 @@ namespace SolutionInspector.Api.Tests.Reporting
 
       It calls_table_writer = () =>
           A.CallTo(
-              () =>
-                  TableWriter.Write(
-                      TextWriter,
-                      RuleViolationViewModels,
-                      A<Expression<Func<RuleViolationViewModel, object>>[]>.That.Matches(expressions => AssertColumnSelectors(expressions)))).MustHaveHappened();
+              () => TableWriter.Write(
+                  TextWriter,
+                  RuleViolationViewModels,
+                  A<Expression<Func<RuleViolationViewModel, object>>[]>.That.Matches(expressions => AssertColumnSelectors(expressions))))
+              .MustHaveHappened();
 
       static bool AssertColumnSelectors (Expression<Func<RuleViolationViewModel, object>>[] expressions)
       {
         var ruleViolationViewModel = RuleViolationViewModels.First();
 
-        return 
-          expressions.Length == 4 &&
-          expressions[0].Compile()(ruleViolationViewModel).Equals(1) &&
-          expressions[1].Compile()(ruleViolationViewModel).Equals("Rule1") &&
-          expressions[2].Compile()(ruleViolationViewModel).Equals("Target1") &&
-          expressions[3].Compile()(ruleViolationViewModel).Equals("Message1");
+        return
+            expressions.Length == 4 &&
+            expressions[0].Compile()(ruleViolationViewModel).Equals(1) &&
+            expressions[1].Compile()(ruleViolationViewModel).Equals("Rule1") &&
+            expressions[2].Compile()(ruleViolationViewModel).Equals("Target1") &&
+            expressions[3].Compile()(ruleViolationViewModel).Equals("Message1");
       }
 
       static IEnumerable<IRuleViolation> RuleViolations;

@@ -90,10 +90,7 @@ namespace SolutionInspector.Api.Tests.Rules
 
     class when_evaluating_and_project_filter_does_not_match
     {
-      Establish ctx = () =>
-      {
-        A.CallTo(() => ProjectNameFilter.IsMatch(A<string>._)).Returns(false);
-      };
+      Establish ctx = () => { A.CallTo(() => ProjectNameFilter.IsMatch(A<string>._)).Returns(false); };
 
       Because of = () => Result = SUT.Evaluate(ProjectItem);
 

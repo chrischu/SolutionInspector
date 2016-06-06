@@ -8,20 +8,20 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
   public static class DiffFormatter
   {
-    public static string FormatDiff(string old, string @new)
+    public static string FormatDiff (string old, string @new)
     {
       var diff = GetDiff(old, @new);
       return FormatDiff(diff);
     }
 
-    private static DiffPaneModel GetDiff(string oldText, string newText)
+    private static DiffPaneModel GetDiff (string oldText, string newText)
     {
       var differ = new Differ();
       var inlineBuilder = new InlineDiffBuilder(differ);
       return inlineBuilder.BuildDiffModel(oldText, newText);
     }
 
-    private static string FormatDiff(DiffPaneModel diff)
+    private static string FormatDiff (DiffPaneModel diff)
     {
       var sb = new StringBuilder();
       foreach (var line in diff.Lines)
@@ -30,7 +30,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
       return sb.ToString();
     }
 
-    private static void AppendLine(StringBuilder sb, DiffPiece line)
+    private static void AppendLine (StringBuilder sb, DiffPiece line)
     {
       switch (line.Type)
       {

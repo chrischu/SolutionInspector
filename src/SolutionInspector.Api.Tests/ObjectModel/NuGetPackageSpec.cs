@@ -117,10 +117,10 @@ namespace SolutionInspector.Api.Tests.ObjectModel
           A.Equals(DifferentFromA).Should().BeFalse();
 
       It works_with_same_reference_as_object = () =>
-          A.Equals((object)A).Should().BeTrue();
+          A.Equals((object) A).Should().BeTrue();
 
       It works_with_null_as_object = () =>
-          A.Equals((object)null).Should().BeFalse();
+          A.Equals((object) null).Should().BeFalse();
 
       It works_with_equality_operator = () =>
           (A == EqualToA).Should().BeTrue();
@@ -132,7 +132,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       static NuGetPackage EqualToA;
       static NuGetPackage DifferentFromA;
     }
-    
+
     static XmlElement CreateXmlElement (string xml)
     {
       var doc = new XmlDocument();

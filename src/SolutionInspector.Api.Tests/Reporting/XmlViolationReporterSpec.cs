@@ -41,10 +41,7 @@ namespace SolutionInspector.Api.Tests.Reporting
       SUT = new XmlViolationReporter(TextWriter, RuleViolationViewModelConverter);
     };
 
-    Cleanup stuff = () =>
-    {
-      SUT.Dispose();
-    };
+    Cleanup stuff = () => { SUT.Dispose(); };
 
     class when_reporting
     {

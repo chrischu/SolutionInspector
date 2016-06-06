@@ -33,10 +33,8 @@ namespace SolutionInspector.Api.Tests.Utilities
 
     class when_converting_to
     {
-      Establish ctx = () =>
-      {
-        BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("A", "B"),new BuildConfiguration("C", "D"));
-      };
+      Establish ctx =
+          () => { BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("A", "B"), new BuildConfiguration("C", "D")); };
 
       Because of = () => Result = ConvertTo(BuildConfigurationFilter);
 
@@ -73,7 +71,7 @@ namespace SolutionInspector.Api.Tests.Utilities
     {
       Establish ctx = () =>
       {
-        BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("A", "B"),new BuildConfiguration("C", "D"));
+        BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("A", "B"), new BuildConfiguration("C", "D"));
         BuildConfigurationFilterString = ConvertTo(BuildConfigurationFilter);
       };
 

@@ -61,6 +61,8 @@ TP2: SolutionInspector warning SI0000: MSG2 (Some)
       static IEnumerable<IRuleViolation> RuleViolations;
     }
 
-    class SomeRule : IRule { }
+    class SomeRule : IRule
+    {
+    }
   }
 }

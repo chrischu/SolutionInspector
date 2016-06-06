@@ -34,10 +34,7 @@ namespace SolutionInspector.Api.Tests.Reporting
 
     class when_converting_one_violation
     {
-      Establish ctx = () =>
-      {
-        RuleViolation = RuleViolationObjectMother.Create(new ARule(), "Target", message: "Message");
-      };
+      Establish ctx = () => { RuleViolation = RuleViolationObjectMother.Create(new ARule(), "Target", message: "Message"); };
 
       Because of = () => Result = SUT.Convert(new[] { RuleViolation });
 
@@ -73,8 +70,13 @@ namespace SolutionInspector.Api.Tests.Reporting
       static IEnumerable<IRuleViolation> RuleViolations;
       static IEnumerable<RuleViolationViewModel> Result;
     }
-    
-    class ARule : IRule { }
-    class BRule : IRule { }
+
+    class ARule : IRule
+    {
+    }
+
+    class BRule : IRule
+    {
+    }
   }
 }

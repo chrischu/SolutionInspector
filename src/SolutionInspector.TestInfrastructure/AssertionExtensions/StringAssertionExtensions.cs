@@ -7,7 +7,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
   public static class StringAssertionExtensions
   {
-    public static void BeWithDiff(this StringAssertions stringAssertions, string expected)
+    public static void BeWithDiff (this StringAssertions stringAssertions, string expected)
     {
       var actualTrimmed = stringAssertions.Subject.Trim();
       var expectedTrimmed = expected.Trim();
@@ -15,7 +15,8 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
       try
       {
         actualTrimmed.Should().Be(expectedTrimmed);
-      } catch(SpecificationException ex)
+      }
+      catch (SpecificationException ex)
       {
         var message = $@"Differences:
 ------------

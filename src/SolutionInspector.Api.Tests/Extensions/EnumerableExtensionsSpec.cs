@@ -27,16 +27,19 @@ namespace SolutionInspector.Api.Tests.Extensions
   {
     class when_checking_if_enumerable_contains_more_than_one
     {
-      Because of = () => { /* actual tests are in the its */ };
+      Because of = () =>
+      {
+        /* actual tests are in the its */
+      };
 
       It works_for_empty = () =>
           new int[0].ContainsMoreThanOne().Should().BeFalse();
 
       It works_for_one = () =>
-          new [] { Some.Integer}.ContainsMoreThanOne().Should().BeFalse();
+          new[] { Some.Integer }.ContainsMoreThanOne().Should().BeFalse();
 
       It works_for_more_than_one = () =>
-           new[] { Some.Integer, Some.Integer }.ContainsMoreThanOne().Should().BeTrue();
+          new[] { Some.Integer, Some.Integer }.ContainsMoreThanOne().Should().BeTrue();
 
       static int Result;
     }
