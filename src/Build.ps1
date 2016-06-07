@@ -41,7 +41,7 @@ $ErrorActionPreference = "Stop"
 $ConfirmPreference = "None"
 trap { $error[0] | Format-List -Force; $host.SetShouldExit(1) }
 
-. $PSScriptRoot\Build\BuildLibrary.ps1
+. $PSScriptRoot\Shared\Build\BuildLibrary.ps1
 
 $TreatWarningsAsErrors = $True
 $MSBuildToolset = "14.0"
@@ -54,7 +54,7 @@ $DotSettingsFile = "${SolutionFile}.DotSettings"
 
 $AssemblyInfoSharedFile = Join-Path $SolutionDirectory "AssemblyInfoShared.cs"
 
-$BuildOutputDirectory = Join-Path $SolutionDirectory "BuildOutput"
+$BuildOutputDirectory = Join-Path $SolutionDirectory "Build"
 $AnalysisResultsDirectory = Join-Path $BuildOutputDirectory "AnalysisResults"
 $FxCopResultsDirectory = Join-Path $AnalysisResultsDirectory "FxCop"
 $NuGetPackagesDirectory = Join-Path $BuildOutputDirectory "NuGetPackages"
@@ -69,10 +69,10 @@ if ($IsPreReleaseBuild) {
   $AssemblyInformationalVersion = "$AssemblyInformationalVersion-pre$BuildCounter"
 }
 
-$ProjectDirectories = Get-ProjectDirectoriesFromSolution $SolutionFile
+$Projects = Get-ProjectsFromSolution $SolutionFile $Configuration | ? { $_.ProjectName -ne "SolutionPackages" }
 
-$TestProjectDirectories = $ProjectDirectories | ? { $_.Name.EndsWith("Tests") }
-$TestAssemblies = $TestProjectDirectories | % { Join-Path $_.FullName "bin\$Configuration\$($_.Name).dll" }
+$TestProjects = $Projects | ? { $_.ProjectName.EndsWith("Tests") }
+$TestAssemblies = $TestProjects | % { $_.TargetPath }
 
 function Run() {
   try {
@@ -119,7 +119,7 @@ BuildTask Restore-AssemblyInfos {
 
 
 BuildTask Build {
-  Build-Solution $SolutionFile $Configuration $TreatWarningsAsErrors $RunFxCopCodeAnalysis $FxCopResultsDirectory
+  Build-Solution $SolutionFile $Projects $Configuration $TreatWarningsAsErrors $RunFxCopCodeAnalysis $FxCopResultsDirectory
 }
 
 BuildTask Run-ReSharperCodeInspection {
@@ -143,7 +143,7 @@ BuildTask Create-NuGetPackages {
   }
   
   $vcsUrlTemplate = "https://raw.githubusercontent.com/chrischu/SolutionInspector/$CommitHash/{0}"
-  Create-NuGetPackagesFromSolution $SolutionDirectory $AssemblyInformationalVersion $Configuration $vcsUrlTemplate $NuGetPackagesDirectory
+  Create-NuGetPackagesFromSolution $SolutionDirectory $Projects $AssemblyInformationalVersion $Configuration $vcsUrlTemplate $NuGetPackagesDirectory
 
   Get-ChildItem $NuGetPackagesDirectory *.nupkg | %{ Report-NuGetPackage $_.FullName }
 }
