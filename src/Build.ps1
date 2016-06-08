@@ -3,12 +3,6 @@
 [CmdletBinding()]
 Param (
   [Parameter()]
-  [string] $Version = "0.0.0",
-  [Parameter()]
-  [int] $BuildCounter = 0,
-  [Parameter()]
-  [string] $CommitHash,
-  [Parameter()]
   [string] $Configuration = "Release",
   [Parameter()]
   [bool] $RunTests = $True,
@@ -21,15 +15,13 @@ Param (
   [Parameter()]
   [bool] $CreateNuGetPackages = $False,
   [Parameter()]
-  [bool] $CreateArchives = $False,
-  [Parameter()]
   [bool]$PushNuGetPackages = $False,
   [Parameter()]
-  [bool] $IsPreReleaseBuild = $False,
-  [Parameter()] 
   [string] $TargetNuGetFeed = "https://www.nuget.org",
   [Parameter()]
   [string] $NuGetApiKey,
+  [Parameter()] 
+  [bool] $CreateArchives = $False,
   [Parameter(Mandatory)]
   [ValidateNotNullOrEmpty()]
   [ValidateSet("Local", "AppVeyor")]
@@ -59,15 +51,7 @@ $AnalysisResultsDirectory = Join-Path $BuildOutputDirectory "AnalysisResults"
 $FxCopResultsDirectory = Join-Path $AnalysisResultsDirectory "FxCop"
 $NuGetPackagesDirectory = Join-Path $BuildOutputDirectory "NuGetPackages"
 
-# Version
-$ParsedVersion = New-Object Version $Version
-$AssemblyFileVersion = New-Object Version $ParsedVersion.Major,$ParsedVersion.Minor,$ParsedVersion.Build,0
-$AssemblyVersion = New-Object Version $AssemblyFileVersion.Major,0,0,0
-$AssemblyInformationalVersion = New-Object Version $AssemblyFileVersion.Major,$AssemblyFileVersion.Minor,$AssemblyFileVersion.Build
-
-if ($IsPreReleaseBuild) {
-  $AssemblyInformationalVersion = "$AssemblyInformationalVersion-pre$BuildCounter"
-}
+$VersionInfo = Get-VersionInfoFromCurrentCommit
 
 $Projects = Get-ProjectsFromSolution $SolutionFile $Configuration | ? { $_.ProjectName -ne "SolutionPackages" }
 
@@ -76,14 +60,16 @@ $TestAssemblies = $TestProjects | % { $_.TargetPath }
 
 function Run() {
   try {
+    Write-Host "Running in '$Mode' mode"
     Write-Host "Building '$SolutionFile'"
-    Write-Host "Version: $Version"
+    Write-Host "Version: $($VersionInfo.AssemblyInformationalVersion)"
     Write-Host "Configuration: $Configuration"
     Write-Host "Run tests: $RunTests (with DotCover coverage analysis: $RunDotCoverCoverageAnalysis)"
     Write-Host "Run FxCop code analysis: $RunFxCopCodeAnalysis"
     Write-Host "Run ReSharper code inspection: $RunReSharperCodeInspection"
-    Write-Host "Build NuGetPackages: $CreateNuGetPackages (with version: $AssemblyInformationalVersion)"
+    Write-Host "Build NuGetPackages: $CreateNuGetPackages (with version: $($VersionInfo.AssemblyInformationalVersion))"
     Write-Host "Push NuGet packages: $PushNuGetPackages (to $TargetNuGetFeed)"
+    Write-Host "Create archives: $CreateArchives"
 
     Clean
     Restore-NuGetPackages
@@ -97,6 +83,8 @@ function Run() {
   } finally {
     Restore-AssemblyInfos
   }
+
+  return $VersionInfo.Version
 }
 
 BuildTask Clean {
@@ -110,7 +98,7 @@ BuildTask Restore-NuGetPackages {
 }
 
 BuildTask Update-AssemblyInfos { 
-  Update-AssemblyInfo $AssemblyInfoSharedFile $Configuration $AssemblyVersion $AssemblyFileVersion $AssemblyInformationalVersion
+  Update-AssemblyInfo $AssemblyInfoSharedFile $Configuration $VersionInfo.AssemblyVersion $VersionInfo.AssemblyFileVersion $VersionInfo.AssemblyInformationalVersion
 }
 
 BuildTask Restore-AssemblyInfos {
@@ -138,12 +126,11 @@ BuildTask Run-Tests {
 }
 
 BuildTask Create-NuGetPackages {
-  if ([string]::IsNullOrEmpty($CommitHash)) {
-    throw "BUILD FAILED: Cannot build NuGet packages without VCS commit hash."
-  }
+  $commitHash = Get-CurrentCommitHash
+  $branchName = Get-CurrentBranchName
   
-  $vcsUrlTemplate = "https://raw.githubusercontent.com/chrischu/SolutionInspector/$CommitHash/{0}"
-  Create-NuGetPackagesFromSolution $SolutionDirectory $Projects $AssemblyInformationalVersion $Configuration $vcsUrlTemplate $NuGetPackagesDirectory
+  $vcsUrlTemplate = "https://raw.githubusercontent.com/chrischu/SolutionInspector/${commitHash}/${branchName}/{0}"
+  Create-NuGetPackagesFromSolution $SolutionDirectory $Projects $VersionInfo.AssemblyInformationalVersion $Configuration $vcsUrlTemplate $NuGetPackagesDirectory
 
   Get-ChildItem $NuGetPackagesDirectory *.nupkg | %{ Report-NuGetPackage $_.FullName }
 }
@@ -153,7 +140,7 @@ BuildTask Push-Packages {
 }
 
 BuildTask Create-Archives {
-  $archivePath = Join-Path $BuildOutputDirectory "SolutionInspector-$AssemblyInformationalVersion.zip"
+  $archivePath = Join-Path $BuildOutputDirectory "SolutionInspector-$($VersionInfo.AssemblyInformationalVersion).zip"
 
   $buildDirectory = Join-Path $SolutionDirectory "SolutionInspector\bin\$Configuration"
   $sourceDirectory = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid())
@@ -165,4 +152,4 @@ BuildTask Create-Archives {
   Report-Archive $archivePath
 }
 
-Run
+return Run

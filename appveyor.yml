@@ -7,66 +7,20 @@ image: Visual Studio 2015
 environment:
   NuGetApiKey:
     secure: Q2iw3AS2EBEcG4wVWDZY/ruR0Whvs50gTeCleO/uypdP7G7ajODYw030N3sOONtP
+install:
+- ps: git submodule update --init --recursive --quiet
 build_script:
-- ps: |
-    function Get-VersionInfoFromGit() {
-      $versionTag = (git describe --tags --abbrev=0 2>$null)
-
-      if($LastExitCode -eq 0) {
-        $version = Parse-Version $versionTag
-        $buildCounter = (git rev-list ${versionTag}..HEAD --count) + 1
-      } else {
-        $version = New-Object Version "0.0.0.0"
-        $buildCounter = (git rev-list HEAD --count)
-      }
-
-      $result = @{
-        Version = $version;
-        BuildCounter = $buildCounter;
-      }
-
-      return (New-Object -TypeName PSObject -Property $result)
-    }
-
-    function Parse-Version([string] $versionTag) {
-      if (-not ($versionTag -Match "^v(\d+\.\d+\.\d+)$")) {
-        throw "The tag '$versionTag' is not a valid version tag of the form 'v{major}.{minor}.{patch}'."
-      }
-
-      $parsedVersion = New-Object Version $versionTag.Substring(1)
-
-      return $parsedVersion
-    }
-
-    $VersionTag = ""
-
-    if ($env:APPVEYOR_REPO_BRANCH -eq "master" -and $env:APPVEYOR_REPO_TAG -eq "true") {
-      $Version = Parse-Version $env:APPVEYOR_REPO_TAG_NAME
-      $BuildCounter = 0
-
-      $IsPreReleaseBuild = $False
-      $PushNuGetPackages = $True
-    } else {
-      $versionInfo = Get-VersionInfoFromGit
-      $Version = $versionInfo.Version
-      $BuildCounter = $versionInfo.BuildCounter
-      
-      $IsPreReleaseBuild = $True
-      $PushNuGetPackages = $False
-    }
-        
+- ps: |       
     Push-Location "src"
 
-    ./Build.ps1 `
+    $PushNuGetPackages = $env:APPVEYOR_REPO_BRANCH -eq "master" -and $env:APPVEYOR_REPO_TAG -eq "true"
+
+    $Version = ./Build.ps1 `
       -Mode "AppVeyor" `
-      -Version "$Version" `
-      -BuildCounter $BuildCounter `
-      -CommitHash "$env:APPVEYOR_REPO_COMMIT" `
       -Configuration "Release" `
       -CreateNuGetPackages $True `
       -PushNuGetPackages $PushNuGetPackages `
       -CreateArchives $True `
-      -IsPreReleaseBuild $IsPreReleaseBuild `
       -NuGetApiKey "$env:NuGetApiKey"
 
     $env:DeploymentVersion = "v$($Version.Major).$($Version.Minor).$($Version.Build)"

@@ -46,6 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CF675B
 		Shared\Build\Build.Reporting.Local.ps1 = Shared\Build\Build.Reporting.Local.ps1
 		Shared\Build\Build.ReSharperInspectCode.ps1 = Shared\Build\Build.ReSharperInspectCode.ps1
 		Shared\Build\Build.Testing.ps1 = Shared\Build\Build.Testing.ps1
+		Shared\Build\Build.Versioning.ps1 = Shared\Build\Build.Versioning.ps1
 		Shared\Build\BuildLibrary.ps1 = Shared\Build\BuildLibrary.ps1
 	EndProjectSection
 EndProject
