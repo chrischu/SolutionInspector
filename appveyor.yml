@@ -7,6 +7,8 @@ image: Visual Studio 2015
 environment:
   NuGetApiKey:
     secure: Q2iw3AS2EBEcG4wVWDZY/ruR0Whvs50gTeCleO/uypdP7G7ajODYw030N3sOONtP
+  GitHubToken:
+    secure: Lp2YKeJITl6VZV0SSdpSrbnuPujRolIyat9yAIq7W3xNkSZ36PGrPwRMrPBK4V11
 install:
 - ps: git submodule update --init --recursive --quiet
 build_script:
@@ -35,8 +37,7 @@ deploy:
 - provider: GitHub
   tag: $(DeploymentVersion)
   release: $(DeploymentVersion)
-  auth_token:
-    secure: Lp2YKeJITl6VZV0SSdpSrbnuPujRolIyat9yAIq7W3xNkSZ36PGrPwRMrPBK4V11
+  auth_token: $(env:GitHubToken)
   artifact: SolutionInspector.zip
   draft: false
   prerelease: false
