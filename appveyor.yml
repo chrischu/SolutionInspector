@@ -13,10 +13,14 @@ build_script:
 - ps: |       
     Push-Location "src"
 
+    $Version = ./Shared/Build/Versioning.ps1
+    $IsPreRelease = $env:APPVEYOR_REPO_BRANCH -ne "master"
     $PushNuGetPackages = $env:APPVEYOR_REPO_BRANCH -eq "master" -and $env:APPVEYOR_REPO_TAG -eq "true"
 
-    $Version = ./Build.ps1 `
+    ./Build.ps1 `
       -Mode "AppVeyor" `
+      -Version $Version `
+      -IsPreRelease $IsPreRelease `
       -Configuration "Release" `
       -CreateNuGetPackages $True `
       -PushNuGetPackages $PushNuGetPackages `

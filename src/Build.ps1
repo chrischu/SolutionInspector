@@ -1,7 +1,15 @@
-#Requires -Version 3.0
+#Requires -Version 5.0
 
 [CmdletBinding()]
 Param (
+  [Parameter(Mandatory)]
+  [ValidateNotNullOrEmpty()]
+  [ValidateSet("Local", "AppVeyor")]
+  [string] $Mode,
+  [Parameter(Mandatory)]
+  [Version] $Version,
+  [Parameter(Mandatory)]
+  [bool] $IsPreRelease,
   [Parameter()]
   [string] $Configuration = "Release",
   [Parameter()]
@@ -21,11 +29,7 @@ Param (
   [Parameter()]
   [string] $NuGetApiKey,
   [Parameter()] 
-  [bool] $CreateArchives = $False,
-  [Parameter(Mandatory)]
-  [ValidateNotNullOrEmpty()]
-  [ValidateSet("Local", "AppVeyor")]
-  [string] $Mode
+  [bool] $CreateArchives = $False
 )
 
 Set-StrictMode -Version 2.0
@@ -51,23 +55,30 @@ $AnalysisResultsDirectory = Join-Path $BuildOutputDirectory "AnalysisResults"
 $FxCopResultsDirectory = Join-Path $AnalysisResultsDirectory "FxCop"
 $NuGetPackagesDirectory = Join-Path $BuildOutputDirectory "NuGetPackages"
 
-$VersionInfo = Get-VersionInfoFromCurrentCommit
-
 $Projects = Get-ProjectsFromSolution $SolutionFile $Configuration | ? { $_.ProjectName -ne "SolutionPackages" }
 
 $TestProjects = $Projects | ? { $_.ProjectName.EndsWith("Tests") }
 $TestAssemblies = $TestProjects | % { $_.TargetPath }
 
+$AssemblyVersion = "$($Version.Major).0.0.0"
+$AssemblyFileVersion = "$($Version.Major).$($Version.Minor).$($Version.Build).$($Version.Revision)"
+$AssemblyInformationalVersion = "$($Version.Major).$($Version.Minor).$($Version.Build)"
+if ($IsPreRelease) {
+  $AssemblyInformationalVersion = "${AssemblyInformationalVersion}-pre$($Version.Revision)"
+}
+
+$NuGetVersion = $Version.Major, $Version.Minor, $Version.Build
+
 function Run() {
   try {
     Write-Host "Running in '$Mode' mode"
     Write-Host "Building '$SolutionFile'"
-    Write-Host "Version: $($VersionInfo.AssemblyInformationalVersion)"
+    Write-Host "Version: $Version"
     Write-Host "Configuration: $Configuration"
     Write-Host "Run tests: $RunTests (with DotCover coverage analysis: $RunDotCoverCoverageAnalysis)"
     Write-Host "Run FxCop code analysis: $RunFxCopCodeAnalysis"
     Write-Host "Run ReSharper code inspection: $RunReSharperCodeInspection"
-    Write-Host "Build NuGetPackages: $CreateNuGetPackages (with version: $($VersionInfo.AssemblyInformationalVersion))"
+    Write-Host "Build NuGetPackages: $CreateNuGetPackages (with version: $AssemblyInformationalVersion)"
     Write-Host "Push NuGet packages: $PushNuGetPackages (to $TargetNuGetFeed)"
     Write-Host "Create archives: $CreateArchives"
 
@@ -83,8 +94,6 @@ function Run() {
   } finally {
     Restore-AssemblyInfos
   }
-
-  return $VersionInfo.Version
 }
 
 BuildTask Clean {
@@ -98,7 +107,7 @@ BuildTask Restore-NuGetPackages {
 }
 
 BuildTask Update-AssemblyInfos { 
-  Update-AssemblyInfo $AssemblyInfoSharedFile $Configuration $VersionInfo.AssemblyVersion $VersionInfo.AssemblyFileVersion $VersionInfo.AssemblyInformationalVersion
+  Update-AssemblyInfo $AssemblyInfoSharedFile $Configuration $AssemblyVersion $AssemblyFileVersion $AssemblyInformationalVersion
 }
 
 BuildTask Restore-AssemblyInfos {
@@ -130,7 +139,7 @@ BuildTask Create-NuGetPackages {
   $branchName = Get-CurrentBranchName
   
   $vcsUrlTemplate = "https://raw.githubusercontent.com/chrischu/SolutionInspector/${commitHash}/${branchName}/{0}"
-  Create-NuGetPackagesFromSolution $SolutionDirectory $Projects $VersionInfo.AssemblyInformationalVersion $Configuration $vcsUrlTemplate $NuGetPackagesDirectory
+  Create-NuGetPackagesFromSolution $SolutionDirectory $Projects $AssemblyInformationalVersion $Configuration $vcsUrlTemplate $NuGetPackagesDirectory
 
   Get-ChildItem $NuGetPackagesDirectory *.nupkg | %{ Report-NuGetPackage $_.FullName }
 }
@@ -140,14 +149,18 @@ BuildTask Push-Packages {
 }
 
 BuildTask Create-Archives {
-  $archivePath = Join-Path $BuildOutputDirectory "SolutionInspector-$($VersionInfo.AssemblyInformationalVersion).zip"
+  $archiveName = "SolutionInspector-${AssemblyInformationalVersion}.zip"
+  $archivePath = Join-Path $BuildOutputDirectory $archiveName
+
+  Write-Host "Creating archive '$archiveName'"
 
   $buildDirectory = Join-Path $SolutionDirectory "SolutionInspector\bin\$Configuration"
   $sourceDirectory = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid())
-  New-Item -ItemType Directory -Path $sourceDirectory
+  New-Item -ItemType Directory -Path $sourceDirectory | Out-Null
   Copy-Item -Path "${buildDirectory}\*" -Destination $sourceDirectory -Exclude "Microsoft.Build*.dll","*CodeAnalysisLog.xml","*.lastcodeanalysissucceeded"
   Zip-Directory -ZipFilePath $archivePath -SourceDirectory $sourceDirectory
   Remove-Item $sourceDirectory -Recurse
+
 
   Report-Archive $archivePath
 }
