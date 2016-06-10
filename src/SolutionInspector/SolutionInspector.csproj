@@ -25,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\SolutionInspector.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,6 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Release\SolutionInspector.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
@@ -89,14 +91,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="icon.ico" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="icon.ico" />
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\SolutionInspector.tool.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj">
