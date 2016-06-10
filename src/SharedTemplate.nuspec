@@ -18,7 +18,7 @@
          See https://github.com/NuGet/Home/issues/1299.
          Note: This also makes the pdb-file optional for the nuget-package. This is acceptable. -->
     <!-- PLANNED: Automatically determine target folder -->
-    <file src="$outputDir$$id$.pdb*" target="lib\net461" />
+    <file src="$outputDir$$id$.pdb*" target="lib\net452" />
     <!-- <file src="bin\$configuration$\**\$id$.resources.dll" target="lib\net461" /> use this inclusion as soon we want to pack also compiled resources (e.g. for the Web) -->
   </files>
 </package>
