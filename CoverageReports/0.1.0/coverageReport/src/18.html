@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\utilities\dictionaryequalitycomparer.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+
+namespace SolutionInspector.Api.Utilities
+{
+  internal class DictionaryEqualityComparer&lt;TKey, TValue&gt; : IEqualityComparer&lt;IReadOnlyDictionary&lt;TKey, TValue&gt;&gt;
+  {
+    public bool Equals (IReadOnlyDictionary&lt;TKey, TValue&gt; x, IReadOnlyDictionary&lt;TKey, TValue&gt; y)
+    {
+      if (x == y)
+        return true;
+      if ((x == null) || (y == null))
+        return false;
+      if (x.Count != y.Count)
+        return false;
+
+      foreach (var kvp in x)
+      {
+        TValue secondValue;
+        if (!y.TryGetValue(kvp.Key, out secondValue))
+          return false;
+        if (!Equals(kvp.Value, secondValue))
+          return false;
+      }
+      return true;
+    }
+
+    public int GetHashCode (IReadOnlyDictionary&lt;TKey, TValue&gt; obj)
+    {
+      unchecked
+      {
+        var hashCode = 17;
+        foreach (var kvp in obj)
+        {
+          hashCode = hashCode * 23 + kvp.Key.GetHashCode();
+          hashCode = hashCode * 23 + kvp.Value.GetHashCode();
+        }
+
+        return hashCode;
+      }
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[10,7,10,18,0],[11,9,11,21,0],[12,7,12,38,0],[13,9,13,22,0],[14,7,14,30,0],[15,9,15,22,0],[17,27,17,28,0],[17,16,17,23,0],[20,9,20,54,0],[21,11,21,24,0],[22,9,22,45,0],[23,11,23,24,0],[17,24,17,26,0],[25,7,25,19,0],[26,5,26,6,0],[32,9,32,27,0],[33,29,33,32,0],[33,18,33,25,0],[35,11,35,60,0],[36,11,36,62,0],[33,26,33,28,0],[39,9,39,25,0]]);
+    </script>
+  </body>
+</html>

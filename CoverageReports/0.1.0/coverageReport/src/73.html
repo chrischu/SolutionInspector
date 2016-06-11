@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\configuration\ruleassemblyimports\ruleassemblyimportsconfigurationsection.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using JetBrains.Annotations;
+
+namespace SolutionInspector.Api.Configuration.RuleAssemblyImports
+{
+  /// &lt;summary&gt;
+  ///   Configuration used to import rule assemblies.
+  /// &lt;/summary&gt;
+  public interface IRuleAssemblyImportsConfiguration
+  {
+    /// &lt;summary&gt;
+    ///   A collection of paths (files and directories) from which to load assemblies.
+    /// &lt;/summary&gt;
+    IReadOnlyCollection&lt;string&gt; Imports { get; }
+  }
+
+  internal class RuleAssemblyImportsConfigurationSection : ConfigurationSection, IRuleAssemblyImportsConfiguration
+  {
+    public const string ExampleConfiguration = @&quot;&lt;ruleAssemblyImports&gt;
+  &lt;import path=&quot;&quot;C:\Path\To\Assembly.dll&quot;&quot; /&gt;
+&lt;/ruleAssemblyImports&gt;&quot;;
+
+    [UsedImplicitly]
+    [ConfigurationProperty (&quot;&quot;, IsRequired = true, IsKey = false, IsDefaultCollection = true)]
+    public RuleAssemblyImportsConfigurationCollection Imports
+    {
+      get { return (RuleAssemblyImportsConfigurationCollection) base[&quot;&quot;]; }
+      set { base[&quot;&quot;] = value; }
+    }
+
+    IReadOnlyCollection&lt;string&gt; IRuleAssemblyImportsConfiguration.Imports =&gt; Imports.Select(i =&gt; i.Path).ToArray();
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[31,13,31,30,0],[31,31,31,32,0],[30,13,30,74,1],[34,78,34,98,1],[34,104,34,115,1],[34,98,34,104,1]]);
+    </script>
+  </body>
+</html>

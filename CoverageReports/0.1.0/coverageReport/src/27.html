@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\utilities\consoletablewritercharacters.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using JetBrains.Annotations;
+
+namespace SolutionInspector.Api.Utilities
+{
+  [PublicAPI]
+  internal class ConsoleTableWriterCharacters
+  {
+    public static readonly ConsoleTableWriterCharacters AdvancedAscii = new ConsoleTableWriterCharacters
+                                                                        {
+                                                                            TopLeftCorner = &#39;┌&#39;,
+                                                                            BottomLeftCorner = &#39;└&#39;,
+                                                                            TopRightCorner = &#39;┐&#39;,
+                                                                            BottomRightCorner = &#39;┘&#39;,
+                                                                            Cross = &#39;┼&#39;,
+                                                                            LeftMiddle = &#39;├&#39;,
+                                                                            RightMiddle = &#39;┤&#39;,
+                                                                            TopMiddle = &#39;┬&#39;,
+                                                                            BottomMiddle = &#39;┴&#39;,
+                                                                            Vertical = &#39;│&#39;,
+                                                                            Horizontal = &#39;─&#39;
+                                                                        };
+
+    public char TopLeftCorner { get; set; } = &#39;+&#39;;
+    public char BottomLeftCorner { get; set; } = &#39;+&#39;;
+    public char TopRightCorner { get; set; } = &#39;+&#39;;
+    public char BottomRightCorner { get; set; } = &#39;+&#39;;
+    public char Cross { get; set; } = &#39;+&#39;;
+    public char LeftMiddle { get; set; } = &#39;+&#39;;
+    public char RightMiddle { get; set; } = &#39;+&#39;;
+    public char TopMiddle { get; set; } = &#39;+&#39;;
+    public char BottomMiddle { get; set; } = &#39;+&#39;;
+    public char Vertical { get; set; } = &#39;│&#39;;
+    public char Horizontal { get; set; } = &#39;-&#39;;
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[24,33,24,37,0],[24,38,24,42,0],[25,36,25,40,0],[25,41,25,45,0],[26,34,26,38,0],[26,39,26,43,0],[27,37,27,41,0],[27,42,27,46,0],[28,25,28,29,0],[28,30,28,34,0],[29,30,29,34,0],[29,35,29,39,0],[30,31,30,35,0],[30,36,30,40,0],[31,29,31,33,0],[31,34,31,38,0],[32,32,32,36,0],[32,37,32,41,0],[33,28,33,32,0],[33,33,33,37,0],[34,30,34,34,0],[34,35,34,39,0],[24,47,24,50,0],[25,50,25,53,0],[26,48,26,51,0],[27,51,27,54,0],[28,39,28,42,0],[29,44,29,47,0],[30,45,30,48,0],[31,43,31,46,0],[32,46,32,49,0],[33,42,33,45,0],[34,44,34,47,0],[9,5,22,75,0]]);
+    </script>
+  </body>
+</html>

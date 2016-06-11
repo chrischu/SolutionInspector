@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\projectpropertyoccurrence.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Diagnostics;
+using JetBrains.Annotations;
+using Microsoft.Build.Construction;
+
+namespace SolutionInspector.Api.ObjectModel
+{
+  /// &lt;summary&gt;
+  ///   Represents a &lt;see cref=&quot;IProjectProperty&quot; /&gt;&#39;s occurrence in the source MSBuild file.
+  /// &lt;/summary&gt;
+  [PublicAPI]
+  public interface IProjectPropertyOccurrence
+  {
+    /// &lt;summary&gt;
+    ///   The value.
+    /// &lt;/summary&gt;
+    string Value { get; }
+
+    /// &lt;summary&gt;
+    ///   The condition that must be fulfilled for the occurrence to be active.
+    /// &lt;/summary&gt;
+    [CanBeNull]
+    IProjectPropertyCondition Condition { get; }
+
+    /// &lt;summary&gt;
+    ///   The location of the occurrence in the MSBuild file.
+    /// &lt;/summary&gt;
+    IProjectLocation Location { get; }
+  }
+
+  [DebuggerDisplay (&quot;{Value} at {Location} when ({Condition})&quot;)]
+  internal class ProjectPropertyOccurrence : IProjectPropertyOccurrence
+  {
+    public string Value { get; }
+
+    [CanBeNull]
+    public IProjectPropertyCondition Condition { get; }
+
+    public IProjectLocation Location { get; }
+
+    public ProjectPropertyOccurrence (string value, [CanBeNull] IProjectPropertyCondition condition, IProjectLocation location)
+    {
+      Value = value;
+      Condition = condition;
+      Location = location;
+    }
+
+    public ProjectPropertyOccurrence (ProjectPropertyElement property)
+        : this(property.Value, CreateCondition(property), new ProjectLocation(property))
+    {
+    }
+
+    private static ProjectPropertyCondition CreateCondition (ProjectPropertyElement property)
+    {
+      var condition = new ProjectPropertyCondition(property);
+      if (condition.Parent != null || condition.Self != null)
+        return condition;
+
+      return null;
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[34,27,34,31,1],[37,50,37,54,1],[39,40,39,44,1],[41,5,41,128,1],[43,7,43,21,1],[44,7,44,29,1],[45,7,45,27,1],[46,5,46,6,1],[49,11,49,89,1],[51,5,51,6,1],[55,7,55,62,1],[56,7,56,62,1],[57,9,57,26,1],[59,7,59,19,1]]);
+    </script>
+  </body>
+</html>

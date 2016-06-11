@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\commands\solutioninspectorcommand.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using JetBrains.Annotations;
+using ManyConsole;
+using NLog;
+
+namespace SolutionInspector.Api.Commands
+{
+  [PublicAPI]
+  internal interface IArgumentsBuilderWithSetValues&lt;out TArguments&gt;
+  {
+    IArgumentsBuilderWithSetValues&lt;TArguments&gt; Option (
+        string longKey,
+        string shortKey,
+        string description,
+        Action&lt;TArguments, string&gt; setValue,
+        string defaultValue = null);
+
+    IArgumentsBuilderWithSetValues&lt;TArguments&gt; Option&lt;T&gt; (
+        string longKey,
+        string shortKey,
+        string description,
+        Action&lt;TArguments, T&gt; setValue,
+        T defaultValue = default(T));
+
+    IArgumentsBuilderWithSetValues&lt;TArguments&gt; Flag (string longKey, string shortKey, string description, Action&lt;TArguments, bool&gt; setValue);
+  }
+
+  [PublicAPI]
+  internal interface IArgumentsBuilder&lt;out TArguments&gt;
+  {
+    IArgumentsBuilder&lt;TArguments&gt; Option (
+        string longKey,
+        string shortKey,
+        string description,
+        Action&lt;TArguments, string&gt; setValue,
+        string defaultValue = null);
+
+    IArgumentsBuilder&lt;TArguments&gt; Option&lt;T&gt; (
+        string longKey,
+        string shortKey,
+        string description,
+        Action&lt;TArguments, T&gt; setValue,
+        T defaultValue = default(T));
+
+    IArgumentsBuilder&lt;TArguments&gt; Flag (
+        string longKey,
+        string shortKey,
+        string description,
+        Action&lt;TArguments, bool&gt; setValue);
+
+    IArgumentsBuilderWithSetValues&lt;TArguments&gt; Values (Action&lt;IValueArgumentsBuilder&lt;TArguments&gt;&gt; configureValueArguments);
+  }
+
+  [PublicAPI]
+  internal interface IValueArgumentsBuilder&lt;out TArguments&gt;
+  {
+    IValueArgumentsBuilder&lt;TArguments&gt; Value (string name, Action&lt;TArguments, string&gt; setValue);
+  }
+
+  internal abstract class SolutionInspectorCommand&lt;TRawArguments, TParsedArguments&gt; : ConsoleCommand
+      where TRawArguments : new()
+  {
+    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+    private readonly TRawArguments _rawArguments;
+    private readonly ArgumentsBuilder&lt;TRawArguments&gt; _rawArgumentsBuilder;
+    private TParsedArguments _parsedArguments;
+
+    [SuppressMessage (&quot;Microsoft.Usage&quot;, &quot;CA2214:DoNotCallOverridableMethodsInConstructors&quot;)]
+    protected SolutionInspectorCommand (string command, string description)
+    {
+      IsCommand(command, description);
+      SkipsCommandSummaryBeforeRunning();
+      _rawArguments = new TRawArguments();
+      _rawArgumentsBuilder = new ArgumentsBuilder&lt;TRawArguments&gt;(this, _rawArguments);
+      // ReSharper disable once VirtualMemberCallInContructor
+      SetupArguments(_rawArgumentsBuilder);
+    }
+
+    protected abstract void SetupArguments (IArgumentsBuilder&lt;TRawArguments&gt; argumentsBuilder);
+
+    public sealed override int? OverrideAfterHandlingArgumentsBeforeRun ([NotNull] string[] remainingArguments)
+    {
+      _rawArgumentsBuilder.HandleRemainingArguments(remainingArguments);
+
+      if (!TryLoadingMsBuildToolsAssembly())
+      {
+        _logger.Error(
+            &quot;Could not find MSBuild assemblies in version 14.0. This most likely means that &#39;MSBuild Tools 2015&#39; was not installed.&quot;
+            + Environment.NewLine
+            + &quot;Just press the RETURN key to open a browser with the download page of the &#39;MSBuild Tools 2015&#39; or press ESCAPE or any other key to cancel...&quot;);
+        var key = Console.ReadKey();
+        if (key.Key == ConsoleKey.Enter)
+          Process.Start(&quot;https://www.microsoft.com/en-us/download/details.aspx?id=48159&quot;);
+
+        return 1;
+      }
+
+      _parsedArguments = ValidateAndParseArguments(_rawArguments, message =&gt; new ConsoleHelpAsException(message));
+
+      return base.OverrideAfterHandlingArgumentsBeforeRun(remainingArguments);
+    }
+
+    private bool TryLoadingMsBuildToolsAssembly ()
+    {
+      try
+      {
+        _logger.Info(&quot;Checking for &#39;MSBuild Tools 2015&#39;...&quot;);
+        Assembly.Load(&quot;Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot;);
+        _logger.Info(&quot;Check successful, &#39;MSBuild Tools 2015&#39; are installed.&quot;);
+        return true;
+      }
+      catch (FileNotFoundException)
+      {
+        return false;
+      }
+    }
+
+    protected abstract TParsedArguments ValidateAndParseArguments (TRawArguments arguments, Func&lt;string, Exception&gt; reportError);
+
+    public sealed override int Run ([NotNull] string[] remainingArguments)
+    {
+      return Run(_parsedArguments);
+    }
+
+    protected abstract int Run (TParsedArguments arguments);
+
+    private class ArgumentsBuilder&lt;TArguments&gt; : IArgumentsBuilder&lt;TArguments&gt;, IArgumentsBuilderWithSetValues&lt;TArguments&gt;
+        where TArguments : new()
+    {
+      private readonly ConsoleCommand _command;
+      private readonly TArguments _arguments;
+      private readonly ValueArgumentsBuilder _valueArgumentsBuilder = new ValueArgumentsBuilder();
+
+      public ArgumentsBuilder (ConsoleCommand command, TArguments arguments)
+      {
+        _command = command;
+        _arguments = arguments;
+      }
+
+      public IArgumentsBuilder&lt;TArguments&gt; Option (
+          string longKey,
+          string shortKey,
+          string description,
+          Action&lt;TArguments, string&gt; setValue,
+          string defaultValue = null)
+      {
+        setValue(_arguments, defaultValue);
+        _command.HasOption($&quot;{shortKey}|{longKey}=&quot;, description, v =&gt; setValue(_arguments, v));
+        return this;
+      }
+
+      public IArgumentsBuilder&lt;TArguments&gt; Option&lt;T&gt; (
+          string longKey,
+          string shortKey,
+          string description,
+          Action&lt;TArguments, T&gt; setValue,
+          T defaultValue = default(T))
+      {
+        setValue(_arguments, defaultValue);
+        _command.HasOption&lt;T&gt;($&quot;{shortKey}|{longKey}=&quot;, description, v =&gt; setValue(_arguments, v));
+        return this;
+      }
+
+
+      public IArgumentsBuilder&lt;TArguments&gt; Flag (string longKey, string shortKey, string description, Action&lt;TArguments, bool&gt; setValue)
+      {
+        _command.HasOption($&quot;{shortKey}|{longKey}&quot;, description, v =&gt; setValue(_arguments, v != null));
+        return this;
+      }
+
+      public IArgumentsBuilderWithSetValues&lt;TArguments&gt; Values (Action&lt;IValueArgumentsBuilder&lt;TArguments&gt;&gt; configureValueArguments)
+      {
+        configureValueArguments(_valueArgumentsBuilder);
+        _valueArgumentsBuilder.SetupAdditionalArguments(_command);
+        return this;
+      }
+
+      IArgumentsBuilderWithSetValues&lt;TArguments&gt; IArgumentsBuilderWithSetValues&lt;TArguments&gt;.Option (
+          string longKey,
+          string shortKey,
+          string description,
+          Action&lt;TArguments, string&gt; setValue,
+          string defaultValue)
+      {
+        return (IArgumentsBuilderWithSetValues&lt;TArguments&gt;) Option(longKey, shortKey, description, setValue);
+      }
+
+      IArgumentsBuilderWithSetValues&lt;TArguments&gt; IArgumentsBuilderWithSetValues&lt;TArguments&gt;.Option&lt;T&gt; (
+          string longKey,
+          string shortKey,
+          string description,
+          Action&lt;TArguments, T&gt; setValue,
+          T defaultValue)
+      {
+        return (IArgumentsBuilderWithSetValues&lt;TArguments&gt;) Option(longKey, shortKey, description, setValue);
+      }
+
+      IArgumentsBuilderWithSetValues&lt;TArguments&gt; IArgumentsBuilderWithSetValues&lt;TArguments&gt;.Flag (
+          string longKey,
+          string shortKey,
+          string description,
+          Action&lt;TArguments, bool&gt; setValue)
+      {
+        return (IArgumentsBuilderWithSetValues&lt;TArguments&gt;) Flag(longKey, shortKey, description, setValue);
+      }
+
+      private class ValueArgumentsBuilder : IValueArgumentsBuilder&lt;TArguments&gt;
+      {
+        private readonly List&lt;ValueArgument&gt; _valueArguments = new List&lt;ValueArgument&gt;();
+
+        private string AdditionalArgumentsString =&gt; string.Join(&quot; &quot;, _valueArguments.Select(a =&gt; $&quot;&lt;{a.Name}&gt;&quot;));
+
+        public IValueArgumentsBuilder&lt;TArguments&gt; Value (string name, Action&lt;TArguments, string&gt; setValue)
+        {
+          _valueArguments.Add(new ValueArgument(name, setValue));
+          return this;
+        }
+
+        private class ValueArgument
+        {
+          public string Name { get; }
+          public Action&lt;TArguments, string&gt; SetValueAction { get; }
+
+          public ValueArgument (string name, Action&lt;TArguments, string&gt; setValueAction)
+          {
+            Name = name;
+            SetValueAction = setValueAction;
+          }
+        }
+
+        public void SetupAdditionalArguments (ConsoleCommand command)
+        {
+          command.HasAdditionalArguments(_valueArguments.Count, AdditionalArgumentsString);
+        }
+
+        public void ParseAdditionalArguments (TArguments arguments, string[] remainingArguments)
+        {
+          Trace.Assert(remainingArguments.Length == _valueArguments.Count);
+
+          for (int i = 0; i &lt; remainingArguments.Length; i++)
+            _valueArguments[i].SetValueAction(arguments, remainingArguments[i]);
+        }
+      }
+
+      public void HandleRemainingArguments (string[] remainingArguments)
+      {
+        _valueArgumentsBuilder?.ParseAdditionalArguments(_arguments, remainingArguments);
+      }
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[93,9,96,159,0],[97,9,97,37,0],[98,9,98,41,0],[99,11,99,91,0],[101,9,101,18,0],[118,7,118,36,0],[120,9,120,22,0],[153,9,153,44,0],[154,9,154,72,0],[154,95,154,97,0],[155,9,155,21,0],[173,9,173,71,0],[173,102,173,104,0],[174,9,174,21,0],[191,9,191,110,0],[201,9,201,110,0],[210,9,210,108,0],[154,72,154,95,0],[173,71,173,102,0],[104,78,104,113,0],[69,5,69,74,1],[75,5,75,76,1],[77,7,77,39,1],[78,7,78,42,1],[79,7,79,43,1],[80,7,80,87,1],[82,7,82,44,1],[83,5,83,6,1],[89,7,89,73,1],[91,7,91,45,1],[104,7,104,78,1],[104,113,104,115,1],[106,7,106,79,1],[113,9,113,62,1],[114,9,114,110,1],[115,9,115,79,1],[116,9,116,21,1],[122,5,122,6,1],[128,7,128,36,1],[138,7,138,99,1],[140,7,140,77,1],[142,9,142,28,1],[143,9,143,32,1],[144,7,144,8,1],[165,9,165,44,1],[166,9,166,75,1],[166,98,166,100,1],[167,9,167,21,1],[179,9,179,57,1],[180,9,180,67,1],[181,9,181,21,1],[253,9,253,90,1],[254,7,254,8,1],[217,53,217,98,1],[217,111,217,113,1],[221,11,221,66,1],[222,11,222,23,1],[239,11,239,92,1],[240,9,240,10,1],[244,11,244,76,1],[246,16,246,25,1],[247,13,247,81,1],[246,58,246,61,1],[246,27,246,56,1],[248,9,248,10,1],[215,9,215,90,1],[227,32,227,36,1],[228,62,228,66,1],[230,11,230,88,1],[232,13,232,25,1],[233,13,233,45,1],[234,11,234,12,1],[217,98,217,111,1],[166,75,166,98,1]]);
+    </script>
+  </body>
+</html>

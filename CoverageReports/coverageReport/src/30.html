@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\utilities\solutionnotfoundexception.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+
+namespace SolutionInspector.Api.Utilities
+{
+  /// &lt;summary&gt;
+  ///   Represents errors that occurs when trying to load a solution file that does not exist.
+  /// &lt;/summary&gt;
+  [Serializable]
+  public class SolutionNotFoundException : Exception
+  {
+    /// &lt;summary&gt;
+    ///   Creates a new &lt;see cref=&quot;SolutionNotFoundException&quot; /&gt;
+    /// &lt;/summary&gt;
+    public SolutionNotFoundException (string solutionPath, Exception innerException = null)
+        : base($&quot;Could not find solution file at &#39;{solutionPath}&#39;.&quot;, innerException)
+    {
+    }
+
+    /// &lt;summary&gt;
+    ///   Serialization constructor.
+    /// &lt;/summary&gt;
+    [ExcludeFromCodeCoverage /* Serialization ctor */]
+    protected SolutionNotFoundException (SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[26,11,26,30,0],[28,5,28,6,0],[17,11,17,85,1],[19,5,19,6,1]]);
+    </script>
+  </body>
+</html>

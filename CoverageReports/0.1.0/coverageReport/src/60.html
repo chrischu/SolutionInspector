@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\extensions\dictionaryextensions.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+
+namespace SolutionInspector.Api.Extensions
+{
+  /// &lt;summary&gt;
+  ///   Extension methods for dictionary types.
+  /// &lt;/summary&gt;
+  public static class DictionaryExtensions
+  {
+    /// &lt;summary&gt;
+    ///   Tries to get the value with the given &lt;paramref name=&quot;key&quot; /&gt; from the &lt;paramref name=&quot;dictionary&quot; /&gt;. Returns &lt;paramref name=&quot;default&quot; /&gt;
+    ///   if no value can be found under the &lt;paramref name=&quot;key&quot; /&gt;.
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public static TValue GetValueOrDefault&lt;TKey, TValue&gt; (
+        this IReadOnlyDictionary&lt;TKey, TValue&gt; dictionary,
+        TKey key,
+        TValue @default = default(TValue))
+    {
+      TValue value;
+      return dictionary.TryGetValue(key, out value) ? value : @default;
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[22,7,22,72,1]]);
+    </script>
+  </body>
+</html>

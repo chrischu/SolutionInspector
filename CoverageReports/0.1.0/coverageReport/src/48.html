@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\buildconfiguration.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
+
+namespace SolutionInspector.Api.ObjectModel
+{
+  /// &lt;summary&gt;
+  ///   Represents a MSBuild build configuration consisting of the configuration (e.g. Debug) and the platform (e.g. AnyCPU).
+  /// &lt;/summary&gt;
+  [PublicAPI]
+  public class BuildConfiguration : IEquatable&lt;BuildConfiguration&gt;
+  {
+    private static Regex s_regex = new Regex(@&quot;[A-Za-z0-9 *]+\|[A-Za-z0-9 *]+&quot;, RegexOptions.Compiled);
+
+    /// &lt;summary&gt;
+    ///   The name of the configuration (e.g. Debug).
+    /// &lt;/summary&gt;
+    public string ConfigurationName { get; }
+
+    /// &lt;summary&gt;
+    ///   The name of the platform (e.g. AnyCPU).
+    /// &lt;/summary&gt;
+    public string PlatformName { get; }
+
+    /// &lt;summary&gt;
+    ///   The full name of the &lt;see cref=&quot;BuildConfiguration&quot; /&gt;.
+    /// &lt;/summary&gt;
+    public string Name =&gt; $&quot;{ConfigurationName}|{PlatformName}&quot;;
+
+    /// &lt;summary&gt;
+    ///   Creates a new &lt;see cref=&quot;BuildConfiguration&quot; /&gt;.
+    /// &lt;/summary&gt;
+    public BuildConfiguration (string configurationName, string platform)
+    {
+      ConfigurationName = configurationName;
+      PlatformName = platform;
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public override string ToString ()
+    {
+      return Name;
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public bool Equals ([CanBeNull] BuildConfiguration other)
+    {
+      if (ReferenceEquals(null, other))
+        return false;
+      if (ReferenceEquals(this, other))
+        return true;
+      return string.Equals(ConfigurationName, other.ConfigurationName) &amp;&amp; string.Equals(PlatformName, other.PlatformName);
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public override bool Equals ([CanBeNull] object obj)
+    {
+      if (ReferenceEquals(null, obj))
+        return false;
+      if (ReferenceEquals(this, obj))
+        return true;
+      if (obj.GetType() != GetType())
+        return false;
+      return Equals((BuildConfiguration) obj);
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public override int GetHashCode ()
+    {
+      unchecked
+      {
+        return (ConfigurationName.GetHashCode() * 397) ^ PlatformName.GetHashCode();
+      }
+    }
+
+    /// &lt;summary&gt;
+    ///   Converts the string representation of a &lt;see cref=&quot;BuildConfiguration&quot; /&gt; to its &lt;see cref=&quot;BuildConfiguration&quot; /&gt; equivalent.
+    /// &lt;/summary&gt;
+    public static BuildConfiguration Parse (string s)
+    {
+      if (!s_regex.IsMatch(s))
+        throw new ArgumentException($&quot;The value &#39;{s}&#39; is not a valid string representation of a {nameof(BuildConfiguration)}&quot;);
+
+      var split = s.Split(&#39;|&#39;);
+      return new BuildConfiguration(split[0], split[1]);
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[49,9,49,22,0],[51,9,51,21,0],[59,9,59,22,0],[61,9,61,21,0],[63,9,63,22,0],[82,9,82,128,0],[18,39,18,43,1],[23,34,23,38,1],[28,27,28,64,1],[33,5,33,74,1],[35,7,35,45,1],[36,7,36,31,1],[37,5,37,6,1],[42,7,42,19,1],[48,7,48,40,1],[50,7,50,40,1],[52,7,52,123,1],[58,7,58,38,1],[60,7,60,38,1],[62,7,62,38,1],[64,7,64,47,1],[72,9,72,85,1],[81,7,81,31,1],[84,7,84,32,1],[85,7,85,57,1],[13,5,13,104,1]]);
+    </script>
+  </body>
+</html>

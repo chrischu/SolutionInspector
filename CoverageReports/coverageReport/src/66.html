@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\configuration\rules\projectrulegroupconfigurationelement.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using SolutionInspector.Api.Configuration.Infrastructure;
+using SolutionInspector.Api.Utilities;
+
+namespace SolutionInspector.Api.Configuration.Rules
+{
+  /// &lt;summary&gt;
+  ///   Configuration defining a set of &lt;see cref=&quot;Rules&quot; /&gt; that is applied to all the projects that match the &lt;see cref=&quot;AppliesTo&quot; /&gt; filter.
+  /// &lt;/summary&gt;
+  public interface IProjectRuleGroupConfiguration
+  {
+    /// &lt;summary&gt;
+    ///   Filter that controlls which projects are affected by the rules in the &lt;see cref=&quot;IProjectRuleGroupConfiguration&quot; /&gt;.
+    /// &lt;/summary&gt;
+    INameFilter AppliesTo { get; }
+
+    /// &lt;summary&gt;
+    ///   The set of rules that is applied to all projects that match the &lt;see cref=&quot;AppliesTo&quot; /&gt; filter.
+    /// &lt;/summary&gt;
+    IReadOnlyCollection&lt;IRuleConfiguration&gt; Rules { get; }
+  }
+
+  internal class ProjectRuleGroupConfigurationElement
+      : RuleConfigurationCollection, IKeyedConfigurationElement&lt;string&gt;, IProjectRuleGroupConfiguration
+  {
+    [ConfigurationProperty (&quot;appliesTo&quot;, IsRequired = true, DefaultValue = &quot;*&quot;)]
+    // ReSharper disable once MemberCanBePrivate.Global
+    public NameFilter AppliesTo =&gt; (NameFilter) this[&quot;appliesTo&quot;];
+
+    public IReadOnlyCollection&lt;IRuleConfiguration&gt; Rules =&gt; this.ToArray();
+
+    INameFilter IProjectRuleGroupConfiguration.AppliesTo =&gt; AppliesTo;
+
+    public string Key =&gt; AppliesTo.ToString();
+    public string KeyName =&gt; &quot;appliesTo&quot;;
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[35,61,35,70,0],[38,30,38,41,0],[31,36,31,66,1],[33,61,33,75,1],[37,26,37,46,1]]);
+    </script>
+  </body>
+</html>

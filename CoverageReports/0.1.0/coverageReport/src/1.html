@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\solutioninspector.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using SystemInterface.IO;
+using SystemInterface.Reflection;
+using SystemWrapper.IO;
+using SystemWrapper.Reflection;
+using Autofac;
+using JetBrains.Annotations;
+using ManyConsole;
+using NLog;
+using SolutionInspector.Api.Commands;
+using SolutionInspector.Api.Configuration;
+using SolutionInspector.Api.Reporting;
+using SolutionInspector.Api.Rules;
+using SolutionInspector.Api.Utilities;
+
+namespace SolutionInspector.Api
+{
+  /// &lt;summary&gt;
+  ///   Entry point for a SolutionInspector run.
+  /// &lt;/summary&gt;
+  [PublicAPI]
+  public static class SolutionInspector
+  {
+    private static Logger s_logger = LogManager.GetCurrentClassLogger();
+
+    /// &lt;summary&gt;
+    ///   Runs the SolutionInspector with the given console &lt;paramref name=&quot;args&quot; /&gt;.
+    /// &lt;/summary&gt;
+    public static int Run (string[] args)
+    {
+      s_logger.Debug($&quot;SolutionInspector was run with the following arguments: [{string.Join(&quot;, &quot;, args)}].&quot;);
+
+      using (var container = SetupContainer())
+      {
+        var ruleAssemblyLoader = container.Resolve&lt;IRuleAssemblyLoader&gt;();
+        var solutionInspectorConfiguration = container.Resolve&lt;ISolutionInspectorConfiguration&gt;();
+        ruleAssemblyLoader.LoadRuleAssemblies(solutionInspectorConfiguration.RuleAssemblyImports.Imports);
+
+        var commands = container.Resolve&lt;IEnumerable&lt;ConsoleCommand&gt;&gt;();
+        return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
+      }
+    }
+
+    private static IContainer SetupContainer ()
+    {
+      var builder = new ContainerBuilder();
+
+      var configuration = SolutionInspectorConfiguration.Load();
+      builder.Register(ctx =&gt; configuration).As&lt;ISolutionInspectorConfiguration&gt;();
+
+      builder.RegisterType&lt;FileWrap&gt;().As&lt;IFile&gt;();
+      builder.RegisterType&lt;DirectoryWrap&gt;().As&lt;IDirectory&gt;();
+      builder.RegisterType&lt;AssemblyWrap&gt;().As&lt;IAssembly&gt;();
+
+      builder.RegisterType&lt;SolutionLoader&gt;().As&lt;ISolutionLoader&gt;();
+
+      builder.RegisterType&lt;RuleAssemblyLoader&gt;().As&lt;IRuleAssemblyLoader&gt;();
+
+      builder.RegisterType&lt;RuleCollectionBuilder&gt;().As&lt;IRuleCollectionBuilder&gt;();
+      builder.RegisterType&lt;RuleTypeResolver&gt;().As&lt;IRuleTypeResolver&gt;();
+
+      builder.RegisterType&lt;RuleConfigurationInstantiator&gt;().As&lt;IRuleConfigurationInstantiator&gt;();
+
+      builder.RegisterType&lt;RuleViolationViewModelConverter&gt;().As&lt;IRuleViolationViewModelConverter&gt;();
+
+      builder.Register(
+          ctx =&gt;
+              new TableWriter(new TableWriterOptions { PreferredTableWidth = 200, Characters = ConsoleTableWriterCharacters.AdvancedAscii })
+          ).As&lt;ITableWriter&gt;();
+
+      builder.RegisterViolationReporter(
+          ViolationReportFormat.Table,
+          ctx =&gt; tw =&gt; new TableViolationReporter(tw, ctx.Resolve&lt;IRuleViolationViewModelConverter&gt;(), ctx.Resolve&lt;ITableWriter&gt;()));
+
+      builder.RegisterViolationReporter(
+          ViolationReportFormat.Xml,
+          ctx =&gt; tw =&gt; new XmlViolationReporter(tw, ctx.Resolve&lt;IRuleViolationViewModelConverter&gt;()));
+
+      builder.RegisterViolationReporter(
+          ViolationReportFormat.VisualStudio,
+          ctx =&gt; tw =&gt; new VisualStudioViolationReporter(tw));
+
+      builder.RegisterType&lt;ViolationReporterFactory&gt;().As&lt;IViolationReporterFactory&gt;();
+
+      builder.RegisterType&lt;InspectCommand&gt;().As&lt;ConsoleCommand&gt;();
+
+      return builder.Build();
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[32,7,32,111,0],[34,14,34,46,0],[36,9,36,75,0],[37,9,37,99,0],[38,9,38,107,0],[40,9,40,73,0],[41,9,41,86,0],[43,5,43,6,0],[47,7,47,44,0],[49,7,49,65,0],[50,7,50,31,0],[50,44,50,84,0],[52,7,52,52,0],[53,7,53,62,0],[54,7,54,60,0],[56,7,56,68,0],[58,7,58,76,0],[60,7,60,82,0],[61,7,61,72,0],[63,7,63,98,0],[65,7,65,102,0],[67,7,69,15,0],[69,141,70,32,0],[72,7,74,18,0],[74,132,74,134,0],[76,7,78,18,0],[78,101,78,103,0],[80,7,82,18,0],[82,61,82,63,0],[84,7,84,88,0],[86,7,86,67,0],[88,7,88,30,0],[25,5,25,73,0],[50,31,50,44,0],[74,24,74,132,0],[78,24,78,101,0],[69,15,69,141,0],[74,18,74,24,0],[78,18,78,24,0],[82,18,82,24,0],[82,24,82,61,0]]);
+    </script>
+  </body>
+</html>

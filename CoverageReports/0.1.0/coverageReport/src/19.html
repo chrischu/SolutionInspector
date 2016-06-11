@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\utilities\hashcodehelper.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Linq;
+
+namespace SolutionInspector.Api.Utilities
+{
+  internal static class HashCodeHelper
+  {
+    public static int GetHashCode (params int[] hashCodes)
+    {
+      unchecked
+      {
+        var totalHash = 17;
+        foreach (var hashCode in hashCodes)
+          totalHash = totalHash * 23 + hashCode;
+        return totalHash;
+      }
+    }
+
+    public static int GetHashCode (params object[] objects)
+    {
+      return GetHashCode(objects.Select(o =&gt; o?.GetHashCode() ?? 0).ToArray());
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[12,9,12,28,0],[13,34,13,43,0],[13,18,13,30,0],[14,11,14,49,0],[13,31,13,33,0],[15,9,15,26,0],[21,7,21,46,0],[21,67,21,80,0],[21,46,21,67,0]]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\configurablerule.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Configuration;
+
+namespace SolutionInspector.Api.Rules
+{
+  /// &lt;summary&gt;
+  ///   A SolutionInspector that is configurable via C# configuration classes.
+  /// &lt;/summary&gt;
+  public interface IConfigurableRule : IRule
+  {
+  }
+
+  /// &lt;summary&gt;
+  ///   A SolutionInspector rule that applies to the given &lt;typeparamref name=&quot;TTarget&quot; /&gt; and can be configured using the
+  ///   &lt;typeparamref name=&quot;TConfiguration&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public interface IConfigurableRule&lt;in TTarget, out TConfiguration&gt; : IRule&lt;TTarget&gt;, IConfigurableRule
+      where TTarget : IRuleTarget
+      where TConfiguration : ConfigurationElement
+  {
+    /// &lt;summary&gt;
+    ///   Configuration.
+    /// &lt;/summary&gt;
+    TConfiguration Configuration { get; }
+  }
+
+  /// &lt;inheritdoc /&gt;
+  public abstract class ConfigurableRule&lt;TTarget, TConfiguration&gt; : Rule&lt;TTarget&gt;, IConfigurableRule&lt;TTarget, TConfiguration&gt;
+      where TTarget : IRuleTarget
+      where TConfiguration : ConfigurationElement
+  {
+    /// &lt;inheritdoc /&gt;
+    public TConfiguration Configuration { get; }
+
+    /// &lt;summary&gt;
+    ///   Creates an instance of the &lt;see cref=&quot;ConfigurableRule{TTarget,TConfiguration}&quot; /&gt; with the given &lt;paramref name=&quot;configuration&quot; /&gt;.
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;configuration&quot;&gt;&lt;/param&gt;
+    protected ConfigurableRule (TConfiguration configuration)
+    {
+      Configuration = configuration;
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[33,43,33,47,1],[39,5,39,62,1],[41,7,41,37,1],[42,5,42,6,1]]);
+    </script>
+  </body>
+</html>

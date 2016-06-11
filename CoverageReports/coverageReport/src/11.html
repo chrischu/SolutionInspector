@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\ruleconfigurationinstantiator.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Configuration;
+using System.Xml;
+using Fasterflect;
+using JetBrains.Annotations;
+using SolutionInspector.Api.Extensions;
+
+namespace SolutionInspector.Api.Rules
+{
+  internal interface IRuleConfigurationInstantiator
+  {
+    ConfigurationElement Instantiate ([CanBeNull] Type configurationType, XmlElement configurationXml);
+  }
+
+  internal class RuleConfigurationInstantiator : IRuleConfigurationInstantiator
+  {
+    public ConfigurationElement Instantiate ([CanBeNull] Type configurationType, XmlElement configurationXml)
+    {
+      if (configurationType == null)
+        return null;
+
+      var configuration = (ConfigurationElement) Activator.CreateInstance(configurationType);
+
+      using (var reader = configurationXml.Read())
+      {
+        configuration.CallMethod(&quot;DeserializeElement&quot;, reader, false);
+      }
+
+      return configuration;
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,9,20,21,0],[19,7,19,37,1],[22,7,22,94,1],[24,14,24,50,1],[26,9,26,71,1],[27,7,27,8,1],[29,7,29,28,1]]);
+    </script>
+  </body>
+</html>

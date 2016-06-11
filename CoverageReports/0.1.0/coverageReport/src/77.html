@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\configuration\infrastructure\configurationelementcollectionbase.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Xml;
+using Fasterflect;
+
+namespace SolutionInspector.Api.Configuration.Infrastructure
+{
+  /// &lt;summary&gt;
+  ///   Base class for &lt;see cref=&quot;ConfigurationElementCollection&quot; /&gt;s with elements of type &lt;typeparamref name=&quot;TElement&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public abstract class ConfigurationElementCollectionBase&lt;TElement&gt; : ConfigurationElementCollection, IEnumerable&lt;TElement&gt;
+      where TElement : ConfigurationElement, new()
+
+  {
+    /// &lt;summary&gt;
+    ///   Adds the given &lt;paramref name=&quot;element&quot; /&gt; to the collection.
+    /// &lt;/summary&gt;
+    public void Add (TElement element)
+    {
+      BaseAdd(element);
+    }
+
+    /// &lt;inheritdoc /&gt;
+    protected sealed override ConfigurationElement CreateNewElement ()
+    {
+      return new TElement();
+    }
+
+    protected abstract override string ElementName { get; }
+
+    public override ConfigurationElementCollectionType CollectionType =&gt; ConfigurationElementCollectionType.BasicMap;
+
+    protected override bool IsElementName (string elementName)
+    {
+      return !string.IsNullOrWhiteSpace(elementName) &amp;&amp; elementName == ElementName;
+    }
+
+    /// &lt;inheritdoc /&gt;
+    protected override object GetElementKey (ConfigurationElement element)
+    {
+      return element;
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public new IEnumerator&lt;TElement&gt; GetEnumerator ()
+    {
+      var enumerator = base.GetEnumerator();
+
+      while (enumerator.MoveNext())
+        yield return (TElement) enumerator.Current;
+    }
+
+    /// &lt;inheritdoc /&gt;
+    protected override bool OnDeserializeUnrecognizedElement (string elementName, XmlReader reader)
+    {
+      if (elementName != ElementName)
+        return false;
+
+      var element = CreateNewElement();
+      element.CallMethod(&quot;DeserializeElement&quot;, reader, false);
+      BaseAdd(element);
+      return true;
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[36,7,36,84,0],[42,7,42,22,0],[58,9,58,22,0],[21,7,21,24,1],[22,5,22,6,1],[27,7,27,29,1],[32,74,32,117,1],[57,7,57,38,1],[60,7,60,40,1],[61,7,61,63,1],[62,7,62,24,1],[63,7,63,19,1],[48,7,48,45,1],[51,9,51,52,1],[50,7,50,36,1],[52,5,52,6,1]]);
+    </script>
+  </body>
+</html>

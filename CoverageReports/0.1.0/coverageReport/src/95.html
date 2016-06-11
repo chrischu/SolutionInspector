@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.defaultrules\solutionbuildconfigurationsrule.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.Linq;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
+using SolutionInspector.Api.Utilities;
+
+namespace SolutionInspector.DefaultRules
+{
+  /// &lt;summary&gt;
+  ///   Verifies that all expected combinations of build configuration/platform are present in the solution.
+  /// &lt;/summary&gt;
+  public class SolutionBuildConfigurationsRule : ConfigurableSolutionRule&lt;SolutionBuildConfigurationsRuleConfiguration&gt;
+  {
+    private readonly ICollectionDifferenceFinder _collectionDifferenceFinder;
+    private readonly Lazy&lt;BuildConfiguration[]&gt; _expectedConfigurations;
+
+    internal IReadOnlyCollection&lt;BuildConfiguration&gt; ExpectedConfigurations =&gt; _expectedConfigurations.Value;
+
+    /// &lt;inheritdoc /&gt;
+    public SolutionBuildConfigurationsRule (SolutionBuildConfigurationsRuleConfiguration configuration)
+        : base(configuration)
+    {
+      _collectionDifferenceFinder = new CollectionDifferenceFinder();
+      _expectedConfigurations = new Lazy&lt;BuildConfiguration[]&gt;(
+          () =&gt; (from config in Configuration.Configurations.OfType&lt;string&gt;()
+            from platform in Configuration.Platforms.OfType&lt;string&gt;()
+            select new BuildConfiguration(config, platform)).ToArray());
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public override IEnumerable&lt;IRuleViolation&gt; Evaluate (ISolution target)
+    {
+      var differences = _collectionDifferenceFinder.FindDifferences(ExpectedConfigurations, target.BuildConfigurations);
+
+      foreach (var add in differences.Adds)
+        yield return new RuleViolation(this, target, $&quot;Unexpected build configuration &#39;{add}&#39; found.&quot;);
+
+      foreach (var remove in differences.Removes)
+        yield return new RuleViolation(this, target, $&quot;Build configuration &#39;{remove}&#39; could not be found.&quot;);
+    }
+  }
+
+  /// &lt;summary&gt;
+  ///   Configuration for the &lt;see cref=&quot;SolutionBuildConfigurationsRule&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public class SolutionBuildConfigurationsRuleConfiguration : ConfigurationElement
+  {
+    /// &lt;summary&gt;
+    ///   A list of expected configurations (e.g. Build, Release).
+    /// &lt;/summary&gt;
+    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
+    [ConfigurationProperty (&quot;expectedConfigurations&quot;, DefaultValue = &quot;&quot;, IsRequired = true)]
+    public CommaDelimitedStringCollection Configurations
+    {
+      get { return (CommaDelimitedStringCollection) this[&quot;expectedConfigurations&quot;]; }
+      set { this[&quot;expectedConfigurations&quot;] = value; }
+    }
+
+    /// &lt;summary&gt;
+    ///   A list of expected platforms (e.g. AnyCPU, x64).
+    /// &lt;/summary&gt;
+    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
+    [ConfigurationProperty (&quot;expectedPlatforms&quot;, DefaultValue = &quot;&quot;, IsRequired = true)]
+    public CommaDelimitedStringCollection Platforms
+    {
+      get { return (CommaDelimitedStringCollection) this[&quot;expectedPlatforms&quot;]; }
+      set { this[&quot;expectedPlatforms&quot;] = value; }
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,80,20,109,1],[24,11,24,30,1],[26,7,26,70,1],[27,7,28,17,1],[30,71,30,73,1],[31,5,31,6,1],[28,17,29,30,1],[29,70,30,20,1],[30,60,30,71,1],[29,30,29,70,1],[30,20,30,60,1],[36,7,36,121,1],[38,27,38,43,1],[38,16,38,23,1],[39,9,39,104,1],[38,24,38,26,1],[41,30,41,49,1],[41,16,41,26,1],[42,9,42,109,1],[41,27,41,29,1],[43,5,43,6,1],[58,13,58,84,1],[59,13,59,52,1],[59,53,59,54,1],[69,13,69,79,1],[70,13,70,47,1],[70,48,70,49,1]]);
+    </script>
+  </body>
+</html>

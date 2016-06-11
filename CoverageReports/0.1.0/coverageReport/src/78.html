@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\configuration\infrastructure\keyedconfigurationelement.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Configuration;
+
+namespace SolutionInspector.Api.Configuration.Infrastructure
+{
+  /// &lt;summary&gt;
+  ///   A &lt;see cref=&quot;ConfigurationElement&quot; /&gt; that can be identified by a &lt;see cref=&quot;Key&quot; /&gt; of type &lt;typeparamref name=&quot;TKey&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public interface IKeyedConfigurationElement&lt;out TKey&gt;
+  {
+    /// &lt;summary&gt;
+    ///   The name of the configuration property that stores the key.
+    /// &lt;/summary&gt;
+    string KeyName { get; }
+
+    /// &lt;summary&gt;
+    ///   The key value that is used to identify this &lt;see cref=&quot;ConfigurationElement&quot; /&gt;.
+    /// &lt;/summary&gt;
+    TKey Key { get; }
+  }
+
+  /// &lt;inheritdoc /&gt;
+  public abstract class KeyedConfigurationElement&lt;TKey&gt; : ConfigurationElement, IKeyedConfigurationElement&lt;TKey&gt;
+  {
+    /// &lt;inheritdoc /&gt;
+    public abstract string KeyName { get; }
+
+    /// &lt;inheritdoc /&gt;
+    public virtual TKey Key =&gt; (TKey) this[KeyName];
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[29,32,29,52,1]]);
+    </script>
+  </body>
+</html>

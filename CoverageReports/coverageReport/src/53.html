@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\nugetreference.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Reflection;
+
+namespace SolutionInspector.Api.ObjectModel
+{
+  /// &lt;summary&gt;
+  ///   Represents a DLL reference via NuGet.
+  /// &lt;/summary&gt;
+  public class NuGetReference : DllReferenceBase
+  {
+    /// &lt;summary&gt;
+    ///   The NuGet package that created the reference.
+    /// &lt;/summary&gt;
+    public NuGetPackage Package { get; }
+
+    /// &lt;summary&gt;
+    ///   &lt;c&gt;True&lt;/c&gt; if the reference is private, &lt;c&gt;false&lt;/c&gt; otherwise.
+    /// &lt;/summary&gt;
+    public bool IsPrivate { get; }
+
+    /// &lt;summary&gt;
+    ///   The hint path that points to the DLL in the NuGet packages folder.
+    /// &lt;/summary&gt;
+    public string HintPath { get; }
+
+    /// &lt;summary&gt;
+    ///   Creates a new &lt;see cref=&quot;NuGetReference&quot; /&gt;.
+    /// &lt;/summary&gt;
+    public NuGetReference (NuGetPackage package, AssemblyName assemblyName, bool isPrivate, string hintPath)
+        : base(assemblyName)
+    {
+      Package = package;
+      IsPrivate = isPrivate;
+      HintPath = hintPath;
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[14,35,14,39,1],[19,29,19,33,1],[24,30,24,34,1],[30,11,30,29,1],[32,7,32,25,1],[33,7,33,29,1],[34,7,34,27,1],[35,5,35,6,1]]);
+    </script>
+  </body>
+</html>

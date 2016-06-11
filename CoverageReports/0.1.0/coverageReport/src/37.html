@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\reporting\violationreporterfactory.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using Autofac.Features.Indexed;
+using JetBrains.Annotations;
+
+namespace SolutionInspector.Api.Reporting
+{
+  internal interface IViolationReporterFactory
+  {
+    IViolationReporter CreateConsoleReporter (ViolationReportFormat reportFormat);
+    IViolationReporter CreateFileReporter (ViolationReportFormat reportFormat, string filePath);
+  }
+
+  [UsedImplicitly /* by Autofac container */]
+  internal class ViolationReporterFactory : IViolationReporterFactory
+  {
+    private readonly IIndex&lt;ViolationReportFormat, Func&lt;TextWriter, IViolationReporter&gt;&gt; _violationReporterFactories;
+
+    public ViolationReporterFactory (IIndex&lt;ViolationReportFormat, Func&lt;TextWriter, IViolationReporter&gt;&gt; violationReporterFactories)
+    {
+      _violationReporterFactories = violationReporterFactories;
+    }
+
+    public IViolationReporter CreateConsoleReporter (ViolationReportFormat reportFormat)
+    {
+      var writer = Console.Out;
+      return _violationReporterFactories[reportFormat](writer);
+    }
+
+    [SuppressMessage (&quot;Microsoft.Reliability&quot;, &quot;CA2000:Dispose objects before losing scope&quot;,
+        Justification = &quot;The StreamWriter is disposed when the IViolationReporter is disposed&quot;)]
+    public IViolationReporter CreateFileReporter (ViolationReportFormat reportFormat, string filePath)
+    {
+      var writer = new StreamWriter(File.OpenWrite(filePath));
+      return _violationReporterFactories[reportFormat](writer);
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,5,20,133,0],[22,7,22,64,0],[23,5,23,6,0],[27,7,27,32,0],[28,7,28,64,0],[35,7,35,63,0],[36,7,36,64,0]]);
+    </script>
+  </body>
+</html>

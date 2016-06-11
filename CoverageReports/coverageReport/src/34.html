@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\reporting\ruleviolationviewmodel.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+
+namespace SolutionInspector.Api.Reporting
+{
+  internal class RuleViolationViewModel
+  {
+    public int Index { get; }
+    public string Rule { get; }
+    public string Target { get; }
+    public string Message { get; }
+
+    public RuleViolationViewModel (int index, string rule, string target, string message)
+    {
+      Index = index;
+      Rule = rule;
+      Target = target;
+      Message = message;
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[7,24,7,28,0],[8,26,8,30,0],[9,28,9,32,0],[10,29,10,33,0],[12,5,12,90,0],[14,7,14,21,0],[15,7,15,19,0],[16,7,16,23,0],[17,7,17,25,0],[18,5,18,6,0]]);
+    </script>
+  </body>
+</html>

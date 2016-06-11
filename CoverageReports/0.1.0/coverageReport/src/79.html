@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\configuration\infrastructure\keyedconfigurationelementcollectionbase.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Configuration;
+
+namespace SolutionInspector.Api.Configuration.Infrastructure
+{
+  /// &lt;summary&gt;
+  ///   Base class for &lt;see cref=&quot;ConfigurationElementCollection&quot; /&gt;s with elements of type &lt;typeparamref name=&quot;TElement&quot; /&gt; that are
+  ///   uniquely identified by a key of type &lt;typeparamref name=&quot;TKey&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public abstract class KeyedConfigurationElementCollectionBase&lt;TElement, TKey&gt; : ConfigurationElementCollectionBase&lt;TElement&gt;
+      where TElement : ConfigurationElement, IKeyedConfigurationElement&lt;TKey&gt;, new()
+  {
+    /// &lt;inheritdoc /&gt;
+    protected sealed override object GetElementKey (ConfigurationElement element)
+    {
+      return GetElementKeyInternal(element);
+    }
+
+    private TKey GetElementKeyInternal (ConfigurationElement element)
+    {
+      return ((TElement) element).Key;
+    }
+
+    /// &lt;inheritdoc /&gt;
+    protected override void BaseAdd (ConfigurationElement element)
+    {
+      var configurationElement = (TElement) element;
+
+      var key = GetElementKeyInternal(configurationElement);
+      if (GetElement(key) != null)
+        throw new ConfigurationErrorsException(
+            $&quot;The value for the property &#39;{configurationElement.KeyName}&#39; is not valid. &quot; +
+            $&quot;The error is: The key &#39;{configurationElement.Key}&#39; was already added to the collection once.&quot;);
+      base.BaseAdd(element);
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public TElement GetElement (TKey key)
+    {
+      return (TElement) BaseGet(key);
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[16,7,16,45,1],[21,7,21,39,1],[27,7,27,53,1],[29,7,29,61,1],[30,7,30,35,1],[31,9,33,110,1],[34,7,34,29,1],[35,5,35,6,1],[40,7,40,38,1]]);
+    </script>
+  </body>
+</html>

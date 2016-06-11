@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\reporting\violationreporterregistrationextensions.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.IO;
+using Autofac;
+
+namespace SolutionInspector.Api.Reporting
+{
+  /// &lt;summary&gt;
+  ///   Provides extension methods that makes registering &lt;see cref=&quot;IViolationReporter&quot; /&gt;s with the Autofac container easier.
+  /// &lt;/summary&gt;
+  public static class ViolationReporterRegistrationExtensions
+  {
+    /// &lt;summary&gt;
+    ///   Registers a &lt;see cref=&quot;IViolationReporter&quot; /&gt; for the &lt;paramref name=&quot;reportFormat&quot; /&gt; with the Autofac container.
+    /// &lt;/summary&gt;
+    public static void RegisterViolationReporter (
+        this ContainerBuilder builder,
+        ViolationReportFormat reportFormat,
+        Func&lt;IComponentContext, Func&lt;TextWriter, IViolationReporter&gt;&gt; reporterFactory)
+    {
+      builder.Register(
+          ctx =&gt;
+          {
+            var context = ctx.Resolve&lt;IComponentContext&gt;();
+            return reporterFactory(context);
+          }).Keyed&lt;Func&lt;TextWriter, IViolationReporter&gt;&gt;(reportFormat);
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,7,23,13,0],[23,60,24,13,0],[24,45,25,72,0],[26,5,26,6,0],[23,13,23,60,0],[24,13,24,45,0]]);
+    </script>
+  </body>
+</html>

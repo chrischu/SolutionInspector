@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\rulecollection.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace SolutionInspector.Api.Rules
+{
+  internal interface IRuleCollection
+  {
+    IReadOnlyCollection&lt;ISolutionRule&gt; SolutionRules { get; }
+    IReadOnlyCollection&lt;IProjectRule&gt; ProjectRules { get; }
+    IReadOnlyCollection&lt;IProjectItemRule&gt; ProjectItemRules { get; }
+  }
+
+  internal class RuleCollection : IRuleCollection
+  {
+    public IReadOnlyCollection&lt;ISolutionRule&gt; SolutionRules { get; }
+    public IReadOnlyCollection&lt;IProjectRule&gt; ProjectRules { get; }
+    public IReadOnlyCollection&lt;IProjectItemRule&gt; ProjectItemRules { get; }
+
+    public RuleCollection (
+        IEnumerable&lt;ISolutionRule&gt; solutionRules,
+        IEnumerable&lt;IProjectRule&gt; projectRules,
+        IEnumerable&lt;IProjectItemRule&gt; projectItemRules)
+    {
+      SolutionRules = solutionRules.ToArray();
+      ProjectRules = projectRules.ToArray();
+      ProjectItemRules = projectItemRules.ToArray();
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[16,63,16,67,1],[17,61,17,65,1],[18,69,18,73,1],[20,5,23,56,1],[25,7,25,47,1],[26,7,26,45,1],[27,7,27,53,1],[28,5,28,6,1]]);
+    </script>
+  </body>
+</html>

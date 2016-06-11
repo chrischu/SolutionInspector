@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\nugetpackage.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Xml;
+using JetBrains.Annotations;
+
+namespace SolutionInspector.Api.ObjectModel
+{
+  /// &lt;summary&gt;
+  ///   Represents a NuGet package referenced by a project.
+  /// &lt;/summary&gt;
+  [PublicAPI]
+  public class NuGetPackage : IEquatable&lt;NuGetPackage&gt;
+  {
+    /// &lt;summary&gt;
+    ///   The package&#39;s id.
+    /// &lt;/summary&gt;
+    public string Id { get; }
+
+    /// &lt;summary&gt;
+    ///   The package&#39;s version.
+    /// &lt;/summary&gt;
+    public Version Version { get; }
+
+    /// &lt;summary&gt;
+    ///   &lt;c&gt;True&lt;/c&gt; if the package is a pre-release package, &lt;c&gt;false&lt;/c&gt; otherwise.
+    /// &lt;/summary&gt;
+    public bool IsPreRelease { get; }
+
+    /// &lt;summary&gt;
+    ///   The package&#39;s pre-release tag (if any).
+    /// &lt;/summary&gt;
+    public string PreReleaseTag { get; }
+
+    /// &lt;summary&gt;
+    ///   The package&#39;s full version string in the format &quot;&amp;lt;Version&amp;gt;&amp;lt;PreReleaseTag&amp;gt;&quot;.
+    /// &lt;/summary&gt;
+    public string FullVersionString =&gt; $&quot;{Version}{PreReleaseTag}&quot;;
+
+    /// &lt;summary&gt;
+    ///   The package&#39;s directory name (relative to the NuGet packages folder)&quot;.
+    /// &lt;/summary&gt;
+    public string PackageDirectoryName =&gt; $&quot;{Id}.{FullVersionString}&quot;;
+
+    /// &lt;summary&gt;
+    ///   The package&#39;s target framework.
+    /// &lt;/summary&gt;
+    public string TargetFramework { get; }
+
+    /// &lt;summary&gt;
+    ///   &lt;c&gt;True&lt;/c&gt; if the package is only a development dependency, &lt;c&gt;false&lt;/c&gt; otherwise.
+    /// &lt;/summary&gt;
+    public bool IsDevelopmentDependency { get; }
+
+    /// &lt;summary&gt;
+    ///   Creates a new &lt;see cref=&quot;NuGetPackage&quot; /&gt;.
+    /// &lt;/summary&gt;
+    public NuGetPackage (
+        string id,
+        Version version,
+        bool isPreRelease,
+        [CanBeNull] string preReleaseTag,
+        string targetFramework,
+        bool isDevelopmentDependency)
+    {
+      Id = id;
+      Version = version;
+      IsPreRelease = isPreRelease;
+      PreReleaseTag = preReleaseTag;
+      TargetFramework = targetFramework;
+      IsDevelopmentDependency = isDevelopmentDependency;
+    }
+
+    /// &lt;summary&gt;
+    ///   Creates a &lt;see cref=&quot;NuGetPackage&quot; /&gt; instance from the given &lt;paramref name=&quot;packageElement&quot; /&gt; from the project packages.config.
+    /// &lt;/summary&gt;
+    public static NuGetPackage FromXmlElement (XmlElement packageElement)
+    {
+      var id = packageElement.GetAttribute(&quot;id&quot;);
+      bool isPreRelease = false;
+      string preReleaseTag = null;
+
+      var versionString = packageElement.GetAttribute(&quot;version&quot;);
+      if (versionString.Contains(&quot;-&quot;))
+      {
+        var split = versionString.Split(&#39;-&#39;);
+        isPreRelease = true;
+        preReleaseTag = &quot;-&quot; + split[1];
+        versionString = split[0];
+      }
+
+      var version = Version.Parse(versionString);
+
+      var targetFramework = packageElement.GetAttribute(&quot;targetFramework&quot;);
+
+      var isDevelopmentDependency = packageElement.HasAttribute(&quot;developmentDependency&quot;)
+                                    &amp;&amp; packageElement.GetAttribute(&quot;developmentDependency&quot;) == &quot;true&quot;;
+
+      return new NuGetPackage(id, version, isPreRelease, preReleaseTag, targetFramework, isDevelopmentDependency);
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public bool Equals ([CanBeNull] NuGetPackage other)
+    {
+      if (ReferenceEquals(null, other))
+        return false;
+      if (ReferenceEquals(this, other))
+        return true;
+      return string.Equals(PackageDirectoryName, other.PackageDirectoryName);
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public override bool Equals ([CanBeNull] object obj)
+    {
+      if (ReferenceEquals(null, obj))
+        return false;
+      if (ReferenceEquals(this, obj))
+        return true;
+      if (obj.GetType() != GetType())
+        return false;
+      return Equals((NuGetPackage) obj);
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public override int GetHashCode ()
+    {
+      return PackageDirectoryName.GetHashCode();
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public static bool operator == ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
+    {
+      return Equals(left, right);
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public static bool operator != ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
+    {
+      return !Equals(left, right);
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[103,7,103,40,0],[104,9,104,22,0],[105,7,105,40,0],[106,9,106,21,0],[107,7,107,78,0],[113,7,113,38,0],[114,9,114,22,0],[115,7,115,38,0],[116,9,116,21,0],[117,7,117,38,0],[118,9,118,22,0],[119,7,119,41,0],[125,7,125,49,0],[131,7,131,34,0],[16,24,16,28,1],[21,30,21,34,1],[26,32,26,36,1],[31,35,31,39,1],[36,40,36,67,1],[41,43,41,70,1],[46,37,46,41,1],[51,43,51,47,1],[56,5,62,38,1],[64,7,64,15,1],[65,7,65,25,1],[66,7,66,35,1],[67,7,67,37,1],[68,7,68,41,1],[69,7,69,57,1],[70,5,70,6,1],[77,7,77,50,1],[78,7,78,33,1],[79,7,79,35,1],[81,7,81,66,1],[82,7,82,39,1],[84,9,84,46,1],[85,9,85,29,1],[86,9,86,40,1],[87,9,87,34,1],[90,7,90,50,1],[92,7,92,76,1],[94,7,95,103,1],[97,7,97,115,1],[137,7,137,35,1]]);
+    </script>
+  </body>
+</html>

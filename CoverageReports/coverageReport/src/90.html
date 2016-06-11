@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.defaultrules\projectshouldnotcontainprojectpropertieswithduplicatenamerule.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using SolutionInspector.Api.Extensions;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
+
+namespace SolutionInspector.DefaultRules
+{
+  /// &lt;summary&gt;
+  ///   Verifies that all &lt;see cref=&quot;IProjectProperty&quot; /&gt;s included in the project have unique names.
+  /// &lt;/summary&gt;
+  public class ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule : ProjectRule
+  {
+    /// &lt;inheritdoc /&gt;
+    public override IEnumerable&lt;IRuleViolation&gt; Evaluate (IProject target)
+    {
+      foreach (var property in target.Advanced.Properties.Values)
+      {
+        var groupedByCondition = property.Occurrences.GroupBy(o =&gt; o.Condition);
+
+        foreach (var group in groupedByCondition.Where(g =&gt; g.ContainsMoreThanOne()))
+        {
+          yield return new RuleViolation(
+              this,
+              target,
+              $&quot;There are multiple project properties with name &#39;{property.Name}&#39; and the same conditions in the following locations: &quot; +
+              $&quot;{string.Join(&quot;, &quot;, group.Select(i =&gt; i.Location))}.&quot;);
+        }
+      }
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,68,20,79,1],[22,61,22,84,1],[28,54,28,64,1],[18,32,18,65,1],[18,16,18,28,1],[20,9,20,68,1],[20,79,20,81,1],[22,31,22,61,1],[22,84,22,85,1],[22,18,22,27,1],[24,11,28,54,1],[28,64,28,71,1],[22,28,22,30,1],[30,7,30,8,1],[18,29,18,31,1],[31,5,31,6,1]]);
+    </script>
+  </body>
+</html>

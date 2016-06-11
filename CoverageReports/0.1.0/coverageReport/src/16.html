@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\ruleviolation.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using JetBrains.Annotations;
+
+namespace SolutionInspector.Api.Rules
+{
+  /// &lt;summary&gt;
+  ///   A violation of a &lt;see cref=&quot;IRule&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public interface IRuleViolation
+  {
+    /// &lt;summary&gt;
+    ///   The &lt;see cref=&quot;IRule&quot; /&gt; that was violated.
+    /// &lt;/summary&gt;
+    IRule Rule { get; }
+
+    /// &lt;summary&gt;
+    ///   The &lt;see cref=&quot;IRuleTarget&quot; /&gt; that caused the &lt;see cref=&quot;IRuleViolation&quot; /&gt;.
+    /// &lt;/summary&gt;
+    IRuleTarget Target { get; }
+
+    /// &lt;summary&gt;
+    ///   A message that describes the nature of the &lt;see cref=&quot;IRuleViolation&quot; /&gt;.
+    /// &lt;/summary&gt;
+    string Message { get; }
+  }
+
+  /// &lt;inheritdoc /&gt;
+  [PublicAPI]
+  public class RuleViolation : IRuleViolation
+  {
+    /// &lt;inheritdoc /&gt;
+    public IRule Rule { get; }
+
+    /// &lt;inheritdoc /&gt;
+    public IRuleTarget Target { get; set; }
+
+    /// &lt;inheritdoc /&gt;
+    public string Message { get; }
+
+    /// &lt;summary&gt;
+    ///   Creates a new &lt;see cref=&quot;RuleViolation&quot; /&gt;.
+    /// &lt;/summary&gt;
+    public RuleViolation (IRule rule, IRuleTarget target, string message)
+    {
+      Rule = rule;
+      Target = target;
+      Message = message;
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[32,25,32,29,1],[35,33,35,37,1],[35,38,35,42,1],[38,29,38,33,1],[43,5,43,74,1],[45,7,45,19,1],[46,7,46,23,1],[47,7,47,25,1],[48,5,48,6,1]]);
+    </script>
+  </body>
+</html>

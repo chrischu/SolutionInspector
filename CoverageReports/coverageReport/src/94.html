@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.defaultrules\projectconfigfileshouldhavecorrectframeworkversionrule.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Xml.Linq;
+using System.Xml.XPath;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
+
+namespace SolutionInspector.DefaultRules
+{
+  /// &lt;summary&gt;
+  ///   Checks that the configuration file for the project (App.config/Web.config) has the correct target framework version/SKU set.
+  /// &lt;/summary&gt;
+  public class ProjectConfigFileShouldHaveCorrectFrameworkVersionRule
+      : ProjectConfigRuleBase&lt;ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration&gt;
+  {
+    /// &lt;inheritdoc /&gt;
+    public ProjectConfigFileShouldHaveCorrectFrameworkVersionRule (
+        ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration configuration)
+        : base(configuration)
+    {
+    }
+
+    /// &lt;inheritdoc /&gt;
+    protected override IEnumerable&lt;IRuleViolation&gt; Evaluate (IConfigurationProjectItem target, XDocument configurationXml)
+    {
+      var supportedRuntimeElement = configurationXml.XPathSelectElement(&quot;/configuration/startup/supportedRuntime&quot;);
+
+      if (supportedRuntimeElement == null)
+        yield return new RuleViolation(this, target, &quot;No explicit configuration for the supported runtime version/SKU could be found.&quot;);
+      else
+      {
+        var version = supportedRuntimeElement.Attribute(&quot;version&quot;)?.Value;
+        if (version != Configuration.ExpectedVersion)
+          yield return
+              new RuleViolation(
+                  this,
+                  target,
+                  $&quot;Unexpected value for supported runtime version, was &#39;{version}&#39; but should be &#39;{Configuration.ExpectedVersion}&#39;.&quot;);
+
+        var sku = supportedRuntimeElement.Attribute(&quot;sku&quot;)?.Value;
+        if (sku != Configuration.ExpectedSKU)
+          yield return
+              new RuleViolation(
+                  this,
+                  target,
+                  $&quot;Unexpected value for supported runtime SKU, was &#39;{sku}&#39; but should be &#39;{Configuration.ExpectedSKU}&#39;.&quot;);
+      }
+    }
+  }
+
+  /// &lt;summary&gt;
+  ///   Configuration for the &lt;see cref=&quot;ProjectConfigFileShouldHaveCorrectFrameworkVersionRule&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public class ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration : ProjectConfigRuleConfigurationBase
+  {
+    /// &lt;summary&gt;
+    ///   The expected framework version (e.g. &quot;v4.0&quot;)
+    /// &lt;/summary&gt;
+    [ConfigurationProperty (&quot;expectedVersion&quot;, DefaultValue = &quot;&quot;, IsRequired = true)]
+    public string ExpectedVersion
+    {
+      get { return (string) this[&quot;expectedVersion&quot;]; }
+      set { this[&quot;expectedVersion&quot;] = value; }
+    }
+
+    /// &lt;summary&gt;
+    ///   The expected SKU (e.g. &quot;.NETFramework,Version=v4.6.1&quot;).
+    /// &lt;/summary&gt;
+    [ConfigurationProperty (&quot;expectedSKU&quot;, DefaultValue = &quot;&quot;, IsRequired = true)]
+    public string ExpectedSKU
+    {
+      get { return (string) this[&quot;expectedSKU&quot;]; }
+      set { this[&quot;expectedSKU&quot;] = value; }
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[20,11,20,30,1],[22,5,22,6,1],[63,13,63,53,1],[64,13,64,45,1],[64,46,64,47,1],[73,13,73,49,1],[74,13,74,41,1],[74,42,74,43,1]]);
+    </script>
+  </body>
+</html>

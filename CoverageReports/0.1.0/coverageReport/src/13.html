@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\ruletyperesolver.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Linq;
+using System.Reflection;
+
+namespace SolutionInspector.Api.Rules
+{
+  internal interface IRuleTypeResolver
+  {
+    RuleTypeInfo Resolve (string ruleTypeName);
+  }
+
+  internal class RuleTypeResolver : IRuleTypeResolver
+  {
+    public RuleTypeInfo Resolve (string ruleTypeName)
+    {
+      var ruleType = ResolveRuleType(ruleTypeName);
+      var configurationType = ResolveConfigurationType(ruleType);
+
+      Func&lt;ConstructorInfo, bool&gt; constructorFilter = c =&gt; c.GetParameters().Length == 0;
+      if (configurationType != null)
+        constructorFilter = c =&gt; c.GetParameters().Length == 1 &amp;&amp; c.GetParameters().Any(p =&gt; p.ParameterType == configurationType);
+      var constructor = ResolveConstructor(
+          ruleType,
+          constructorFilter,
+          configurationType == null ? &quot;&quot; : $&quot; only taking a parameter of type &#39;{configurationType.Name}&#39; as a parameter&quot;);
+
+      return new RuleTypeInfo(ruleType, configurationType, constructor);
+    }
+
+    private ConstructorInfo ResolveConstructor (Type ruleType, Func&lt;ConstructorInfo, bool&gt; constructorFilter, string taking)
+    {
+      var validConstructors = ruleType.GetConstructors().Where(constructorFilter).ToArray();
+
+      //taking a parameter of type &#39;{configurationType.Name}&#39; as a parameter.
+      if (validConstructors.Length == 0)
+        throw new RuleTypeResolvingException(
+            $&quot;The rule type &#39;{ruleType.Name}&#39; does not provide a public constructor{taking}.&quot;);
+
+      if (validConstructors.Length &gt; 1)
+        throw new RuleTypeResolvingException(
+            $&quot;The rule type &#39;{ruleType.Name}&#39; has multiple constructors{taking}, but only one is allowed.&quot;);
+
+      return validConstructors[0];
+    }
+
+    private static Type ResolveRuleType (string ruleTypeName)
+    {
+      var ruleType = Type.GetType(ruleTypeName);
+
+      if (ruleType == null)
+        throw new RuleTypeResolvingException($&quot;Could not resolve rule type &#39;{ruleTypeName}&#39;.&quot;);
+
+      if (!typeof(IRule).IsAssignableFrom(ruleType))
+        throw new RuleTypeResolvingException($&quot;The type &#39;{ruleType.Name}&#39; is not a valid rule type.&quot;);
+
+      return ruleType;
+    }
+
+    private Type ResolveConfigurationType (Type ruleType)
+    {
+      if (!typeof(IConfigurableRule).IsAssignableFrom(ruleType))
+        return null;
+
+      return ruleType.GetInterfaces()
+          .Single(i =&gt; i.IsConstructedGenericType &amp;&amp; i.GetGenericTypeDefinition() == typeof(IConfigurableRule&lt;,&gt;))
+          .GenericTypeArguments[1];
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[40,9,41,109,0],[16,7,16,52,1],[17,7,17,66,1],[19,7,19,60,1],[19,89,19,90,1],[20,7,20,37,1],[21,9,21,34,1],[21,131,21,132,1],[22,7,25,123,1],[27,7,27,73,1],[32,7,32,93,1],[35,7,35,41,1],[36,9,37,96,1],[39,7,39,40,1],[43,7,43,35,1],[48,7,48,49,1],[50,7,50,28,1],[51,9,51,96,1],[53,7,53,53,1],[54,9,54,103,1],[56,7,56,23,1],[61,7,61,65,1],[62,9,62,21,1],[64,7,65,24,1],[65,114,66,36,1],[21,34,21,94,1],[21,130,21,131,1],[21,94,21,130,1],[19,60,19,89,1],[65,24,65,114,1]]);
+    </script>
+  </body>
+</html>

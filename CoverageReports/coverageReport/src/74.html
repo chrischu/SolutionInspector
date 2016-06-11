@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\configuration\msbuildparsing\msbuildparsingconfigurationsection.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using JetBrains.Annotations;
+
+namespace SolutionInspector.Api.Configuration.MsBuildParsing
+{
+  /// &lt;summary&gt;
+  ///   Configuration that controls how the MSBuild (e.g. csproj) files are parsed.
+  /// &lt;/summary&gt;
+  [PublicAPI]
+  public interface IMsBuildParsingConfiguration
+  {
+    /// &lt;summary&gt;
+    ///   Returns &lt;c&gt;true&lt;/c&gt; if the given &lt;paramref name=&quot;projectItemType&quot; /&gt; is a valid project item type.
+    /// &lt;/summary&gt;
+    bool IsValidProjectItemType (string projectItemType);
+  }
+
+  internal class MsBuildParsingConfigurationSection : ConfigurationSection, IMsBuildParsingConfiguration
+  {
+    private Lazy&lt;HashSet&lt;string&gt;&gt; _projectBuildActionsHashSet;
+
+    internal const string ExampleConfiguration = @&quot;&lt;solutionInspector&gt;
+  &lt;projectBuildActions&gt;
+    &lt;projectBuildAction name=&quot;&quot;None&quot;&quot; /&gt;
+  &lt;/projectBuildActions&gt;
+&lt;/solutionInspector&gt;&quot;;
+
+    public MsBuildParsingConfigurationSection ()
+    {
+      _projectBuildActionsHashSet = new Lazy&lt;HashSet&lt;string&gt;&gt;(() =&gt; new HashSet&lt;string&gt;(ProjectBuildActions.Select(a =&gt; a.Name)));
+    }
+
+    [ConfigurationProperty (&quot;projectBuildActions&quot;)]
+    public ProjectBuildActionsConfigurationElement ProjectBuildActions =&gt; (ProjectBuildActionsConfigurationElement) this[&quot;projectBuildActions&quot;];
+
+    public bool IsValidProjectItemType (string projectItemType)
+    {
+      return _projectBuildActionsHashSet.Value.Contains(projectItemType);
+    }
+
+    public static MsBuildParsingConfigurationSection Load ()
+    {
+      return (MsBuildParsingConfigurationSection) ConfigurationManager.GetSection(&quot;solutionInspector&quot;);
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[46,7,46,104,0],[31,5,31,49,1],[33,7,33,69,1],[33,129,33,131,1],[34,5,34,6,1],[37,75,37,144,1],[41,7,41,74,1],[33,69,33,121,1],[33,127,33,129,1],[33,121,33,127,1]]);
+    </script>
+  </body>
+</html>

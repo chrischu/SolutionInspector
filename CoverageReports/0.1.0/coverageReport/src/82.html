@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.defaultrules\allprojectitemsmustbepresentrule.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
+
+namespace SolutionInspector.DefaultRules
+{
+  /// &lt;summary&gt;
+  ///   Verifies that all &lt;see cref=&quot;IProjectItem&quot; /&gt;s included in the project also exist in the file system.
+  /// &lt;/summary&gt;
+  public class AllProjectItemsMustBePresentRule : ProjectRule
+  {
+    /// &lt;inheritdoc /&gt;
+    public override IEnumerable&lt;IRuleViolation&gt; Evaluate (IProject target)
+    {
+      return target.ProjectItems.Where(i =&gt; !i.File.Exists)
+          .Select(i =&gt; new RuleViolation(this, target, $&quot;Could not find project item &#39;{i.OriginalInclude.Evaluated}&#39;.&quot;));
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[17,7,17,45,1],[17,59,18,24,1],[18,120,18,122,1],[18,24,18,120,1],[17,45,17,59,1]]);
+    </script>
+  </body>
+</html>

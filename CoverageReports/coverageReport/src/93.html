@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.defaultrules\requirednugetpackagesrule.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using JetBrains.Annotations;
+using SolutionInspector.Api.Configuration.Infrastructure;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Rules;
+
+namespace SolutionInspector.DefaultRules
+{
+  /// &lt;summary&gt;
+  ///   Verifies that the project references all the NuGet packages configured via &lt;see cref=&quot;RequiredNuGetPackagesRuleConfiguration&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public class RequiredNuGetPackagesRule : ConfigurableProjectRule&lt;RequiredNuGetPackagesRuleConfiguration&gt;
+  {
+    /// &lt;inheritdoc /&gt;
+    public RequiredNuGetPackagesRule ([NotNull] RequiredNuGetPackagesRuleConfiguration configuration)
+        : base(configuration)
+    {
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public override IEnumerable&lt;IRuleViolation&gt; Evaluate (IProject target)
+    {
+      return from requiredNuGetPackage in Configuration
+        where target.NuGetPackages.All(p =&gt; p.Id != requiredNuGetPackage.Id)
+        select new RuleViolation(this, target, $&quot;Required NuGet package &#39;{requiredNuGetPackage.Id}&#39; is missing.&quot;);
+    }
+  }
+
+  /// &lt;summary&gt;
+  ///   Configuration for the &lt;see cref=&quot;RequiredNuGetPackagesRule&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public class RequiredNuGetPackagesRuleConfiguration : KeyedConfigurationElementCollectionBase&lt;RequiredNuGetPackageConfigurationElement, string&gt;
+  {
+    /// &lt;inheritdoc /&gt;
+    protected override string ElementName =&gt; &quot;nuGetPackage&quot;;
+  }
+
+  /// &lt;summary&gt;
+  ///   Configuration element that represents a required NuGet package.
+  /// &lt;/summary&gt;
+  public class RequiredNuGetPackageConfigurationElement : KeyedConfigurationElement&lt;string&gt;
+  {
+    /// &lt;inheritdoc /&gt;
+    public override string KeyName =&gt; &quot;id&quot;;
+
+    /// &lt;summary&gt;
+    ///   The id of the required NuGet package.
+    /// &lt;/summary&gt;
+    [ConfigurationProperty (&quot;id&quot;, DefaultValue = &quot;&quot;, IsRequired = true, IsKey = true)]
+    public string Id
+    {
+      get { return (string) this[&quot;id&quot;]; }
+      set { this[&quot;id&quot;] = value; }
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[19,11,19,30,1],[21,5,21,6,1],[26,7,27,15,1],[27,77,28,16,1],[28,114,28,115,1],[27,15,27,45,1],[27,76,27,77,1],[28,16,28,114,1],[27,45,27,76,1],[38,46,38,60,1],[47,39,47,43,1],[55,13,55,40,1],[56,13,56,32,1],[56,33,56,34,1]]);
+    </script>
+  </body>
+</html>

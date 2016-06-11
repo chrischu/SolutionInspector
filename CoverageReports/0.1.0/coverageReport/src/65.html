@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\configuration\rules\projectitemrulegroupconfigurationelement.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using SolutionInspector.Api.Configuration.Infrastructure;
+using SolutionInspector.Api.Utilities;
+
+namespace SolutionInspector.Api.Configuration.Rules
+{
+  /// &lt;summary&gt;
+  ///   Configuration defining a set of &lt;see cref=&quot;Rules&quot; /&gt; that is applied to all the project items that match the &lt;see cref=&quot;AppliesTo&quot; /&gt; and
+  ///   &lt;see cref=&quot;InProject&quot; /&gt; filters.
+  /// &lt;/summary&gt;
+  public interface IProjectItemRuleGroupConfiguration
+  {
+    /// &lt;summary&gt;
+    ///   Filter that controlls which project items are affected by the rules in the &lt;see cref=&quot;IProjectItemRuleGroupConfiguration&quot; /&gt;.
+    /// &lt;/summary&gt;
+    INameFilter AppliesTo { get; }
+
+    /// &lt;summary&gt;
+    ///   Filter that controlls which project&#39;s items are affected by the rules in the &lt;see cref=&quot;IProjectItemRuleGroupConfiguration&quot; /&gt;.
+    /// &lt;/summary&gt;
+    INameFilter InProject { get; }
+
+    /// &lt;summary&gt;
+    ///   The set of rules that is applied to all project items that match the &lt;see cref=&quot;AppliesTo&quot; /&gt; and &lt;see cref=&quot;InProject&quot; /&gt; filters.
+    /// &lt;/summary&gt;
+    IReadOnlyCollection&lt;IRuleConfiguration&gt; Rules { get; }
+  }
+
+  internal class ProjectItemRuleGroupConfigurationElement
+      : RuleConfigurationCollection, IKeyedConfigurationElement&lt;string&gt;, IProjectItemRuleGroupConfiguration
+  {
+    [ConfigurationProperty (&quot;appliesTo&quot;, IsRequired = true, DefaultValue = &quot;*&quot;)]
+    // ReSharper disable once MemberCanBePrivate.Global
+    public NameFilter AppliesTo =&gt; (NameFilter) this[&quot;appliesTo&quot;];
+
+    [ConfigurationProperty (&quot;inProject&quot;, IsRequired = true, DefaultValue = &quot;*&quot;)]
+    // ReSharper disable once MemberCanBePrivate.Global
+    public NameFilter InProject =&gt; (NameFilter) this[&quot;inProject&quot;];
+
+    public IReadOnlyCollection&lt;IRuleConfiguration&gt; Rules =&gt; this.ToArray();
+
+    INameFilter IProjectItemRuleGroupConfiguration.AppliesTo =&gt; AppliesTo;
+    INameFilter IProjectItemRuleGroupConfiguration.InProject =&gt; InProject;
+
+    public string Key =&gt; $&quot;{InProject} {AppliesTo}&quot;;
+    public string KeyName =&gt; &quot;appliesTo&quot;;
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[45,65,45,74,0],[46,65,46,74,0],[49,30,49,41,0],[37,36,37,66,1],[41,36,41,66,1],[43,61,43,75,1],[48,26,48,52,1]]);
+    </script>
+  </body>
+</html>

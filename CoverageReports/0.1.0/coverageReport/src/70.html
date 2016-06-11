@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\configuration\rules\rulesconfigurationsection.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+
+namespace SolutionInspector.Api.Configuration.Rules
+{
+  /// &lt;summary&gt;
+  ///   Configuration for all the &lt;see cref=&quot;SolutionRules&quot; /&gt;, &lt;see cref=&quot;ProjectRuleGroups&quot; /&gt; and &lt;see cref=&quot;ProjectItemRuleGroups&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public interface IRulesConfiguration
+  {
+    /// &lt;summary&gt;
+    ///   All configured solution rules.
+    /// &lt;/summary&gt;
+    IReadOnlyCollection&lt;IRuleConfiguration&gt; SolutionRules { get; }
+
+    /// &lt;summary&gt;
+    ///   All configured project rule groups.
+    /// &lt;/summary&gt;
+    IReadOnlyCollection&lt;IProjectRuleGroupConfiguration&gt; ProjectRuleGroups { get; }
+
+    /// &lt;summary&gt;
+    ///   All configured project item rule groups.
+    /// &lt;/summary&gt;
+    IReadOnlyCollection&lt;IProjectItemRuleGroupConfiguration&gt; ProjectItemRuleGroups { get; }
+  }
+
+  internal sealed class RulesConfigurationSection : ConfigurationSection, IRulesConfiguration
+  {
+    public const string ExampleConfiguration = @&quot;&lt;rules&gt;
+  &lt;solutionRules&gt;
+    &lt;rule type=&quot;&quot;Namespace.Rule, Assembly&quot;&quot; property=&quot;&quot;Property&quot;&quot;&gt;
+      &lt;innerConfig property=&quot;&quot;InnerProperty&quot;&quot; /&gt;
+    &lt;/rule&gt;
+  &lt;/solutionRules&gt;
+  &lt;projectRules&gt;
+    &lt;projectRuleGroup appliesTo=&quot;&quot;*&quot;&quot;&gt;
+      &lt;rule type=&quot;&quot;Namespace.Rule, Assembly&quot;&quot; property=&quot;&quot;Property&quot;&quot;&gt;
+        &lt;innerConfig property=&quot;&quot;InnerProperty&quot;&quot; /&gt;
+      &lt;/rule&gt;
+    &lt;/projectRuleGroup&gt;
+    &lt;projectRuleGroup appliesTo=&quot;&quot;+Inc*lude;-Exc*lude&quot;&quot;&gt;
+      &lt;rule type=&quot;&quot;Namespace.Rule, Assembly&quot;&quot; property=&quot;&quot;Property&quot;&quot;&gt;
+        &lt;innerConfig property=&quot;&quot;InnerProperty&quot;&quot; /&gt;
+      &lt;/rule&gt;
+    &lt;/projectRuleGroup&gt;
+    &lt;projectRuleGroup appliesTo=&quot;&quot;Project&quot;&quot;&gt;
+      &lt;rule type=&quot;&quot;Namespace.Rule, Assembly&quot;&quot; property=&quot;&quot;Property&quot;&quot;&gt;
+        &lt;innerConfig property=&quot;&quot;InnerProperty&quot;&quot; /&gt;
+      &lt;/rule&gt;
+    &lt;/projectRuleGroup&gt;
+  &lt;/projectRules&gt;
+  &lt;projectItemRules&gt;
+    &lt;projectItemRuleGroup appliesTo=&quot;&quot;App.config&quot;&quot; inProject=&quot;&quot;Project&quot;&quot;&gt;
+      &lt;rule type=&quot;&quot;Namespace.Rule, Assembly&quot;&quot; property=&quot;&quot;Property&quot;&quot;&gt;
+        &lt;innerConfig property=&quot;&quot;InnerProperty&quot;&quot; /&gt;
+      &lt;/rule&gt;
+    &lt;/projectItemRuleGroup&gt;
+  &lt;/projectItemRules&gt;
+&lt;/rules&gt;&quot;;
+
+    [ConfigurationProperty (&quot;solutionRules&quot;)]
+    public RuleConfigurationCollection SolutionRules =&gt; (RuleConfigurationCollection) this[&quot;solutionRules&quot;];
+
+    [ConfigurationProperty (&quot;projectRules&quot;)]
+    public ProjectRulesConfigurationCollection ProjectRules =&gt; (ProjectRulesConfigurationCollection) this[&quot;projectRules&quot;];
+
+    [ConfigurationProperty (&quot;projectItemRules&quot;)]
+    public ProjectItemRulesConfigurationCollection ProjectItemRules =&gt; (ProjectItemRulesConfigurationCollection) this[&quot;projectItemRules&quot;];
+
+    IReadOnlyCollection&lt;IRuleConfiguration&gt; IRulesConfiguration.SolutionRules =&gt; SolutionRules.ToArray();
+    IReadOnlyCollection&lt;IProjectRuleGroupConfiguration&gt; IRulesConfiguration.ProjectRuleGroups =&gt; ProjectRules.ToArray();
+    IReadOnlyCollection&lt;IProjectItemRuleGroupConfiguration&gt; IRulesConfiguration.ProjectItemRuleGroups =&gt; ProjectItemRules.ToArray();
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[72,82,72,105,0],[73,98,73,120,0],[74,106,74,132,0],[64,57,64,108,1],[67,64,67,122,1],[70,72,70,138,1]]);
+    </script>
+  </body>
+</html>

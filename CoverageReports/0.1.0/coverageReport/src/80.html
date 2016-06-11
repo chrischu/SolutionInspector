@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\commands\inspectcommand.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
+using Microsoft.Build.Exceptions;
+using NLog;
+using SolutionInspector.Api.Configuration;
+using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Api.Reporting;
+using SolutionInspector.Api.Rules;
+using SolutionInspector.Api.Utilities;
+
+namespace SolutionInspector.Api.Commands
+{
+  internal class InspectCommand : SolutionInspectorCommand&lt;InspectCommand.RawArguments, InspectCommand.ParsedArguments&gt;
+  {
+    private static readonly Logger s_logger = LogManager.GetCurrentClassLogger();
+
+    private readonly ISolutionInspectorConfiguration _configuration;
+    private readonly ISolutionLoader _solutionLoader;
+    private readonly IRuleCollectionBuilder _ruleCollectionBuilder;
+    private readonly IViolationReporterFactory _violationReporterFactory;
+
+    public InspectCommand (
+        ISolutionInspectorConfiguration configuration,
+        ISolutionLoader solutionLoader,
+        IRuleCollectionBuilder ruleCollectionBuilder,
+        IViolationReporterFactory violationReporterFactory)
+        : base(&quot;inspect&quot;, &quot;Inspects a given solution for rule violations.&quot;)
+    {
+      _configuration = configuration;
+      _solutionLoader = solutionLoader;
+      _ruleCollectionBuilder = ruleCollectionBuilder;
+      _violationReporterFactory = violationReporterFactory;
+    }
+
+    protected override void SetupArguments (IArgumentsBuilder&lt;RawArguments&gt; argumentsBuilder)
+    {
+      argumentsBuilder
+          .Option&lt;ViolationReportFormat&gt;(
+              &quot;reportFormat&quot;,
+              &quot;f&quot;,
+              $&quot;Controls the format of the violation report ({string.Join(&quot;|&quot;, Enum.GetNames(typeof(ViolationReportFormat)))}).&quot;,
+              (a, v) =&gt; a.ReportFormat = v)
+          .Option&lt;string&gt;(
+              &quot;reportOutputFile&quot;,
+              &quot;o&quot;,
+              &quot;Writes the violation report to the given file instead of to the console.&quot;,
+              (a, v) =&gt; a.ReportOutputFile = v != null ? v.Trim() : null)
+          .Values(c =&gt; c.Value(&quot;solutionFilePath&quot;, (a, v) =&gt; a.SolutionFilePath = v));
+    }
+
+    protected override ParsedArguments ValidateAndParseArguments (RawArguments arguments, Func&lt;string, Exception&gt; reportError)
+    {
+      var solution = ValidateAndParseSolution(arguments, reportError);
+      var rules = _ruleCollectionBuilder.Build(_configuration.Rules);
+
+      return new ParsedArguments(solution, rules, arguments.ReportFormat, arguments.ReportOutputFile);
+    }
+
+    private ISolution ValidateAndParseSolution (RawArguments arguments, Func&lt;string, Exception&gt; reportError)
+    {
+      try
+      {
+        return _solutionLoader.Load(arguments.SolutionFilePath, _configuration.MsBuildParsing);
+      }
+      catch (SolutionNotFoundException)
+      {
+        throw reportError($&quot;Given solution file &#39;{arguments.SolutionFilePath}&#39; could not be found.&quot;);
+      }
+      catch (InvalidProjectFileException ex)
+      {
+        s_logger.Error(ex, &quot;Error while loading solution.&quot;);
+        throw reportError(
+            $&quot;Given file &#39;{arguments.SolutionFilePath}&#39; is not a valid solution file &quot; +
+            &quot;(for detailed error information see the log file &#39;SolutionInspector.log&#39;).&quot;);
+      }
+      catch (Exception ex)
+      {
+        s_logger.Error(ex, &quot;Error while loading solution.&quot;);
+        throw reportError($&quot;Unexpected error when loading solution file &#39;{arguments.SolutionFilePath}: {ex}&quot;);
+      }
+    }
+
+    protected override int Run (ParsedArguments arguments)
+    {
+      using (var solution = arguments.Solution)
+      {
+        s_logger.Info($&quot;Inspecting solution &#39;{solution.FullPath}&#39;...&quot;);
+
+        var violations = GetRuleViolations(solution, arguments.Rules).ToArray();
+
+        if (violations.Any())
+        {
+          using (var reporter = CreateViolationReporter(arguments))
+            reporter.Report(violations);
+          return 1;
+        }
+
+        return 0;
+      }
+    }
+
+    private IViolationReporter CreateViolationReporter (ParsedArguments arguments)
+    {
+      if (arguments.ReportOutputFile != null)
+        return _violationReporterFactory.CreateFileReporter(arguments.ReportFormat, arguments.ReportOutputFile);
+
+      return _violationReporterFactory.CreateConsoleReporter(arguments.ReportFormat);
+    }
+
+    private IEnumerable&lt;IRuleViolation&gt; GetRuleViolations (ISolution solution, IRuleCollection rules)
+    {
+      var ruleViolations = new List&lt;IRuleViolation&gt;();
+      int previousViolationCount = 0;
+
+      s_logger.Info($&quot;Checking for solution rule violations in solution &#39;{solution.FullPath}&#39;...&quot;);
+      foreach (var solutionRule in rules.SolutionRules)
+        ruleViolations.AddRange(solutionRule.Evaluate(solution));
+      s_logger.Info(
+          $&quot;Finished checking for solution rule violations in solution &#39;{solution.FullPath}&#39;: &quot; +
+          $&quot;Found {ruleViolations.Count - previousViolationCount} violations.&quot;);
+
+      foreach (var project in solution.Projects)
+      {
+        s_logger.Info($&quot;Checking for project rule violations in project &#39;{project.FullPath}&#39;...&quot;);
+        previousViolationCount = ruleViolations.Count;
+        foreach (var projectRule in rules.ProjectRules)
+          ruleViolations.AddRange(projectRule.Evaluate(project));
+        s_logger.Info(
+            $&quot;Finished checking for project rule violations in project &#39;{project.FullPath}&#39;: &quot; +
+            $&quot;Found {ruleViolations.Count - previousViolationCount} violations.&quot;);
+      }
+
+      foreach (var project in solution.Projects)
+      {
+        s_logger.Info($&quot;Checking for project item rule violations in project &#39;{project.FullPath}&#39;...&quot;);
+        previousViolationCount = ruleViolations.Count;
+
+        foreach (var projectItem in project.ProjectItems)
+        {
+          s_logger.Debug($&quot;Checking for project item rule violations in project item &#39;{projectItem.FullPath}&#39;...&quot;);
+          foreach (var projectItemRule in rules.ProjectItemRules)
+            ruleViolations.AddRange(projectItemRule.Evaluate(projectItem));
+        }
+
+        s_logger.Info(
+            $&quot;Finished checking for project item rule violations in project &#39;{project.FullPath}&#39;: &quot; +
+            $&quot;Found {ruleViolations.Count - previousViolationCount} violations.&quot;);
+      }
+
+      s_logger.Info(
+          $&quot;Finished checking for violations in solution &#39;{solution.FullPath}&#39;: &quot; +
+          $&quot;Found {ruleViolations.Count} total violations.&quot;);
+      return ruleViolations;
+    }
+
+    public class RawArguments
+    {
+      public string SolutionFilePath { get; set; }
+      public ViolationReportFormat ReportFormat { get; set; }
+      public string ReportOutputFile { get; set; }
+    }
+
+    public class ParsedArguments
+    {
+      public ISolution Solution { get; }
+      public IRuleCollection Rules { get; }
+      public ViolationReportFormat ReportFormat { get; }
+      public string ReportOutputFile { get; }
+
+      public ParsedArguments (
+          ISolution solution,
+          IRuleCollection rules,
+          ViolationReportFormat reportFormat,
+          [CanBeNull] string reportOutputFile)
+      {
+        Solution = solution;
+        Rules = rules;
+        ReportFormat = reportFormat;
+        ReportOutputFile = reportOutputFile;
+      }
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[67,7,67,40,0],[69,9,69,102,0],[71,7,71,45,0],[73,9,73,61,0],[74,9,76,91,0],[78,7,78,27,0],[80,9,80,61,0],[81,9,81,111,0],[29,11,29,76,1],[31,7,31,38,1],[32,7,32,40,1],[33,7,33,54,1],[34,7,34,60,1],[35,5,35,6,1],[39,7,44,25,1],[44,43,49,25,1],[49,73,50,24,1],[50,85,50,87,1],[51,5,51,6,1],[55,7,55,71,1],[56,7,56,70,1],[58,7,58,103,1],[65,9,65,96,1],[83,5,83,6,1],[87,14,87,47,1],[89,9,89,72,1],[91,9,91,81,1],[93,9,93,30,1],[95,18,95,67,1],[96,13,96,41,1],[97,11,97,20,1],[100,9,100,18,1],[102,5,102,6,1],[106,7,106,46,1],[107,9,107,113,1],[109,7,109,86,1],[114,7,114,55,1],[115,7,115,38,1],[117,7,117,100,1],[118,36,118,55,1],[118,16,118,32,1],[119,9,119,66,1],[118,33,118,35,1],[120,7,122,81,1],[124,31,124,48,1],[124,16,124,27,1],[126,9,126,99,1],[127,9,127,55,1],[128,37,128,55,1],[128,18,128,33,1],[129,11,129,66,1],[128,34,128,36,1],[130,9,132,83,1],[124,28,124,30,1],[135,31,135,48,1],[135,16,135,27,1],[137,9,137,104,1],[138,9,138,55,1],[140,37,140,57,1],[140,18,140,33,1],[142,11,142,116,1],[143,43,143,65,1],[143,20,143,39,1],[144,13,144,76,1],[143,40,143,42,1],[140,34,140,36,1],[147,9,149,83,1],[135,28,135,30,1],[152,7,154,62,1],[155,7,155,29,1],[17,5,17,82,1],[160,40,160,44,1],[160,45,160,49,1],[161,51,161,55,1],[161,56,161,60,1],[162,40,162,44,1],[162,45,162,49,1],[167,35,167,39,1],[168,38,168,42,1],[169,51,169,55,1],[170,40,170,44,1],[172,7,176,47,1],[178,9,178,29,1],[179,9,179,23,1],[180,9,180,37,1],[181,9,181,45,1],[182,7,182,8,1],[44,25,44,43,1],[49,25,49,73,1],[50,24,50,62,1],[50,84,50,85,1],[50,62,50,84,1]]);
+    </script>
+  </body>
+</html>

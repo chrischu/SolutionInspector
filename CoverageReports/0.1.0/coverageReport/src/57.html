@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\projectreference.cs</title>
+    <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
+  </head>
+  <body>
+    <pre id="content" class="source-code">
+using System;
+using JetBrains.Annotations;
+
+namespace SolutionInspector.Api.ObjectModel
+{
+  /// &lt;summary&gt;
+  ///   A reference to another project in the same solution.
+  /// &lt;/summary&gt;
+  [PublicAPI]
+  public class ProjectReference
+  {
+    /// &lt;summary&gt;
+    ///   The referenced project.
+    /// &lt;/summary&gt;
+    public IProject Project { get; }
+
+    /// &lt;summary&gt;
+    ///   Creates a new &lt;see cref=&quot;ProjectReference&quot; /&gt;.
+    /// &lt;/summary&gt;
+    public ProjectReference (IProject project)
+    {
+      Project = project;
+    }
+  }
+}
+    </pre>
+    <script type="text/javascript">
+      highlightRanges([[15,31,15,35,1],[20,5,20,47,1],[22,7,22,25,1],[23,5,23,6,1]]);
+    </script>
+  </body>
+</html>
