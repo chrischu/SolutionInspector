@@ -38,6 +38,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Build", ".Build", "{F6047F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CF675B56-CD6D-4E18-A751-EB7BA25F6547}"
 	ProjectSection(SolutionItems) = preProject
+		Shared\Build\Build.AppVeyor.ps1 = Shared\Build\Build.AppVeyor.ps1
 		Shared\Build\Build.Common.ps1 = Shared\Build\Build.Common.ps1
 		Shared\Build\Build.Logging.ps1 = Shared\Build\Build.Logging.ps1
 		Shared\Build\Build.MSBuild.ps1 = Shared\Build\Build.MSBuild.ps1

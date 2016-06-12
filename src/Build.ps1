@@ -53,7 +53,12 @@ $AssemblyInfoSharedFile = Join-Path $SolutionDirectory "AssemblyInfoShared.cs"
 $BuildOutputDirectory = Join-Path $SolutionDirectory "Build"
 $AnalysisResultsDirectory = Join-Path $BuildOutputDirectory "AnalysisResults"
 $FxCopResultsDirectory = Join-Path $AnalysisResultsDirectory "FxCop"
+$DotCoverResultsDirectory = Join-Path $AnalysisResultsDirectory "dotCover"
 $NuGetPackagesDirectory = Join-Path $BuildOutputDirectory "NuGetPackages"
+
+$DotCoverCoverageSnapshotFile = Join-Path $DotCoverResultsDirectory "coverageSnapshot.dcvr"
+$DotCoverCoverageBadgeFile = Join-Path $DotCoverResultsDirectory "coverageBadge.svg"
+$DotCoverCoverageReportFile = Join-Path $DotCoverResultsDirectory "coverageReport.html"
 
 $Projects = Get-ProjectsFromSolution $SolutionFile $Configuration | ? { $_.ProjectName -ne "SolutionPackages" }
 
@@ -94,12 +99,14 @@ function Run() {
   } finally {
     Restore-AssemblyInfos
   }
+  
+  Publish-CoverageReports -Condition ($Mode -eq "AppVeyor" -and -not $IsPreRelease -and $RunDotCoverCoverageAnalysis)
 }
 
 BuildTask Clean {
   Clean-BuildDirectory $BuildOutputDirectory
   Clean-Solution $SolutionFile
-  New-Item $AnalysisResultsDirectory, $FxCopResultsDirectory, $NuGetPackagesDirectory -Type Directory | Out-Null
+  New-Item $AnalysisResultsDirectory, $FxCopResultsDirectory, $DotCoverResultsDirectory, $NuGetPackagesDirectory -Type Directory | Out-Null
 }
 
 BuildTask Restore-NuGetPackages {
@@ -126,8 +133,10 @@ BuildTask Run-ReSharperCodeInspection {
 
 BuildTask Run-Tests {
   if ($RunDotCoverCoverageAnalysis) {
-    $DotCoverCoverageAnalysisResultsFile = Join-Path $AnalysisResultsDirectory "DotCoverCoverageAnalysisResults.dcvr"
-    Execute-MSpecTests -WithDotCover -TestAssemblies $TestAssemblies -DotSettingsFile $DotSettingsFile -DotCoverResultsFile $DotCoverCoverageAnalysisResultsFile
+    Execute-MSpecTests -WithDotCover -TestAssemblies $TestAssemblies -DotSettingsFile $DotSettingsFile -DotCoverResultsFile $DotCoverCoverageSnapshotFile
+
+    Create-DotCoverCoverageBadge $DotCoverCoverageSnapshotFile $DotCoverCoverageBadgeFile
+    Create-DotCoverCoverageReport $DotCoverCoverageSnapshotFile $DotCoverCoverageReportFile
   }
   else {
     Execute-MSpecTests -TestAssemblies $TestAssemblies 
@@ -163,6 +172,10 @@ BuildTask Create-Archives {
 
 
   Report-Archive $archivePath
+}
+
+BuildTask Publish-CoverageReports {
+  Publish-CoverageReport $AssemblyInformationalVersion $DotCoverCoverageBadgeFile $DotCoverCoverageReportFile
 }
 
 return Run
