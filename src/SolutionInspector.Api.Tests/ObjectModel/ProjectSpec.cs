@@ -6,11 +6,11 @@ using System.Reflection;
 using System.Xml.Linq;
 using FakeItEasy;
 using FluentAssertions;
-using Machine.Specifications;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
+using Machine.Specifications;
 
 #region R# preamble for Machine.Specifications files
 
@@ -35,6 +35,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
   {
     static string SolutionPath;
     static IMsBuildParsingConfiguration MsBuildParsingConfiguration;
+    static Guid GuidOfEmptyProject;
 
     Establish ctx = () =>
     {
@@ -44,6 +45,8 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
       MsBuildParsingConfiguration = A.Fake<IMsBuildParsingConfiguration>();
       A.CallTo(() => MsBuildParsingConfiguration.IsValidProjectItemType(A<string>._)).Returns(true);
+
+      GuidOfEmptyProject = Guid.Parse("{61EF1F50-EA80-4164-AFF3-974C76A8D1E2}");
     };
 
     class when_loading_empty_project
@@ -56,6 +59,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         var projectPath = GetProjectPath(ProjectName);
 
+        Result.Guid.Should().Be(GuidOfEmptyProject);
         Result.Name.Should().Be(ProjectName);
         Result.AssemblyName.Should().Be(ProjectName);
         Result.DefaultNamespace.Should().Be(ProjectName);
@@ -273,8 +277,35 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         Result.NuGetPackages.ShouldAllBeLike(ReferencedNuGetPackage1, ReferencedNuGetPackage2);
       };
 
-      It parses_project_references = () =>
-          Result.ProjectReferences.Single().Project.Name.Should().Be("EmptyProject");
+      It parses_valid_project_reference = () =>
+      {
+        var reference = Result.ProjectReferences.Single(r => r.ReferencedProjectName == "EmptyProject");
+
+        reference.Project.Name.Should().Be("EmptyProject");
+        reference.ReferencedProjectName.Should().Be("EmptyProject");
+        reference.ReferencedProjectGuid.Should().Be(GuidOfEmptyProject);
+        reference.Include.Should().Be("..\\EmptyProject\\EmptyProject.csproj");
+      };
+
+      It parses_project_reference_with_invalid_project_guid = () =>
+      {
+        var reference = Result.ProjectReferences.Single(r => r.ReferencedProjectName == "InvalidGuid");
+
+        reference.Project.Should().BeNull();
+        reference.ReferencedProjectName.Should().Be("InvalidGuid");
+        reference.ReferencedProjectGuid.Should().Be(Guid.Empty);
+        reference.Include.Should().Be("..\\EmptyProject\\EmptyProject.csproj");
+      };
+
+      It parses_project_reference_with_invalid_include = () =>
+      {
+        var reference = Result.ProjectReferences.Single(r => r.ReferencedProjectName == "InvalidInclude");
+
+        reference.Project.Name.Should().Be("EmptyProject");
+        reference.ReferencedProjectName.Should().Be("InvalidInclude");
+        reference.ReferencedProjectGuid.Should().Be(GuidOfEmptyProject);
+        reference.Include.Should().Be("..\\EmptyProject\\WrongInclude.csproj");
+      };
 
       static string ProjectName;
       static NuGetPackage ReferencedNuGetPackage1;
