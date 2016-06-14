@@ -63,14 +63,6 @@
       <HintPath>..\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Machine.Specifications.Clr4, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NullGuard, Version=1.4.6.0, Culture=neutral, PublicKeyToken=1958ac8092168428, processorArchitecture=MSIL">
       <HintPath>..\packages\NullGuard.Fody.1.4.6\lib\dotnet\NullGuard.dll</HintPath>
       <Private>False</Private>
@@ -87,6 +79,14 @@
       <HintPath>..\packages\SystemWrapper.Wrappers.0.11.0.49\lib\net45\SystemWrapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="TestFx.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TestFx.Core.0.6.1-Pre00015\lib\net40\TestFx.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="TestFx.MSpec, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TestFx.MSpec.0.6.1-Pre00015\lib\net40\TestFx.MSpec.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -100,6 +100,7 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="AllProjectReferencesMustBeValidRuleSpec.cs" />
     <Compile Include="ProjectShouldNotContainProjectPropertiesWithDuplicateNameRuleSpec.cs" />
     <Compile Include="ProjectShouldNotContainProjectItemsWithDuplicateIncludesRuleSpec.cs" />
     <Compile Include="AllProjectItemsMustBePresentRuleSpec.cs" />
@@ -116,6 +117,9 @@
     <Compile Include="RequiredCompilationSymbolsProjectRuleSpec.cs" />
     <Compile Include="RequiredNuGetPackagesRuleSpec.cs" />
     <Compile Include="SolutionBuildConfigurationsRuleSpec.cs" />
+    <Compile Include="_TestExtensions\DefaultValueTestExtension.cs" />
+    <Compile Include="_TestExtensions\ResetInstanceFieldsTestExtension.cs" />
+    <Compile Include="_TestLoaders\MSpecTestLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj">
@@ -142,7 +146,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\TestFx.Core.0.6.1-Pre00015\build\net40\TestFx.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TestFx.Core.0.6.1-Pre00015\build\net40\TestFx.Core.targets'))" />
   </Target>
+  <Import Project="..\packages\TestFx.Core.0.6.1-Pre00015\build\net40\TestFx.Core.targets" Condition="Exists('..\packages\TestFx.Core.0.6.1-Pre00015\build\net40\TestFx.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -14,6 +14,8 @@
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,14 +59,6 @@
       <HintPath>..\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Machine.Specifications.Clr4, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ManyConsole, Version=0.4.2.19, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ManyConsole.0.4.2.19\lib\ManyConsole.dll</HintPath>
       <Private>True</Private>
@@ -96,6 +90,14 @@
       <HintPath>..\packages\SystemWrapper.Wrappers.0.11.0.49\lib\net45\SystemWrapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="TestFx.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TestFx.Core.0.6.1-Pre00015\lib\net40\TestFx.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="TestFx.MSpec, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TestFx.MSpec.0.6.1-Pre00015\lib\net40\TestFx.MSpec.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyInfoShared.cs">
@@ -122,6 +124,9 @@
     <Compile Include="ObjectModel\ProjectSpec.cs" />
     <Compile Include="ObjectModel\NuGetPackageSpec.cs" />
     <Compile Include="ObjectModel\SolutionSpec.cs" />
+    <Compile Include="_TestExtensions\DefaultValueTestExtension.cs" />
+    <Compile Include="_TestExtensions\ResetInstanceFieldsTestExtension.cs" />
+    <Compile Include="_TestLoaders\MSpecTestLoader.cs" />
     <None Include="ObjectModel\TestData\ProjectItem\Link.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -208,6 +213,7 @@
     </None>
     <None Include="ObjectModel\TestData\Project\ProjectWithReferences\ProjectWithReferences.csproj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="ObjectModel\TestData\Project\TestSolution.sln">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -232,7 +238,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\TestFx.Core.0.6.1-Pre00015\build\net40\TestFx.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\TestFx.Core.0.6.1-Pre00015\build\net40\TestFx.Core.targets'))" />
   </Target>
+  <Import Project="..\packages\TestFx.Core.0.6.1-Pre00015\build\net40\TestFx.Core.targets" Condition="Exists('..\packages\TestFx.Core.0.6.1-Pre00015\build\net40\TestFx.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
