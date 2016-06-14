@@ -15,7 +15,7 @@ namespace SolutionInspector.DefaultRules
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
-      return target.ProjectItems.GroupBy(i => i.OriginalInclude.Evaluated).Where(g => g.ContainsMoreThanOne()).Select(
+      return target.ProjectItems.GroupBy(i => i.Include.Evaluated).Where(g => g.ContainsMoreThanOne()).Select(
           group => new RuleViolation(
               this,
               target,

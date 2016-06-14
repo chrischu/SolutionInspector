@@ -139,6 +139,12 @@
     <None Include="ObjectModel\TestData\Project\ExecutableProject\Program.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="ObjectModel\TestData\ProjectItem\Project\Wildcard\IncludedByWildcard.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ObjectModel\TestData\ProjectItem\Project\Wildcard\IncludedByWildcardAndNormally.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Reporting\RuleViolationObjectMother.cs" />
     <Compile Include="Reporting\VisualStudioViolationReporterSpec.cs" />
     <Compile Include="Reporting\TableViolationReporterSpec.cs" />

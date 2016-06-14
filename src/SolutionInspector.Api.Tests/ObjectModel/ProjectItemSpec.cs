@@ -55,7 +55,6 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         var projectItemPath = GetProjectItemPath(ProjectItemName);
 
         Result.Name.Should().Be(ProjectItemName);
-        Result.OriginalInclude.Should().Be(new ProjectItemInclude(ProjectItemName, ProjectItemName));
         Result.Include.Should().Be(new ProjectItemInclude(ProjectItemName, ProjectItemName));
         Result.BuildAction.Should().Be(ProjectItemBuildAction.Compile);
         Result.File.FullName.Should().Be(projectItemPath);
@@ -85,7 +84,6 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         var projectItemPath = GetProjectItemPath(include);
 
         Result.Name.Should().Be(ProjectItemName);
-        Result.OriginalInclude.Should().Be(new ProjectItemInclude(include, include));
         Result.Include.Should().Be(new ProjectItemInclude(include, include));
         Result.BuildAction.Should().Be(ProjectItemBuildAction.Compile);
         Result.File.FullName.Should().Be(projectItemPath);
@@ -112,7 +110,6 @@ namespace SolutionInspector.Api.Tests.ObjectModel
         var projectItemPath = GetProjectItemPath(include);
 
         Result.Name.Should().Be(ProjectItemName);
-        Result.OriginalInclude.Should().Be(new ProjectItemInclude(include, include));
         Result.Include.Should().Be(new ProjectItemInclude(include, include));
         Result.BuildAction.Should().Be(ProjectItemBuildAction.EmbeddedResource);
         Result.File.FullName.Should().Be(projectItemPath);
@@ -135,12 +132,10 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
       It parses_project_item = () =>
       {
-        var include = ProjectItemName;
         var projectItemPath = Path.Combine(Path.GetDirectoryName(SolutionPath).AssertNotNull(), ProjectItemName);
 
         Result.Name.Should().Be(ProjectItemName);
-        Result.OriginalInclude.Should().Be(new ProjectItemInclude("..\\Link.cs", "..\\Link.cs"));
-        Result.Include.Should().Be(new ProjectItemInclude(include, include));
+        Result.Include.Should().Be(new ProjectItemInclude("..\\Link.cs", "..\\Link.cs"));
         Result.BuildAction.Should().Be(ProjectItemBuildAction.Compile);
         Result.File.FullName.Should().Be(projectItemPath);
         Result.Parent.Should().BeNull();
@@ -175,11 +170,55 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
       It parses_both_items = () =>
       {
-        Result[0].OriginalInclude.Evaluated.Should().Be("AlmostDuplicate.cs");
+        Result[0].Include.Evaluated.Should().Be("AlmostDuplicate.cs");
         Result[0].Metadata["Metadata"].Should().Be("3");
 
-        Result[1].OriginalInclude.Evaluated.Should().Be("AlmostDuplicate.cs");
+        Result[1].Include.Evaluated.Should().Be("AlmostDuplicate.cs");
         Result[1].Metadata["Metadata"].Should().Be("5");
+      };
+
+      static string ProjectItemName;
+      static IProjectItem[] Result;
+    }
+
+    class when_loading_a_project_item_included_by_wildcard
+    {
+      Establish ctx = () => { ProjectItemName = "IncludedByWildcard.cs"; };
+
+      Because of = () => Result = LoadProjectItems(ProjectItemName).Single();
+
+      It parses_project_item = () =>
+      {
+        Result.Include.Evaluated.Should().Be("Wildcard\\IncludedByWildcard.cs");
+        Result.Include.Unevaluated.Should().Be("Wildcard\\*.cs");
+        Result.IsIncludedByWildcard.Should().BeTrue();
+        Result.WildcardInclude.Should().Be("Wildcard\\*.cs");
+        Result.Metadata["Metadata"].Should().Be("SomeMetadata");
+      };
+
+      static string ProjectItemName;
+      static IProjectItem Result;
+    }
+
+    class when_loading_a_project_item_included_by_wildcard_and_normally
+    {
+      Establish ctx = () => { ProjectItemName = "IncludedByWildcardAndNormally.cs"; };
+
+      Because of = () => Result = LoadProjectItems(ProjectItemName).ToArray();
+
+      It parses_both_items = () =>
+      {
+        Result[0].Include.Evaluated.Should().Be("Wildcard\\IncludedByWildcardAndNormally.cs");
+        Result[0].Include.Unevaluated.Should().Be("Wildcard\\*.cs");
+        Result[0].IsIncludedByWildcard.Should().BeTrue();
+        Result[0].WildcardInclude.Should().Be("Wildcard\\*.cs");
+        Result[0].Metadata["Metadata"].Should().Be("SomeMetadata");
+
+        Result[1].Include.Evaluated.Should().Be("Wildcard\\IncludedByWildcardAndNormally.cs");
+        Result[1].Include.Unevaluated.Should().Be("Wildcard\\IncludedByWildcardAndNormally.cs");
+        Result[1].IsIncludedByWildcard.Should().BeFalse();
+        Result[1].WildcardInclude.Should().BeNull();
+        Result[1].Metadata.GetValueOrDefault("Metadata").Should().BeNull();
       };
 
       static string ProjectItemName;
@@ -193,7 +232,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
       return project.ProjectItems.Where(i => i.Name == itemName);
     }
-
+    
     static string GetProjectItemPath (string itemName)
     {
       return Path.Combine(Path.GetDirectoryName(SolutionPath).AssertNotNull(), $"Project\\{itemName}");

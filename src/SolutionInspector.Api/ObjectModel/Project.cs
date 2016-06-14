@@ -160,8 +160,8 @@ namespace SolutionInspector.Api.ObjectModel
     {
       var configurationItem = ProjectItems.SingleOrDefault(
           i =>
-              string.Equals(i.OriginalInclude.Unevaluated, "App.config", StringComparison.InvariantCultureIgnoreCase)
-              || string.Equals(i.OriginalInclude.Unevaluated, "Web.config", StringComparison.InvariantCultureIgnoreCase));
+              string.Equals(i.Include.Unevaluated, "App.config", StringComparison.InvariantCultureIgnoreCase)
+              || string.Equals(i.Include.Unevaluated, "Web.config", StringComparison.InvariantCultureIgnoreCase));
 
       if (configurationItem == null)
         return null;
@@ -174,7 +174,7 @@ namespace SolutionInspector.Api.ObjectModel
       var projectItems =
           msBuildProjectItems.Where(i => !i.IsImported && _msBuildParsingConfiguration.IsValidProjectItemType(i.ItemType))
               .Select(p => ProjectItem.FromMsBuildProjectItem(this, p))
-              .ToLookup(i => i.OriginalInclude.Evaluated);
+              .ToLookup(i => i.Include.Evaluated);
 
       foreach (var projectItem in projectItems.SelectMany(g => g))
       {
@@ -182,7 +182,7 @@ namespace SolutionInspector.Api.ObjectModel
 
         if (dependentUpon != null)
         {
-          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.OriginalInclude.Evaluated).AssertNotNull(), dependentUpon);
+          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.Include.Evaluated).AssertNotNull(), dependentUpon);
 
           var parents = projectItems[dependentUponInclude];
           foreach (var parent in parents)

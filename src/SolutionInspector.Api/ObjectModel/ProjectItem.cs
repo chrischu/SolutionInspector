@@ -36,12 +36,6 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The original (just as in the MSBuild file) include path (relative to the project file) of the project item.
     /// </summary>
-    IProjectItemInclude OriginalInclude { get; }
-
-    /// <summary>
-    ///   The path (relative to the project file) of the project item.
-    ///   Differs from <see cref="OriginalInclude" /> for links.
-    /// </summary>
     IProjectItemInclude Include { get; }
 
     /// <summary>
@@ -53,6 +47,24 @@ namespace SolutionInspector.Api.ObjectModel
     ///   A <see cref="IFileInfo" /> pointing to the project item.
     /// </summary>
     IFileInfo File { get; }
+
+    /// <summary>
+    ///   True, if the file is referenced as a link instead of a regular reference.
+    /// </summary>
+    /// <remarks>
+    ///   Links are usually used to reference one file in multiple projects while still maintaining only one physical copy of it.
+    /// </remarks>
+    bool IsLink { get; }
+
+    /// <summary>
+    ///   True, if the file was referenced with wildcards (see <see cref="WildcardInclude"/>) as opposed to a direct file name reference.
+    /// </summary>
+    bool IsIncludedByWildcard { get; }
+
+    /// <summary>
+    /// The wildcard the project item was included with or <see langword="null" /> if it wasn't included via wildcard.
+    /// </summary>
+    string WildcardInclude { get; }
 
     /// <summary>
     ///   The project item's location inside the project file.
@@ -95,18 +107,20 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IProject Project { get; }
 
-    public string Name => Path.GetFileName(OriginalInclude.Evaluated);
+    public string Name => Path.GetFileName(Include.Evaluated);
 
     public string Identifier => _identifier.Value;
 
     public string FullPath => File.FullName;
 
-    public IProjectItemInclude OriginalInclude { get; }
     public IProjectItemInclude Include { get; }
 
     public ProjectItemBuildAction BuildAction { get; }
 
     public IFileInfo File { get; }
+    public bool IsLink { get; }
+    public bool IsIncludedByWildcard { get; }
+    public string WildcardInclude { get; }
 
     public IProjectLocation Location { get; }
 
@@ -125,11 +139,9 @@ namespace SolutionInspector.Api.ObjectModel
         Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
       Project = project;
-      OriginalInclude = new ProjectItemInclude(msBuildProjectItem.EvaluatedInclude, msBuildProjectItem.UnevaluatedInclude);
       OriginalProjectItem = msBuildProjectItem;
 
-      var linkMetadata = msBuildProjectItem.DirectMetadata.SingleOrDefault(d => d.Name == "Link");
-      Include = linkMetadata != null ? new ProjectItemInclude(linkMetadata.EvaluatedValue, linkMetadata.UnevaluatedValue) : OriginalInclude;
+      Include = new ProjectItemInclude(msBuildProjectItem.EvaluatedInclude, msBuildProjectItem.UnevaluatedInclude);
 
       BuildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
       var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
@@ -137,6 +149,13 @@ namespace SolutionInspector.Api.ObjectModel
 
       Location = new ProjectLocation(msBuildProjectItem.Xml.Location.Line, msBuildProjectItem.Xml.Location.Column);
       Metadata = msBuildProjectItem.Metadata.ToDictionary(m => m.Name, m => m.EvaluatedValue);
+      IsLink = Metadata.ContainsKey("Link");
+
+      if (msBuildProjectItem.UnevaluatedInclude.Contains("*"))
+      {
+        IsIncludedByWildcard = true;
+        WildcardInclude = msBuildProjectItem.UnevaluatedInclude;
+      }
 
       _identifier = new Lazy<string>(CreateIdentifier);
     }
@@ -148,7 +167,9 @@ namespace SolutionInspector.Api.ObjectModel
       sb.Append(Parent != null ? Parent.Identifier : Project.Identifier);
       sb.Append('/');
 
-      var include = Include.Evaluated.Replace('\\', '/');
+      var include = IsLink ? Metadata["Link"] : Include.Evaluated;
+
+      include = include.Replace('\\', '/');
       if (Parent != null)
         include = include.Split('/').Last();
 

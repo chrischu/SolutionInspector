@@ -75,7 +75,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
       var projectItemInclude = A.Fake<IProjectItemInclude>();
       A.CallTo(() => projectItemInclude.Evaluated).Returns(include);
-      A.CallTo(() => projectItem.OriginalInclude).Returns(projectItemInclude);
+      A.CallTo(() => projectItem.Include).Returns(projectItemInclude);
 
       if (location != null)
       {

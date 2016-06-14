@@ -41,7 +41,7 @@ namespace SolutionInspector.DefaultRules.Tests
       ProjectItemInclude = A.Fake<IProjectItemInclude>();
       A.CallTo(() => ProjectItemInclude.Evaluated).Returns("ProjectItem");
 
-      A.CallTo(() => ProjectItem.OriginalInclude).Returns(ProjectItemInclude);
+      A.CallTo(() => ProjectItem.Include).Returns(ProjectItemInclude);
 
       Project = A.Fake<IProject>();
       A.CallTo(() => Project.ProjectItems).Returns(new[] { ProjectItem });
