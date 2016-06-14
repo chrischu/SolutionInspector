@@ -29,6 +29,11 @@ namespace SolutionInspector.Api.ObjectModel
     IAdvancedProject Advanced { get; }
 
     /// <summary>
+    ///   The project's <see cref="Guid" />.
+    /// </summary>
+    Guid Guid { get; }
+
+    /// <summary>
     ///   The project's name.
     /// </summary>
     string Name { get; }
@@ -145,6 +150,8 @@ namespace SolutionInspector.Api.ObjectModel
 
       Advanced = new AdvancedProject(this, project, projectInSolution);
 
+      Guid = Guid.Parse(projectInSolution.ProjectGuid);
+
       NuGetPackages = BuildNuGetPackages(NuGetPackagesFile).ToArray();
 
       _classifiedReferences = new Lazy<ClassifiedReferences>(() => ClassifyReferences(project, NuGetPackages, solution));
@@ -194,6 +201,8 @@ namespace SolutionInspector.Api.ObjectModel
     }
 
     public IAdvancedProject Advanced { get; }
+
+    public Guid Guid { get; }
 
     public ISolution Solution { get; }
 
@@ -256,8 +265,13 @@ namespace SolutionInspector.Api.ObjectModel
               .Select(
                   r =>
                       new ProjectReference(
-                          solution.Projects.Single(
-                              p => p.ProjectFile.FullName == Path.GetFullPath(Path.Combine(project.DirectoryPath, r.EvaluatedInclude)))));
+                          r,
+                          solution.Projects.SingleOrDefault(
+                              p =>
+                              {
+                                var projectGuid = r.DirectMetadata.SingleOrDefault(m => m.Name == "Project")?.UnevaluatedValue;
+                                return string.Equals(p.Advanced.MsBuildProjectInSolution.ProjectGuid, projectGuid, StringComparison.OrdinalIgnoreCase);
+                              })));
 
       var dllReferences =
           project.GetItemsIgnoringCondition("Reference")
