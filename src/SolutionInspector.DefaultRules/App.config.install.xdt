@@ -29,6 +29,9 @@
                 type="SolutionInspector.DefaultRules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.AllProjectReferencesMustBeValidRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectPropertyRule, SolutionInspector.DefaultRules"
                 property="AppDesignerFolder" expectedValue="Properties" />
 
