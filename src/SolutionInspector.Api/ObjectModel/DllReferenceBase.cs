@@ -8,16 +8,18 @@ namespace SolutionInspector.Api.ObjectModel
   ///   Base class that represents a project's DLL reference.
   /// </summary>
   [PublicAPI]
-  public abstract class DllReferenceBase
+  public interface IDllReference
   {
     /// <summary>
     ///   The <see cref="AssemblyName" /> of the referenced DLL.
     /// </summary>
+    AssemblyName AssemblyName { get; }
+  }
+
+  internal abstract class DllReferenceBase : IDllReference
+  {
     public AssemblyName AssemblyName { get; }
 
-    /// <summary>
-    ///   Creates a new DLL reference.
-    /// </summary>
     protected DllReferenceBase (AssemblyName assemblyName)
     {
       AssemblyName = assemblyName;

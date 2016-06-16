@@ -91,22 +91,22 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   A collection of DLLs referenced from the GAC.
     /// </summary>
-    IReadOnlyCollection<GacReference> GacReferences { get; }
+    IReadOnlyCollection<IGacReference> GacReferences { get; }
 
     /// <summary>
     ///   A collection of DLLs referenced from NuGet.
     /// </summary>
-    IReadOnlyCollection<NuGetReference> NuGetReferences { get; }
+    IReadOnlyCollection<INuGetReference> NuGetReferences { get; }
 
     /// <summary>
     ///   A collection of DLLs referenced from the file system.
     /// </summary>
-    IReadOnlyCollection<FileReference> FileReferences { get; }
+    IReadOnlyCollection<IFileReference> FileReferences { get; }
 
     /// <summary>
     ///   A collection of referenced projects.
     /// </summary>
-    IReadOnlyCollection<ProjectReference> ProjectReferences { get; }
+    IReadOnlyCollection<IProjectReference> ProjectReferences { get; }
 
     /// <summary>
     ///   The solution the project is contained in.
@@ -231,10 +231,10 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IReadOnlyCollection<NuGetPackage> NuGetPackages { get; }
 
-    public IReadOnlyCollection<GacReference> GacReferences => _classifiedReferences.Value.GacReferences;
-    public IReadOnlyCollection<NuGetReference> NuGetReferences => _classifiedReferences.Value.NuGetReferences;
-    public IReadOnlyCollection<FileReference> FileReferences => _classifiedReferences.Value.FileReferences;
-    public IReadOnlyCollection<ProjectReference> ProjectReferences => _classifiedReferences.Value.ProjectReferences;
+    public IReadOnlyCollection<IGacReference> GacReferences => _classifiedReferences.Value.GacReferences;
+    public IReadOnlyCollection<INuGetReference> NuGetReferences => _classifiedReferences.Value.NuGetReferences;
+    public IReadOnlyCollection<IFileReference> FileReferences => _classifiedReferences.Value.FileReferences;
+    public IReadOnlyCollection<IProjectReference> ProjectReferences => _classifiedReferences.Value.ProjectReferences;
 
     public IReadOnlyCollection<IProjectItem> ProjectItems { get; }
 
