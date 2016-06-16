@@ -6,11 +6,11 @@ using System.Reflection;
 using System.Xml.Linq;
 using FakeItEasy;
 using FluentAssertions;
+using Machine.Specifications;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
-using Machine.Specifications;
 
 #region R# preamble for Machine.Specifications files
 
@@ -293,7 +293,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         var reference = Result.ProjectReferences.Single(r => r.ReferencedProjectName == "InvalidGuid");
 
-        reference.Project.Should().BeNull();
+        reference.Project.Name.Should().Be("EmptyProject");
         reference.ReferencedProjectName.Should().Be("InvalidGuid");
         reference.ReferencedProjectGuid.Should().Be(Guid.Empty);
         reference.Include.Should().Be("..\\EmptyProject\\EmptyProject.csproj");
@@ -305,7 +305,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         var reference = Result.ProjectReferences.Single(r => r.ReferencedProjectName == "InvalidInclude");
 
-        reference.Project.Name.Should().Be("EmptyProject");
+        reference.Project.Should().BeNull();
         reference.ReferencedProjectName.Should().Be("InvalidInclude");
         reference.ReferencedProjectGuid.Should().Be(GuidOfEmptyProject);
         reference.Include.Should().Be("..\\WrongInclude\\WrongInclude.csproj");
@@ -329,6 +329,24 @@ namespace SolutionInspector.Api.Tests.ObjectModel
           Project.Advanced.MsBuildProject.ProjectCollection.LoadedProjects.Should().BeEmpty();
 
       static IProject Project;
+    }
+
+    class when_getting_project_by_absolute_file_path
+    {
+      Establish ctx = () =>
+      {
+        ReferencingProject = LoadProject("EmptyProject");
+        ProjectToReference = LoadProject("ExecutableProject");
+      };
+
+      Because of = () => Result = ReferencingProject.GetIncludePathFor(ProjectToReference);
+
+      It returns_relative_path = () =>
+          Result.Should().Be("..\\ExecutableProject\\ExecutableProject.csproj");
+
+      static IProject ReferencingProject;
+      static IProject ProjectToReference;
+      static string Result;
     }
 
     static IProject LoadProject (string projectName)

@@ -36,6 +36,18 @@ namespace SolutionInspector.Api.ObjectModel
     ///   All <see cref="BuildConfiguration" />s in the solution.
     /// </summary>
     IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
+
+    /// <summary>
+    ///   Returns the project with a matching <paramref name="projectGuid" /> or <see langword="null" /> if no such project can be found.
+    /// </summary>
+    [CanBeNull]
+    IProject GetProjectByProjectGuid (Guid projectGuid);
+
+    /// <summary>
+    ///   Returns the project point to by the given <paramref name="absoluteProjectPath" /> or <see langword="null" /> if no such project can be found.
+    /// </summary>
+    [CanBeNull]
+    IProject GetProjectByAbsoluteProjectFilePath (string absoluteProjectPath);
   }
 
   internal sealed class Solution : ISolution
@@ -61,6 +73,16 @@ namespace SolutionInspector.Api.ObjectModel
     public IDirectoryInfo SolutionDirectory { get; }
     public IReadOnlyCollection<IProject> Projects { get; }
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
+
+    public IProject GetProjectByProjectGuid (Guid projectGuid)
+    {
+      return Projects.SingleOrDefault(p => p.Guid == projectGuid);
+    }
+
+    public IProject GetProjectByAbsoluteProjectFilePath (string absoluteProjectPath)
+    {
+      return Projects.SingleOrDefault(p => p.ProjectFile.FullName == absoluteProjectPath);
+    }
 
     string IRuleTarget.Identifier => Path.GetFileName(_solutionPath);
     string IRuleTarget.FullPath => _solutionPath;

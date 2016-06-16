@@ -71,5 +71,45 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
       static ISolution Solution;
     }
+
+    class when_getting_project_by_project_guid
+    {
+      Establish ctx = () => { Solution = Api.ObjectModel.Solution.Load(SolutionPath, MsBuildParsingConfiguration); };
+
+      Because of = () =>
+      {
+        /* Tests are in the its */
+      };
+
+      It returns_project_for_existing_guid = () =>
+          Solution.GetProjectByProjectGuid(Guid.Parse("82E31753-8314-4C92-953C-0178F923C9C1")).Should().NotBeNull();
+
+      It returns_null_for_nonexisting_guid = () =>
+          Solution.GetProjectByProjectGuid(Guid.Empty).Should().BeNull();
+
+      static ISolution Solution;
+    }
+
+    class when_getting_project_by_absolute_file_path
+    {
+      Establish ctx = () => { Solution = Api.ObjectModel.Solution.Load(SolutionPath, MsBuildParsingConfiguration); };
+
+      Because of = () =>
+      {
+        /* Tests are in the its */
+      };
+
+      It returns_project_for_existing_path = () =>
+          Solution.GetProjectByAbsoluteProjectFilePath(Path.Combine(Solution.SolutionDirectory.FullName, "EmptyProject.csproj"))
+              .Should()
+              .NotBeNull();
+
+      It returns_null_for_nonexisting_path = () =>
+          Solution.GetProjectByAbsoluteProjectFilePath(Path.Combine(Solution.SolutionDirectory.FullName, "DoesNotExist.csproj"))
+              .Should()
+              .BeNull();
+
+      static ISolution Solution;
+    }
   }
 }

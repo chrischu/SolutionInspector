@@ -122,6 +122,11 @@ namespace SolutionInspector.Api.ObjectModel
     ///   The project configuration file (App.config/Web.config).
     /// </summary>
     IConfigurationProjectItem ConfigurationProjectItem { get; }
+
+    /// <summary>
+    ///   Get the include path for the given <paramref name="projectToInclude" /> (relative to the current project file).
+    /// </summary>
+    string GetIncludePathFor (IProject projectToInclude);
   }
 
   internal sealed class Project : IProject
@@ -240,6 +245,14 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IConfigurationProjectItem ConfigurationProjectItem { get; }
 
+    public string GetIncludePathFor (IProject projectToInclude)
+    {
+      var includeUri = new Uri(projectToInclude.ProjectFile.FullName);
+      var selfUri = new Uri(ProjectFile.FullName);
+      var relativeUri = selfUri.MakeRelativeUri(includeUri);
+      return relativeUri.OriginalString.Replace('/', '\\');
+    }
+
     string IRuleTarget.Identifier => Path.GetFileName(Advanced.MsBuildProject.FullPath);
     string IRuleTarget.FullPath => Advanced.MsBuildProject.FullPath;
 
@@ -260,18 +273,7 @@ namespace SolutionInspector.Api.ObjectModel
         IReadOnlyCollection<NuGetPackage> nuGetPackages,
         ISolution solution)
     {
-      var projectReferences =
-          project.GetItemsIgnoringCondition("ProjectReference")
-              .Select(
-                  r =>
-                      new ProjectReference(
-                          r,
-                          solution.Projects.SingleOrDefault(
-                              p =>
-                              {
-                                var projectGuid = r.DirectMetadata.SingleOrDefault(m => m.Name == "Project")?.UnevaluatedValue;
-                                return string.Equals(p.Advanced.MsBuildProjectInSolution.ProjectGuid, projectGuid, StringComparison.OrdinalIgnoreCase);
-                              })));
+      var projectReferences = project.GetItemsIgnoringCondition("ProjectReference").Select(r => new ProjectReference(solution, r));
 
       var dllReferences =
           project.GetItemsIgnoringCondition("Reference")
