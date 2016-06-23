@@ -62,9 +62,14 @@ namespace SolutionInspector.Api.ObjectModel
     bool IsIncludedByWildcard { get; }
 
     /// <summary>
-    /// The wildcard the project item was included with or <see langword="null" /> if it wasn't included via wildcard.
+    /// The include path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
     /// </summary>
     string WildcardInclude { get; }
+
+    /// <summary>
+    /// The exclude path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
+    /// </summary>
+    string WildcardExclude { get; }
 
     /// <summary>
     ///   The project item's location inside the project file.
@@ -121,6 +126,7 @@ namespace SolutionInspector.Api.ObjectModel
     public bool IsLink { get; }
     public bool IsIncludedByWildcard { get; }
     public string WildcardInclude { get; }
+    public string WildcardExclude { get; }
 
     public IProjectLocation Location { get; }
 
@@ -155,6 +161,7 @@ namespace SolutionInspector.Api.ObjectModel
       {
         IsIncludedByWildcard = true;
         WildcardInclude = msBuildProjectItem.UnevaluatedInclude;
+        WildcardExclude = msBuildProjectItem.Xml.Exclude;
       }
 
       _identifier = new Lazy<string>(CreateIdentifier);

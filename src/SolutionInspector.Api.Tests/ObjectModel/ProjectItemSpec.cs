@@ -190,10 +190,17 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       It parses_project_item = () =>
       {
         Result.Include.Evaluated.Should().Be("Wildcard\\IncludedByWildcard.cs");
-        Result.Include.Unevaluated.Should().Be("Wildcard\\*.cs");
+        Result.Include.Unevaluated.Should().Be("Wildcard\\*.cs;Wildcard2\\*.cs");
         Result.IsIncludedByWildcard.Should().BeTrue();
-        Result.WildcardInclude.Should().Be("Wildcard\\*.cs");
+        Result.WildcardInclude.Should().Be("Wildcard\\*.cs;Wildcard2\\*.cs");
+        Result.WildcardExclude.Should().Be("Wildcard\\Excluded.cs;Wildcard2\\Excluded2.cs");
         Result.Metadata["Metadata"].Should().Be("SomeMetadata");
+      };
+
+      It does_not_load_excluded_items = () =>
+      {
+        LoadProjectItems("Exclude.cs").Should().BeEmpty();
+        LoadProjectItems("Exclude2.cs").Should().BeEmpty();
       };
 
       static string ProjectItemName;
@@ -209,15 +216,17 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       It parses_both_items = () =>
       {
         Result[0].Include.Evaluated.Should().Be("Wildcard\\IncludedByWildcardAndNormally.cs");
-        Result[0].Include.Unevaluated.Should().Be("Wildcard\\*.cs");
+        Result[0].Include.Unevaluated.Should().Be("Wildcard\\*.cs;Wildcard2\\*.cs");
         Result[0].IsIncludedByWildcard.Should().BeTrue();
-        Result[0].WildcardInclude.Should().Be("Wildcard\\*.cs");
+        Result[0].WildcardInclude.Should().Be("Wildcard\\*.cs;Wildcard2\\*.cs");
+        Result[0].WildcardExclude.Should().Be("Wildcard\\Excluded.cs;Wildcard2\\Excluded2.cs");
         Result[0].Metadata["Metadata"].Should().Be("SomeMetadata");
 
         Result[1].Include.Evaluated.Should().Be("Wildcard\\IncludedByWildcardAndNormally.cs");
         Result[1].Include.Unevaluated.Should().Be("Wildcard\\IncludedByWildcardAndNormally.cs");
         Result[1].IsIncludedByWildcard.Should().BeFalse();
         Result[1].WildcardInclude.Should().BeNull();
+        Result[1].WildcardExclude.Should().BeNull();
         Result[1].Metadata.GetValueOrDefault("Metadata").Should().BeNull();
       };
 
@@ -232,7 +241,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
 
       return project.ProjectItems.Where(i => i.Name == itemName);
     }
-    
+
     static string GetProjectItemPath (string itemName)
     {
       return Path.Combine(Path.GetDirectoryName(SolutionPath).AssertNotNull(), $"Project\\{itemName}");
