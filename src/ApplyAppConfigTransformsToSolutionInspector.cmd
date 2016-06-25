@@ -1,1 +1,1 @@
-powershell -File ApplyAppConfigTransformsToSolutionChecker.ps1
+powershell -File ApplyAppConfigTransformsToSolutionInspector.ps1
