@@ -8,20 +8,13 @@ namespace SolutionInspector.Api.ObjectModel
   /// </summary>
   public interface IFileReference : IDllReference
   {
-    /// <summary>
-    ///   The hint path that points to the DLL in the file system.
-    /// </summary>
-    string HintPath { get; }
   }
 
   internal class FileReference : DllReferenceBase, IFileReference
   {
-    public string HintPath { get; }
-
-    public FileReference (AssemblyName assemblyName, string hintPath)
-        : base(assemblyName)
+    public FileReference (AssemblyName assemblyName, string hintPath, string projectDirectory)
+        : base(assemblyName, projectDirectory, hintPath)
     {
-      HintPath = hintPath;
     }
   }
 }

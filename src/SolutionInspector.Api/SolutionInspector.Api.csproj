@@ -129,6 +129,7 @@
     <Compile Include="ObjectModel\EvaluatedProjectPropertyValue.cs" />
     <Compile Include="ObjectModel\ProjectLocation.cs" />
     <Compile Include="ObjectModel\ProjectPropertyOccurrence.cs" />
+    <Compile Include="ObjectModel\ReferenceBase.cs" />
     <Compile Include="Reporting\ViolationReporterRegistrationExtensions.cs" />
     <Compile Include="Rules\FilteringProjectItemRuleProxy.cs" />
     <Compile Include="Rules\FilteringProjectRuleProxy.cs" />

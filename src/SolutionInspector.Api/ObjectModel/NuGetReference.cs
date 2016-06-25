@@ -32,8 +32,8 @@ namespace SolutionInspector.Api.ObjectModel
 
     public string HintPath { get; }
 
-    public NuGetReference (NuGetPackage package, AssemblyName assemblyName, bool isPrivate, string hintPath)
-        : base(assemblyName)
+    public NuGetReference (NuGetPackage package, AssemblyName assemblyName, bool isPrivate, string hintPath, string projectDirectory)
+        : base(assemblyName, projectDirectory, hintPath)
     {
       Package = package;
       IsPrivate = isPrivate;

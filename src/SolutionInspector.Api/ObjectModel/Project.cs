@@ -39,7 +39,7 @@ namespace SolutionInspector.Api.ObjectModel
     string Name { get; }
 
     /// <summary>
-    ///   The name in which the project is stored, relative to the solution file.
+    ///   The name of the folder in which the project is stored, relative to the solution file.
     /// </summary>
     string FolderName { get; }
 
@@ -47,6 +47,11 @@ namespace SolutionInspector.Api.ObjectModel
     ///   A <see cref="IFileInfo" /> that represents the project file.
     /// </summary>
     IFileInfo ProjectFile { get; }
+
+    /// <summary>
+    /// A <see cref="IDirectoryInfo"/> that represents the project directory.
+    /// </summary>
+    IDirectoryInfo ProjectDirectory { get; }
 
     /// <summary>
     ///   A <see cref="XDocument" /> that represents the project file.
@@ -214,6 +219,7 @@ namespace SolutionInspector.Api.ObjectModel
     public string Name { get; }
     public string FolderName => Path.GetFileName(Advanced.MsBuildProject.DirectoryPath);
     public IFileInfo ProjectFile => new FileInfoWrap(Advanced.MsBuildProject.FullPath);
+    public IDirectoryInfo ProjectDirectory => new DirectoryInfoWrap(Advanced.MsBuildProject.DirectoryPath);
     public XDocument ProjectXml => _projectXml.Value;
     public IFileInfo NuGetPackagesFile => new FileInfoWrap(Path.Combine(Advanced.MsBuildProject.DirectoryPath, "packages.config"));
 
@@ -300,9 +306,10 @@ namespace SolutionInspector.Api.ObjectModel
                   matchingNuGetPackage,
                   reference.AssemblyName,
                   reference.Metadata.GetValueOrDefault("Private") == "True",
-                  reference.HintPath));
+                  reference.HintPath,
+                  project.DirectoryPath));
         else
-          fileReferences.Add(new FileReference(reference.AssemblyName, reference.HintPath));
+          fileReferences.Add(new FileReference(reference.AssemblyName, reference.HintPath, project.DirectoryPath));
       }
 
       return new ClassifiedReferences(gacReferences, fileReferences, nuGetReferences, projectReferences);

@@ -1,28 +1,40 @@
 using System;
+using System.IO;
 using System.Reflection;
+using SystemInterface.IO;
+using SystemWrapper.IO;
 using JetBrains.Annotations;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
-  ///   Base class that represents a project's DLL reference.
+  ///   Represents a reference pointing to a DLL in the file system.
   /// </summary>
   [PublicAPI]
-  public interface IDllReference
+  public interface IDllReference : IReference
   {
     /// <summary>
-    ///   The <see cref="AssemblyName" /> of the referenced DLL.
+    ///   The referenced DLL file.
     /// </summary>
-    AssemblyName AssemblyName { get; }
+    IFileInfo DllFile { get; }
+
+    /// <summary>
+    ///   The hint path that points to the DLL in the file system.
+    /// </summary>
+    string HintPath { get; }
   }
 
-  internal abstract class DllReferenceBase : IDllReference
+  internal abstract class DllReferenceBase : ReferenceBase, IDllReference
   {
-    public AssemblyName AssemblyName { get; }
+    public IFileInfo DllFile { get; }
 
-    protected DllReferenceBase (AssemblyName assemblyName)
+    public string HintPath { get; }
+
+    protected DllReferenceBase (AssemblyName assemblyName, string projectDirectory, string hintPath)
+        : base(assemblyName)
     {
-      AssemblyName = assemblyName;
+      HintPath = hintPath;
+      DllFile = new FileInfoWrap(Path.GetFullPath(Path.Combine(projectDirectory, hintPath)));
     }
   }
 }
