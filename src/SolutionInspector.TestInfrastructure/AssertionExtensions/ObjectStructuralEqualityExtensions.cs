@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SystemWrapper.IO;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using FluentAssertions.Primitives;
@@ -30,7 +31,15 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 
     public static void BeLike (this ObjectAssertions objectAssertions, object expectation)
     {
-      objectAssertions.Subject.ShouldBeEquivalentTo(expectation, options => options.ExcludingMissingMembers());
+      objectAssertions.Subject.ShouldBeEquivalentTo(
+          expectation,
+          options =>
+              options.ExcludingMissingMembers()
+                  .IgnoringCyclicReferences()
+                  .RespectingRuntimeTypes()
+                  .Using<FileInfoWrap>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<FileInfoWrap>()
+                  .Using<DirectoryInfoWrap>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<DirectoryInfoWrap>()
+          );
     }
   }
 }

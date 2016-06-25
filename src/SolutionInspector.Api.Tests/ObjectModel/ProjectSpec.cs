@@ -83,7 +83,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       It parses_unconditional_properties = () =>
       {
         // We only need to check one exemplary property.
-        Result.Advanced.Properties["FileAlignment"].ShouldBeEquivalentTo(
+        Result.Advanced.Properties["FileAlignment"].Should().BeLike(
             new ProjectProperty("FileAlignment", "512") { new ProjectPropertyOccurrence("512", null, new ProjectLocation(13, 5)) });
       };
 
@@ -95,7 +95,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
             "LOL",
             new ProjectPropertyCondition(" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ", null),
             new ProjectLocation(24, 5));
-        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+        Result.Advanced.Properties[propertyName].Should().BeLike(
             new ProjectProperty(propertyName, "LOL")
             {
                 occurrence
@@ -117,7 +117,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
             new ProjectPropertyCondition(" '$(Property)' == 'true' ", null),
             new ProjectLocation(25, 5));
 
-        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(new ProjectProperty(propertyName, "") { occurrence });
+        Result.Advanced.Properties[propertyName].Should().BeLike(new ProjectProperty(propertyName, "") { occurrence });
 
         var propertiesBasedOnTrueCondition =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Property", "true" } });
@@ -137,7 +137,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
             new ProjectPropertyCondition(null, " '$(Parent)' == 'true' "),
             new ProjectLocation(28, 5));
 
-        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+        Result.Advanced.Properties[propertyName].Should().BeLike(
             new ProjectProperty(propertyName, "") { occurrence });
 
         var propertiesBasedOnTrueCondition =
@@ -158,7 +158,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
             new ProjectPropertyCondition(" '$(Self)' == 'true' ", " '$(Parent)' == 'true' "),
             new ProjectLocation(29, 5));
 
-        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(new ProjectProperty(propertyName, "") { occurrence });
+        Result.Advanced.Properties[propertyName].Should().BeLike(new ProjectProperty(propertyName, "") { occurrence });
 
         var propertiesBasedOnTrueCondition =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "true" } });
@@ -187,7 +187,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
             new ProjectPropertyCondition(" '$(Value)' == '5'", null),
             new ProjectLocation(33, 5));
 
-        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+        Result.Advanced.Properties[propertyName].Should().BeLike(
             new ProjectProperty(propertyName, "") { occurrenceWithThree, occurrenceWithFive });
 
         var propertiesBasedOnFirstValue =
@@ -203,7 +203,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       {
         const string propertyName = "Duplicate";
 
-        Result.Advanced.Properties[propertyName].ShouldBeEquivalentTo(
+        Result.Advanced.Properties[propertyName].Should().BeLike(
             new ProjectProperty(propertyName, "2")
             {
                 new ProjectPropertyOccurrence("1", null, new ProjectLocation(20, 5)),
@@ -249,23 +249,24 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       Because of = () => Result = LoadProject(ProjectName);
 
       It parses_gac_references = () =>
-          Result.GacReferences.Single().ShouldBeEquivalentTo(new GacReference(new AssemblyName("System")));
+          Result.GacReferences.Single().Should().BeLike(new GacReference(new AssemblyName("System")));
 
       It parses_file_references = () =>
-          Result.FileReferences.Single().ShouldBeEquivalentTo(new FileReference(new AssemblyName("Dummy"), ".\\Dummy.dll"));
+          Result.FileReferences.Single().Should().BeLike(new FileReference(new AssemblyName("Dummy"), ".\\Dummy.dll", Result.ProjectDirectory.FullName));
 
       It parses_NuGet_references = () =>
       {
         var privateReference = Result.NuGetReferences.Single(r => r.IsPrivate);
-        privateReference.ShouldBeEquivalentTo(
+        privateReference.Should().BeLike(
             new NuGetReference(
                 ReferencedNuGetPackage1,
                 new AssemblyName("Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"),
                 isPrivate: true,
-                hintPath: "..\\packages\\Newtonsoft.Json.8.0.3\\lib\\net45\\Newtonsoft.Json.dll"));
+                hintPath: "..\\packages\\Newtonsoft.Json.8.0.3\\lib\\net45\\Newtonsoft.Json.dll", 
+                projectDirectory: Result.ProjectDirectory.FullName));
 
         var publicReference = Result.NuGetReferences.Single(r => !r.IsPrivate);
-        publicReference.ShouldBeEquivalentTo(new { IsPrivate = false }, c => c.ExcludingMissingMembers());
+        publicReference.Should().BeLike(new { IsPrivate = false });
       };
 
       It parses_NuGet_packages = () =>
