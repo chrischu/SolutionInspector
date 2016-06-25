@@ -70,7 +70,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violation = () =>
-          Result.ShouldAllBeLike(new RuleViolation(SUT, Project, $"The NuGet reference to package 'Id' has an invalid hint path ('HintPath')."));
+          Result.ShouldAllBeLike(new RuleViolation(SUT, Project, "The NuGet reference to package 'Id' has an invalid hint path ('HintPath')."));
 
       static IEnumerable<IRuleViolation> Result;
     }
