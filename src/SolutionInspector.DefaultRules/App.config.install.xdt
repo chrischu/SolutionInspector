@@ -31,6 +31,9 @@
                 type="SolutionInspector.DefaultRules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.AllNuGetReferenceHintPathsMustBeValidRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.AllProjectReferencesMustBeValidRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
