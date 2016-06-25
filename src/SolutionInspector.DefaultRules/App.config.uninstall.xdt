@@ -4,6 +4,8 @@
     <rules>
       <solutionRules>
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+              type="SolutionInspector.DefaultRules.AllProjectGuidsMustBeUniqueRule, SolutionInspector.DefaultRules" />
+        <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules" />
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.SolutionBuildConfigurationsRule, SolutionInspector.DefaultRules"

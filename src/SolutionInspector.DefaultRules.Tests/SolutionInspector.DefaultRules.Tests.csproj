@@ -116,6 +116,7 @@
     <Compile Include="ProjectPropertyRuleSpec.cs" />
     <Compile Include="RequiredCompilationSymbolsProjectRuleSpec.cs" />
     <Compile Include="RequiredNuGetPackagesRuleSpec.cs" />
+    <Compile Include="AllProjectGuidsMustBeUniqueRuleSpec.cs" />
     <Compile Include="SolutionBuildConfigurationsRuleSpec.cs" />
   </ItemGroup>
   <ItemGroup>

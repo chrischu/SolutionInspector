@@ -12,6 +12,8 @@
     <rules xdt:Transform="InsertIfMissing">
       <solutionRules xdt:Transform="InsertIfMissing">
         <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+              type="SolutionInspector.DefaultRules.AllProjectGuidsMustBeUniqueRule, SolutionInspector.DefaultRules" />
+        <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules" />
         <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.SolutionBuildConfigurationsRule, SolutionInspector.DefaultRules"
