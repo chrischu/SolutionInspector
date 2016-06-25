@@ -45,6 +45,8 @@ namespace SolutionInspector.Api.ObjectModel
 
     public string Name { get; }
     public string DefaultValue { get; }
+
+    [ExcludeFromCodeCoverage]
     public IReadOnlyCollection<IProjectPropertyOccurrence> Occurrences => _occurrences;
 
     public ProjectProperty (string name, string defaultValue)
@@ -53,9 +55,9 @@ namespace SolutionInspector.Api.ObjectModel
       DefaultValue = defaultValue;
     }
 
-    public void Add (IProjectPropertyOccurrence occurence)
+    public void Add (IProjectPropertyOccurrence occurrence)
     {
-      _occurrences.Add(occurence);
+      _occurrences.Add(occurrence);
     }
 
     [ExcludeFromCodeCoverage]
