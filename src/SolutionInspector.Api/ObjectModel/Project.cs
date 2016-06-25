@@ -91,7 +91,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   A collection of referenced <see cref="NuGetPackage" />s.
     /// </summary>
-    IReadOnlyCollection<NuGetPackage> NuGetPackages { get; }
+    IReadOnlyCollection<INuGetPackage> NuGetPackages { get; }
 
     /// <summary>
     ///   A collection of DLLs referenced from the GAC.
@@ -240,7 +240,7 @@ namespace SolutionInspector.Api.ObjectModel
     public ProjectOutputType OutputType
       => Advanced.Properties.GetValueOrDefault("OutputType")?.DefaultValue == "Exe" ? ProjectOutputType.Executable : ProjectOutputType.Library;
 
-    public IReadOnlyCollection<NuGetPackage> NuGetPackages { get; }
+    public IReadOnlyCollection<INuGetPackage> NuGetPackages { get; }
 
     public IReadOnlyCollection<IGacReference> GacReferences => _classifiedReferences.Value.GacReferences;
     public IReadOnlyCollection<INuGetReference> NuGetReferences => _classifiedReferences.Value.NuGetReferences;
@@ -262,7 +262,7 @@ namespace SolutionInspector.Api.ObjectModel
     string IRuleTarget.Identifier => Path.GetFileName(Advanced.MsBuildProject.FullPath);
     string IRuleTarget.FullPath => Advanced.MsBuildProject.FullPath;
 
-    private IEnumerable<NuGetPackage> BuildNuGetPackages (IFileInfo nuGetPackagesFile)
+    private IEnumerable<INuGetPackage> BuildNuGetPackages (IFileInfo nuGetPackagesFile)
     {
       if (!nuGetPackagesFile.Exists)
         yield break;
@@ -276,7 +276,7 @@ namespace SolutionInspector.Api.ObjectModel
 
     private ClassifiedReferences ClassifyReferences (
         Microsoft.Build.Evaluation.Project project,
-        IReadOnlyCollection<NuGetPackage> nuGetPackages,
+        IReadOnlyCollection<INuGetPackage> nuGetPackages,
         ISolution solution)
     {
       var projectReferences = project.GetItemsIgnoringCondition("ProjectReference").Select(r => new ProjectReference(solution, r));

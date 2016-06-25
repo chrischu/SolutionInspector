@@ -5,6 +5,7 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.TestInfrastructure;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
@@ -46,7 +47,18 @@ namespace SolutionInspector.DefaultRules.Tests
       Establish ctx =
           () =>
           {
-            A.CallTo(() => Project.NuGetPackages).Returns(new[] { new NuGetPackage("Package", Version.Parse("0.0.1"), false, "", "net461", false) });
+            var nuGetPackage = FakeHelper.CreateAndConfigure<INuGetPackage>(
+              c =>
+              {
+                A.CallTo(() => c.Id).Returns("Package");
+                A.CallTo(() => c.Version).Returns(new Version(0, 0, 1));
+                A.CallTo(() => c.IsPreRelease).Returns(false);
+                A.CallTo(() => c.PreReleaseTag).Returns(null);
+                A.CallTo(() => c.TargetFramework).Returns("net461");
+                A.CallTo(() => c.IsDevelopmentDependency).Returns(false);
+              });
+
+            A.CallTo(() => Project.NuGetPackages).Returns(new[] { nuGetPackage });
           };
 
       Because of = () => Result = SUT.Evaluate(Project);
