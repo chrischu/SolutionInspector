@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### ObjectModel
 #### Added
-* SolutionInspector now has better support for project items that contain wildcards (*) in their include/exclude paths or links (IProjectItem has 3 new properties: IsLink, IsIncludedByWildcard, WildcardInclude, WildcardExclude).
+* SolutionInspector now has better support for project items that contain wildcards (*) in their include/exclude paths or links (IProjectItem has new properties: IsLink, IsIncludedByWildcard, WildcardInclude, WildcardExclude).
 
 ### Rules
 #### Added
