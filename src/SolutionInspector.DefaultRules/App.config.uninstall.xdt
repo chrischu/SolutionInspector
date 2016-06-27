@@ -4,7 +4,7 @@
     <rules>
       <solutionRules>
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-              type="SolutionInspector.DefaultRules.AllProjectGuidsMustBeUniqueRule, SolutionInspector.DefaultRules" />
+              type="SolutionInspector.DefaultRules.ProjectGuidsMustBeUniqueRule, SolutionInspector.DefaultRules" />
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules" />
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
@@ -20,13 +20,13 @@
                 type="SolutionInspector.DefaultRules.ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.DefaultRules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.ProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.DefaultRules.AllNuGetReferenceHintPathsMustBeValidRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.NuGetReferenceHintPathsMustBeValidRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.DefaultRules.AllProjectReferencesMustBeValidRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.ProjectReferencesMustBeValidRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectPropertyRule, SolutionInspector.DefaultRules"

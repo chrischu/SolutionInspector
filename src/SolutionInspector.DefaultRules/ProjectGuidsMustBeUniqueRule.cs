@@ -10,7 +10,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that every project has a unique GUID.
   /// </summary>
-  public class AllProjectGuidsMustBeUniqueRule : SolutionRule
+  public class ProjectGuidsMustBeUniqueRule : SolutionRule
   {
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (ISolution target)

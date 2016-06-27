@@ -26,15 +26,15 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof(AllProjectGuidsMustBeUniqueRule))]
-  class AllProjectGuidsMustBeUniqueRuleSpec
+  [Subject (typeof(ProjectGuidsMustBeUniqueRule))]
+  class ProjectGuidsMustBeUniqueRuleSpec
   {
     static ISolution Solution;
     static IProject Project1;
     static IProject Project2;
     static IProject Project3;
 
-    static AllProjectGuidsMustBeUniqueRule SUT;
+    static ProjectGuidsMustBeUniqueRule SUT;
 
     Establish ctx = () =>
     {
@@ -54,7 +54,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
       A.CallTo(() => Solution.Projects).Returns(new[] { Project1, Project2, Project3 });
 
-      SUT = new AllProjectGuidsMustBeUniqueRule();
+      SUT = new ProjectGuidsMustBeUniqueRule();
     };
 
     class when_there_are_no_duplicate_project_guids

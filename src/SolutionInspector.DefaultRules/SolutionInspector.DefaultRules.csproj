@@ -68,10 +68,10 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="AllProjectGuidsMustBeUniqueRule.cs" />
-    <Compile Include="AllNuGetReferenceHintPathsMustBeValidRule.cs" />
-    <Compile Include="AllProjectItemsMustBePresentRule.cs" />
-    <Compile Include="AllProjectReferencesMustBeValidRule.cs" />
+    <Compile Include="ProjectGuidsMustBeUniqueRule.cs" />
+    <Compile Include="NuGetReferenceHintPathsMustBeValidRule.cs" />
+    <Compile Include="ProjectItemsMustBePresentRule.cs" />
+    <Compile Include="ProjectReferencesMustBeValidRule.cs" />
     <Compile Include="NuGetPackagesShouldHaveOneVersionAcrossSolutionRule.cs" />
     <Compile Include="ProjectBuildConfigurationDependentPropertyRule.cs" />
     <Compile Include="ProjectItemMustHaveCorrectBuildActionRule.cs" />

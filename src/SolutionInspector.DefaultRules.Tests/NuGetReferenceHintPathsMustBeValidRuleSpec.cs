@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SystemInterface.IO;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -25,33 +26,34 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof(AllProjectItemsMustBePresentRule))]
-  class AllProjectItemsMustBePresentRuleSpec
+  [Subject (typeof(NuGetReferenceHintPathsMustBeValidRule))]
+  class NuGetReferenceHintPathsMustBeValidRuleSpec
   {
-    static IProjectItemInclude ProjectItemInclude;
-    static IProjectItem ProjectItem;
+    static IFileInfo NuGetReferenceDllFile;
+    static INuGetReference NuGetReference;
     static IProject Project;
 
-    static AllProjectItemsMustBePresentRule SUT;
+    static NuGetReferenceHintPathsMustBeValidRule SUT;
 
     Establish ctx = () =>
     {
-      ProjectItem = A.Fake<IProjectItem>();
-
-      ProjectItemInclude = A.Fake<IProjectItemInclude>();
-      A.CallTo(() => ProjectItemInclude.Evaluated).Returns("ProjectItem");
-
-      A.CallTo(() => ProjectItem.Include).Returns(ProjectItemInclude);
-
       Project = A.Fake<IProject>();
-      A.CallTo(() => Project.ProjectItems).Returns(new[] { ProjectItem });
 
-      SUT = new AllProjectItemsMustBePresentRule();
+      NuGetReferenceDllFile = A.Fake<IFileInfo>();
+
+      NuGetReference = A.Fake<INuGetReference>();
+      A.CallTo(() => NuGetReference.DllFile).Returns(NuGetReferenceDllFile);
+      A.CallTo(() => NuGetReference.HintPath).Returns("HintPath");
+      A.CallTo(() => NuGetReference.Package.Id).Returns("Id");
+
+      A.CallTo(() => Project.NuGetReferences).Returns(new[] { NuGetReference });
+
+      SUT = new NuGetReferenceHintPathsMustBeValidRule();
     };
 
-    class when_evaluating_and_all_files_are_existing
+    class when_evaluating_and_all_NuGet_reference_hint_paths_are_valid
     {
-      Establish ctx = () => { A.CallTo(() => ProjectItem.File.Exists).Returns(true); };
+      Establish ctx = () => { A.CallTo(() => NuGetReferenceDllFile.Exists).Returns(true); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
@@ -61,14 +63,14 @@ namespace SolutionInspector.DefaultRules.Tests
       static IEnumerable<IRuleViolation> Result;
     }
 
-    class when_evaluating_and_at_least_one_file_is_missing
+    class when_evaluating_and_a_NuGet_references_hint_path_is_invalid
     {
-      Establish ctx = () => { A.CallTo(() => ProjectItem.File.Exists).Returns(false); };
+      Establish ctx = () => { A.CallTo(() => NuGetReferenceDllFile.Exists).Returns(false); };
 
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violation = () =>
-          Result.ShouldAllBeLike(new RuleViolation(SUT, Project, "Could not find project item 'ProjectItem'."));
+          Result.ShouldAllBeLike(new RuleViolation(SUT, Project, "The NuGet reference to package 'Id' has an invalid hint path ('HintPath')."));
 
       static IEnumerable<IRuleViolation> Result;
     }

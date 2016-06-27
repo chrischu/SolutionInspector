@@ -10,7 +10,7 @@ namespace SolutionInspector.DefaultRules
   ///   Verifies that all <see cref="INuGetReference" />s in the project have correct hint paths (pointing to an actually
   ///   existing file).
   /// </summary>
-  public class AllNuGetReferenceHintPathsMustBeValidRule : ProjectRule
+  public class NuGetReferenceHintPathsMustBeValidRule : ProjectRule
   {
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)

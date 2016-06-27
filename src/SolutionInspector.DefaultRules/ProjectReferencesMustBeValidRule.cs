@@ -9,7 +9,7 @@ namespace SolutionInspector.DefaultRules
   ///   Verifies that all <see cref="ProjectReference" />s in the project are valid (i.e. point to existing csproj files included in the solution
   ///   and have the correct project GUID).
   /// </summary>
-  public class AllProjectReferencesMustBeValidRule : ProjectRule
+  public class ProjectReferencesMustBeValidRule : ProjectRule
   {
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {

@@ -26,15 +26,15 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  [Subject (typeof(AllProjectReferencesMustBeValidRule))]
-  class AllProjectReferencesMustBeValidRuleSpec
+  [Subject (typeof(ProjectReferencesMustBeValidRule))]
+  class ProjectReferencesMustBeValidRuleSpec
   {
     static IProject Project;
     static IProjectReference ProjectReference;
     static Guid ProjectReferenceGuid;
     static ISolution Solution;
 
-    static AllProjectReferencesMustBeValidRule SUT;
+    static ProjectReferencesMustBeValidRule SUT;
 
     Establish ctx = () =>
     {
@@ -52,7 +52,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Solution = A.Fake<ISolution>();
       A.CallTo(() => Project.Solution).Returns(Solution);
 
-      SUT = new AllProjectReferencesMustBeValidRule();
+      SUT = new ProjectReferencesMustBeValidRule();
     };
 
     class when_evaluating_a_project_reference_with_invalid_guid
