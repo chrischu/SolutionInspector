@@ -7,6 +7,7 @@
 
 Inspects VisualStudio solutions against violations against a plethora of different rules to keep your solution tidy.
 
-## Roadmap
+## Documentation
 
-See [Roadmap](https://github.com/chrischu/SolutionInspector/wiki/Roadmap).
+For current change log/work in progress see [Changelog](CHANGELOG.md).
+For future plans see [Roadmap](ROADMAP.md).
