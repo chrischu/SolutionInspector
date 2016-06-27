@@ -71,6 +71,8 @@
                 type="SolutionInspector.DefaultRules.ProjectItemMustHaveCustomToolSetRule, SolutionInspector.DefaultRules" />
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectItemMustHaveCorrectBuildActionRule, SolutionInspector.DefaultRules" />
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectItemMustNotBeIncludedByWildcardRule, SolutionInspector.DefaultRules" />
         </projectItemRuleGroup>
       </projectItemRules>
     </rules>

@@ -71,6 +71,8 @@
     <Compile Include="NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRule.cs" />
     <Compile Include="ProjectGuidsMustBeUniqueRule.cs" />
     <Compile Include="NuGetReferenceHintPathsMustBeValidRule.cs" />
+    <Compile Include="ProjectItemMustBeIncludedByWildcardRule.cs" />
+    <Compile Include="ProjectItemMustNotBeIncludedByWildcardRule.cs" />
     <Compile Include="ProjectItemsMustBePresentRule.cs" />
     <Compile Include="ProjectReferencesMustBeValidRule.cs" />
     <Compile Include="NuGetPackagesShouldHaveOneVersionAcrossSolutionRule.cs" />

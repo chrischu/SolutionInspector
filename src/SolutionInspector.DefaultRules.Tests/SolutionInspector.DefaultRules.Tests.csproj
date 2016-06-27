@@ -102,6 +102,8 @@
     </Compile>
     <Compile Include="NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRuleSpec.cs" />
     <Compile Include="NuGetReferenceHintPathsMustBeValidRuleSpec.cs" />
+    <Compile Include="ProjectItemMustNotBeIncludedByWildcardRuleSpec.cs" />
+    <Compile Include="ProjectItemMustBeIncludedByWildcardRuleSpec.cs" />
     <Compile Include="ProjectReferencesMustBeValidRuleSpec.cs" />
     <Compile Include="ProjectShouldNotContainProjectPropertiesWithDuplicateNameRuleSpec.cs" />
     <Compile Include="ProjectShouldNotContainProjectItemsWithDuplicateIncludesRuleSpec.cs" />
