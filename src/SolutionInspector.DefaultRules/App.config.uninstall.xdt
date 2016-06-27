@@ -26,6 +26,9 @@
                 type="SolutionInspector.DefaultRules.NuGetReferenceHintPathsMustBeValidRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectReferencesMustBeValidRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"

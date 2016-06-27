@@ -18,6 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * **ProjectReferencesMustBeValidRule**: Verifies that all ProjectReferences in the project are valid (i.e. point to existing csproj files included in the solution and have the correct project GUID).
 * **ProjectGuidsMustBeUniqueRule**: Verifies that every project in the solution has a unique GUID.
 * **NuGetReferenceHintPathsMustBeValidRule**: Verifies that all NuGet references in the project have correct hint paths (pointing to an actually existing file). 
+* **NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRule**: Verifies that all non-development NuGet references in the project have their 'IsPrivate' flag (also referred to as 'Copy Local') set to true. 
 
 #### Changed
 * Renamed AllProjectItemsMustBePresentRule to ProjectItemsMustBePresentRule to be more in line with the newly added rules.

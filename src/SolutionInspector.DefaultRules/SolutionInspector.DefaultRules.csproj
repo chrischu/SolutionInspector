@@ -68,6 +68,7 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRule.cs" />
     <Compile Include="ProjectGuidsMustBeUniqueRule.cs" />
     <Compile Include="NuGetReferenceHintPathsMustBeValidRule.cs" />
     <Compile Include="ProjectItemsMustBePresentRule.cs" />

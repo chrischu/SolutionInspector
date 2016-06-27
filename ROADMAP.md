@@ -11,7 +11,7 @@ Already planned features/fixes for SolutionInspector are documented here.
   - [x] See [#1](../issues/1)
   - [x] Project GUIDs should be unique
   - [x] NuGet references should have correct hint path
-  - [ ] non-development NuGet references should have Private (=CopyLocal) set to true
+  - [x] non-development NuGet references should have Private (=CopyLocal) set to true
   - [ ] Project item(s) should only be included with wildcard
   - [ ] Project item(s) should only be included without wildcard
 

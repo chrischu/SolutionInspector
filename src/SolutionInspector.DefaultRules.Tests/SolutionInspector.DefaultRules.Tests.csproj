@@ -100,6 +100,7 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRuleSpec.cs" />
     <Compile Include="NuGetReferenceHintPathsMustBeValidRuleSpec.cs" />
     <Compile Include="ProjectReferencesMustBeValidRuleSpec.cs" />
     <Compile Include="ProjectShouldNotContainProjectPropertiesWithDuplicateNameRuleSpec.cs" />
