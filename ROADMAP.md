@@ -14,7 +14,6 @@ Already planned features/fixes for SolutionInspector are documented here.
   - [x] non-development NuGet references should have Private (=CopyLocal) set to true
   - [x] Project item(s) should only be included with wildcard
   - [x] Project item(s) should only be included without wildcard
-  - [ ] Project item(s) should only be included once
 
 ## Medium-Term
 
