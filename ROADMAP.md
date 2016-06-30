@@ -7,8 +7,8 @@ Already planned features/fixes for SolutionInspector are documented here.
 - [x] Release SolutionInspector.exe on NuGet as well
 - [x] 100% code coverage
 - [x] Wildcard support (see [#2](../issues/2))
-- [ ] Change where the configuration file is located (next to solution instead of SolutionInspector.exe)
-- [ ] Allow specifying a special configuration file via command line
+- [x] Add possibility to have a configuration file per solution (that lies next to the solution)
+- [x] Add possibility to define any arbitrary file path for a configuration file
 - [ ] More rules
   - [x] See [#1](../issues/1)
   - [x] Project GUIDs should be unique

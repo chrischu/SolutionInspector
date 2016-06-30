@@ -10,7 +10,6 @@ using JetBrains.Annotations;
 using ManyConsole;
 using NLog;
 using SolutionInspector.Api.Commands;
-using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
@@ -35,10 +34,6 @@ namespace SolutionInspector.Api
 
       using (var container = SetupContainer())
       {
-        var ruleAssemblyLoader = container.Resolve<IRuleAssemblyLoader>();
-        var solutionInspectorConfiguration = container.Resolve<ISolutionInspectorConfiguration>();
-        ruleAssemblyLoader.LoadRuleAssemblies(solutionInspectorConfiguration.RuleAssemblyImports.Imports);
-
         var commands = container.Resolve<IEnumerable<ConsoleCommand>>();
         return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
       }
@@ -47,9 +42,6 @@ namespace SolutionInspector.Api
     private static IContainer SetupContainer ()
     {
       var builder = new ContainerBuilder();
-
-      var configuration = SolutionInspectorConfiguration.Load();
-      builder.Register(ctx => configuration).As<ISolutionInspectorConfiguration>();
 
       builder.RegisterType<FileWrap>().As<IFile>();
       builder.RegisterType<DirectoryWrap>().As<IDirectory>();

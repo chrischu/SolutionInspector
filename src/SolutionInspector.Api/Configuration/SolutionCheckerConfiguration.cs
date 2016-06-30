@@ -38,11 +38,5 @@ namespace SolutionInspector.Api.Configuration
     public IMsBuildParsingConfiguration MsBuildParsing => (MsBuildParsingConfigurationSection) Sections["msBuildParsing"];
 
     public IRulesConfiguration Rules => (RulesConfigurationSection) Sections["rules"];
-
-    public static SolutionInspectorConfiguration Load ()
-    {
-      var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-      return (SolutionInspectorConfiguration) configuration.GetSectionGroup("solutionInspector");
-    }
   }
 }

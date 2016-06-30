@@ -106,6 +106,7 @@
     <Compile Include="Configuration\Infrastructure\KeyedConfigurationElementCollectionBaseSpec.cs" />
     <Compile Include="Configuration\MsBuildParsing\MsBuildParsingConfigurationSectionSpec.cs" />
     <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportsConfigurationSectionSpec.cs" />
+    <Compile Include="Configuration\ConfigurationLoaderSpec.cs" />
     <Compile Include="Configuration\Rules\RuleAssemblyLoaderSpec.cs" />
     <Compile Include="Configuration\Rules\ProjectConfigRuleBaseSpec.cs" />
     <Compile Include="Configuration\Rules\RuleConfigurationElementSpec.cs" />

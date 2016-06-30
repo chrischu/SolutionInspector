@@ -49,7 +49,10 @@ namespace SolutionInspector.Api.Tests.Commands
     static IViolationReporterFactory ViolationReporterFactory;
 
     static IMsBuildInstallationChecker MsBuildInstallationChecker;
-    static ISolutionInspectorConfiguration Configuration;
+    static IConfigurationLoader ConfigurationLoader;
+    static IRuleAssemblyLoader RuleAssemblyLoader;
+
+    static ISolutionInspectorConfiguration SolutionInspectorConfiguration;
     static IRulesConfiguration RulesConfiguration;
 
     static ISolutionRule SolutionRule;
@@ -83,10 +86,16 @@ namespace SolutionInspector.Api.Tests.Commands
       MsBuildInstallationChecker = A.Fake<IMsBuildInstallationChecker>();
       A.CallTo(() => MsBuildInstallationChecker.IsMsBuildInstalled()).Returns(true);
 
-      Configuration = A.Fake<ISolutionInspectorConfiguration>();
-      RulesConfiguration = A.Fake<IRulesConfiguration>();
-      A.CallTo(() => Configuration.Rules).Returns(RulesConfiguration);
+      SolutionInspectorConfiguration = A.Fake<ISolutionInspectorConfiguration>();
 
+      RulesConfiguration = A.Fake<IRulesConfiguration>();
+      A.CallTo(() => SolutionInspectorConfiguration.Rules).Returns(RulesConfiguration);
+
+      ConfigurationLoader = A.Fake<IConfigurationLoader>();
+      A.CallTo(() => ConfigurationLoader.Load(A<string>._)).Returns(SolutionInspectorConfiguration);
+      A.CallTo(() => ConfigurationLoader.LoadAppConfigFile()).Returns(SolutionInspectorConfiguration);
+
+      RuleAssemblyLoader = A.Fake<IRuleAssemblyLoader>();
       ViolationReporterFactory = A.Fake<IViolationReporterFactory>();
 
       ViolationReporter = A.Fake<IViolationReporter>();
@@ -95,19 +104,110 @@ namespace SolutionInspector.Api.Tests.Commands
 
       TextWriter = new StringWriter();
 
-      SUT = new InspectCommand(MsBuildInstallationChecker, Configuration, SolutionLoader, RuleCollectionBuilder, ViolationReporterFactory);
+      SUT = new InspectCommand(
+          MsBuildInstallationChecker,
+          ConfigurationLoader,
+          RuleAssemblyLoader,
+          SolutionLoader,
+          RuleCollectionBuilder,
+          ViolationReporterFactory);
     };
 
     class when_running_without_violations
     {
       Because of = () => Result = RunCommand(SUT, "solution");
 
-      Behaves_like<it_executes_the_command_correctly> _;
-      Behaves_like<it_does_not_create_a_violation_reporter> __;
+      Behaves_like<it_loads_the_configuration_with_default_parameters> _;
+      Behaves_like<it_executes_the_command_correctly> __;
+      Behaves_like<it_does_not_create_a_violation_reporter> ___;
 
       It returns_exit_code = () =>
           Result.Should().Be(0);
 
+      static int Result;
+    }
+
+    class when_running_with_AppConfig_configuration_file
+    {
+      Because of = () => Result = RunCommand(SUT, "--configurationFile=AppConfig", "solution");
+
+      Behaves_like<it_executes_the_command_correctly> _;
+      Behaves_like<it_does_not_create_a_violation_reporter> __;
+
+      It loads_configuration = () =>
+          A.CallTo(() => ConfigurationLoader.LoadAppConfigFile()).MustHaveHappened();
+
+      It returns_exit_code = () =>
+          Result.Should().Be(0);
+
+      static int Result;
+    }
+
+    class when_running_with_Solution_configuration_file
+    {
+      Because of = () => Result = RunCommand(SUT, "--configurationFile=Solution", "solution");
+
+      Behaves_like<it_executes_the_command_correctly> _;
+      Behaves_like<it_does_not_create_a_violation_reporter> __;
+
+      It loads_configuration = () =>
+          A.CallTo(() => ConfigurationLoader.Load("solution.SolutionInspectorConfig")).MustHaveHappened();
+
+      It returns_exit_code = () =>
+          Result.Should().Be(0);
+
+      static int Result;
+    }
+
+    class when_running_with_other_configuration_file
+    {
+      Because of = () => Result = RunCommand(SUT, "--configurationFile=file", "solution");
+
+      Behaves_like<it_executes_the_command_correctly> _;
+      Behaves_like<it_does_not_create_a_violation_reporter> __;
+
+      It loads_configuration = () =>
+          A.CallTo(() => ConfigurationLoader.Load("file")).MustHaveHappened();
+
+      It returns_exit_code = () =>
+          Result.Should().Be(0);
+
+      static int Result;
+    }
+
+    class when_running_and_configuration_file_cannot_be_found
+    {
+      Establish ctx =
+          () => { A.CallTo(() => ConfigurationLoader.LoadAppConfigFile()).Throws(new FileNotFoundException("NOTFOUND")); };
+
+      Because of = () => Result = RunCommand(SUT, "solution");
+
+      It shows_error = () =>
+          TextWriter.ToString().Should().Contain("NOTFOUND");
+
+      It returns_exit_code = () =>
+          Result.Should().Be(-1);
+
+      static int Result;
+    }
+
+    class when_running_and_configuration_file_loading_fails
+    {
+      Establish ctx = () =>
+      {
+        ThrownException = Some.Exception;
+        A.CallTo(() => ConfigurationLoader.Load(A<string>._)).Throws(ThrownException);
+      };
+
+      Because of = () => Result = RunCommand(SUT, "--configurationFile=file", "solution");
+
+      It shows_error = () =>
+          TextWriter.ToString().Should().Contain($"Unexpected error when loading configuration file: {ThrownException.Message}.");
+
+      It returns_exit_code = () =>
+          Result.Should().Be(-1);
+
+      static Exception ThrownException;
       static int Result;
     }
 
@@ -121,8 +221,9 @@ namespace SolutionInspector.Api.Tests.Commands
 
       Because of = () => Result = RunCommand(SUT, "solution");
 
-      Behaves_like<it_executes_the_command_correctly> _;
-      Behaves_like<it_creates_and_calls_a_console_violation_reporter_with_the_expected_format> __;
+      Behaves_like<it_loads_the_configuration_with_default_parameters> _;
+      Behaves_like<it_executes_the_command_correctly> __;
+      Behaves_like<it_creates_and_calls_a_console_violation_reporter_with_the_expected_format> ___;
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
@@ -142,8 +243,9 @@ namespace SolutionInspector.Api.Tests.Commands
 
       Because of = () => Result = RunCommand(SUT, $"--reportFormat={ExpectedReportFormat}", "solution");
 
-      Behaves_like<it_executes_the_command_correctly> _;
-      Behaves_like<it_creates_and_calls_a_console_violation_reporter_with_the_expected_format> __;
+      Behaves_like<it_loads_the_configuration_with_default_parameters> _;
+      Behaves_like<it_executes_the_command_correctly> __;
+      Behaves_like<it_creates_and_calls_a_console_violation_reporter_with_the_expected_format> ___;
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
@@ -164,8 +266,9 @@ namespace SolutionInspector.Api.Tests.Commands
 
       Because of = () => Result = RunCommand(SUT, $"--reportFormat={ExpectedReportFormat}", $"--reportOutputFile={ExpectedFilePath}", "solution");
 
-      Behaves_like<it_executes_the_command_correctly> _;
-      Behaves_like<it_creates_and_calls_a_file_violation_reporter_with_the_expected_format> __;
+      Behaves_like<it_loads_the_configuration_with_default_parameters> _;
+      Behaves_like<it_executes_the_command_correctly> __;
+      Behaves_like<it_creates_and_calls_a_file_violation_reporter_with_the_expected_format> ___;
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
@@ -186,8 +289,9 @@ namespace SolutionInspector.Api.Tests.Commands
 
       Because of = () => Result = RunCommand(SUT, $"-f {ExpectedReportFormat}", "solution");
 
-      Behaves_like<it_executes_the_command_correctly> _;
-      Behaves_like<it_creates_and_calls_a_console_violation_reporter_with_the_expected_format> __;
+      Behaves_like<it_loads_the_configuration_with_default_parameters> _;
+      Behaves_like<it_executes_the_command_correctly> __;
+      Behaves_like<it_creates_and_calls_a_console_violation_reporter_with_the_expected_format> ___;
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
@@ -208,8 +312,9 @@ namespace SolutionInspector.Api.Tests.Commands
 
       Because of = () => Result = RunCommand(SUT, $"--reportFormat={ExpectedReportFormat}", $"-o {ExpectedFilePath}", "solution");
 
-      Behaves_like<it_executes_the_command_correctly> _;
-      Behaves_like<it_creates_and_calls_a_file_violation_reporter_with_the_expected_format> __;
+      Behaves_like<it_loads_the_configuration_with_default_parameters> _;
+      Behaves_like<it_executes_the_command_correctly> __;
+      Behaves_like<it_creates_and_calls_a_file_violation_reporter_with_the_expected_format> ___;
 
       It returns_exit_code = () =>
           Result.Should().Be(1);
@@ -244,7 +349,8 @@ namespace SolutionInspector.Api.Tests.Commands
 
       Because of = () => Result = RunCommand(SUT, "DOES_NOT_EXIST");
 
-      Behaves_like<it_does_not_create_a_violation_reporter> _;
+      Behaves_like<it_loads_the_configuration_with_default_parameters> _;
+      Behaves_like<it_does_not_create_a_violation_reporter> __;
 
       It shows_error = () =>
           TextWriter.ToString().Should().Contain("Given solution file 'DOES_NOT_EXIST' could not be found.");
@@ -265,7 +371,8 @@ namespace SolutionInspector.Api.Tests.Commands
 
       Because of = () => Result = RunCommand(SUT, "solution");
 
-      Behaves_like<it_does_not_create_a_violation_reporter> _;
+      Behaves_like<it_loads_the_configuration_with_default_parameters> _;
+      Behaves_like<it_does_not_create_a_violation_reporter> __;
 
       It shows_error = () =>
           TextWriter.ToString()
@@ -289,7 +396,8 @@ namespace SolutionInspector.Api.Tests.Commands
 
       Because of = () => Result = RunCommand(SUT, "solution");
 
-      Behaves_like<it_does_not_create_a_violation_reporter> _;
+      Behaves_like<it_loads_the_configuration_with_default_parameters> _;
+      Behaves_like<it_does_not_create_a_violation_reporter> __;
 
       It shows_error = () =>
           TextWriter.ToString().Should().Contain($"Unexpected error when loading solution file 'solution': {ThrownException.Message}");
@@ -318,8 +426,11 @@ namespace SolutionInspector.Api.Tests.Commands
     [Behaviors]
     class it_executes_the_command_correctly
     {
+      It loads_rule_assemblies = () =>
+          A.CallTo(() => RuleAssemblyLoader.LoadRuleAssemblies(SolutionInspectorConfiguration.RuleAssemblyImports.Imports)).MustHaveHappened();
+
       It loads_solution = () =>
-          A.CallTo(() => SolutionLoader.Load("solution", Configuration.MsBuildParsing)).MustHaveHappened();
+          A.CallTo(() => SolutionLoader.Load("solution", SolutionInspectorConfiguration.MsBuildParsing)).MustHaveHappened();
 
       It builds_rules = () =>
           A.CallTo(() => RuleCollectionBuilder.Build(RulesConfiguration)).MustHaveHappened();
@@ -332,6 +443,13 @@ namespace SolutionInspector.Api.Tests.Commands
 
       It calls_project_item_rule = () =>
           A.CallTo(() => ProjectItemRule.Evaluate(ProjectItem)).MustHaveHappened(Repeated.Exactly.Once);
+    }
+
+    [Behaviors]
+    class it_loads_the_configuration_with_default_parameters
+    {
+      It loads_configuration = () =>
+          A.CallTo(() => ConfigurationLoader.LoadAppConfigFile()).MustHaveHappened();
     }
 
     [Behaviors]

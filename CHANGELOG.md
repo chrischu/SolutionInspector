@@ -8,6 +8,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Added
 * SolutionInspector.exe is now available on NuGet.org as well (<https://www.nuget.org/packages/SolutionInspector.Console/>).
 * SolutionInspector's code now has 100% coverage by tests.
+* SolutionInspector now has more options to define which configuration file is to be used:
+  * `--configurationFile=AppConfig`: Use the SolutionInspector.exe.config file (is and was the default).
+  * `--configurationFile=Solution`: Use the \<SolutionName>.sln.SolutionInspectorConfig file lying next to the inspected solution.
+  * `--configurationFile=<SomeFilePath>`: Use the specified configuration file.
 
 ### ObjectModel
 #### Added
