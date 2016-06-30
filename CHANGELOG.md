@@ -24,6 +24,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 #### Changed
 * Renamed AllProjectItemsMustBePresentRule to ProjectItemsMustBePresentRule to be more in line with the newly added rules.
 
-## 0.1.0 - 2016-06-05
+## [0.1.0](https://github.com/chrischu/SolutionInspector/compare/c02165e6caba2eaedc357a883ffdaf3663fce16c...v0.1.0) - 2016-06-05
 
 * Initial release
