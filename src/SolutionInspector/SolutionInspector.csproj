@@ -91,6 +91,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Template.SolutionInspectorConfig" />
     <None Include="App.config" />
     <None Include="icon.ico" />
     <None Include="NLog.config">

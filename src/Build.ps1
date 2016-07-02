@@ -90,6 +90,7 @@ function Run() {
     Clean
     Restore-NuGetPackages
     Update-AssemblyInfos
+    Update-SolutionInspectorConfig
     Build
     Run-ReSharperCodeInspection -Condition $RunReSharperCodeInspection
     Run-Tests -Condition $RunTests
@@ -119,6 +120,18 @@ BuildTask Update-AssemblyInfos {
 
 BuildTask Restore-AssemblyInfos {
   Restore-AssemblyInfo $AssemblyInfoSharedFile
+}
+
+BuildTask Update-SolutionInspectorConfig {
+  $solutionInspectorProject = $Projects | ?{ $_.ProjectName -eq "SolutionInspector" }
+
+  Apply-XdtTransform $solutionInspectorProject "Template.SolutionInspectorConfig" "..\SolutionInspector.Api\App.config.uninstall.xdt"
+  Apply-XdtTransform $solutionInspectorProject "Template.SolutionInspectorConfig" "..\SolutionInspector.Api\App.config.install.xdt"
+  Apply-XdtTransform $solutionInspectorProject "Template.SolutionInspectorConfig" "..\SolutionInspector.DefaultRules\App.config.install.xdt"
+
+  Apply-XdtTransform $solutionInspectorProject "App.config" "..\SolutionInspector.Api\App.config.uninstall.xdt"
+  Apply-XdtTransform $solutionInspectorProject "App.config" "..\SolutionInspector.Api\App.config.install.xdt"
+  Apply-XdtTransform $solutionInspectorProject "App.config" "..\SolutionInspector.DefaultRules\App.config.install.xdt"
 }
 
 
@@ -169,7 +182,6 @@ BuildTask Create-Archives {
   Copy-Item -Path "${buildDirectory}\*" -Destination $sourceDirectory -Exclude "Microsoft.Build*.dll","*CodeAnalysisLog.xml","*.lastcodeanalysissucceeded"
   Zip-Directory -ZipFilePath $archivePath -SourceDirectory $sourceDirectory
   Remove-Item $sourceDirectory -Recurse
-
 
   Report-Archive $archivePath
 }
