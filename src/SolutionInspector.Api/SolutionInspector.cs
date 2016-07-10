@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using SystemInterface.Configuration;
 using SystemInterface.IO;
 using SystemInterface.Reflection;
+using SystemWrapper.Configuration;
 using SystemWrapper.IO;
 using SystemWrapper.Reflection;
 using Autofac;
@@ -10,6 +12,7 @@ using JetBrains.Annotations;
 using ManyConsole;
 using NLog;
 using SolutionInspector.Api.Commands;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
@@ -46,6 +49,7 @@ namespace SolutionInspector.Api
       builder.RegisterType<FileWrap>().As<IFile>();
       builder.RegisterType<DirectoryWrap>().As<IDirectory>();
       builder.RegisterType<AssemblyWrap>().As<IAssembly>();
+      builder.RegisterType<ConfigurationManagerWrap>().As<IConfigurationManager>();
 
       builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
 
@@ -80,6 +84,8 @@ namespace SolutionInspector.Api
       builder.RegisterType<InspectCommand>().As<ConsoleCommand>();
 
       builder.RegisterType<MsBuildInstallationChecker>().As<IMsBuildInstallationChecker>();
+
+      builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();
 
       return builder.Build();
     }
