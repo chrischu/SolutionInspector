@@ -183,7 +183,7 @@ BuildTask Create-Archives {
   Zip-Directory -ZipFilePath $archivePath -SourceDirectory $sourceDirectory
   Remove-Item $sourceDirectory -Recurse
 
-  Report-Archive $archivePath
+  Report-Archive $archivePath "SolutionInspector.zip"
 }
 
 BuildTask Publish-CoverageReports {
