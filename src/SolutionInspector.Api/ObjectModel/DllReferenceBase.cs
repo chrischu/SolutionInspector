@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Reflection;
-using SystemInterface.IO;
-using SystemWrapper.IO;
 using JetBrains.Annotations;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -34,7 +34,7 @@ namespace SolutionInspector.Api.ObjectModel
         : base(assemblyName)
     {
       HintPath = hintPath;
-      DllFile = new FileInfoWrap(Path.GetFullPath(Path.Combine(projectDirectory, hintPath)));
+      DllFile = new FileInfoWrapper(new FileInfo(Path.GetFullPath(Path.Combine(projectDirectory, hintPath))));
     }
   }
 }

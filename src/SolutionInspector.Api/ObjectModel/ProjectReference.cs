@@ -1,8 +1,8 @@
 using System;
 using System.IO;
-using SystemInterface.IO;
-using SystemWrapper.IO;
 using JetBrains.Annotations;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -58,7 +58,7 @@ namespace SolutionInspector.Api.ObjectModel
       Include = projectItem.EvaluatedInclude;
 
       var fullPath = Path.GetFullPath(Path.Combine(projectItem.Project.DirectoryPath, Include));
-      File = new FileInfoWrap(fullPath);
+      File = new FileInfoWrapper(new FileInfo(fullPath));
       Project = solution.GetProjectByAbsoluteProjectFilePath(fullPath);
 
       Guid referencedProjectGuid;

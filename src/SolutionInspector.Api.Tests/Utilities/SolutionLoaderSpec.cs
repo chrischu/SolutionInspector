@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using SystemInterface.IO;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -10,6 +9,7 @@ using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Utilities;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
+using Wrapperator.Interfaces.IO;
 
 #region R# preamble for Machine.Specifications files
 

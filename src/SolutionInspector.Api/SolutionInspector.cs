@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using SystemInterface.Configuration;
-using SystemInterface.IO;
-using SystemInterface.Reflection;
-using SystemWrapper.Configuration;
-using SystemWrapper.IO;
-using SystemWrapper.Reflection;
 using Autofac;
 using JetBrains.Annotations;
 using ManyConsole;
@@ -16,6 +10,12 @@ using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
+using Wrapperator.Interfaces.Configuration;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Interfaces.Reflection;
+using Wrapperator.Wrappers.Configuration;
+using Wrapperator.Wrappers.IO;
+using Wrapperator.Wrappers.Reflection;
 
 namespace SolutionInspector.Api
 {
@@ -46,10 +46,10 @@ namespace SolutionInspector.Api
     {
       var builder = new ContainerBuilder();
 
-      builder.RegisterType<FileWrap>().As<IFile>();
-      builder.RegisterType<DirectoryWrap>().As<IDirectory>();
-      builder.RegisterType<AssemblyWrap>().As<IAssembly>();
-      builder.RegisterType<ConfigurationManagerWrap>().As<IConfigurationManager>();
+      builder.RegisterType<FileWrapper>().As<IFile>();
+      builder.RegisterType<DirectoryWrapper>().As<IDirectory>();
+      builder.RegisterType<AssemblyWrapper>().As<IAssembly>();
+      builder.RegisterType<ConfigurationManagerWrapper>().As<IConfigurationManager>();
 
       builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
 

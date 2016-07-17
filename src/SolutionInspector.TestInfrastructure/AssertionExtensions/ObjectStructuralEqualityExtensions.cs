@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using SystemWrapper.IO;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using FluentAssertions.Primitives;
 using JetBrains.Annotations;
+using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
@@ -37,8 +37,8 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
               options.ExcludingMissingMembers()
                   .IgnoringCyclicReferences()
                   .RespectingRuntimeTypes()
-                  .Using<FileInfoWrap>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<FileInfoWrap>()
-                  .Using<DirectoryInfoWrap>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<DirectoryInfoWrap>()
+                  .Using<FileInfoWrapper>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<FileInfoWrapper>()
+                  .Using<DirectoryInfoWrapper>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<DirectoryInfoWrapper>()
           );
     }
   }

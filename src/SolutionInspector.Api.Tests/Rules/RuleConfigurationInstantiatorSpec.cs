@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Configuration;
 using System.Xml;
-using SystemInterface.Reflection;
 using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.TestInfrastructure;
+using Wrapperator.Interfaces.Reflection;
 
 #region R# preamble for Machine.Specifications files
 

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using SystemInterface.IO;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
+using Wrapperator.Interfaces.IO;
 
 #region R# preamble for Machine.Specifications files
 

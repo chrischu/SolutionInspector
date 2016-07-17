@@ -6,14 +6,14 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
-using SystemInterface.IO;
-using SystemWrapper.IO;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -218,10 +218,10 @@ namespace SolutionInspector.Api.ObjectModel
 
     public string Name { get; }
     public string FolderName => Path.GetFileName(Advanced.MsBuildProject.DirectoryPath);
-    public IFileInfo ProjectFile => new FileInfoWrap(Advanced.MsBuildProject.FullPath);
-    public IDirectoryInfo ProjectDirectory => new DirectoryInfoWrap(Advanced.MsBuildProject.DirectoryPath);
+    public IFileInfo ProjectFile => new FileInfoWrapper(new FileInfo(Advanced.MsBuildProject.FullPath));
+    public IDirectoryInfo ProjectDirectory => new DirectoryInfoWrapper(new DirectoryInfo(Advanced.MsBuildProject.DirectoryPath));
     public XDocument ProjectXml => _projectXml.Value;
-    public IFileInfo NuGetPackagesFile => new FileInfoWrap(Path.Combine(Advanced.MsBuildProject.DirectoryPath, "packages.config"));
+    public IFileInfo NuGetPackagesFile => new FileInfoWrapper(new FileInfo(Path.Combine(Advanced.MsBuildProject.DirectoryPath, "packages.config")));
 
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 

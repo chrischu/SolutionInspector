@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
-using SystemInterface.Configuration;
-using SystemInterface.IO;
+using Wrapperator.Interfaces.Configuration;
+using Wrapperator.Interfaces.IO;
 
 namespace SolutionInspector.Api.Configuration
 {

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SystemInterface.IO;
-using SystemInterface.Reflection;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Interfaces.Reflection;
 
 namespace SolutionInspector.Api.Rules
 {

@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SystemInterface.IO;
-using SystemWrapper.IO;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
+using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -59,7 +60,7 @@ namespace SolutionInspector.Api.ObjectModel
     {
       _solutionPath = solutionPath;
       Name = Path.GetFileNameWithoutExtension(solutionPath);
-      SolutionDirectory = new DirectoryInfoWrap(Path.GetDirectoryName(solutionPath));
+      SolutionDirectory = new DirectoryInfoWrapper(new DirectoryInfo(Path.GetDirectoryName(solutionPath).AssertNotNull()));
       _solutionFile = SolutionFile.Parse(solutionPath);
 
       Projects =

@@ -1,8 +1,8 @@
 using System;
-using SystemInterface.IO;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.ObjectModel;
+using Wrapperator.Interfaces.IO;
 
 namespace SolutionInspector.Api.Utilities
 {

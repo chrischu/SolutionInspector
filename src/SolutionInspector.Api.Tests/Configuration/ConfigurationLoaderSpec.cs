@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
-using SystemInterface.Configuration;
-using SystemInterface.IO;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
+using Wrapperator.Interfaces.Configuration;
+using Wrapperator.Interfaces.IO;
 
 #region R# preamble for Machine.Specifications files
 
