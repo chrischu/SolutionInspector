@@ -6,7 +6,7 @@ echo   -Mode "Local" `>> tmp.ps1
 echo   -Version $version `>> tmp.ps1
 echo   -IsPreRelease $True `>> tmp.ps1
 echo   -RunFxCopCodeAnalysis $False `>> tmp.ps1
-echo   -RunReSharperCodeInspection $False `>> tmp.ps1
+echo   -RunReSharperCodeInspection $False >> tmp.ps1
 
 Shared\Build\OutputSplitter.exe "powershell" "-NonInteractive -File tmp.ps1" "Build.log"
 del tmp.ps1
