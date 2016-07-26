@@ -14,9 +14,9 @@ namespace SolutionInspector.Api.Utilities
   [UsedImplicitly /* by container */]
   internal class SolutionLoader : ISolutionLoader
   {
-    private readonly IFile _file;
+    private readonly IFileStatic _file;
 
-    public SolutionLoader (IFile file)
+    public SolutionLoader (IFileStatic file)
     {
       _file = file;
     }

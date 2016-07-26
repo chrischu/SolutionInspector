@@ -13,6 +13,7 @@ using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
 using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers;
 using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -218,10 +219,10 @@ namespace SolutionInspector.Api.ObjectModel
 
     public string Name { get; }
     public string FolderName => Path.GetFileName(Advanced.MsBuildProject.DirectoryPath);
-    public IFileInfo ProjectFile => new FileInfoWrapper(new FileInfo(Advanced.MsBuildProject.FullPath));
-    public IDirectoryInfo ProjectDirectory => new DirectoryInfoWrapper(new DirectoryInfo(Advanced.MsBuildProject.DirectoryPath));
+    public IFileInfo ProjectFile => Wrapper.Wrap(new FileInfo(Advanced.MsBuildProject.FullPath));
+    public IDirectoryInfo ProjectDirectory => Wrapper.Wrap(new DirectoryInfo(Advanced.MsBuildProject.DirectoryPath));
     public XDocument ProjectXml => _projectXml.Value;
-    public IFileInfo NuGetPackagesFile => new FileInfoWrapper(new FileInfo(Path.Combine(Advanced.MsBuildProject.DirectoryPath, "packages.config")));
+    public IFileInfo NuGetPackagesFile => Wrapper.Wrap(new FileInfo(Path.Combine(Advanced.MsBuildProject.DirectoryPath, "packages.config")));
 
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 

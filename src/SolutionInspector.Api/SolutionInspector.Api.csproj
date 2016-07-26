@@ -98,11 +98,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Wrapperator.Interfaces, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Interfaces.0.7.0\lib\net452\Wrapperator.Interfaces.dll</HintPath>
+      <HintPath>..\packages\Wrapperator.Interfaces.0.9.0\lib\net452\Wrapperator.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Wrapperator.Wrappers, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Wrappers.0.7.0\lib\net452\Wrapperator.Wrappers.dll</HintPath>
+      <HintPath>..\packages\Wrapperator.Wrappers.0.9.0\lib\net452\Wrapperator.Wrappers.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

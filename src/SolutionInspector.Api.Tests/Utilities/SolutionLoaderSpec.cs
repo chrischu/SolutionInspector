@@ -32,14 +32,14 @@ namespace SolutionInspector.Api.Tests.Utilities
   [Subject (typeof(SolutionLoader))]
   class SolutionLoaderSpec
   {
-    static IFile File;
+    static IFileStatic File;
     static SolutionLoader SUT;
 
     static IMsBuildParsingConfiguration MsBuildParsingConfiguration;
 
     Establish ctx = () =>
     {
-      File = A.Fake<IFile>();
+      File = A.Fake<IFileStatic>();
       SUT = new SolutionLoader(File);
 
       MsBuildParsingConfiguration = A.Dummy<IMsBuildParsingConfiguration>();

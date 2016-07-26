@@ -31,9 +31,9 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
   [Subject (typeof(RuleAssemblyLoader))]
   class RuleAssemblyLoaderSpec
   {
-    static IFile File;
-    static IDirectory Directory;
-    static IAssembly Assembly;
+    static IFileStatic File;
+    static IDirectoryStatic Directory;
+    static IAssemblyStatic Assembly;
 
     static IAssembly LoadedAssembly;
 
@@ -41,9 +41,9 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
 
     Establish ctx = () =>
     {
-      File = A.Fake<IFile>();
-      Directory = A.Fake<IDirectory>();
-      Assembly = A.Fake<IAssembly>();
+      File = A.Fake<IFileStatic>();
+      Directory = A.Fake<IDirectoryStatic>();
+      Assembly = A.Fake<IAssemblyStatic>();
 
       LoadedAssembly = A.Fake<IAssembly>();
       A.CallTo(() => LoadedAssembly.GetExportedTypes()).Returns(new[] { typeof(DummyRule) });

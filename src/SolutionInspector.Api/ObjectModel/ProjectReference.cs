@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using JetBrains.Annotations;
 using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers;
 using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -58,7 +59,7 @@ namespace SolutionInspector.Api.ObjectModel
       Include = projectItem.EvaluatedInclude;
 
       var fullPath = Path.GetFullPath(Path.Combine(projectItem.Project.DirectoryPath, Include));
-      File = new FileInfoWrapper(new FileInfo(fullPath));
+      File = Wrapper.Wrap(new FileInfo(fullPath));
       Project = solution.GetProjectByAbsoluteProjectFilePath(fullPath);
 
       Guid referencedProjectGuid;

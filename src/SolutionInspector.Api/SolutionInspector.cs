@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Autofac;
 using JetBrains.Annotations;
 using ManyConsole;
 using NLog;
+using NLog.Internal;
 using SolutionInspector.Api.Commands;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
+using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.Configuration;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
+using Wrapperator.Wrappers;
 using Wrapperator.Wrappers.Configuration;
 using Wrapperator.Wrappers.IO;
 using Wrapperator.Wrappers.Reflection;
@@ -46,10 +50,11 @@ namespace SolutionInspector.Api
     {
       var builder = new ContainerBuilder();
 
-      builder.RegisterType<FileWrapper>().As<IFile>();
-      builder.RegisterType<DirectoryWrapper>().As<IDirectory>();
-      builder.RegisterType<AssemblyWrapper>().As<IAssembly>();
-      builder.RegisterType<ConfigurationManagerWrapper>().As<IConfigurationManager>();
+      builder.Register(ctx => Wrapper.Console).As<IConsoleStatic>();
+      builder.Register(ctx => Wrapper.File).As<IFileStatic>();
+      builder.Register(ctx => Wrapper.Directory).As<IDirectoryStatic>();
+      builder.Register(ctx => Wrapper.Assembly).As<IAssemblyStatic>();
+      builder.Register(ctx => Wrapper.ConfigurationManager).As<IConfigurationManagerStatic>();
 
       builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
 
@@ -82,6 +87,13 @@ namespace SolutionInspector.Api
       builder.RegisterType<ViolationReporterFactory>().As<IViolationReporterFactory>();
 
       builder.RegisterType<InspectCommand>().As<ConsoleCommand>();
+      builder.Register(
+          ctx => new InitializeCommand(
+              ctx.Resolve<IMsBuildInstallationChecker>(),
+              Wrapper.Wrap(Assembly.GetEntryAssembly()),
+              ctx.Resolve<IFileStatic>(),
+              ctx.Resolve<IConsoleStatic>())
+          );
 
       builder.RegisterType<MsBuildInstallationChecker>().As<IMsBuildInstallationChecker>();
 

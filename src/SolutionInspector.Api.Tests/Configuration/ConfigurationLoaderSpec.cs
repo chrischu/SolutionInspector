@@ -31,8 +31,8 @@ namespace SolutionInspector.Api.Tests.Configuration
   [Subject (typeof(ConfigurationLoader))]
   class ConfigurationLoaderSpec
   {
-    static IFile File;
-    static IConfigurationManager ConfigurationManager;
+    static IFileStatic File;
+    static IConfigurationManagerStatic ConfigurationManager;
 
     static IConfiguration Configuration;
     static SolutionInspectorConfiguration SolutionInspectorConfiguration;
@@ -41,10 +41,10 @@ namespace SolutionInspector.Api.Tests.Configuration
 
     Establish ctx = () =>
     {
-      File = A.Fake<IFile>();
+      File = A.Fake<IFileStatic>();
       A.CallTo(() => File.Exists(A<string>._)).Returns(true);
 
-      ConfigurationManager = A.Fake<IConfigurationManager>();
+      ConfigurationManager = A.Fake<IConfigurationManagerStatic>();
 
       Configuration = A.Fake<IConfiguration>();
       A.CallTo(() => ConfigurationManager.OpenExeConfiguration(A<ConfigurationUserLevel>._)).Returns(Configuration);

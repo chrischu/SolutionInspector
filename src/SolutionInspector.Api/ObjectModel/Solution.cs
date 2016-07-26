@@ -8,6 +8,7 @@ using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
 using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers;
 using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -60,7 +61,7 @@ namespace SolutionInspector.Api.ObjectModel
     {
       _solutionPath = solutionPath;
       Name = Path.GetFileNameWithoutExtension(solutionPath);
-      SolutionDirectory = new DirectoryInfoWrapper(new DirectoryInfo(Path.GetDirectoryName(solutionPath).AssertNotNull()));
+      SolutionDirectory = Wrapper.Wrap(new DirectoryInfo(Path.GetDirectoryName(solutionPath).AssertNotNull()));
       _solutionFile = SolutionFile.Parse(solutionPath);
 
       Projects =

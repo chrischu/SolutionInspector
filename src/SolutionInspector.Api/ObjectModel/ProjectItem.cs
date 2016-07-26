@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
 using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers;
 using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -151,7 +152,7 @@ namespace SolutionInspector.Api.ObjectModel
 
       BuildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
       var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
-      File = new FileInfoWrapper(new FileInfo(fullPath));
+      File = Wrapper.Wrap(new FileInfo(fullPath));
 
       Location = new ProjectLocation(msBuildProjectItem.Xml.Location.Line, msBuildProjectItem.Xml.Location.Column);
       Metadata = msBuildProjectItem.Metadata.ToDictionary(m => m.Name, m => m.EvaluatedValue);

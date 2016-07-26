@@ -14,10 +14,10 @@ namespace SolutionInspector.Api.Configuration
 
   internal class ConfigurationLoader : IConfigurationLoader
   {
-    private readonly IFile _file;
-    private readonly IConfigurationManager _configurationManager;
+    private readonly IFileStatic _file;
+    private readonly IConfigurationManagerStatic _configurationManager;
 
-    public ConfigurationLoader (IFile file, IConfigurationManager configurationManager)
+    public ConfigurationLoader (IFileStatic file, IConfigurationManagerStatic configurationManager)
     {
       _file = file;
       _configurationManager = configurationManager;
