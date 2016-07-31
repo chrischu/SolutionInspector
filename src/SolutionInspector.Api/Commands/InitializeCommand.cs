@@ -12,8 +12,8 @@ namespace SolutionInspector.Api.Commands
     private readonly IFileStatic _file;
     private readonly IConsoleStatic _console;
 
-    public InitializeCommand (IMsBuildInstallationChecker msBuildInstallationChecker, IAssembly resourceAssembly, IFileStatic file, IConsoleStatic console)
-        : base(msBuildInstallationChecker, "initialize", "Creates a new SolutionInspector configuration file or overwrite an existing one.")
+    public InitializeCommand (IAssembly resourceAssembly, IFileStatic file, IConsoleStatic console)
+        : base("initialize", "Creates a new SolutionInspector configuration file or overwrite an existing one.")
     {
       _resourceAssembly = resourceAssembly;
       _file = file;

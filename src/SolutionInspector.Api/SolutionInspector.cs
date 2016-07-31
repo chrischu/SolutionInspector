@@ -85,13 +85,10 @@ namespace SolutionInspector.Api
       builder.RegisterType<InspectCommand>().As<ConsoleCommand>();
       builder.Register(
           ctx => new InitializeCommand(
-              ctx.Resolve<IMsBuildInstallationChecker>(),
               Wrapper.Wrap(Assembly.GetEntryAssembly()),
               ctx.Resolve<IFileStatic>(),
               ctx.Resolve<IConsoleStatic>())
           );
-
-      builder.RegisterType<MsBuildInstallationChecker>().As<IMsBuildInstallationChecker>();
 
       builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();
 

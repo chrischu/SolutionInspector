@@ -102,7 +102,6 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="Commands\InitializeCommandSpec.cs" />
-    <Compile Include="Commands\SolutionInspectorCommandSpec.cs" />
     <Compile Include="Configuration\Infrastructure\ConfigurationElementCollectionBaseSpec.cs" />
     <Compile Include="Configuration\Infrastructure\KeyedConfigurationElementCollectionBaseSpec.cs" />
     <Compile Include="Configuration\MsBuildParsing\MsBuildParsingConfigurationSectionSpec.cs" />

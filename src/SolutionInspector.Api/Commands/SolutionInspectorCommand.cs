@@ -45,15 +45,13 @@ namespace SolutionInspector.Api.Commands
   internal abstract class SolutionInspectorCommand<TRawArguments, TParsedArguments> : ConsoleCommand
       where TRawArguments : new()
   {
-    private readonly IMsBuildInstallationChecker _msBuildInstallationChecker;
     private readonly TRawArguments _rawArguments;
     private readonly ArgumentsBuilder<TRawArguments> _rawArgumentsBuilder;
     private TParsedArguments _parsedArguments;
 
     [SuppressMessage ("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    protected SolutionInspectorCommand (IMsBuildInstallationChecker msBuildInstallationChecker, string command, string description)
+    protected SolutionInspectorCommand (string command, string description)
     {
-      _msBuildInstallationChecker = msBuildInstallationChecker;
       IsCommand(command, description);
       SkipsCommandSummaryBeforeRunning();
       _rawArguments = new TRawArguments();
@@ -67,13 +65,6 @@ namespace SolutionInspector.Api.Commands
     public sealed override int? OverrideAfterHandlingArgumentsBeforeRun ([NotNull] string[] remainingArguments)
     {
       _rawArgumentsBuilder.HandleRemainingArguments(remainingArguments);
-
-      if (!_msBuildInstallationChecker.IsMsBuildInstalled())
-      {
-        _msBuildInstallationChecker.SuggestInstallation();
-        return 1;
-      }
-
       _parsedArguments = ValidateAndParseArguments(_rawArguments, message => new ConsoleHelpAsException(message));
 
       return base.OverrideAfterHandlingArgumentsBeforeRun(remainingArguments);

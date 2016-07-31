@@ -48,7 +48,6 @@ namespace SolutionInspector.Api.Tests.Commands
     static IViolationReporter ViolationReporter;
     static IViolationReporterFactory ViolationReporterFactory;
 
-    static IMsBuildInstallationChecker MsBuildInstallationChecker;
     static IConfigurationLoader ConfigurationLoader;
     static IRuleAssemblyLoader RuleAssemblyLoader;
 
@@ -83,9 +82,6 @@ namespace SolutionInspector.Api.Tests.Commands
       Rules = new RuleCollection(new[] { SolutionRule }, new[] { ProjectRule }, new[] { ProjectItemRule });
       A.CallTo(() => RuleCollectionBuilder.Build(A<IRulesConfiguration>._)).Returns(Rules);
 
-      MsBuildInstallationChecker = A.Fake<IMsBuildInstallationChecker>();
-      A.CallTo(() => MsBuildInstallationChecker.IsMsBuildInstalled()).Returns(true);
-
       SolutionInspectorConfiguration = A.Fake<ISolutionInspectorConfiguration>();
 
       RulesConfiguration = A.Fake<IRulesConfiguration>();
@@ -105,7 +101,6 @@ namespace SolutionInspector.Api.Tests.Commands
       TextWriter = new StringWriter();
 
       SUT = new InspectCommand(
-          MsBuildInstallationChecker,
           ConfigurationLoader,
           RuleAssemblyLoader,
           SolutionLoader,

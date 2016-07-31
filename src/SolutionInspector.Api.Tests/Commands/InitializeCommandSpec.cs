@@ -31,7 +31,6 @@ namespace SolutionInspector.Api.Tests.Commands
   [Subject (typeof(InitializeCommand))]
   class InitializeCommandSpec
   {
-    static IMsBuildInstallationChecker MsBuildInstallationChecker;
     static IAssembly ResourceAssembly;
     static IFileStatic File;
     static IConsoleStatic Console;
@@ -45,9 +44,6 @@ namespace SolutionInspector.Api.Tests.Commands
 
     Establish ctx = () =>
     {
-      MsBuildInstallationChecker = A.Fake<IMsBuildInstallationChecker>();
-      A.CallTo(() => MsBuildInstallationChecker.IsMsBuildInstalled()).Returns(true);
-
       ResourceAssembly = A.Fake<IAssembly>();
       File = A.Fake<IFileStatic>();
       Console = A.Fake<IConsoleStatic>();
@@ -60,7 +56,7 @@ namespace SolutionInspector.Api.Tests.Commands
       DestinationStream = A.Fake<IFileStream>();
       A.CallTo(() => File.Open(A<string>._, A<FileMode>._)).Returns(DestinationStream);
 
-      SUT = new InitializeCommand(MsBuildInstallationChecker, ResourceAssembly, File, Console);
+      SUT = new InitializeCommand(ResourceAssembly, File, Console);
     };
 
     class when_running_successfully

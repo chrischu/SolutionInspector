@@ -15,6 +15,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * SolutionInspector now has a new command: `initialize [-f|--force] <configFilePath>`
   * Creates a pristine copy of a SolutionInspector config file at the given path. The command will require confirmation (except when the force flag is used) when the file would be overwritten.
 
+#### Changed
+* Changed the way SolutionInspector includes MSBuild DLLs:
+  * SolutionInspector no longer requires the installation of the MSBuild tools 2015, the DLLs are now directly included.
+
 ### ObjectModel
 #### Added
 * SolutionInspector now has better support for project items that contain wildcards (*) in their include/exclude paths or links (IProjectItem has new properties: IsLink, IsIncludedByWildcard, WildcardInclude, WildcardExclude).

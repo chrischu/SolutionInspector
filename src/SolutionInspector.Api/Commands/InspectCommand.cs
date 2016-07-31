@@ -24,13 +24,12 @@ namespace SolutionInspector.Api.Commands
     private readonly IViolationReporterFactory _violationReporterFactory;
 
     public InspectCommand (
-        IMsBuildInstallationChecker msBuildInstallationChecker,
         IConfigurationLoader configurationLoader,
         IRuleAssemblyLoader ruleAssemblyLoader,
         ISolutionLoader solutionLoader,
         IRuleCollectionBuilder ruleCollectionBuilder,
         IViolationReporterFactory violationReporterFactory)
-        : base(msBuildInstallationChecker, "inspect", "Inspects a given solution for rule violations.")
+        : base("inspect", "Inspects a given solution for rule violations.")
     {
       _configurationLoader = configurationLoader;
       _ruleAssemblyLoader = ruleAssemblyLoader;

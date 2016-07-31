@@ -179,7 +179,7 @@ BuildTask Create-Archives {
   $buildDirectory = Join-Path $SolutionDirectory "SolutionInspector\bin\$Configuration"
   $sourceDirectory = Join-Path ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid())
   New-Item -ItemType Directory -Path $sourceDirectory | Out-Null
-  Copy-Item -Path "${buildDirectory}\*" -Destination $sourceDirectory -Exclude "Microsoft.Build*.dll","*CodeAnalysisLog.xml","*.lastcodeanalysissucceeded"
+  Copy-Item -Path "${buildDirectory}\*" -Destination $sourceDirectory -Exclude "*CodeAnalysisLog.xml","*.lastcodeanalysissucceeded"
   Zip-Directory -ZipFilePath $archivePath -SourceDirectory $sourceDirectory
   Remove-Item $sourceDirectory -Recurse
 
