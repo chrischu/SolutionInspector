@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * SolutionInspector now has more options to define which configuration file is to be used:
   * `--configurationFile=AppConfig`: Use the SolutionInspector.exe.config file (is and was the default).
   * `--configurationFile=Solution`: Use the \<SolutionName>.sln.SolutionInspectorConfig file lying next to the inspected solution.
-  * `--configurationFile=<SomeFilePath>`: Use the specified configuration file.
+  * `--configurationFile=<configFilePath>`: Use the specified configuration file.
 * SolutionInspector now has a new command: `initialize [-f|--force] <configFilePath>`
   * Creates a pristine copy of a SolutionInspector config file at the given path. The command will require confirmation (except when the force flag is used) when the file would be overwritten.
 * SolutionInspector.exe is now also distributed as a NuGet package: *SolutionInspector.exe*.
