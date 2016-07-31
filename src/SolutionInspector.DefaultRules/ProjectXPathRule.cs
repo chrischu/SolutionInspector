@@ -42,7 +42,7 @@ namespace SolutionInspector.DefaultRules
         yield return new RuleViolation(this, target, $"The XPath expression '{Configuration.XPath}' did not evaluate to 'true', but to 'false'.");
     }
 
-    private XDocument GetXDocumentForXPathEvaluation(XDocument xdoc, bool ignoreNamespaces)
+    private XDocument GetXDocumentForXPathEvaluation (XDocument xdoc, bool ignoreNamespaces)
     {
       return ignoreNamespaces ? StripNamespaces(xdoc) : xdoc;
     }
@@ -113,10 +113,10 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Controls whether XML namespaces should be ignored or not.
     /// </summary>
-    [ConfigurationProperty("ignoreNamespaces", DefaultValue = true, IsRequired = false)]
+    [ConfigurationProperty ("ignoreNamespaces", DefaultValue = true, IsRequired = false)]
     public bool IgnoreNamespaces
     {
-      get { return (bool)this["ignoreNamespaces"]; }
+      get { return (bool) this["ignoreNamespaces"]; }
       set { this["ignoreNamespaces"] = value; }
     }
   }

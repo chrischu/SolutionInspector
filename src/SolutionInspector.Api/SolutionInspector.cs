@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using SystemInterface.IO;
-using SystemInterface.Reflection;
-using SystemWrapper.IO;
-using SystemWrapper.Reflection;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Autofac;
 using JetBrains.Annotations;
 using ManyConsole;
@@ -13,6 +11,11 @@ using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
+using Wrapperator.Interfaces;
+using Wrapperator.Interfaces.Configuration;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Interfaces.Reflection;
+using Wrapperator.Wrappers;
 
 namespace SolutionInspector.Api
 {
@@ -20,6 +23,7 @@ namespace SolutionInspector.Api
   ///   Entry point for a SolutionInspector run.
   /// </summary>
   [PublicAPI]
+  [ExcludeFromCodeCoverage]
   public static class SolutionInspector
   {
     private static Logger s_logger = LogManager.GetCurrentClassLogger();
@@ -33,10 +37,6 @@ namespace SolutionInspector.Api
 
       using (var container = SetupContainer())
       {
-        var ruleAssemblyLoader = container.Resolve<IRuleAssemblyLoader>();
-        var solutionInspectorConfiguration = container.Resolve<ISolutionInspectorConfiguration>();
-        ruleAssemblyLoader.LoadRuleAssemblies(solutionInspectorConfiguration.RuleAssemblyImports.Imports);
-
         var commands = container.Resolve<IEnumerable<ConsoleCommand>>();
         return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
       }
@@ -46,12 +46,11 @@ namespace SolutionInspector.Api
     {
       var builder = new ContainerBuilder();
 
-      var configuration = SolutionInspectorConfiguration.Load();
-      builder.Register(ctx => configuration).As<ISolutionInspectorConfiguration>();
-
-      builder.RegisterType<FileWrap>().As<IFile>();
-      builder.RegisterType<DirectoryWrap>().As<IDirectory>();
-      builder.RegisterType<AssemblyWrap>().As<IAssembly>();
+      builder.Register(ctx => Wrapper.Console).As<IConsoleStatic>();
+      builder.Register(ctx => Wrapper.File).As<IFileStatic>();
+      builder.Register(ctx => Wrapper.Directory).As<IDirectoryStatic>();
+      builder.Register(ctx => Wrapper.Assembly).As<IAssemblyStatic>();
+      builder.Register(ctx => Wrapper.ConfigurationManager).As<IConfigurationManagerStatic>();
 
       builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
 
@@ -66,7 +65,7 @@ namespace SolutionInspector.Api
 
       builder.Register(
           ctx =>
-              new TableWriter(new TableWriterOptions { PreferredTableWidth = 200, Characters = ConsoleTableWriterCharacters.AdvancedAscii })
+              new TableWriter(new TableWriterOptions { PreferredTableWidth = 200, Characters = TableWriterCharacters.AdvancedAscii })
           ).As<ITableWriter>();
 
       builder.RegisterViolationReporter(
@@ -84,6 +83,14 @@ namespace SolutionInspector.Api
       builder.RegisterType<ViolationReporterFactory>().As<IViolationReporterFactory>();
 
       builder.RegisterType<InspectCommand>().As<ConsoleCommand>();
+      builder.Register(
+          ctx => new InitializeCommand(
+              Wrapper.Wrap(Assembly.GetEntryAssembly()),
+              ctx.Resolve<IFileStatic>(),
+              ctx.Resolve<IConsoleStatic>())
+          ).As<ConsoleCommand>();
+
+      builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();
 
       return builder.Build();
     }

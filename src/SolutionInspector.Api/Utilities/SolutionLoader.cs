@@ -1,8 +1,8 @@
 using System;
-using SystemInterface.IO;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.ObjectModel;
+using Wrapperator.Interfaces.IO;
 
 namespace SolutionInspector.Api.Utilities
 {
@@ -11,12 +11,12 @@ namespace SolutionInspector.Api.Utilities
     ISolution Load (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration);
   }
 
-  [UsedImplicitly ( /* by container */)]
+  [UsedImplicitly /* by container */]
   internal class SolutionLoader : ISolutionLoader
   {
-    private readonly IFile _file;
+    private readonly IFileStatic _file;
 
-    public SolutionLoader (IFile file)
+    public SolutionLoader (IFileStatic file)
     {
       _file = file;
     }

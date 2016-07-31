@@ -51,7 +51,7 @@ namespace SolutionInspector.Api.Extensions
     /// </summary>
     public static void RemoveAttributesWhere (this XmlNode xmlNode, Func<XmlAttribute, bool> filter)
     {
-      if (xmlNode.Attributes == null)
+      if (xmlNode.Attributes == null || xmlNode.Attributes.Count == 0)
         return;
 
       var toRemove = xmlNode.Attributes.Cast<XmlAttribute>().Where(filter).ToArray();

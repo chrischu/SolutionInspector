@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Autofac;
 
@@ -7,6 +8,7 @@ namespace SolutionInspector.Api.Reporting
   /// <summary>
   ///   Provides extension methods that makes registering <see cref="IViolationReporter" />s with the Autofac container easier.
   /// </summary>
+  [ExcludeFromCodeCoverage]
   public static class ViolationReporterRegistrationExtensions
   {
     /// <summary>

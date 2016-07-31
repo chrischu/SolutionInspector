@@ -4,6 +4,8 @@
     <rules>
       <solutionRules>
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+              type="SolutionInspector.DefaultRules.ProjectGuidsMustBeUniqueRule, SolutionInspector.DefaultRules" />
+        <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules" />
         <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.SolutionBuildConfigurationsRule, SolutionInspector.DefaultRules"
@@ -18,7 +20,16 @@
                 type="SolutionInspector.DefaultRules.ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
-                type="SolutionInspector.DefaultRules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.ProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.NuGetReferenceHintPathsMustBeValidRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectReferencesMustBeValidRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectPropertyRule, SolutionInspector.DefaultRules"
@@ -39,6 +50,9 @@
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectXPathRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.RequiredResourceLanguagesRule, SolutionInspector.DefaultRules" />
         </projectRuleGroup>
         <projectRuleGroup xdt:Locator="Match(appliesTo)"
                           appliesTo="+*;-*Tests;-*TestInfrastructure">
@@ -60,6 +74,8 @@
                 type="SolutionInspector.DefaultRules.ProjectItemMustHaveCustomToolSetRule, SolutionInspector.DefaultRules" />
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectItemMustHaveCorrectBuildActionRule, SolutionInspector.DefaultRules" />
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectItemMustNotBeIncludedByWildcardRule, SolutionInspector.DefaultRules" />
         </projectItemRuleGroup>
       </projectItemRules>
     </rules>

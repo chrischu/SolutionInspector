@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -7,7 +8,7 @@ namespace SolutionInspector.Api.ObjectModel
   ///   Represents a MSBuild project item build action (e.g. None, Compile).
   /// </summary>
   [PublicAPI]
-  public class ProjectItemBuildAction : IEquatable<ProjectItemBuildAction>
+  public sealed class ProjectItemBuildAction : IEquatable<ProjectItemBuildAction>
   {
     private readonly string _value;
 
@@ -61,12 +62,10 @@ namespace SolutionInspector.Api.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      if (obj.GetType() != GetType())
-        return false;
-      return Equals((ProjectItemBuildAction) obj);
+      return obj is ProjectItemBuildAction && Equals((ProjectItemBuildAction) obj);
     }
 
-    /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public override int GetHashCode ()
     {
       return _value.GetHashCode();

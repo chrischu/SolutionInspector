@@ -6,14 +6,14 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
-using SystemInterface.IO;
-using SystemWrapper.IO;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -29,12 +29,17 @@ namespace SolutionInspector.Api.ObjectModel
     IAdvancedProject Advanced { get; }
 
     /// <summary>
+    ///   The project's <see cref="Guid" />.
+    /// </summary>
+    Guid Guid { get; }
+
+    /// <summary>
     ///   The project's name.
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    ///   The name in which the project is stored, relative to the solution file.
+    ///   The name of the folder in which the project is stored, relative to the solution file.
     /// </summary>
     string FolderName { get; }
 
@@ -42,6 +47,11 @@ namespace SolutionInspector.Api.ObjectModel
     ///   A <see cref="IFileInfo" /> that represents the project file.
     /// </summary>
     IFileInfo ProjectFile { get; }
+
+    /// <summary>
+    /// A <see cref="IDirectoryInfo"/> that represents the project directory.
+    /// </summary>
+    IDirectoryInfo ProjectDirectory { get; }
 
     /// <summary>
     ///   A <see cref="XDocument" /> that represents the project file.
@@ -81,27 +91,27 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   A collection of referenced <see cref="NuGetPackage" />s.
     /// </summary>
-    IReadOnlyCollection<NuGetPackage> NuGetPackages { get; }
+    IReadOnlyCollection<INuGetPackage> NuGetPackages { get; }
 
     /// <summary>
     ///   A collection of DLLs referenced from the GAC.
     /// </summary>
-    IReadOnlyCollection<GacReference> GacReferences { get; }
+    IReadOnlyCollection<IGacReference> GacReferences { get; }
 
     /// <summary>
     ///   A collection of DLLs referenced from NuGet.
     /// </summary>
-    IReadOnlyCollection<NuGetReference> NuGetReferences { get; }
+    IReadOnlyCollection<INuGetReference> NuGetReferences { get; }
 
     /// <summary>
     ///   A collection of DLLs referenced from the file system.
     /// </summary>
-    IReadOnlyCollection<FileReference> FileReferences { get; }
+    IReadOnlyCollection<IFileReference> FileReferences { get; }
 
     /// <summary>
     ///   A collection of referenced projects.
     /// </summary>
-    IReadOnlyCollection<ProjectReference> ProjectReferences { get; }
+    IReadOnlyCollection<IProjectReference> ProjectReferences { get; }
 
     /// <summary>
     ///   The solution the project is contained in.
@@ -117,6 +127,11 @@ namespace SolutionInspector.Api.ObjectModel
     ///   The project configuration file (App.config/Web.config).
     /// </summary>
     IConfigurationProjectItem ConfigurationProjectItem { get; }
+
+    /// <summary>
+    ///   Get the include path for the given <paramref name="projectToInclude" /> (relative to the current project file).
+    /// </summary>
+    string GetIncludePathFor (IProject projectToInclude);
   }
 
   internal sealed class Project : IProject
@@ -135,6 +150,8 @@ namespace SolutionInspector.Api.ObjectModel
     {
       _projectCollection = projectCollection;
 
+      Solution = solution;
+
       _msBuildParsingConfiguration = msBuildParsingConfiguration;
       Name = projectInSolution.ProjectName;
 
@@ -142,6 +159,8 @@ namespace SolutionInspector.Api.ObjectModel
           projectInSolution.ProjectConfigurations.Values.Select(c => new BuildConfiguration(c.ConfigurationName, c.PlatformName)).Distinct().ToArray();
 
       Advanced = new AdvancedProject(this, project, projectInSolution);
+
+      Guid = Guid.Parse(projectInSolution.ProjectGuid);
 
       NuGetPackages = BuildNuGetPackages(NuGetPackagesFile).ToArray();
 
@@ -158,8 +177,8 @@ namespace SolutionInspector.Api.ObjectModel
     {
       var configurationItem = ProjectItems.SingleOrDefault(
           i =>
-              string.Equals(i.OriginalInclude.Unevaluated, "App.config", StringComparison.InvariantCultureIgnoreCase)
-              || string.Equals(i.OriginalInclude.Unevaluated, "Web.config", StringComparison.InvariantCultureIgnoreCase));
+              string.Equals(i.Include.Unevaluated, "App.config", StringComparison.InvariantCultureIgnoreCase)
+              || string.Equals(i.Include.Unevaluated, "Web.config", StringComparison.InvariantCultureIgnoreCase));
 
       if (configurationItem == null)
         return null;
@@ -172,7 +191,7 @@ namespace SolutionInspector.Api.ObjectModel
       var projectItems =
           msBuildProjectItems.Where(i => !i.IsImported && _msBuildParsingConfiguration.IsValidProjectItemType(i.ItemType))
               .Select(p => ProjectItem.FromMsBuildProjectItem(this, p))
-              .ToLookup(i => i.OriginalInclude.Evaluated);
+              .ToLookup(i => i.Include.Evaluated);
 
       foreach (var projectItem in projectItems.SelectMany(g => g))
       {
@@ -180,7 +199,7 @@ namespace SolutionInspector.Api.ObjectModel
 
         if (dependentUpon != null)
         {
-          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.OriginalInclude.Evaluated).AssertNotNull(), dependentUpon);
+          var dependentUponInclude = Path.Combine(Path.GetDirectoryName(projectItem.Include.Evaluated).AssertNotNull(), dependentUpon);
 
           var parents = projectItems[dependentUponInclude];
           foreach (var parent in parents)
@@ -193,13 +212,16 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IAdvancedProject Advanced { get; }
 
+    public Guid Guid { get; }
+
     public ISolution Solution { get; }
 
     public string Name { get; }
     public string FolderName => Path.GetFileName(Advanced.MsBuildProject.DirectoryPath);
-    public IFileInfo ProjectFile => new FileInfoWrap(Advanced.MsBuildProject.FullPath);
+    public IFileInfo ProjectFile => Wrapper.Wrap(new FileInfo(Advanced.MsBuildProject.FullPath));
+    public IDirectoryInfo ProjectDirectory => Wrapper.Wrap(new DirectoryInfo(Advanced.MsBuildProject.DirectoryPath));
     public XDocument ProjectXml => _projectXml.Value;
-    public IFileInfo NuGetPackagesFile => new FileInfoWrap(Path.Combine(Advanced.MsBuildProject.DirectoryPath, "packages.config"));
+    public IFileInfo NuGetPackagesFile => Wrapper.Wrap(new FileInfo(Path.Combine(Advanced.MsBuildProject.DirectoryPath, "packages.config")));
 
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 
@@ -218,21 +240,29 @@ namespace SolutionInspector.Api.ObjectModel
     public ProjectOutputType OutputType
       => Advanced.Properties.GetValueOrDefault("OutputType")?.DefaultValue == "Exe" ? ProjectOutputType.Executable : ProjectOutputType.Library;
 
-    public IReadOnlyCollection<NuGetPackage> NuGetPackages { get; }
+    public IReadOnlyCollection<INuGetPackage> NuGetPackages { get; }
 
-    public IReadOnlyCollection<GacReference> GacReferences => _classifiedReferences.Value.GacReferences;
-    public IReadOnlyCollection<NuGetReference> NuGetReferences => _classifiedReferences.Value.NuGetReferences;
-    public IReadOnlyCollection<FileReference> FileReferences => _classifiedReferences.Value.FileReferences;
-    public IReadOnlyCollection<ProjectReference> ProjectReferences => _classifiedReferences.Value.ProjectReferences;
+    public IReadOnlyCollection<IGacReference> GacReferences => _classifiedReferences.Value.GacReferences;
+    public IReadOnlyCollection<INuGetReference> NuGetReferences => _classifiedReferences.Value.NuGetReferences;
+    public IReadOnlyCollection<IFileReference> FileReferences => _classifiedReferences.Value.FileReferences;
+    public IReadOnlyCollection<IProjectReference> ProjectReferences => _classifiedReferences.Value.ProjectReferences;
 
     public IReadOnlyCollection<IProjectItem> ProjectItems { get; }
 
     public IConfigurationProjectItem ConfigurationProjectItem { get; }
 
+    public string GetIncludePathFor (IProject projectToInclude)
+    {
+      var includeUri = new Uri(projectToInclude.ProjectFile.FullName);
+      var selfUri = new Uri(ProjectFile.FullName);
+      var relativeUri = selfUri.MakeRelativeUri(includeUri);
+      return relativeUri.OriginalString.Replace('/', '\\');
+    }
+
     string IRuleTarget.Identifier => Path.GetFileName(Advanced.MsBuildProject.FullPath);
     string IRuleTarget.FullPath => Advanced.MsBuildProject.FullPath;
 
-    private IEnumerable<NuGetPackage> BuildNuGetPackages (IFileInfo nuGetPackagesFile)
+    private IEnumerable<INuGetPackage> BuildNuGetPackages (IFileInfo nuGetPackagesFile)
     {
       if (!nuGetPackagesFile.Exists)
         yield break;
@@ -246,16 +276,10 @@ namespace SolutionInspector.Api.ObjectModel
 
     private ClassifiedReferences ClassifyReferences (
         Microsoft.Build.Evaluation.Project project,
-        IReadOnlyCollection<NuGetPackage> nuGetPackages,
+        IReadOnlyCollection<INuGetPackage> nuGetPackages,
         ISolution solution)
     {
-      var projectReferences =
-          project.GetItemsIgnoringCondition("ProjectReference")
-              .Select(
-                  r =>
-                      new ProjectReference(
-                          solution.Projects.Single(
-                              p => p.ProjectFile.FullName == Path.GetFullPath(Path.Combine(project.DirectoryPath, r.EvaluatedInclude)))));
+      var projectReferences = project.GetItemsIgnoringCondition("ProjectReference").Select(r => new ProjectReference(solution, r));
 
       var dllReferences =
           project.GetItemsIgnoringCondition("Reference")
@@ -282,9 +306,10 @@ namespace SolutionInspector.Api.ObjectModel
                   matchingNuGetPackage,
                   reference.AssemblyName,
                   reference.Metadata.GetValueOrDefault("Private") == "True",
-                  reference.HintPath));
+                  reference.HintPath,
+                  project.DirectoryPath));
         else
-          fileReferences.Add(new FileReference(reference.AssemblyName, reference.HintPath));
+          fileReferences.Add(new FileReference(reference.AssemblyName, reference.HintPath, project.DirectoryPath));
       }
 
       return new ClassifiedReferences(gacReferences, fileReferences, nuGetReferences, projectReferences);

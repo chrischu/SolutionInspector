@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -44,6 +45,8 @@ namespace SolutionInspector.Api.ObjectModel
 
     public string Name { get; }
     public string DefaultValue { get; }
+
+    [ExcludeFromCodeCoverage]
     public IReadOnlyCollection<IProjectPropertyOccurrence> Occurrences => _occurrences;
 
     public ProjectProperty (string name, string defaultValue)
@@ -52,16 +55,18 @@ namespace SolutionInspector.Api.ObjectModel
       DefaultValue = defaultValue;
     }
 
-    public void Add (IProjectPropertyOccurrence occurence)
+    public void Add (IProjectPropertyOccurrence occurrence)
     {
-      _occurrences.Add(occurence);
+      _occurrences.Add(occurrence);
     }
 
+    [ExcludeFromCodeCoverage]
     public IEnumerator<IProjectPropertyOccurrence> GetEnumerator ()
     {
       return _occurrences.GetEnumerator();
     }
 
+    [ExcludeFromCodeCoverage]
     IEnumerator IEnumerable.GetEnumerator ()
     {
       return GetEnumerator();

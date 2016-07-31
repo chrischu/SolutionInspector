@@ -40,10 +40,5 @@ namespace SolutionInspector.Api.Configuration.MsBuildParsing
     {
       return _projectBuildActionsHashSet.Value.Contains(projectItemType);
     }
-
-    public static MsBuildParsingConfigurationSection Load ()
-    {
-      return (MsBuildParsingConfigurationSection) ConfigurationManager.GetSection("solutionInspector");
-    }
   }
 }

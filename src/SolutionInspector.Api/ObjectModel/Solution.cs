@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SystemInterface.IO;
-using SystemWrapper.IO;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
+using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -36,6 +37,18 @@ namespace SolutionInspector.Api.ObjectModel
     ///   All <see cref="BuildConfiguration" />s in the solution.
     /// </summary>
     IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
+
+    /// <summary>
+    ///   Returns the project with a matching <paramref name="projectGuid" /> or <see langword="null" /> if no such project can be found.
+    /// </summary>
+    [CanBeNull]
+    IProject GetProjectByProjectGuid (Guid projectGuid);
+
+    /// <summary>
+    ///   Returns the project point to by the given <paramref name="absoluteProjectPath" /> or <see langword="null" /> if no such project can be found.
+    /// </summary>
+    [CanBeNull]
+    IProject GetProjectByAbsoluteProjectFilePath (string absoluteProjectPath);
   }
 
   internal sealed class Solution : ISolution
@@ -47,7 +60,7 @@ namespace SolutionInspector.Api.ObjectModel
     {
       _solutionPath = solutionPath;
       Name = Path.GetFileNameWithoutExtension(solutionPath);
-      SolutionDirectory = new DirectoryInfoWrap(Path.GetDirectoryName(solutionPath));
+      SolutionDirectory = Wrapper.Wrap(new DirectoryInfo(Path.GetDirectoryName(solutionPath).AssertNotNull()));
       _solutionFile = SolutionFile.Parse(solutionPath);
 
       Projects =
@@ -61,6 +74,16 @@ namespace SolutionInspector.Api.ObjectModel
     public IDirectoryInfo SolutionDirectory { get; }
     public IReadOnlyCollection<IProject> Projects { get; }
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
+
+    public IProject GetProjectByProjectGuid (Guid projectGuid)
+    {
+      return Projects.SingleOrDefault(p => p.Guid == projectGuid);
+    }
+
+    public IProject GetProjectByAbsoluteProjectFilePath (string absoluteProjectPath)
+    {
+      return Projects.SingleOrDefault(p => p.ProjectFile.FullName == absoluteProjectPath);
+    }
 
     string IRuleTarget.Identifier => Path.GetFileName(_solutionPath);
     string IRuleTarget.FullPath => _solutionPath;

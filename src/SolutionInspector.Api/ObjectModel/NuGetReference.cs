@@ -6,32 +6,30 @@ namespace SolutionInspector.Api.ObjectModel
   /// <summary>
   ///   Represents a DLL reference via NuGet.
   /// </summary>
-  public class NuGetReference : DllReferenceBase
+  public interface INuGetReference : IDllReference
   {
     /// <summary>
     ///   The NuGet package that created the reference.
     /// </summary>
-    public NuGetPackage Package { get; }
+    INuGetPackage Package { get; }
 
     /// <summary>
     ///   <c>True</c> if the reference is private, <c>false</c> otherwise.
     /// </summary>
+    bool IsPrivate { get; }
+  }
+
+  internal class NuGetReference : DllReferenceBase, INuGetReference
+  {
+    public INuGetPackage Package { get; }
+
     public bool IsPrivate { get; }
 
-    /// <summary>
-    ///   The hint path that points to the DLL in the NuGet packages folder.
-    /// </summary>
-    public string HintPath { get; }
-
-    /// <summary>
-    ///   Creates a new <see cref="NuGetReference" />.
-    /// </summary>
-    public NuGetReference (NuGetPackage package, AssemblyName assemblyName, bool isPrivate, string hintPath)
-        : base(assemblyName)
+    public NuGetReference (INuGetPackage package, AssemblyName assemblyName, bool isPrivate, string hintPath, string projectDirectory)
+        : base(assemblyName, projectDirectory, hintPath)
     {
       Package = package;
       IsPrivate = isPrivate;
-      HintPath = hintPath;
     }
   }
 }

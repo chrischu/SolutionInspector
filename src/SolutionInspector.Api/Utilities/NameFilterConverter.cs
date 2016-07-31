@@ -21,8 +21,8 @@ namespace SolutionInspector.Api.Utilities
       if (value == null)
         return null;
 
-      if (value.GetType() != typeof(NameFilterConverter))
-        throw new ArgumentException($"Unsupported type '{value.GetType()}', expected type '{typeof(NameFilterConverter)}'.", nameof(value));
+      if (value.GetType() != typeof(NameFilter))
+        throw new ArgumentException($"Unsupported type '{value.GetType()}', expected type '{typeof(NameFilter)}'.", nameof(value));
 
       return value.ToString();
     }
@@ -34,6 +34,9 @@ namespace SolutionInspector.Api.Utilities
     {
       if (data == null)
         return null;
+
+      if (data.GetType() != typeof(string))
+        throw new ArgumentException($"Unsupported type '{data.GetType()}', expected type '{typeof(string)}'.", nameof(data));
 
       var filterString = (string) data;
       var partRegex = @"((\+?|-)[\w.*]+)";

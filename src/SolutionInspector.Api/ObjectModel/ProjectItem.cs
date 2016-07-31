@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using SystemInterface.IO;
-using SystemWrapper.IO;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -37,12 +36,6 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The original (just as in the MSBuild file) include path (relative to the project file) of the project item.
     /// </summary>
-    IProjectItemInclude OriginalInclude { get; }
-
-    /// <summary>
-    ///   The path (relative to the project file) of the project item.
-    ///   Differs from <see cref="OriginalInclude" /> for links.
-    /// </summary>
     IProjectItemInclude Include { get; }
 
     /// <summary>
@@ -54,6 +47,29 @@ namespace SolutionInspector.Api.ObjectModel
     ///   A <see cref="IFileInfo" /> pointing to the project item.
     /// </summary>
     IFileInfo File { get; }
+
+    /// <summary>
+    ///   True, if the file is referenced as a link instead of a regular reference.
+    /// </summary>
+    /// <remarks>
+    ///   Links are usually used to reference one file in multiple projects while still maintaining only one physical copy of it.
+    /// </remarks>
+    bool IsLink { get; }
+
+    /// <summary>
+    ///   True, if the file was referenced with wildcards (see <see cref="WildcardInclude"/>) as opposed to a direct file name reference.
+    /// </summary>
+    bool IsIncludedByWildcard { get; }
+
+    /// <summary>
+    /// The include path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
+    /// </summary>
+    string WildcardInclude { get; }
+
+    /// <summary>
+    /// The exclude path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
+    /// </summary>
+    string WildcardExclude { get; }
 
     /// <summary>
     ///   The project item's location inside the project file.
@@ -87,9 +103,8 @@ namespace SolutionInspector.Api.ObjectModel
   }
 
   [PublicAPI]
-  internal class ProjectItem : IProjectItem, IEquatable<ProjectItem>
+  internal class ProjectItem : IProjectItem
   {
-    private readonly DictionaryEqualityComparer<string, string> _dictionaryEqualityComparer = new DictionaryEqualityComparer<string, string>();
     private readonly List<ProjectItem> _children = new List<ProjectItem>();
     private Lazy<string> _identifier;
 
@@ -97,18 +112,21 @@ namespace SolutionInspector.Api.ObjectModel
 
     public IProject Project { get; }
 
-    public string Name => Path.GetFileName(OriginalInclude.Evaluated);
+    public string Name => Path.GetFileName(Include.Evaluated);
 
     public string Identifier => _identifier.Value;
 
     public string FullPath => File.FullName;
 
-    public IProjectItemInclude OriginalInclude { get; }
     public IProjectItemInclude Include { get; }
 
     public ProjectItemBuildAction BuildAction { get; }
 
     public IFileInfo File { get; }
+    public bool IsLink { get; }
+    public bool IsIncludedByWildcard { get; }
+    public string WildcardInclude { get; }
+    public string WildcardExclude { get; }
 
     public IProjectLocation Location { get; }
 
@@ -127,18 +145,24 @@ namespace SolutionInspector.Api.ObjectModel
         Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
       Project = project;
-      OriginalInclude = new ProjectItemInclude(msBuildProjectItem.EvaluatedInclude, msBuildProjectItem.UnevaluatedInclude);
       OriginalProjectItem = msBuildProjectItem;
 
-      var linkMetadata = msBuildProjectItem.DirectMetadata.SingleOrDefault(d => d.Name == "Link");
-      Include = linkMetadata != null ? new ProjectItemInclude(linkMetadata.EvaluatedValue, linkMetadata.UnevaluatedValue) : OriginalInclude;
+      Include = new ProjectItemInclude(msBuildProjectItem.EvaluatedInclude, msBuildProjectItem.UnevaluatedInclude);
 
       BuildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
       var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
-      File = new FileInfoWrap(fullPath);
+      File = Wrapper.Wrap(new FileInfo(fullPath));
 
       Location = new ProjectLocation(msBuildProjectItem.Xml.Location.Line, msBuildProjectItem.Xml.Location.Column);
       Metadata = msBuildProjectItem.Metadata.ToDictionary(m => m.Name, m => m.EvaluatedValue);
+      IsLink = Metadata.ContainsKey("Link");
+
+      if (msBuildProjectItem.UnevaluatedInclude.Contains("*"))
+      {
+        IsIncludedByWildcard = true;
+        WildcardInclude = msBuildProjectItem.UnevaluatedInclude;
+        WildcardExclude = msBuildProjectItem.Xml.Exclude;
+      }
 
       _identifier = new Lazy<string>(CreateIdentifier);
     }
@@ -150,7 +174,9 @@ namespace SolutionInspector.Api.ObjectModel
       sb.Append(Parent != null ? Parent.Identifier : Project.Identifier);
       sb.Append('/');
 
-      var include = Include.Evaluated.Replace('\\', '/');
+      var include = IsLink ? Metadata["Link"] : Include.Evaluated;
+
+      include = include.Replace('\\', '/');
       if (Parent != null)
         include = include.Split('/').Last();
 
@@ -168,42 +194,6 @@ namespace SolutionInspector.Api.ObjectModel
     public static ProjectItem FromMsBuildProjectItem (IProject project, Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
       return new ProjectItem(project, msBuildProjectItem);
-    }
-
-    public bool Equals (ProjectItem other)
-    {
-      return Equals(OriginalInclude, other.OriginalInclude)
-             && Equals(Include, other.Include)
-             && _dictionaryEqualityComparer.Equals(Metadata, other.Metadata)
-             && BuildAction == other.BuildAction;
-    }
-
-    public override bool Equals (object obj)
-    {
-      if (ReferenceEquals(null, obj))
-        return false;
-      if (ReferenceEquals(this, obj))
-        return true;
-      return obj.GetType() == GetType() && Equals((ProjectItem) obj);
-    }
-
-    public override int GetHashCode ()
-    {
-      return HashCodeHelper.GetHashCode(
-          OriginalInclude.GetHashCode(),
-          Include.GetHashCode(),
-          BuildAction.GetHashCode(),
-          _dictionaryEqualityComparer.GetHashCode(Metadata));
-    }
-
-    public static bool operator == (ProjectItem left, ProjectItem right)
-    {
-      return Equals(left, right);
-    }
-
-    public static bool operator != (ProjectItem left, ProjectItem right)
-    {
-      return !Equals(left, right);
     }
   }
 }

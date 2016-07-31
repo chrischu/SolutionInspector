@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
-using SystemInterface.IO;
-using SystemInterface.Reflection;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.TestInfrastructure;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Interfaces.Reflection;
 
 #region R# preamble for Machine.Specifications files
 
@@ -31,9 +31,9 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
   [Subject (typeof(RuleAssemblyLoader))]
   class RuleAssemblyLoaderSpec
   {
-    static IFile File;
-    static IDirectory Directory;
-    static IAssembly Assembly;
+    static IFileStatic File;
+    static IDirectoryStatic Directory;
+    static IAssemblyStatic Assembly;
 
     static IAssembly LoadedAssembly;
 
@@ -41,9 +41,9 @@ namespace SolutionInspector.Api.Tests.Configuration.Rules
 
     Establish ctx = () =>
     {
-      File = A.Fake<IFile>();
-      Directory = A.Fake<IDirectory>();
-      Assembly = A.Fake<IAssembly>();
+      File = A.Fake<IFileStatic>();
+      Directory = A.Fake<IDirectoryStatic>();
+      Assembly = A.Fake<IAssemblyStatic>();
 
       LoadedAssembly = A.Fake<IAssembly>();
       A.CallTo(() => LoadedAssembly.GetExportedTypes()).Returns(new[] { typeof(DummyRule) });

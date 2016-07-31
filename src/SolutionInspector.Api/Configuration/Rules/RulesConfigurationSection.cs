@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace SolutionInspector.Api.Configuration.Rules
@@ -69,8 +70,13 @@ namespace SolutionInspector.Api.Configuration.Rules
     [ConfigurationProperty ("projectItemRules")]
     public ProjectItemRulesConfigurationCollection ProjectItemRules => (ProjectItemRulesConfigurationCollection) this["projectItemRules"];
 
+    [ExcludeFromCodeCoverage]
     IReadOnlyCollection<IRuleConfiguration> IRulesConfiguration.SolutionRules => SolutionRules.ToArray();
+
+    [ExcludeFromCodeCoverage]
     IReadOnlyCollection<IProjectRuleGroupConfiguration> IRulesConfiguration.ProjectRuleGroups => ProjectRules.ToArray();
+
+    [ExcludeFromCodeCoverage]
     IReadOnlyCollection<IProjectItemRuleGroupConfiguration> IRulesConfiguration.ProjectItemRuleGroups => ProjectItemRules.ToArray();
   }
 }

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SystemInterface.IO;
-using SystemInterface.Reflection;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Interfaces.Reflection;
 
 namespace SolutionInspector.Api.Rules
 {
@@ -14,11 +14,11 @@ namespace SolutionInspector.Api.Rules
 
   internal class RuleAssemblyLoader : IRuleAssemblyLoader
   {
-    private readonly IFile _file;
-    private readonly IDirectory _directory;
-    private readonly IAssembly _assembly;
+    private readonly IFileStatic _file;
+    private readonly IDirectoryStatic _directory;
+    private readonly IAssemblyStatic _assembly;
 
-    public RuleAssemblyLoader (IFile file, IDirectory directory, IAssembly assembly)
+    public RuleAssemblyLoader (IFileStatic file, IDirectoryStatic directory, IAssemblyStatic assembly)
     {
       _file = file;
       _directory = directory;

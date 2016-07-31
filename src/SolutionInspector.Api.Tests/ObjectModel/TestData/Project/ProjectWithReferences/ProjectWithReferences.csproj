@@ -52,6 +52,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EmptyProject\EmptyProject.csproj">
+      <Project>{00000000-0000-0000-0000-000000000000}</Project>
+      <Name>InvalidGuid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WrongInclude\WrongInclude.csproj">
+      <Project>{61ef1f50-ea80-4164-aff3-974c76a8d1e2}</Project>
+      <Name>InvalidInclude</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

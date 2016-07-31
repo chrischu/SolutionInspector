@@ -6,11 +6,12 @@ namespace SolutionInspector.Api.ObjectModel
   /// <summary>
   ///   Represents a DLL reference via the GAC (Global Assembly Cache).
   /// </summary>
-  public class GacReference : DllReferenceBase
+  public interface IGacReference : IReference
   {
-    /// <summary>
-    ///   Creates a new <see cref="GacReference" />.
-    /// </summary>
+  }
+
+  internal class GacReference : ReferenceBase, IGacReference
+  {
     public GacReference (AssemblyName assemblyName)
         : base(assemblyName)
     {

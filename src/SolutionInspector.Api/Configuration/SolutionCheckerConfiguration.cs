@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Configuration.RuleAssemblyImports;
@@ -29,6 +30,7 @@ namespace SolutionInspector.Api.Configuration
   }
 
   [UsedImplicitly]
+  [ExcludeFromCodeCoverage]
   internal class SolutionInspectorConfiguration : ConfigurationSectionGroup, ISolutionInspectorConfiguration
   {
     public IRuleAssemblyImportsConfiguration RuleAssemblyImports => (RuleAssemblyImportsConfigurationSection) Sections["ruleAssemblyImports"];
@@ -36,11 +38,5 @@ namespace SolutionInspector.Api.Configuration
     public IMsBuildParsingConfiguration MsBuildParsing => (MsBuildParsingConfigurationSection) Sections["msBuildParsing"];
 
     public IRulesConfiguration Rules => (RulesConfigurationSection) Sections["rules"];
-
-    public static SolutionInspectorConfiguration Load ()
-    {
-      var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-      return (SolutionInspectorConfiguration) configuration.GetSectionGroup("solutionInspector");
-    }
   }
 }

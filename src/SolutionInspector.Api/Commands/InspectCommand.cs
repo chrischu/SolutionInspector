@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Build.Exceptions;
@@ -16,19 +17,22 @@ namespace SolutionInspector.Api.Commands
   {
     private static readonly Logger s_logger = LogManager.GetCurrentClassLogger();
 
-    private readonly ISolutionInspectorConfiguration _configuration;
+    private readonly IConfigurationLoader _configurationLoader;
+    private readonly IRuleAssemblyLoader _ruleAssemblyLoader;
     private readonly ISolutionLoader _solutionLoader;
     private readonly IRuleCollectionBuilder _ruleCollectionBuilder;
     private readonly IViolationReporterFactory _violationReporterFactory;
 
     public InspectCommand (
-        ISolutionInspectorConfiguration configuration,
+        IConfigurationLoader configurationLoader,
+        IRuleAssemblyLoader ruleAssemblyLoader,
         ISolutionLoader solutionLoader,
         IRuleCollectionBuilder ruleCollectionBuilder,
         IViolationReporterFactory violationReporterFactory)
         : base("inspect", "Inspects a given solution for rule violations.")
     {
-      _configuration = configuration;
+      _configurationLoader = configurationLoader;
+      _ruleAssemblyLoader = ruleAssemblyLoader;
       _solutionLoader = solutionLoader;
       _ruleCollectionBuilder = ruleCollectionBuilder;
       _violationReporterFactory = violationReporterFactory;
@@ -36,6 +40,8 @@ namespace SolutionInspector.Api.Commands
 
     protected override void SetupArguments (IArgumentsBuilder<RawArguments> argumentsBuilder)
     {
+      var executableName = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
+
       argumentsBuilder
           .Option<ViolationReportFormat>(
               "reportFormat",
@@ -46,23 +52,61 @@ namespace SolutionInspector.Api.Commands
               "reportOutputFile",
               "o",
               "Writes the violation report to the given file instead of to the console.",
-              (a, v) => a.ReportOutputFile = v != null ? v.Trim() : null)
+              (a, v) => a.ReportOutputFile = v?.Trim())
+          .Option<string>(
+              "configurationFile",
+              "c",
+              $@"Controls which configuration file is used. Valid values are: 
+AppConfig: Use the {executableName}.config file next to {executableName}.
+Solution: Use the <solutionFilePath>.SolutionInspectorConfig file.
+<FilePath>: Uses the given configuration file.",
+              (a, v) => a.ConfigurationFile = v?.Trim()
+          )
           .Values(c => c.Value("solutionFilePath", (a, v) => a.SolutionFilePath = v));
     }
 
     protected override ParsedArguments ValidateAndParseArguments (RawArguments arguments, Func<string, Exception> reportError)
     {
-      var solution = ValidateAndParseSolution(arguments, reportError);
-      var rules = _ruleCollectionBuilder.Build(_configuration.Rules);
+      var configuration = ValidateAndLoadConfiguration(arguments, reportError);
+      var solution = ValidateAndParseSolution(configuration, arguments, reportError);
+      var rules = _ruleCollectionBuilder.Build(configuration.Rules);
 
-      return new ParsedArguments(solution, rules, arguments.ReportFormat, arguments.ReportOutputFile);
+      return new ParsedArguments(solution, rules, arguments.ReportFormat, arguments.ReportOutputFile, configuration);
     }
 
-    private ISolution ValidateAndParseSolution (RawArguments arguments, Func<string, Exception> reportError)
+    private ISolutionInspectorConfiguration ValidateAndLoadConfiguration (RawArguments arguments, Func<string, Exception> reportError)
     {
       try
       {
-        return _solutionLoader.Load(arguments.SolutionFilePath, _configuration.MsBuildParsing);
+        if (arguments.ConfigurationFile == "AppConfig" || arguments.ConfigurationFile == null)
+          return _configurationLoader.LoadAppConfigFile();
+
+        var configurationFilePath = arguments.ConfigurationFile == "Solution"
+          ? arguments.SolutionFilePath + ".SolutionInspectorConfig"
+          : arguments.ConfigurationFile;
+
+        return _configurationLoader.Load(configurationFilePath);
+      }
+      catch (FileNotFoundException ex)
+      {
+        s_logger.Error(ex, "Error while loading configuration file.");
+        throw reportError(ex.Message);
+      }
+      catch (Exception ex)
+      {
+        s_logger.Error(ex, "Error while loading configuration file.");
+        throw reportError($"Unexpected error when loading configuration file: {ex.Message}.");
+      }
+    }
+
+    private ISolution ValidateAndParseSolution (
+        ISolutionInspectorConfiguration configuration,
+        RawArguments arguments,
+        Func<string, Exception> reportError)
+    {
+      try
+      {
+        return _solutionLoader.Load(arguments.SolutionFilePath, configuration.MsBuildParsing);
       }
       catch (SolutionNotFoundException)
       {
@@ -72,13 +116,14 @@ namespace SolutionInspector.Api.Commands
       {
         s_logger.Error(ex, "Error while loading solution.");
         throw reportError(
-            $"Given file '{arguments.SolutionFilePath}' is not a valid solution file " +
+            $"Given solution file '{arguments.SolutionFilePath}' contains an invalid project file '{ex.ProjectFile}' " +
             "(for detailed error information see the log file 'SolutionInspector.log').");
       }
       catch (Exception ex)
       {
         s_logger.Error(ex, "Error while loading solution.");
-        throw reportError($"Unexpected error when loading solution file '{arguments.SolutionFilePath}: {ex}");
+        throw reportError($"Unexpected error when loading solution file '{arguments.SolutionFilePath}': {ex.Message} (for further details see the" +
+                          "log file 'SolutionInspector.log').");
       }
     }
 
@@ -86,6 +131,10 @@ namespace SolutionInspector.Api.Commands
     {
       using (var solution = arguments.Solution)
       {
+        s_logger.Info("Loading rule assemblies...");
+
+        _ruleAssemblyLoader.LoadRuleAssemblies(arguments.Configuration.RuleAssemblyImports.Imports);
+
         s_logger.Info($"Inspecting solution '{solution.FullPath}'...");
 
         var violations = GetRuleViolations(solution, arguments.Rules).ToArray();
@@ -160,6 +209,7 @@ namespace SolutionInspector.Api.Commands
       public string SolutionFilePath { get; set; }
       public ViolationReportFormat ReportFormat { get; set; }
       public string ReportOutputFile { get; set; }
+      public string ConfigurationFile { get; set; }
     }
 
     public class ParsedArguments
@@ -168,17 +218,20 @@ namespace SolutionInspector.Api.Commands
       public IRuleCollection Rules { get; }
       public ViolationReportFormat ReportFormat { get; }
       public string ReportOutputFile { get; }
+      public ISolutionInspectorConfiguration Configuration { get; }
 
       public ParsedArguments (
           ISolution solution,
           IRuleCollection rules,
           ViolationReportFormat reportFormat,
-          [CanBeNull] string reportOutputFile)
+          [CanBeNull] string reportOutputFile,
+          ISolutionInspectorConfiguration configuration)
       {
         Solution = solution;
         Rules = rules;
         ReportFormat = reportFormat;
         ReportOutputFile = reportOutputFile;
+        Configuration = configuration;
       }
     }
   }

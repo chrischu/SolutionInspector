@@ -24,38 +24,49 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Tests.Configuration.Infrastructure
 {
-  [Subject (typeof(KeyedConfigurationElementCollectionBase<,>))]
+  [Subject (typeof(ConfigurationElementCollectionBase<>))]
   class ConfigurationElementCollectionBaseSpec
   {
     static DummyConfigurationElementCollection SUT;
 
-    class when_adding_two_elements_with_the_same_key
+    class when_deserializing
     {
       Establish ctx = () => { SUT = new DummyConfigurationElementCollection(); };
 
-      Because of = () =>
-          Exception = Catch.Exception(() => ConfigurationHelper.DeserializeElement(SUT, @"<collection><add key=""a"" /><add key=""a"" />"));
+      Because of = () => ConfigurationHelper.DeserializeElement(SUT, @"<collection><element value=""a"" /><element value=""b"" /></collection>");
+
+      It deserializes_everything = () =>
+          SUT.ShouldAllBeLike(new { Value = "a" }, new { Value = "b" });
+    }
+
+    class when_deserializing_unrecognized_element
+    {
+      Establish ctx = () => { SUT = new DummyConfigurationElementCollection(); };
+
+      Because of = () => Exception = Catch.Exception(
+          () => ConfigurationHelper.DeserializeElement(
+              SUT,
+              @"<collection><element value=""a"" /><UNRECOGNIZED /></collection>"));
 
       It throws = () =>
-          Exception.Should().Be<ConfigurationErrorsException>()
-              .WithMessage(
-                  "The value for the property 'key' is not valid. " +
-                  "The error is: The key 'a' was already added to the collection once.");
+          Exception.Should().Be<ConfigurationErrorsException>().WithMessage("Unrecognized element 'UNRECOGNIZED'.");
 
       static Exception Exception;
     }
 
-    class DummyConfigurationElementCollection : KeyedConfigurationElementCollectionBase<DummyConfigurationElement, string>
+    class DummyConfigurationElementCollection : ConfigurationElementCollectionBase<DummyConfigurationElement>
     {
-      protected override string ElementName => "add";
+      protected override string ElementName => "element";
     }
 
-    class DummyConfigurationElement : KeyedConfigurationElement<string>
+    class DummyConfigurationElement : ConfigurationElement
     {
-      [ConfigurationProperty ("key")]
-      public new string Key => base.Key;
-
-      public override string KeyName => "key";
+      [ConfigurationProperty ("value")]
+      public string Value
+      {
+        get { return (string) this["value"]; }
+        set { this["value"] = value; }
+      }
     }
   }
 }

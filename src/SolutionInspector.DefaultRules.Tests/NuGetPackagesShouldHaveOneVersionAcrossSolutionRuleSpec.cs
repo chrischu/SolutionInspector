@@ -5,6 +5,7 @@ using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.TestInfrastructure;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
@@ -42,7 +43,17 @@ namespace SolutionInspector.DefaultRules.Tests
       Project2 = A.Fake<IProject>();
       A.CallTo(() => Solution.Projects).Returns(new[] { Project1, Project2 });
 
-      var nuGetPackage = new NuGetPackage("Id", new Version(1, 0), false, null, "targetFramework", false);
+      var nuGetPackage = FakeHelper.CreateAndConfigure<INuGetPackage>(
+          c =>
+          {
+            A.CallTo(() => c.Id).Returns("Id");
+            A.CallTo(() => c.Version).Returns(new Version(1, 0));
+            A.CallTo(() => c.IsPreRelease).Returns(false);
+            A.CallTo(() => c.PreReleaseTag).Returns(null);
+            A.CallTo(() => c.TargetFramework).Returns("targetFramework");
+            A.CallTo(() => c.IsDevelopmentDependency).Returns(false);
+            A.CallTo(() => c.FullVersionString).Returns("1.0");
+          });
       A.CallTo(() => Project1.NuGetPackages).Returns(new[] { nuGetPackage });
       A.CallTo(() => Project2.NuGetPackages).Returns(new[] { nuGetPackage });
 
@@ -63,7 +74,17 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        var nuGetPackage = new NuGetPackage("Id", new Version(1, 1), false, null, "targetFramework", false);
+        var nuGetPackage = FakeHelper.CreateAndConfigure<INuGetPackage>(
+          c =>
+          {
+            A.CallTo(() => c.Id).Returns("Id");
+            A.CallTo(() => c.Version).Returns(new Version(1, 1));
+            A.CallTo(() => c.IsPreRelease).Returns(false);
+            A.CallTo(() => c.PreReleaseTag).Returns(null);
+            A.CallTo(() => c.TargetFramework).Returns("targetFramework");
+            A.CallTo(() => c.IsDevelopmentDependency).Returns(false);
+            A.CallTo(() => c.FullVersionString).Returns("1.1");
+          });
         A.CallTo(() => Project2.NuGetPackages).Returns(new[] { nuGetPackage });
       };
 
@@ -79,7 +100,17 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       Establish ctx = () =>
       {
-        var nuGetPackage = new NuGetPackage("Id", new Version(1, 1), true, "-tag", "targetFramework", false);
+        var nuGetPackage = FakeHelper.CreateAndConfigure<INuGetPackage>(
+          c =>
+          {
+            A.CallTo(() => c.Id).Returns("Id");
+            A.CallTo(() => c.Version).Returns(new Version(1, 1));
+            A.CallTo(() => c.IsPreRelease).Returns(true);
+            A.CallTo(() => c.PreReleaseTag).Returns("-tag");
+            A.CallTo(() => c.TargetFramework).Returns("targetFramework");
+            A.CallTo(() => c.IsDevelopmentDependency).Returns(false);
+            A.CallTo(() => c.FullVersionString).Returns("1.1-tag");
+          });
         A.CallTo(() => Project2.NuGetPackages).Returns(new[] { nuGetPackage });
       };
 

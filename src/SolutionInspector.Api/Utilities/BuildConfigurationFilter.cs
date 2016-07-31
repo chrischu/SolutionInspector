@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
@@ -46,6 +47,7 @@ namespace SolutionInspector.Api.Utilities
                (x.PlatformName == y.PlatformName || x.PlatformName == "*" || y.PlatformName == "*");
       }
 
+      [ExcludeFromCodeCoverage]
       public int GetHashCode ([NotNull] BuildConfiguration obj)
       {
         return obj.GetHashCode();
@@ -53,6 +55,7 @@ namespace SolutionInspector.Api.Utilities
     }
 
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public override string ToString ()
     {
       return string.Join(",", _filters.Select(f => f.ToString()));

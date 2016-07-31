@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$.exe</id>
+    <version>$version$</version>
+    <title>$id$</title>
+    <authors>chrischu</authors>
+    <owners>chrischu</owners>
+    <licenseUrl>https://raw.githubusercontent.com/chrischu/SolutionInspector/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/chrischu/SolutionInspector</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/chrischu/SolutionInspector/master/media/icon.png</iconUrl>
+    <description>SolutionInspector checks your solution and projects against a plethora of different configurable rules to keep it tidy.</description>
+    <tags>solutioninspector solution project rules inspect</tags>
+    <developmentDependency>true</developmentDependency>
+  </metadata>
+  <files>
+    <file src="$outputDir$**" target="tools" />
+  </files>
+</package>

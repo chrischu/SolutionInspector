@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Configuration;
 using System.Xml;
-using SystemInterface.Reflection;
 using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.TestInfrastructure;
+using Wrapperator.Interfaces.Reflection;
 
 #region R# preamble for Machine.Specifications files
 
@@ -55,6 +55,24 @@ namespace SolutionInspector.Api.Tests.Rules
 
       It sets_property = () =>
           Result.As<RuleConfiguration>().Property.Should().Be("value");
+
+      static XmlElement Configuration;
+      static ConfigurationElement Result;
+    }
+
+    class when_instantiating_with_null
+    {
+      Establish ctx = () =>
+      {
+        var doc = new XmlDocument();
+        doc.LoadXml(@"<rule property=""value"" />");
+        Configuration = (XmlElement) doc.FirstChild;
+      };
+
+      Because of = () => Result = SUT.Instantiate(null, Configuration);
+
+      It returns_null = () =>
+          Result.Should().BeNull();
 
       static XmlElement Configuration;
       static ConfigurationElement Result;

@@ -13,21 +13,23 @@ namespace SolutionInspector.TestInfrastructure
   [PublicAPI]
   public static class Some
   {
-    private const int c_SomeStringDefaultMaxLength = 100;
+    private const int c_someStringDefaultMaxLength = 100;
 
     // Thread-local Random instance provider
-    private static int s_Seed = Environment.TickCount;
+    private static int s_seed = Environment.TickCount;
 
     private static readonly ThreadLocal<Random> s_threadLocalRandomProvider =
-        new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref s_Seed)));
+        new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref s_seed)));
 
     // ReSharper disable UnusedMember.Global - maybe used in the future
     public static bool Boolean => Random.Next(2) == 1;
 
     public static string String ()
     {
-      return StringBetween(1, c_SomeStringDefaultMaxLength);
+      return StringBetween(1, c_someStringDefaultMaxLength);
     }
+
+    public static Version Version => new Version(PositiveInteger, PositiveInteger, PositiveInteger, PositiveInteger);
 
     private static string StringBetween (int minLength, int maxLength)
     {
@@ -45,6 +47,8 @@ namespace SolutionInspector.TestInfrastructure
       var values = System.Enum.GetValues(typeof(T));
       return (T) values.GetValue(Random.Next(values.Length));
     }
+
+    public static Guid Guid => Guid.NewGuid();
 
     // ReSharper restore UnusedMember.Global
 

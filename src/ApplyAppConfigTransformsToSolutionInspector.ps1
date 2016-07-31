@@ -26,6 +26,24 @@ function Apply-XmlDocTransform([string] $xml, [string] $xdt)
   $xmldoc.Save($xml);
 }
 
+function Format-Xml([string] $path) {
+  [xml] $xml = Get-Content $path
+
+  $xws = New-Object System.Xml.XmlWriterSettings
+  $xws.Indent = $true
+  $xws.IndentChars = "  "
+
+  $xw = [System.Xml.XmlWriter]::Create($path, $xws)
+  $xml.Save($xw)
+  $xw.Dispose()
+}
+
 Apply-XmlDocTransform "SolutionInspector\App.config" "SolutionInspector.Api\App.config.uninstall.xdt"
 Apply-XmlDocTransform "SolutionInspector\App.config" "SolutionInspector.Api\App.config.install.xdt"
 Apply-XmlDocTransform "SolutionInspector\App.config" "SolutionInspector.DefaultRules\App.config.install.xdt"
+Format-Xml "SolutionInspector\App.config"
+
+Apply-XmlDocTransform "SolutionInspector\Template.SolutionInspectorConfig" "SolutionInspector.Api\App.config.uninstall.xdt"
+Apply-XmlDocTransform "SolutionInspector\Template.SolutionInspectorConfig" "SolutionInspector.Api\App.config.install.xdt"
+Apply-XmlDocTransform "SolutionInspector\Template.SolutionInspectorConfig" "SolutionInspector.DefaultRules\App.config.install.xdt"
+Format-Xml "SolutionInspector\Template.SolutionInspectorConfig"

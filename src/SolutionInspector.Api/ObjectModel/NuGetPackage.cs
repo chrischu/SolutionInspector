@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using JetBrains.Annotations;
 
@@ -8,51 +9,67 @@ namespace SolutionInspector.Api.ObjectModel
   ///   Represents a NuGet package referenced by a project.
   /// </summary>
   [PublicAPI]
-  public class NuGetPackage : IEquatable<NuGetPackage>
+  public interface INuGetPackage : IEquatable<INuGetPackage>
   {
     /// <summary>
     ///   The package's id.
     /// </summary>
-    public string Id { get; }
+    string Id { get; }
 
     /// <summary>
     ///   The package's version.
     /// </summary>
-    public Version Version { get; }
+    Version Version { get; }
 
     /// <summary>
     ///   <c>True</c> if the package is a pre-release package, <c>false</c> otherwise.
     /// </summary>
-    public bool IsPreRelease { get; }
+    bool IsPreRelease { get; }
 
     /// <summary>
     ///   The package's pre-release tag (if any).
     /// </summary>
-    public string PreReleaseTag { get; }
+    string PreReleaseTag { get; }
 
     /// <summary>
     ///   The package's full version string in the format "&lt;Version&gt;&lt;PreReleaseTag&gt;".
     /// </summary>
-    public string FullVersionString => $"{Version}{PreReleaseTag}";
+    string FullVersionString { get; }
 
     /// <summary>
     ///   The package's directory name (relative to the NuGet packages folder)".
     /// </summary>
-    public string PackageDirectoryName => $"{Id}.{FullVersionString}";
+    string PackageDirectoryName { get; }
 
     /// <summary>
     ///   The package's target framework.
     /// </summary>
-    public string TargetFramework { get; }
+    string TargetFramework { get; }
 
     /// <summary>
     ///   <c>True</c> if the package is only a development dependency, <c>false</c> otherwise.
     /// </summary>
+    bool IsDevelopmentDependency { get; }
+  }
+
+  internal sealed class NuGetPackage : INuGetPackage
+  {
+    public string Id { get; }
+
+    public Version Version { get; }
+
+    public bool IsPreRelease { get; }
+
+    public string PreReleaseTag { get; }
+
+    public string FullVersionString => $"{Version}{PreReleaseTag}";
+
+    public string PackageDirectoryName => $"{Id}.{FullVersionString}";
+
+    public string TargetFramework { get; }
+
     public bool IsDevelopmentDependency { get; }
 
-    /// <summary>
-    ///   Creates a new <see cref="NuGetPackage" />.
-    /// </summary>
     public NuGetPackage (
         string id,
         Version version,
@@ -69,9 +86,6 @@ namespace SolutionInspector.Api.ObjectModel
       IsDevelopmentDependency = isDevelopmentDependency;
     }
 
-    /// <summary>
-    ///   Creates a <see cref="NuGetPackage" /> instance from the given <paramref name="packageElement" /> from the project packages.config.
-    /// </summary>
     public static NuGetPackage FromXmlElement (XmlElement packageElement)
     {
       var id = packageElement.GetAttribute("id");
@@ -97,8 +111,7 @@ namespace SolutionInspector.Api.ObjectModel
       return new NuGetPackage(id, version, isPreRelease, preReleaseTag, targetFramework, isDevelopmentDependency);
     }
 
-    /// <inheritdoc />
-    public bool Equals ([CanBeNull] NuGetPackage other)
+    public bool Equals ([CanBeNull] INuGetPackage other)
     {
       if (ReferenceEquals(null, other))
         return false;
@@ -107,31 +120,26 @@ namespace SolutionInspector.Api.ObjectModel
       return string.Equals(PackageDirectoryName, other.PackageDirectoryName);
     }
 
-    /// <inheritdoc />
     public override bool Equals ([CanBeNull] object obj)
     {
       if (ReferenceEquals(null, obj))
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      if (obj.GetType() != GetType())
-        return false;
-      return Equals((NuGetPackage) obj);
+      return obj is INuGetPackage && Equals((INuGetPackage) obj);
     }
 
-    /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public override int GetHashCode ()
     {
       return PackageDirectoryName.GetHashCode();
     }
 
-    /// <inheritdoc />
     public static bool operator == ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
     {
       return Equals(left, right);
     }
 
-    /// <inheritdoc />
     public static bool operator != ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
     {
       return !Equals(left, right);

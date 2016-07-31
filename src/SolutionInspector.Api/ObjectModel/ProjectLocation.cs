@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using SolutionInspector.Api.Utilities;
@@ -38,7 +39,7 @@ namespace SolutionInspector.Api.ObjectModel
     {
     }
 
-    public bool Equals (ProjectLocation other)
+    public bool Equals ([CanBeNull] ProjectLocation other)
     {
       if (ReferenceEquals(null, other))
         return false;
@@ -47,7 +48,7 @@ namespace SolutionInspector.Api.ObjectModel
       return Line == other.Line && Column == other.Column;
     }
 
-    public override bool Equals (object obj)
+    public override bool Equals ([CanBeNull] object obj)
     {
       if (ReferenceEquals(null, obj))
         return false;
@@ -56,6 +57,7 @@ namespace SolutionInspector.Api.ObjectModel
       return obj is ProjectLocation && Equals((ProjectLocation) obj);
     }
 
+    [ExcludeFromCodeCoverage]
     public override int GetHashCode ()
     {
       return HashCodeHelper.GetHashCode(Line, Column);
@@ -71,6 +73,7 @@ namespace SolutionInspector.Api.ObjectModel
       return !Equals(left, right);
     }
 
+    [ExcludeFromCodeCoverage]
     public override string ToString ()
     {
       return $"({Line},{Column})";

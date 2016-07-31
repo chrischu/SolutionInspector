@@ -6,20 +6,15 @@ namespace SolutionInspector.Api.ObjectModel
   /// <summary>
   ///   Represents a DLL reference via the file system.
   /// </summary>
-  public class FileReference : DllReferenceBase
+  public interface IFileReference : IDllReference
   {
-    /// <summary>
-    ///   The hint path that points to the DLL in the file system.
-    /// </summary>
-    public string HintPath { get; }
+  }
 
-    /// <summary>
-    ///   Creates a new <see cref="FileReference" />.
-    /// </summary>
-    public FileReference (AssemblyName assemblyName, string hintPath)
-        : base(assemblyName)
+  internal class FileReference : DllReferenceBase, IFileReference
+  {
+    public FileReference (AssemblyName assemblyName, string hintPath, string projectDirectory)
+        : base(assemblyName, projectDirectory, hintPath)
     {
-      HintPath = hintPath;
     }
   }
 }

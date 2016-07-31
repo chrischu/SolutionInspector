@@ -1,4 +1,7 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using JetBrains.Annotations;
+using SolutionInspector.Api.Utilities;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -29,7 +32,7 @@ namespace SolutionInspector.Api.ObjectModel
       Unevaluated = unevaluated;
     }
 
-    public bool Equals (ProjectItemInclude other)
+    public bool Equals ([CanBeNull] ProjectItemInclude other)
     {
       if (ReferenceEquals(null, other))
         return false;
@@ -38,7 +41,7 @@ namespace SolutionInspector.Api.ObjectModel
       return string.Equals(Evaluated, other.Evaluated) && string.Equals(Unevaluated, other.Unevaluated);
     }
 
-    public override bool Equals (object obj)
+    public override bool Equals ([CanBeNull] object obj)
     {
       if (ReferenceEquals(null, obj))
         return false;
@@ -47,12 +50,10 @@ namespace SolutionInspector.Api.ObjectModel
       return obj is ProjectItemInclude && Equals((ProjectItemInclude) obj);
     }
 
+    [ExcludeFromCodeCoverage]
     public override int GetHashCode ()
     {
-      unchecked
-      {
-        return (Evaluated.GetHashCode() * 397) ^ Unevaluated.GetHashCode();
-      }
+      return HashCodeHelper.GetHashCode(Evaluated, Unevaluated);
     }
 
     public static bool operator == (ProjectItemInclude left, ProjectItemInclude right)

@@ -112,10 +112,11 @@ namespace SolutionInspector.DefaultRules.Tests
         SUT = new ProjectXPathRule(
             new ProjectXPathRuleConfiguration
             {
-              XPath = "boolean(//element)"
+                XPath = "boolean(//element[@attr=7])"
             });
 
-        A.CallTo(() => Project.ProjectXml).Returns(XDocument.Parse("<xml xmlns=\"http://some.namespace\"><element /></xml>"));
+        A.CallTo(() => Project.ProjectXml)
+            .Returns(XDocument.Parse("<xml xmlns=\"http://some.namespace\" xmlns:x=\"http://some.other.namespace\"><element x:attr=\"7\" /></xml>"));
       };
 
       Because of = () => Result = SUT.Evaluate(Project);
@@ -133,8 +134,8 @@ namespace SolutionInspector.DefaultRules.Tests
         SUT = new ProjectXPathRule(
             new ProjectXPathRuleConfiguration
             {
-              XPath = "boolean(//element)",
-              IgnoreNamespaces = false
+                XPath = "boolean(//element)",
+                IgnoreNamespaces = false
             });
 
         A.CallTo(() => Project.ProjectXml).Returns(XDocument.Parse("<xml xmlns=\"http://some.namespace\"><element /></xml>"));

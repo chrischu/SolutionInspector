@@ -11,7 +11,8 @@ namespace SolutionInspector.Api.Reporting
     private readonly IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
     private readonly ITableWriter _tableWriter;
 
-    public TableViolationReporter (TextWriter writer, IRuleViolationViewModelConverter ruleViolationViewModelConverter, ITableWriter tableWriter) : base(writer)
+    public TableViolationReporter (TextWriter writer, IRuleViolationViewModelConverter ruleViolationViewModelConverter, ITableWriter tableWriter)
+        : base(writer)
     {
       _ruleViolationViewModelConverter = ruleViolationViewModelConverter;
       _tableWriter = tableWriter;

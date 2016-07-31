@@ -39,6 +39,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\JetBrains.ReSharper.CommandLineTools.2016.1.20160523.144749\build\JetBrains.ReSharper.CommandLineTools.Targets" Condition="Exists('..\packages\JetBrains.ReSharper.CommandLineTools.2016.1.20160523.144749\build\JetBrains.ReSharper.CommandLineTools.Targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

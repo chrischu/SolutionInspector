@@ -11,7 +11,8 @@ namespace SolutionInspector.Api.Reporting
   {
     private readonly IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
 
-    public XmlViolationReporter (TextWriter writer, IRuleViolationViewModelConverter ruleViolationViewModelConverter) : base(writer)
+    public XmlViolationReporter (TextWriter writer, IRuleViolationViewModelConverter ruleViolationViewModelConverter)
+        : base(writer)
     {
       _ruleViolationViewModelConverter = ruleViolationViewModelConverter;
     }
@@ -20,7 +21,7 @@ namespace SolutionInspector.Api.Reporting
     {
       var violationModels = _ruleViolationViewModelConverter.Convert(violations);
 
-      XmlDocument doc = new XmlDocument();
+      var doc = new XmlDocument();
       var vios = doc.CreateElement("violations");
       doc.AppendChild(vios);
 

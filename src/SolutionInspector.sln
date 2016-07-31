@@ -36,17 +36,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Build", ".Build", "{F6047F
 		InsertSourceLinks.msbuild = InsertSourceLinks.msbuild
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{CF675B56-CD6D-4E18-A751-EB7BA25F6547}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CF675B56-CD6D-4E18-A751-EB7BA25F6547}"
 	ProjectSection(SolutionItems) = preProject
-		Build\Build.Common.ps1 = Build\Build.Common.ps1
-		Build\Build.Logging.ps1 = Build\Build.Logging.ps1
-		Build\Build.MSBuild.ps1 = Build\Build.MSBuild.ps1
-		Build\Build.NuGet.ps1 = Build\Build.NuGet.ps1
-		Build\Build.Reporting.AppVeyor.ps1 = Build\Build.Reporting.AppVeyor.ps1
-		Build\Build.Reporting.Local.ps1 = Build\Build.Reporting.Local.ps1
-		Build\Build.ReSharperInspectCode.ps1 = Build\Build.ReSharperInspectCode.ps1
-		Build\Build.Testing.ps1 = Build\Build.Testing.ps1
-		Build\BuildLibrary.ps1 = Build\BuildLibrary.ps1
+		Shared\Build\Build.AppVeyor.ps1 = Shared\Build\Build.AppVeyor.ps1
+		Shared\Build\Build.Common.ps1 = Shared\Build\Build.Common.ps1
+		Shared\Build\Build.Logging.ps1 = Shared\Build\Build.Logging.ps1
+		Shared\Build\Build.MSBuild.ps1 = Shared\Build\Build.MSBuild.ps1
+		Shared\Build\Build.NuGet.ps1 = Shared\Build\Build.NuGet.ps1
+		Shared\Build\Build.Reporting.AppVeyor.ps1 = Shared\Build\Build.Reporting.AppVeyor.ps1
+		Shared\Build\Build.Reporting.Local.ps1 = Shared\Build\Build.Reporting.Local.ps1
+		Shared\Build\Build.ReSharperInspectCode.ps1 = Shared\Build\Build.ReSharperInspectCode.ps1
+		Shared\Build\Build.Testing.ps1 = Shared\Build\Build.Testing.ps1
+		Shared\Build\Build.Versioning.ps1 = Shared\Build\Build.Versioning.ps1
+		Shared\Build\BuildLibrary.ps1 = Shared\Build\BuildLibrary.ps1
+		Shared\Build\Versioning.ps1 = Shared\Build\Versioning.ps1
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector", "SolutionInspector\SolutionInspector.csproj", "{9E33C5B1-89AD-4A24-82FA-6C9489159A54}"
@@ -57,7 +60,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.DefaultRu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Docs", ".Docs", "{D8707020-E590-4226-8C6E-9AB8675E84C0}"
 	ProjectSection(SolutionItems) = preProject
+		..\CHANGELOG.md = ..\CHANGELOG.md
 		..\README.md = ..\README.md
+		..\ROADMAP.md = ..\ROADMAP.md
 	EndProjectSection
 EndProject
 Global

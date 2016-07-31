@@ -12,6 +12,8 @@
     <rules xdt:Transform="InsertIfMissing">
       <solutionRules xdt:Transform="InsertIfMissing">
         <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+              type="SolutionInspector.DefaultRules.ProjectGuidsMustBeUniqueRule, SolutionInspector.DefaultRules" />
+        <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.NuGetPackagesShouldHaveOneVersionAcrossSolutionRule, SolutionInspector.DefaultRules" />
         <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
               type="SolutionInspector.DefaultRules.SolutionBuildConfigurationsRule, SolutionInspector.DefaultRules"
@@ -26,7 +28,16 @@
                 type="SolutionInspector.DefaultRules.ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule, SolutionInspector.DefaultRules" />
           
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
-                type="SolutionInspector.DefaultRules.AllProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
+                type="SolutionInspector.DefaultRules.ProjectItemsMustBePresentRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.NuGetReferenceHintPathsMustBeValidRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectReferencesMustBeValidRule, SolutionInspector.DefaultRules" />
 
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectPropertyRule, SolutionInspector.DefaultRules"
@@ -49,6 +60,10 @@
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectXPathRule, SolutionInspector.DefaultRules"
                 xPath="boolean(//Compile)" ignoreNamespaces="true" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.RequiredResourceLanguagesRule, SolutionInspector.DefaultRules"
+                requiredResources="Resource,OtherResource" requiredLanguages="de,cs" />
         </projectRuleGroup>
         <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)"
                           appliesTo="+*;-*Tests;-*TestInfrastructure">
@@ -73,6 +88,8 @@
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectItemMustHaveCorrectBuildActionRule, SolutionInspector.DefaultRules"
                 expectedBuildAction="Compile" />
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.ProjectItemMustNotBeIncludedByWildcardRule, SolutionInspector.DefaultRules" />
         </projectItemRuleGroup>
       </projectItemRules>
     </rules>

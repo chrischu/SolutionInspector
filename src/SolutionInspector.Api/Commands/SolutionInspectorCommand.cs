@@ -2,25 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using JetBrains.Annotations;
 using ManyConsole;
-using NLog;
 
 namespace SolutionInspector.Api.Commands
 {
   [PublicAPI]
   internal interface IArgumentsBuilderWithSetValues<out TArguments>
   {
-    IArgumentsBuilderWithSetValues<TArguments> Option (
-        string longKey,
-        string shortKey,
-        string description,
-        Action<TArguments, string> setValue,
-        string defaultValue = null);
-
     IArgumentsBuilderWithSetValues<TArguments> Option<T> (
         string longKey,
         string shortKey,
@@ -34,13 +24,6 @@ namespace SolutionInspector.Api.Commands
   [PublicAPI]
   internal interface IArgumentsBuilder<out TArguments>
   {
-    IArgumentsBuilder<TArguments> Option (
-        string longKey,
-        string shortKey,
-        string description,
-        Action<TArguments, string> setValue,
-        string defaultValue = null);
-
     IArgumentsBuilder<TArguments> Option<T> (
         string longKey,
         string shortKey,
@@ -48,11 +31,7 @@ namespace SolutionInspector.Api.Commands
         Action<TArguments, T> setValue,
         T defaultValue = default(T));
 
-    IArgumentsBuilder<TArguments> Flag (
-        string longKey,
-        string shortKey,
-        string description,
-        Action<TArguments, bool> setValue);
+    IArgumentsBuilder<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
 
     IArgumentsBuilderWithSetValues<TArguments> Values (Action<IValueArgumentsBuilder<TArguments>> configureValueArguments);
   }
@@ -66,7 +45,6 @@ namespace SolutionInspector.Api.Commands
   internal abstract class SolutionInspectorCommand<TRawArguments, TParsedArguments> : ConsoleCommand
       where TRawArguments : new()
   {
-    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
     private readonly TRawArguments _rawArguments;
     private readonly ArgumentsBuilder<TRawArguments> _rawArgumentsBuilder;
     private TParsedArguments _parsedArguments;
@@ -87,38 +65,9 @@ namespace SolutionInspector.Api.Commands
     public sealed override int? OverrideAfterHandlingArgumentsBeforeRun ([NotNull] string[] remainingArguments)
     {
       _rawArgumentsBuilder.HandleRemainingArguments(remainingArguments);
-
-      if (!TryLoadingMsBuildToolsAssembly())
-      {
-        _logger.Error(
-            "Could not find MSBuild assemblies in version 14.0. This most likely means that 'MSBuild Tools 2015' was not installed."
-            + Environment.NewLine
-            + "Just press the RETURN key to open a browser with the download page of the 'MSBuild Tools 2015' or press ESCAPE or any other key to cancel...");
-        var key = Console.ReadKey();
-        if (key.Key == ConsoleKey.Enter)
-          Process.Start("https://www.microsoft.com/en-us/download/details.aspx?id=48159");
-
-        return 1;
-      }
-
       _parsedArguments = ValidateAndParseArguments(_rawArguments, message => new ConsoleHelpAsException(message));
 
       return base.OverrideAfterHandlingArgumentsBeforeRun(remainingArguments);
-    }
-
-    private bool TryLoadingMsBuildToolsAssembly ()
-    {
-      try
-      {
-        _logger.Info("Checking for 'MSBuild Tools 2015'...");
-        Assembly.Load("Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-        _logger.Info("Check successful, 'MSBuild Tools 2015' are installed.");
-        return true;
-      }
-      catch (FileNotFoundException)
-      {
-        return false;
-      }
     }
 
     protected abstract TParsedArguments ValidateAndParseArguments (TRawArguments arguments, Func<string, Exception> reportError);
@@ -141,18 +90,6 @@ namespace SolutionInspector.Api.Commands
       {
         _command = command;
         _arguments = arguments;
-      }
-
-      public IArgumentsBuilder<TArguments> Option (
-          string longKey,
-          string shortKey,
-          string description,
-          Action<TArguments, string> setValue,
-          string defaultValue = null)
-      {
-        setValue(_arguments, defaultValue);
-        _command.HasOption($"{shortKey}|{longKey}=", description, v => setValue(_arguments, v));
-        return this;
       }
 
       public IArgumentsBuilder<TArguments> Option<T> (
@@ -181,16 +118,7 @@ namespace SolutionInspector.Api.Commands
         return this;
       }
 
-      IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Option (
-          string longKey,
-          string shortKey,
-          string description,
-          Action<TArguments, string> setValue,
-          string defaultValue)
-      {
-        return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
-      }
-
+      [ExcludeFromCodeCoverage]
       IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Option<T> (
           string longKey,
           string shortKey,
@@ -201,6 +129,7 @@ namespace SolutionInspector.Api.Commands
         return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
       }
 
+      [ExcludeFromCodeCoverage]
       IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Flag (
           string longKey,
           string shortKey,

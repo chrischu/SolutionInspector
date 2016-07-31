@@ -18,7 +18,7 @@ namespace SolutionInspector.Api.Rules
 
       Func<ConstructorInfo, bool> constructorFilter = c => c.GetParameters().Length == 0;
       if (configurationType != null)
-        constructorFilter = c => c.GetParameters().Length == 1 && c.GetParameters().Any(p => p.ParameterType == configurationType);
+        constructorFilter = c => c.GetParameters().Length == 1 && c.GetParameters().Single().ParameterType == configurationType;
       var constructor = ResolveConstructor(
           ruleType,
           constructorFilter,
@@ -31,14 +31,9 @@ namespace SolutionInspector.Api.Rules
     {
       var validConstructors = ruleType.GetConstructors().Where(constructorFilter).ToArray();
 
-      //taking a parameter of type '{configurationType.Name}' as a parameter.
       if (validConstructors.Length == 0)
         throw new RuleTypeResolvingException(
             $"The rule type '{ruleType.Name}' does not provide a public constructor{taking}.");
-
-      if (validConstructors.Length > 1)
-        throw new RuleTypeResolvingException(
-            $"The rule type '{ruleType.Name}' has multiple constructors{taking}, but only one is allowed.");
 
       return validConstructors[0];
     }
