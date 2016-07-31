@@ -3,7 +3,6 @@ using System.IO;
 using JetBrains.Annotations;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Wrappers;
-using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
 {

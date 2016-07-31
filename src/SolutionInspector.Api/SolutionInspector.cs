@@ -6,7 +6,6 @@ using Autofac;
 using JetBrains.Annotations;
 using ManyConsole;
 using NLog;
-using NLog.Internal;
 using SolutionInspector.Api.Commands;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
@@ -17,9 +16,6 @@ using Wrapperator.Interfaces.Configuration;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
 using Wrapperator.Wrappers;
-using Wrapperator.Wrappers.Configuration;
-using Wrapperator.Wrappers.IO;
-using Wrapperator.Wrappers.Reflection;
 
 namespace SolutionInspector.Api
 {

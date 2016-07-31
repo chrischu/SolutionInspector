@@ -8,7 +8,6 @@ using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Wrappers;
-using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.Api.ObjectModel
 {
