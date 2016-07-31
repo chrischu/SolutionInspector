@@ -35,6 +35,7 @@ function Format-Xml([string] $path) {
 
   $xw = [System.Xml.XmlWriter]::Create($path, $xws)
   $xml.Save($xw)
+  $xw.Dispose()
 }
 
 Apply-XmlDocTransform "SolutionInspector\App.config" "SolutionInspector.Api\App.config.uninstall.xdt"

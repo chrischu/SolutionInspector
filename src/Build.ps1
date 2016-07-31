@@ -128,10 +128,12 @@ BuildTask Update-SolutionInspectorConfig {
   Apply-XdtTransform $solutionInspectorProject "Template.SolutionInspectorConfig" "..\SolutionInspector.Api\App.config.uninstall.xdt"
   Apply-XdtTransform $solutionInspectorProject "Template.SolutionInspectorConfig" "..\SolutionInspector.Api\App.config.install.xdt"
   Apply-XdtTransform $solutionInspectorProject "Template.SolutionInspectorConfig" "..\SolutionInspector.DefaultRules\App.config.install.xdt"
+  Format-Xml (Join-Path $($solutionInspectorProject.ProjectDir) "Template.SolutionInspectorConfig")
 
   Apply-XdtTransform $solutionInspectorProject "App.config" "..\SolutionInspector.Api\App.config.uninstall.xdt"
   Apply-XdtTransform $solutionInspectorProject "App.config" "..\SolutionInspector.Api\App.config.install.xdt"
   Apply-XdtTransform $solutionInspectorProject "App.config" "..\SolutionInspector.DefaultRules\App.config.install.xdt"
+  Format-Xml (Join-Path $($solutionInspectorProject.ProjectDir) "App.config")
 }
 
 
