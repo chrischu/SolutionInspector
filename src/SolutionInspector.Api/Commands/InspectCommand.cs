@@ -116,13 +116,14 @@ Solution: Use the <solutionFilePath>.SolutionInspectorConfig file.
       {
         s_logger.Error(ex, "Error while loading solution.");
         throw reportError(
-            $"Given solution file '{arguments.SolutionFilePath}' contains an invalid project file '{ex.ProjectFile}'." +
+            $"Given solution file '{arguments.SolutionFilePath}' contains an invalid project file '{ex.ProjectFile}' " +
             "(for detailed error information see the log file 'SolutionInspector.log').");
       }
       catch (Exception ex)
       {
         s_logger.Error(ex, "Error while loading solution.");
-        throw reportError($"Unexpected error when loading solution file '{arguments.SolutionFilePath}': {ex.Message}.");
+        throw reportError($"Unexpected error when loading solution file '{arguments.SolutionFilePath}': {ex.Message} (for further details see the" +
+                          "log file 'SolutionInspector.log').");
       }
     }
 

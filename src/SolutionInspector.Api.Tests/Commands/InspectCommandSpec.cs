@@ -372,7 +372,7 @@ namespace SolutionInspector.Api.Tests.Commands
       It shows_error = () =>
           TextWriter.ToString()
               .Should()
-              .Contain($"Given solution file 'solution' contains an invalid project file '{Environment.CurrentDirectory}\\projectFile'.");
+              .Contain($"Given solution file 'solution' contains an invalid project file '{Environment.CurrentDirectory}\\projectFile'");
 
       It returns_exit_code = () =>
           Result.Should().Be(-1);
