@@ -1,27 +1,12 @@
 # Roadmap
 
-Already planned features/fixes for SolutionInspector are documented here.
+Already planned features for SolutionInspector are documented here. Please note that bug fixes will not be recorded here, but they will always be fixed as soon as possible (i.e. in the next release version).
 
-## Next Version (v0.2.0)
-
-- [x] Release SolutionInspector.exe on NuGet as well
-- [x] 100% code coverage
-- [x] Wildcard support (see [#2](../issues/2))
-- [x] Add possibility to have a configuration file per solution (that lies next to the solution)
-- [x] Add possibility to define any arbitrary file path for a configuration file
-- [ ] More rules
-  - [x] See [#1](../issues/1)
-  - [x] Project GUIDs should be unique
-  - [x] NuGet references should have correct hint path
-  - [x] non-development NuGet references should have Private (=CopyLocal) set to true
-  - [x] Project item(s) should only be included with wildcard
-  - [x] Project item(s) should only be included without wildcard
-
-## Medium-Term
+## Next Version (v0.3.0)
 
 * Configuration UI (probably powered by WPF)
 
-## Long-Term
+## Medium-Term
 
 * Fixes (violations allow automatical fixing)
 * GUI reporting
