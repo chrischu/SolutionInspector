@@ -50,6 +50,9 @@
 
           <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectXPathRule, SolutionInspector.DefaultRules" />
+
+          <rule xdt:Transform="Remove" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.RequiredResourceLanguagesRule, SolutionInspector.DefaultRules" />
         </projectRuleGroup>
         <projectRuleGroup xdt:Locator="Match(appliesTo)"
                           appliesTo="+*;-*Tests;-*TestInfrastructure">

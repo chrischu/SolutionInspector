@@ -60,6 +60,10 @@
           <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
                 type="SolutionInspector.DefaultRules.ProjectXPathRule, SolutionInspector.DefaultRules"
                 xPath="boolean(//Compile)" ignoreNamespaces="true" />
+
+          <rule xdt:Transform="InsertIfMissing" xdt:Locator="Match(type)"
+                type="SolutionInspector.DefaultRules.RequiredResourceLanguagesRule, SolutionInspector.DefaultRules"
+                requiredResources="Resource,OtherResource" requiredLanguages="de,cs" />
         </projectRuleGroup>
         <projectRuleGroup xdt:Transform="InsertIfMissing" xdt:Locator="Match(appliesTo)"
                           appliesTo="+*;-*Tests;-*TestInfrastructure">

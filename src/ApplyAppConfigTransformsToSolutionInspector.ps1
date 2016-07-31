@@ -41,3 +41,8 @@ Apply-XmlDocTransform "SolutionInspector\App.config" "SolutionInspector.Api\App.
 Apply-XmlDocTransform "SolutionInspector\App.config" "SolutionInspector.Api\App.config.install.xdt"
 Apply-XmlDocTransform "SolutionInspector\App.config" "SolutionInspector.DefaultRules\App.config.install.xdt"
 Format-Xml "SolutionInspector\App.config"
+
+Apply-XmlDocTransform "SolutionInspector\Template.SolutionInspectorConfig" "SolutionInspector.Api\App.config.uninstall.xdt"
+Apply-XmlDocTransform "SolutionInspector\Template.SolutionInspectorConfig" "SolutionInspector.Api\App.config.install.xdt"
+Apply-XmlDocTransform "SolutionInspector\Template.SolutionInspectorConfig" "SolutionInspector.DefaultRules\App.config.install.xdt"
+Format-Xml "SolutionInspector\Template.SolutionInspectorConfig"

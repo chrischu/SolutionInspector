@@ -31,6 +31,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * **NuGetReferenceHintPathsMustBeValidRule**: Verifies that all NuGet references in the project have correct hint paths (pointing to an actually existing file). 
 * **NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRule**: Verifies that all non-development NuGet references in the project have their 'IsPrivate' flag (also referred to as 'Copy Local') set to true. 
 * **ProjectItemMustBeIncludedByWildcardRule/ProjectItemMustNotBeIncludedByWildcardRule**: Verifies that project items are included/not included by wildcards.
+* **RequiredResourceLanguagesRule**: Checks that all given resource files are localized in all given languages in the project.
 
 #### Changed
 * Renamed AllProjectItemsMustBePresentRule to ProjectItemsMustBePresentRule to be more in line with the newly added rules.

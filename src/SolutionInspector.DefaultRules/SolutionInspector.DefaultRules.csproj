@@ -88,6 +88,7 @@
     <Compile Include="RequiredCompilationSymbolsProjectRule.cs" />
     <Compile Include="RequiredNuGetPackagesRule.cs" />
     <Compile Include="ProjectConfigFileShouldHaveCorrectFrameworkVersionRule.cs" />
+    <Compile Include="RequiredResourceLanguagesRule.cs" />
     <Compile Include="SolutionBuildConfigurationsRule.cs" />
   </ItemGroup>
   <ItemGroup>
