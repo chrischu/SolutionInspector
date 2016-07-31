@@ -3,11 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/chrischu/SolutionInspector/compare/v0.2.0...HEAD)
+## [Unreleased](https://github.com/chrischu/SolutionInspector/compare/v0.2.1...HEAD)
 
 * No changes yet.
 
-## [0.2.0](https://github.com/chrischu/SolutionInspector/compare/v0.1.0...v0.2.0) - 2016-07-31
+## [0.2.1](https://github.com/chrischu/SolutionInspector/compare/v0.1.0...v0.2.1) - 2016-07-31
 ### General
 #### Added
 * SolutionInspector.exe is now available on NuGet.org as well (<https://www.nuget.org/packages/SolutionInspector.exe/>).
