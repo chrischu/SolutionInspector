@@ -64,7 +64,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.3.4\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.3.6\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NullGuard, Version=1.4.6.0, Culture=neutral, PublicKeyToken=1958ac8092168428, processorArchitecture=MSIL">
@@ -110,9 +110,9 @@
     <EmbeddedResource Include="Template.SolutionInspectorConfig" />
     <None Include="App.config" />
     <None Include="icon.ico" />
-    <None Include="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
