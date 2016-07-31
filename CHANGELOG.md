@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   * `--configurationFile=<SomeFilePath>`: Use the specified configuration file.
 * SolutionInspector now has a new command: `initialize [-f|--force] <configFilePath>`
   * Creates a pristine copy of a SolutionInspector config file at the given path. The command will require confirmation (except when the force flag is used) when the file would be overwritten.
+* SolutionInspector.exe is now also distributed as a NuGet package: *SolutionInspector.exe*.
 
 #### Changed
 * Changed the way SolutionInspector includes MSBuild DLLs:

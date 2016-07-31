@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <id>$id$.Console</id>
+    <id>$id$.exe</id>
     <version>$version$</version>
     <title>$id$</title>
     <authors>chrischu</authors>

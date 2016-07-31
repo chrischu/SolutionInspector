@@ -3,7 +3,7 @@
 [![Master Build][appveyor_master]](https://ci.appveyor.com/project/chrischu/solutioninspector)
 [![Coverage][coverage]](http://chrischu.github.io/SolutionInspector/CoverageReports/coverageReport.html)
 [![GitHub Release Version][github_release]](https://github.com/chrischu/SolutionInspector/releases)
-[![NuGet Release Version (SolutionChecker.Exe)][nuget_release_exe]](https://www.nuget.org/packages/SolutionInspector.Exe/)
+[![NuGet Release Version (SolutionChecker.exe)][nuget_release_exe]](https://www.nuget.org/packages/SolutionInspector.exe/)
 [![NuGet Release Version (SolutionChecker.Api)][nuget_release_api]](https://www.nuget.org/packages/SolutionInspector.Api/)
 [![NuGet Release Version (SolutionChecker.DefaultRules)][nuget_release_rules]](https://www.nuget.org/packages/SolutionInspector.DefaultRules/)
 [![License][license]](https://raw.githubusercontent.com/chrischu/SolutionInspector/master/LICENSE)
