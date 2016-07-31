@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SolutionInspector.Api.Extensions;
 using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
@@ -36,7 +37,7 @@ namespace SolutionInspector.Api.Commands
     {
       if (_file.Exists(arguments.ConfigFilePath) && !arguments.Force)
       {
-        _console.WriteLine($"File '{arguments.ConfigFilePath}' already exists. Do you want to overwrite it? [y/N]");
+        _console.Write($"File '{arguments.ConfigFilePath}' already exists. Do you want to overwrite it? [y/N] ");
         var answer = _console.ReadLine();
         if (string.IsNullOrEmpty(answer) || !string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase))
         {
@@ -45,7 +46,7 @@ namespace SolutionInspector.Api.Commands
         }
       }
 
-      using (var sourceStream = _resourceAssembly.GetManifestResourceStream("Template.SolutionInspectorConfig"))
+      using (var sourceStream = _resourceAssembly.GetManifestResourceStream("SolutionInspector.Template.SolutionInspectorConfig").AssertNotNull())
       using (var destinationStream = _file.Open(arguments.ConfigFilePath, FileMode.Create))
         sourceStream.CopyTo(destinationStream);
 

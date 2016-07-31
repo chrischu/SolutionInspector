@@ -66,12 +66,7 @@ namespace SolutionInspector.Api.Tests.Commands
       It returns_exit_code = () =>
           Result.Should().Be(0);
 
-      It loads_resource_and_copies_it_to_file = () =>
-          A.CallTo(() => ResourceAssembly.GetManifestResourceStream("Template.SolutionInspectorConfig")).MustHaveHappened()
-              .Then(A.CallTo(() => File.Open("configFilePath", FileMode.Create)).MustHaveHappened())
-              .Then(A.CallTo(() => SourceStream.CopyTo(DestinationStream)).MustHaveHappened())
-              .Then(A.CallTo(() => DestinationStream.Dispose()).MustHaveHappened())
-              .Then(A.CallTo(() => SourceStream.Dispose()).MustHaveHappened());
+      Behaves_like<it_loads_resource_and_copies_it_to_file> _;
 
       static int Result;
     }
@@ -87,17 +82,12 @@ namespace SolutionInspector.Api.Tests.Commands
       Because of = () => Result = RunCommand(SUT, "configFilePath");
 
       It queries_for_confirmation = () =>
-          A.CallTo(() => Console.WriteLine("File 'configFilePath' already exists. Do you want to overwrite it? [y/N]")).MustHaveHappened();
+          A.CallTo(() => Console.Write("File 'configFilePath' already exists. Do you want to overwrite it? [y/N] ")).MustHaveHappened();
 
       It returns_exit_code = () =>
           Result.Should().Be(0);
 
-      It loads_resource_and_copies_it_to_file = () =>
-          A.CallTo(() => ResourceAssembly.GetManifestResourceStream("Template.SolutionInspectorConfig")).MustHaveHappened()
-              .Then(A.CallTo(() => File.Open("configFilePath", FileMode.Create)).MustHaveHappened())
-              .Then(A.CallTo(() => SourceStream.CopyTo(DestinationStream)).MustHaveHappened())
-              .Then(A.CallTo(() => DestinationStream.Dispose()).MustHaveHappened())
-              .Then(A.CallTo(() => SourceStream.Dispose()).MustHaveHappened());
+      Behaves_like<it_loads_resource_and_copies_it_to_file> _;
 
       static int Result;
     }
@@ -113,7 +103,7 @@ namespace SolutionInspector.Api.Tests.Commands
       Because of = () => Result = RunCommand(SUT, "configFilePath");
 
       It queries_for_confirmation = () =>
-          A.CallTo(() => Console.WriteLine("File 'configFilePath' already exists. Do you want to overwrite it? [y/N]")).MustHaveHappened();
+          A.CallTo(() => Console.Write("File 'configFilePath' already exists. Do you want to overwrite it? [y/N] ")).MustHaveHappened();
 
       It confirms_command_abortion = () =>
           A.CallTo(() => Console.WriteLine("Command was aborted.")).MustHaveHappened();
@@ -136,13 +126,20 @@ namespace SolutionInspector.Api.Tests.Commands
       It returns_exit_code = () =>
           Result.Should().Be(0);
 
+      Behaves_like<it_loads_resource_and_copies_it_to_file> _;
+
+      static int Result;
+    }
+
+    [Behaviors]
+    class it_loads_resource_and_copies_it_to_file
+    {
       It loads_resource_and_copies_it_to_file = () =>
-          A.CallTo(() => ResourceAssembly.GetManifestResourceStream("Template.SolutionInspectorConfig")).MustHaveHappened()
+          A.CallTo(() => ResourceAssembly.GetManifestResourceStream("SolutionInspector.Template.SolutionInspectorConfig")).MustHaveHappened()
               .Then(A.CallTo(() => File.Open("configFilePath", FileMode.Create)).MustHaveHappened())
               .Then(A.CallTo(() => SourceStream.CopyTo(DestinationStream)).MustHaveHappened())
               .Then(A.CallTo(() => DestinationStream.Dispose()).MustHaveHappened())
               .Then(A.CallTo(() => SourceStream.Dispose()).MustHaveHappened());
-      static int Result;
     }
 
     static int RunCommand (ConsoleCommand command, params string[] arguments)
