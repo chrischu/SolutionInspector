@@ -88,7 +88,7 @@ namespace SolutionInspector.Api
               Wrapper.Wrap(Assembly.GetEntryAssembly()),
               ctx.Resolve<IFileStatic>(),
               ctx.Resolve<IConsoleStatic>())
-          );
+          ).As<ConsoleCommand>();
 
       builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();
 

@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased](https://github.com/chrischu/SolutionInspector/compare/v0.1.0...HEAD)
 ### General
 #### Added
-* SolutionInspector.exe is now available on NuGet.org as well (<https://www.nuget.org/packages/SolutionInspector.Console/>).
+* SolutionInspector.exe is now available on NuGet.org as well (<https://www.nuget.org/packages/SolutionInspector.exe/>).
 * SolutionInspector's code now has 100% coverage by tests.
 * SolutionInspector now has more options to define which configuration file is to be used:
   * `--configurationFile=AppConfig`: Use the SolutionInspector.exe.config file (is and was the default).
@@ -14,7 +14,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   * `--configurationFile=<configFilePath>`: Use the specified configuration file.
 * SolutionInspector now has a new command: `initialize [-f|--force] <configFilePath>`
   * Creates a pristine copy of a SolutionInspector config file at the given path. The command will require confirmation (except when the force flag is used) when the file would be overwritten.
-* SolutionInspector.exe is now also distributed as a NuGet package: *SolutionInspector.exe*.
 
 #### Changed
 * Changed the way SolutionInspector includes MSBuild DLLs:

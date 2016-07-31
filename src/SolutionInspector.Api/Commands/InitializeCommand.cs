@@ -23,7 +23,7 @@ namespace SolutionInspector.Api.Commands
     protected override void SetupArguments (IArgumentsBuilder<RawArguments> argumentsBuilder)
     {
       argumentsBuilder
-          .Flag("force", "f", "Do not ask for confirmation if the file already exists.", (a, v) => a.Force = v)
+          .Flag("force", "f", "Overwrite file if it exists without asking for confirmation.", (a, v) => a.Force = v)
           .Values(c => c.Value("configFilePath", (a, v) => a.ConfigFilePath = v));
     }
 
