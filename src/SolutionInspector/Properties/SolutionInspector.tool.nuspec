@@ -3,7 +3,7 @@
   <metadata>
     <id>$id$.exe</id>
     <version>$version$</version>
-    <title>$id$</title>
+    <title>$id$.exe</title>
     <authors>chrischu</authors>
     <owners>chrischu</owners>
     <licenseUrl>https://raw.githubusercontent.com/chrischu/SolutionInspector/master/LICENSE</licenseUrl>

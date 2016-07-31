@@ -101,7 +101,7 @@ function Run() {
     Restore-AssemblyInfos
   }
   
-  Publish-CoverageReports -Condition ($Mode -eq "AppVeyor" -and -not $IsPreRelease -and $RunDotCoverCoverageAnalysis)
+  Publish-CoverageReports -Condition ($Mode -eq "AppVeyor" -and -not $IsPreRelease -and $RunDotCoverCoverageAnalysis -and $PushNuGetPackages)
 }
 
 BuildTask Clean {
