@@ -2,44 +2,58 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\projectrule.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\utilities\collectiondifferences.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
-using System.Configuration;
-using SolutionInspector.Api.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 
-namespace SolutionInspector.Api.Rules
+namespace SolutionInspector.Api.Utilities
 {
   /// &lt;summary&gt;
-  ///   A SolutionInspector rule that targets &lt;see cref=&quot;IProject&quot; /&gt;s.
+  ///   Container class for all the differences between two collections with elements of type &lt;typeparamref name=&quot;T&quot; /&gt;.
   /// &lt;/summary&gt;
-  public interface IProjectRule : IRule&lt;IProject&gt;
+  public class CollectionDifferences&lt;T&gt;
   {
-  }
+    /// &lt;summary&gt;
+    ///   A instance of &lt;see cref=&quot;CollectionDifferences{T}&quot; /&gt; that represents no differences.
+    /// &lt;/summary&gt;
+    [PublicAPI]
+    public static readonly CollectionDifferences&lt;T&gt; None = new CollectionDifferences&lt;T&gt;(Enumerable.Empty&lt;T&gt;(), Enumerable.Empty&lt;T&gt;());
 
-  /// &lt;inheritdoc /&gt;
-  public abstract class ProjectRule : Rule&lt;IProject&gt;, IProjectRule
-  {
-  }
+    /// &lt;summary&gt;
+    ///   All the elements that were added.
+    /// &lt;/summary&gt;
+    public IReadOnlyCollection&lt;T&gt; Adds { get; }
 
-  /// &lt;inheritdoc /&gt;
-  public abstract class ConfigurableProjectRule&lt;TConfiguration&gt; : ConfigurableRule&lt;IProject, TConfiguration&gt;, IProjectRule
-      where TConfiguration : ConfigurationElement
-  {
-    /// &lt;inheritdoc /&gt;
-    protected ConfigurableProjectRule (TConfiguration configuration)
-        : base(configuration)
+    /// &lt;summary&gt;
+    ///   All the elements that were removed.
+    /// &lt;/summary&gt;
+    public IReadOnlyCollection&lt;T&gt; Removes { get; }
+
+    /// &lt;summary&gt;
+    ///   &lt;c&gt;True&lt;/c&gt; if differences were found, &lt;c&gt;false&lt;/c&gt; otherwise.
+    /// &lt;/summary&gt;
+    public bool DifferencesFound =&gt; Adds.Any() || Removes.Any();
+
+    /// &lt;summary&gt;
+    ///   Creates an instance of &lt;see cref=&quot;CollectionDifferences{T}&quot; /&gt;.
+    /// &lt;/summary&gt;
+    public CollectionDifferences (IEnumerable&lt;T&gt; adds, IEnumerable&lt;T&gt; removes)
     {
+      Adds = adds.ToArray();
+      Removes = removes.ToArray();
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[25,11,25,30,1],[27,5,27,6,1]]);
+      highlightRanges([[22,42,22,46,1],[27,45,27,49,1],[32,37,32,64,1],[37,5,37,79,1],[39,7,39,29,1],[40,7,40,35,1],[41,5,41,6,1],[17,5,17,135,1]]);
     </script>
   </body>
 </html>

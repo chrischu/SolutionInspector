@@ -2,52 +2,214 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\nugetreference.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\objectmodel\projectitem.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
-using System.Reflection;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using JetBrains.Annotations;
+using SolutionInspector.Api.Extensions;
+using SolutionInspector.Api.Rules;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// &lt;summary&gt;
-  ///   Represents a DLL reference via NuGet.
+  ///   Represents a MSBuild project item.
   /// &lt;/summary&gt;
-  public class NuGetReference : DllReferenceBase
+  [PublicAPI]
+  public interface IProjectItem : IRuleTarget
   {
     /// &lt;summary&gt;
-    ///   The NuGet package that created the reference.
+    ///   The original MSBuild project item.
     /// &lt;/summary&gt;
-    public NuGetPackage Package { get; }
+    Microsoft.Build.Evaluation.ProjectItem OriginalProjectItem { get; set; }
+
 
     /// &lt;summary&gt;
-    ///   &lt;c&gt;True&lt;/c&gt; if the reference is private, &lt;c&gt;false&lt;/c&gt; otherwise.
+    ///   The project the item is contained in.
     /// &lt;/summary&gt;
-    public bool IsPrivate { get; }
+    IProject Project { get; }
 
     /// &lt;summary&gt;
-    ///   The hint path that points to the DLL in the NuGet packages folder.
+    ///   The (file) name of the project item.
     /// &lt;/summary&gt;
-    public string HintPath { get; }
+    string Name { get; }
 
     /// &lt;summary&gt;
-    ///   Creates a new &lt;see cref=&quot;NuGetReference&quot; /&gt;.
+    ///   The original (just as in the MSBuild file) include path (relative to the project file) of the project item.
     /// &lt;/summary&gt;
-    public NuGetReference (NuGetPackage package, AssemblyName assemblyName, bool isPrivate, string hintPath)
-        : base(assemblyName)
+    IProjectItemInclude Include { get; }
+
+    /// &lt;summary&gt;
+    ///   The build action that is configured for the project item.
+    /// &lt;/summary&gt;
+    ProjectItemBuildAction BuildAction { get; }
+
+    /// &lt;summary&gt;
+    ///   A &lt;see cref=&quot;IFileInfo&quot; /&gt; pointing to the project item.
+    /// &lt;/summary&gt;
+    IFileInfo File { get; }
+
+    /// &lt;summary&gt;
+    ///   True, if the file is referenced as a link instead of a regular reference.
+    /// &lt;/summary&gt;
+    /// &lt;remarks&gt;
+    ///   Links are usually used to reference one file in multiple projects while still maintaining only one physical copy of it.
+    /// &lt;/remarks&gt;
+    bool IsLink { get; }
+
+    /// &lt;summary&gt;
+    ///   True, if the file was referenced with wildcards (see &lt;see cref=&quot;WildcardInclude&quot;/&gt;) as opposed to a direct file name reference.
+    /// &lt;/summary&gt;
+    bool IsIncludedByWildcard { get; }
+
+    /// &lt;summary&gt;
+    /// The include path(s) (including a wildcard) for the project item or &lt;see langword=&quot;null&quot; /&gt; if it wasn&#39;t included via wildcard.
+    /// &lt;/summary&gt;
+    string WildcardInclude { get; }
+
+    /// &lt;summary&gt;
+    /// The exclude path(s) (including a wildcard) for the project item or &lt;see langword=&quot;null&quot; /&gt; if it wasn&#39;t included via wildcard.
+    /// &lt;/summary&gt;
+    string WildcardExclude { get; }
+
+    /// &lt;summary&gt;
+    ///   The project item&#39;s location inside the project file.
+    /// &lt;/summary&gt;
+    IProjectLocation Location { get; }
+
+    /// &lt;summary&gt;
+    ///   Metadata for the project item.
+    /// &lt;/summary&gt;
+    IReadOnlyDictionary&lt;string, string&gt; Metadata { get; }
+
+    /// &lt;summary&gt;
+    ///   The custom tool that is configured for the project item.
+    /// &lt;/summary&gt;
+    string CustomTool { get; }
+
+    /// &lt;summary&gt;
+    ///   The custom tool namespace that is configured for the project item.
+    /// &lt;/summary&gt;
+    string CustomToolNamespace { get; }
+
+    /// &lt;summary&gt;
+    ///   The project item&#39;s parent project item (if any).
+    /// &lt;/summary&gt;
+    IProjectItem Parent { get; }
+
+    /// &lt;summary&gt;
+    ///   The project item&#39;s child project items (if any).
+    /// &lt;/summary&gt;
+    IReadOnlyCollection&lt;IProjectItem&gt; Children { get; }
+  }
+
+  [PublicAPI]
+  internal class ProjectItem : IProjectItem
+  {
+    private readonly List&lt;ProjectItem&gt; _children = new List&lt;ProjectItem&gt;();
+    private Lazy&lt;string&gt; _identifier;
+
+    public Microsoft.Build.Evaluation.ProjectItem OriginalProjectItem { get; set; }
+
+    public IProject Project { get; }
+
+    public string Name =&gt; Path.GetFileName(Include.Evaluated);
+
+    public string Identifier =&gt; _identifier.Value;
+
+    public string FullPath =&gt; File.FullName;
+
+    public IProjectItemInclude Include { get; }
+
+    public ProjectItemBuildAction BuildAction { get; }
+
+    public IFileInfo File { get; }
+    public bool IsLink { get; }
+    public bool IsIncludedByWildcard { get; }
+    public string WildcardInclude { get; }
+    public string WildcardExclude { get; }
+
+    public IProjectLocation Location { get; }
+
+    public IReadOnlyDictionary&lt;string, string&gt; Metadata { get; }
+
+    public string CustomTool =&gt; Metadata.GetValueOrDefault(&quot;Generator&quot;);
+    public string CustomToolNamespace =&gt; Metadata.GetValueOrDefault(&quot;CustomToolNamespace&quot;);
+
+
+    public IProjectItem Parent { get; private set; }
+
+    public IReadOnlyCollection&lt;IProjectItem&gt; Children =&gt; _children;
+
+    protected ProjectItem (
+        IProject project,
+        Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
-      Package = package;
-      IsPrivate = isPrivate;
-      HintPath = hintPath;
+      Project = project;
+      OriginalProjectItem = msBuildProjectItem;
+
+      Include = new ProjectItemInclude(msBuildProjectItem.EvaluatedInclude, msBuildProjectItem.UnevaluatedInclude);
+
+      BuildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
+      var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
+      File = Wrapper.Wrap(new FileInfo(fullPath));
+
+      Location = new ProjectLocation(msBuildProjectItem.Xml.Location.Line, msBuildProjectItem.Xml.Location.Column);
+      Metadata = msBuildProjectItem.Metadata.ToDictionary(m =&gt; m.Name, m =&gt; m.EvaluatedValue);
+      IsLink = Metadata.ContainsKey(&quot;Link&quot;);
+
+      if (msBuildProjectItem.UnevaluatedInclude.Contains(&quot;*&quot;))
+      {
+        IsIncludedByWildcard = true;
+        WildcardInclude = msBuildProjectItem.UnevaluatedInclude;
+        WildcardExclude = msBuildProjectItem.Xml.Exclude;
+      }
+
+      _identifier = new Lazy&lt;string&gt;(CreateIdentifier);
+    }
+
+    private string CreateIdentifier ()
+    {
+      var sb = new StringBuilder();
+
+      sb.Append(Parent != null ? Parent.Identifier : Project.Identifier);
+      sb.Append(&#39;/&#39;);
+
+      var include = IsLink ? Metadata[&quot;Link&quot;] : Include.Evaluated;
+
+      include = include.Replace(&#39;\\&#39;, &#39;/&#39;);
+      if (Parent != null)
+        include = include.Split(&#39;/&#39;).Last();
+
+      sb.Append(include);
+
+      return sb.ToString();
+    }
+
+    internal void SetParent (ProjectItem parent)
+    {
+      parent._children.Add(this);
+      Parent = parent;
+    }
+
+    public static ProjectItem FromMsBuildProjectItem (IProject project, Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
+    {
+      return new ProjectItem(project, msBuildProjectItem);
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[14,35,14,39,1],[19,29,19,33,1],[24,30,24,34,1],[30,11,30,29,1],[32,7,32,25,1],[33,7,33,29,1],[34,7,34,27,1],[35,5,35,6,1]]);
+      highlightRanges([[111,73,111,77,1],[111,78,111,82,1],[113,31,113,35,1],[115,27,115,62,1],[117,33,117,50,1],[119,31,119,44,1],[121,42,121,46,1],[123,49,123,53,1],[125,29,125,33,1],[126,26,126,30,1],[127,40,127,44,1],[128,37,128,41,1],[129,37,129,41,1],[131,40,131,44,1],[133,59,133,63,1],[135,33,135,72,1],[136,42,136,91,1],[139,34,139,38,1],[139,39,139,51,1],[141,58,141,67,1],[108,5,108,76,1],[143,5,145,67,1],[147,7,147,25,1],[148,7,148,48,1],[150,7,150,116,1],[152,7,152,80,1],[153,7,153,125,1],[154,7,154,51,1],[156,7,156,116,1],[157,7,157,64,1],[157,70,157,77,1],[157,93,157,95,1],[158,7,158,45,1],[160,7,160,63,1],[162,9,162,37,1],[163,9,163,65,1],[164,9,164,58,1],[167,7,167,56,1],[168,5,168,6,1],[172,7,172,36,1],[174,7,174,74,1],[175,7,175,22,1],[177,7,177,67,1],[179,7,179,44,1],[180,7,180,26,1],[181,9,181,45,1],[183,7,183,26,1],[185,7,185,28,1],[190,7,190,34,1],[191,7,191,23,1],[192,5,192,6,1],[196,7,196,59,1],[157,64,157,70,1],[157,77,157,93,1]]);
     </script>
   </body>
 </html>

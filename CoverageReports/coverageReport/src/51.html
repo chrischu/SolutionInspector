@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\gacreference.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\objectmodel\nugetreference.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
@@ -14,22 +14,38 @@ using System.Reflection;
 namespace SolutionInspector.Api.ObjectModel
 {
   /// &lt;summary&gt;
-  ///   Represents a DLL reference via the GAC (Global Assembly Cache).
+  ///   Represents a DLL reference via NuGet.
   /// &lt;/summary&gt;
-  public class GacReference : DllReferenceBase
+  public interface INuGetReference : IDllReference
   {
     /// &lt;summary&gt;
-    ///   Creates a new &lt;see cref=&quot;GacReference&quot; /&gt;.
+    ///   The NuGet package that created the reference.
     /// &lt;/summary&gt;
-    public GacReference (AssemblyName assemblyName)
-        : base(assemblyName)
+    INuGetPackage Package { get; }
+
+    /// &lt;summary&gt;
+    ///   &lt;c&gt;True&lt;/c&gt; if the reference is private, &lt;c&gt;false&lt;/c&gt; otherwise.
+    /// &lt;/summary&gt;
+    bool IsPrivate { get; }
+  }
+
+  internal class NuGetReference : DllReferenceBase, INuGetReference
+  {
+    public INuGetPackage Package { get; }
+
+    public bool IsPrivate { get; }
+
+    public NuGetReference (INuGetPackage package, AssemblyName assemblyName, bool isPrivate, string hintPath, string projectDirectory)
+        : base(assemblyName, projectDirectory, hintPath)
     {
+      Package = package;
+      IsPrivate = isPrivate;
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[15,11,15,29,1],[17,5,17,6,1]]);
+      highlightRanges([[24,36,24,40,1],[26,29,26,33,1],[29,11,29,57,1],[31,7,31,25,1],[32,7,32,29,1],[33,5,33,6,1]]);
     </script>
   </body>
 </html>

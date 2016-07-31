@@ -2,61 +2,72 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\configuration\solutioncheckerconfiguration.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\configuration\rules\projectitemrulegroupconfigurationelement.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
+using System.Collections.Generic;
 using System.Configuration;
-using JetBrains.Annotations;
-using SolutionInspector.Api.Configuration.MsBuildParsing;
-using SolutionInspector.Api.Configuration.RuleAssemblyImports;
-using SolutionInspector.Api.Configuration.Rules;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using SolutionInspector.Api.Configuration.Infrastructure;
+using SolutionInspector.Api.Utilities;
 
-namespace SolutionInspector.Api.Configuration
+namespace SolutionInspector.Api.Configuration.Rules
 {
   /// &lt;summary&gt;
-  ///   Configuration for the SolutionInspector.
+  ///   Configuration defining a set of &lt;see cref=&quot;Rules&quot; /&gt; that is applied to all the project items that match the &lt;see cref=&quot;AppliesTo&quot; /&gt; and
+  ///   &lt;see cref=&quot;InProject&quot; /&gt; filters.
   /// &lt;/summary&gt;
-  public interface ISolutionInspectorConfiguration
+  public interface IProjectItemRuleGroupConfiguration
   {
     /// &lt;summary&gt;
-    ///   Allows importing rule assemblies to enable access to rules contained in them.
+    ///   Filter that controlls which project items are affected by the rules in the &lt;see cref=&quot;IProjectItemRuleGroupConfiguration&quot; /&gt;.
     /// &lt;/summary&gt;
-    IRuleAssemblyImportsConfiguration RuleAssemblyImports { get; }
+    INameFilter AppliesTo { get; }
 
     /// &lt;summary&gt;
-    ///   Controls how SolutionInspector parses MSBuild files.
+    ///   Filter that controlls which project&#39;s items are affected by the rules in the &lt;see cref=&quot;IProjectItemRuleGroupConfiguration&quot; /&gt;.
     /// &lt;/summary&gt;
-    IMsBuildParsingConfiguration MsBuildParsing { get; }
+    INameFilter InProject { get; }
 
     /// &lt;summary&gt;
-    ///   Configures the various rules that are checked against when running the SolutionInspector.
+    ///   The set of rules that is applied to all project items that match the &lt;see cref=&quot;AppliesTo&quot; /&gt; and &lt;see cref=&quot;InProject&quot; /&gt; filters.
     /// &lt;/summary&gt;
-    IRulesConfiguration Rules { get; }
+    IReadOnlyCollection&lt;IRuleConfiguration&gt; Rules { get; }
   }
 
-  [UsedImplicitly]
-  internal class SolutionInspectorConfiguration : ConfigurationSectionGroup, ISolutionInspectorConfiguration
+  internal class ProjectItemRuleGroupConfigurationElement
+      : RuleConfigurationCollection, IKeyedConfigurationElement&lt;string&gt;, IProjectItemRuleGroupConfiguration
   {
-    public IRuleAssemblyImportsConfiguration RuleAssemblyImports =&gt; (RuleAssemblyImportsConfigurationSection) Sections[&quot;ruleAssemblyImports&quot;];
+    [ConfigurationProperty (&quot;appliesTo&quot;, IsRequired = true, DefaultValue = &quot;*&quot;)]
+    // ReSharper disable once MemberCanBePrivate.Global
+    public NameFilter AppliesTo =&gt; (NameFilter) this[&quot;appliesTo&quot;];
 
-    public IMsBuildParsingConfiguration MsBuildParsing =&gt; (MsBuildParsingConfigurationSection) Sections[&quot;msBuildParsing&quot;];
+    [ConfigurationProperty (&quot;inProject&quot;, IsRequired = true, DefaultValue = &quot;*&quot;)]
+    // ReSharper disable once MemberCanBePrivate.Global
+    public NameFilter InProject =&gt; (NameFilter) this[&quot;inProject&quot;];
 
-    public IRulesConfiguration Rules =&gt; (RulesConfigurationSection) Sections[&quot;rules&quot;];
+    public IReadOnlyCollection&lt;IRuleConfiguration&gt; Rules =&gt; this.ToArray();
 
-    public static SolutionInspectorConfiguration Load ()
-    {
-      var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-      return (SolutionInspectorConfiguration) configuration.GetSectionGroup(&quot;solutionInspector&quot;);
-    }
+    [ExcludeFromCodeCoverage]
+    INameFilter IProjectItemRuleGroupConfiguration.AppliesTo =&gt; AppliesTo;
+
+    [ExcludeFromCodeCoverage]
+    INameFilter IProjectItemRuleGroupConfiguration.InProject =&gt; InProject;
+
+    public string Key =&gt; $&quot;{InProject} {AppliesTo}&quot;;
+
+    [ExcludeFromCodeCoverage]
+    public string KeyName =&gt; &quot;appliesTo&quot;;
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[34,69,34,142,0],[36,59,36,122,0],[38,41,38,86,0],[42,7,42,98,0],[43,7,43,98,0]]);
+      highlightRanges([[38,36,38,66,1],[42,36,42,66,1],[44,61,44,75,1],[52,26,52,52,1]]);
     </script>
   </body>
 </html>

@@ -2,46 +2,79 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\projectitemrule.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\utilities\buildconfigurationfilter.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
-using System.Configuration;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 
-namespace SolutionInspector.Api.Rules
+namespace SolutionInspector.Api.Utilities
 {
   /// &lt;summary&gt;
-  ///   A SolutionInspector rule that targets &lt;see cref=&quot;IProjectItem&quot; /&gt;s.
+  ///   Filter for build configurations (e.g. Debug/AnyCPU).
   /// &lt;/summary&gt;
-  public interface IProjectItemRule : IRule&lt;IProjectItem&gt;
+  public class BuildConfigurationFilter
   {
-  }
+    private readonly BuildConfiguration[] _filters;
 
-  /// &lt;inheritdoc /&gt;
-  [PublicAPI]
-  public abstract class ProjectItemRule : Rule&lt;IProjectItem&gt;, IProjectItemRule
-  {
-  }
-
-  /// &lt;inheritdoc /&gt;
-  public abstract class ConfigurableProjectItemRule&lt;TConfiguration&gt; : ConfigurableRule&lt;IProjectItem, TConfiguration&gt;, IProjectItemRule
-      where TConfiguration : ConfigurationElement
-  {
-    /// &lt;inheritdoc /&gt;
-    protected ConfigurableProjectItemRule (TConfiguration configuration)
-        : base(configuration)
+    /// &lt;summary&gt;
+    ///   Creates a &lt;see cref=&quot;BuildConfigurationFilter&quot; /&gt; from the given &lt;see cref=&quot;BuildConfiguration&quot; /&gt;s.
+    /// &lt;/summary&gt;
+    public BuildConfigurationFilter (IEnumerable&lt;BuildConfiguration&gt; filters)
+        : this(filters.ToArray())
     {
+    }
+
+    /// &lt;summary&gt;
+    ///   Creates a &lt;see cref=&quot;BuildConfigurationFilter&quot; /&gt; from the given &lt;see cref=&quot;BuildConfiguration&quot; /&gt;s.
+    /// &lt;/summary&gt;
+    public BuildConfigurationFilter (params BuildConfiguration[] filters)
+    {
+      _filters = filters.ToArray();
+    }
+
+    /// &lt;summary&gt;
+    ///   Returns &lt;c&gt;true&lt;/c&gt; if the given &lt;paramref name=&quot;buildConfiguration&quot; /&gt; matches the filter, &lt;c&gt;false&lt;/c&gt; otherwise.
+    /// &lt;/summary&gt;
+    public bool IsMatch (BuildConfiguration buildConfiguration)
+    {
+      var comparer = new BuildConfigurationFilterEqualityComparer();
+      return _filters.Any(f =&gt; comparer.Equals(f, buildConfiguration));
+    }
+
+    private class BuildConfigurationFilterEqualityComparer : IEqualityComparer&lt;BuildConfiguration&gt;
+    {
+      public bool Equals ([NotNull] BuildConfiguration x, [NotNull] BuildConfiguration y)
+      {
+        return (x.ConfigurationName == y.ConfigurationName || x.ConfigurationName == &quot;*&quot; || y.ConfigurationName == &quot;*&quot;) &amp;&amp;
+               (x.PlatformName == y.PlatformName || x.PlatformName == &quot;*&quot; || y.PlatformName == &quot;*&quot;);
+      }
+
+      [ExcludeFromCodeCoverage]
+      public int GetHashCode ([NotNull] BuildConfiguration obj)
+      {
+        return obj.GetHashCode();
+      }
+    }
+
+    /// &lt;inheritdoc /&gt;
+    [ExcludeFromCodeCoverage]
+    public override string ToString ()
+    {
+      return string.Join(&quot;,&quot;, _filters.Select(f =&gt; f.ToString()));
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[27,11,27,30,1],[29,5,29,6,1]]);
+      highlightRanges([[21,11,21,34,1],[23,5,23,6,1],[28,5,28,74,1],[30,7,30,36,1],[31,5,31,6,1],[38,7,38,69,1],[39,7,39,32,1],[39,70,39,72,1],[46,9,47,101,1],[39,32,39,70,1]]);
     </script>
   </body>
 </html>

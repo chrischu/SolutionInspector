@@ -2,119 +2,118 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\projectitembuildaction.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\objectmodel\solution.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using JetBrains.Annotations;
+using Microsoft.Build.Construction;
+using SolutionInspector.Api.Configuration.MsBuildParsing;
+using SolutionInspector.Api.Extensions;
+using SolutionInspector.Api.Rules;
+using Wrapperator.Interfaces.IO;
+using Wrapperator.Wrappers;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// &lt;summary&gt;
-  ///   Represents a MSBuild project item build action (e.g. None, Compile).
+  ///   Represents a VisualStudio solution.
   /// &lt;/summary&gt;
   [PublicAPI]
-  public class ProjectItemBuildAction : IEquatable&lt;ProjectItemBuildAction&gt;
+  public interface ISolution : IRuleTarget, IDisposable
   {
-    private readonly string _value;
+    /// &lt;summary&gt;
+    ///   The solution&#39;s name.
+    /// &lt;/summary&gt;
+    string Name { get; }
 
     /// &lt;summary&gt;
-    ///   Represents the &lt;c&gt;None&lt;/c&gt; build action.
+    ///   The directory where the solution lies.
     /// &lt;/summary&gt;
-    public static readonly ProjectItemBuildAction None = new ProjectItemBuildAction(&quot;None&quot;);
+    IDirectoryInfo SolutionDirectory { get; }
 
     /// &lt;summary&gt;
-    ///   Represents the &lt;c&gt;Compile&lt;/c&gt; build action.
+    ///   All &lt;see cref=&quot;IProject&quot; /&gt; contained in the solution.
     /// &lt;/summary&gt;
-    public static readonly ProjectItemBuildAction Compile = new ProjectItemBuildAction(&quot;Compile&quot;);
+    IReadOnlyCollection&lt;IProject&gt; Projects { get; }
 
     /// &lt;summary&gt;
-    ///   Represents the &lt;c&gt;Content&lt;/c&gt; build action.
+    ///   All &lt;see cref=&quot;BuildConfiguration&quot; /&gt;s in the solution.
     /// &lt;/summary&gt;
-    public static readonly ProjectItemBuildAction Content = new ProjectItemBuildAction(&quot;Content&quot;);
+    IReadOnlyCollection&lt;BuildConfiguration&gt; BuildConfigurations { get; }
 
     /// &lt;summary&gt;
-    ///   Represents the &lt;c&gt;EmbeddedResource&lt;/c&gt; build action.
+    ///   Returns the project with a matching &lt;paramref name=&quot;projectGuid&quot; /&gt; or &lt;see langword=&quot;null&quot; /&gt; if no such project can be found.
     /// &lt;/summary&gt;
-    public static readonly ProjectItemBuildAction EmbeddedResource = new ProjectItemBuildAction(&quot;EmbeddedResource&quot;);
+    [CanBeNull]
+    IProject GetProjectByProjectGuid (Guid projectGuid);
 
     /// &lt;summary&gt;
-    ///   Allows the creation of a custom &lt;see cref=&quot;ProjectItemBuildAction&quot; /&gt;.
+    ///   Returns the project point to by the given &lt;paramref name=&quot;absoluteProjectPath&quot; /&gt; or &lt;see langword=&quot;null&quot; /&gt; if no such project can be found.
     /// &lt;/summary&gt;
-    public static ProjectItemBuildAction Custom (string value)
+    [CanBeNull]
+    IProject GetProjectByAbsoluteProjectFilePath (string absoluteProjectPath);
+  }
+
+  internal sealed class Solution : ISolution
+  {
+    private readonly string _solutionPath;
+    private readonly SolutionFile _solutionFile;
+
+    private Solution (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
-      return new ProjectItemBuildAction(value);
+      _solutionPath = solutionPath;
+      Name = Path.GetFileNameWithoutExtension(solutionPath);
+      SolutionDirectory = Wrapper.Wrap(new DirectoryInfo(Path.GetDirectoryName(solutionPath).AssertNotNull()));
+      _solutionFile = SolutionFile.Parse(solutionPath);
+
+      Projects =
+          _solutionFile.ProjectsInOrder.Where(p =&gt; p.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat)
+              .Select(p =&gt; Project.FromSolution(this, p, msBuildParsingConfiguration))
+              .ToArray();
+      BuildConfigurations = _solutionFile.SolutionConfigurations.Select(c =&gt; new BuildConfiguration(c.ConfigurationName, c.PlatformName)).ToArray();
     }
 
-    private ProjectItemBuildAction (string value)
+    public string Name { get; }
+    public IDirectoryInfo SolutionDirectory { get; }
+    public IReadOnlyCollection&lt;IProject&gt; Projects { get; }
+    public IReadOnlyCollection&lt;BuildConfiguration&gt; BuildConfigurations { get; }
+
+    public IProject GetProjectByProjectGuid (Guid projectGuid)
     {
-      _value = value;
+      return Projects.SingleOrDefault(p =&gt; p.Guid == projectGuid);
     }
 
-    /// &lt;inheritdoc /&gt;
-    public bool Equals ([CanBeNull] ProjectItemBuildAction other)
+    public IProject GetProjectByAbsoluteProjectFilePath (string absoluteProjectPath)
     {
-      if (ReferenceEquals(null, other))
-        return false;
-      if (ReferenceEquals(this, other))
-        return true;
-      return string.Equals(_value, other._value);
+      return Projects.SingleOrDefault(p =&gt; p.ProjectFile.FullName == absoluteProjectPath);
     }
 
-    /// &lt;inheritdoc /&gt;
-    public override bool Equals ([CanBeNull] object obj)
+    string IRuleTarget.Identifier =&gt; Path.GetFileName(_solutionPath);
+    string IRuleTarget.FullPath =&gt; _solutionPath;
+
+    public static Solution Load (string solutionFilePath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
-      if (ReferenceEquals(null, obj))
-        return false;
-      if (ReferenceEquals(this, obj))
-        return true;
-      if (obj.GetType() != GetType())
-        return false;
-      return Equals((ProjectItemBuildAction) obj);
+      var fullPath = Path.GetFullPath(solutionFilePath);
+      return new Solution(fullPath, msBuildParsingConfiguration);
     }
 
-    /// &lt;inheritdoc /&gt;
-    public override int GetHashCode ()
+    public void Dispose ()
     {
-      return _value.GetHashCode();
-    }
-
-    /// &lt;inheritdoc /&gt;
-    public static bool operator == ([CanBeNull] ProjectItemBuildAction left, [CanBeNull] ProjectItemBuildAction right)
-    {
-      return Equals(left, right);
-    }
-
-    /// &lt;inheritdoc /&gt;
-    public static bool operator != ([CanBeNull] ProjectItemBuildAction left, [CanBeNull] ProjectItemBuildAction right)
-    {
-      return !(left == right);
-    }
-
-    /// &lt;inheritdoc /&gt;
-    public static bool operator == ([CanBeNull] ProjectItemBuildAction left, [CanBeNull] string right)
-    {
-      return Equals(left?._value, right);
-    }
-
-    /// &lt;inheritdoc /&gt;
-    public static bool operator != ([CanBeNull] ProjectItemBuildAction left, [CanBeNull] string right)
-    {
-      return !(left == right);
-    }
-
-    public override string ToString ()
-    {
-      return _value;
+      foreach (var project in Projects)
+        project.Dispose();
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[51,9,51,22,0],[53,9,53,21,0],[61,9,61,22,0],[63,9,63,21,0],[65,9,65,22,0],[72,7,72,35,0],[78,7,78,34,0],[84,7,84,31,0],[39,7,39,48,1],[42,5,42,50,1],[44,7,44,22,1],[45,5,45,6,1],[50,7,50,40,1],[52,7,52,40,1],[54,7,54,50,1],[60,7,60,38,1],[62,7,62,38,1],[64,7,64,38,1],[66,7,66,51,1],[90,7,90,42,1],[96,7,96,31,1],[101,7,101,21,1],[17,5,17,93,1],[22,5,22,99,1],[27,5,27,99,1],[32,5,32,117,1]]);
+      highlightRanges([[61,7,61,36,1],[62,7,62,61,1],[63,7,63,112,1],[64,7,64,56,1],[66,7,67,52,1],[67,111,68,28,1],[68,86,69,26,1],[70,7,70,78,1],[70,137,70,149,1],[71,5,71,6,1],[73,26,73,30,1],[74,47,74,51,1],[75,53,75,57,1],[76,74,76,78,1],[80,7,80,44,1],[80,65,80,67,1],[85,7,85,44,1],[85,89,85,91,1],[88,38,88,69,1],[89,36,89,49,1],[93,7,93,57,1],[94,7,94,66,1],[99,31,99,39,1],[99,16,99,27,1],[100,9,100,27,1],[99,28,99,30,1],[101,5,101,6,1],[68,28,68,86,1],[67,52,67,111,1],[70,78,70,137,1],[80,44,80,65,1],[85,44,85,89,1]]);
     </script>
   </body>
 </html>

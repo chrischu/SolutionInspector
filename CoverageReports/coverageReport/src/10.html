@@ -2,123 +2,47 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\rulecollectionbuilder.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\utilities\solutionloader.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using SolutionInspector.Api.Configuration.Rules;
+using JetBrains.Annotations;
+using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.ObjectModel;
-using SolutionInspector.Api.Utilities;
+using Wrapperator.Interfaces.IO;
 
-namespace SolutionInspector.Api.Rules
+namespace SolutionInspector.Api.Utilities
 {
-  internal interface IRuleCollectionBuilder
+  internal interface ISolutionLoader
   {
-    IRuleCollection Build (IRulesConfiguration rulesConfiguration);
+    ISolution Load (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration);
   }
 
-  internal class RuleCollectionBuilder : IRuleCollectionBuilder
+  [UsedImplicitly /* by container */]
+  internal class SolutionLoader : ISolutionLoader
   {
-    private readonly IRuleTypeResolver _ruleTypeResolver;
-    private readonly IRuleConfigurationInstantiator _ruleConfigurationInstantiator;
+    private readonly IFileStatic _file;
 
-    public RuleCollectionBuilder (
-        IRuleTypeResolver ruleTypeResolver,
-        IRuleConfigurationInstantiator ruleConfigurationInstantiator)
+    public SolutionLoader (IFileStatic file)
     {
-      _ruleTypeResolver = ruleTypeResolver;
-      _ruleConfigurationInstantiator = ruleConfigurationInstantiator;
+      _file = file;
     }
 
-    public IRuleCollection Build (IRulesConfiguration rulesConfiguration)
+    public ISolution Load (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
-      var solutionRules = BuildSolutionRules(rulesConfiguration.SolutionRules);
-      var projectRules = BuildProjectRules(rulesConfiguration.ProjectRuleGroups);
-      var projectItemRules = BuildProjectItemRules(rulesConfiguration.ProjectItemRuleGroups);
+      if (!_file.Exists(solutionPath))
+        throw new SolutionNotFoundException(solutionPath);
 
-      return new RuleCollection(solutionRules, projectRules, projectItemRules);
-    }
-
-    private IEnumerable&lt;ISolutionRule&gt; BuildSolutionRules (IReadOnlyCollection&lt;IRuleConfiguration&gt; solutionRulesConfiguration)
-    {
-      return InstantiateRules&lt;ISolutionRule&gt;(solutionRulesConfiguration);
-    }
-
-    private IEnumerable&lt;IProjectRule&gt; BuildProjectRules (IReadOnlyCollection&lt;IProjectRuleGroupConfiguration&gt; projectRuleGroups)
-    {
-      foreach (var projectRuleGroup in projectRuleGroups)
-        foreach (var projectRule in InstantiateRules&lt;IProjectRule&gt;(projectRuleGroup.Rules))
-          yield return new FilteringProjectRuleProxy(projectRuleGroup.AppliesTo, projectRule);
-    }
-
-    private IEnumerable&lt;IProjectItemRule&gt; BuildProjectItemRules (IReadOnlyCollection&lt;IProjectItemRuleGroupConfiguration&gt; projectItemRuleGrousp)
-    {
-      foreach (var projectItemRuleGroup in projectItemRuleGrousp)
-        foreach (var projectItemRule in InstantiateRules&lt;IProjectItemRule&gt;(projectItemRuleGroup.Rules))
-          yield return new FilteringProjectItemRuleProxy(projectItemRuleGroup.AppliesTo, projectItemRuleGroup.InProject, projectItemRule);
-    }
-
-    private IEnumerable&lt;TRule&gt; InstantiateRules&lt;TRule&gt; (IReadOnlyCollection&lt;IRuleConfiguration&gt; ruleConfigurations)
-        where TRule : IRule
-    {
-      return from ruleConfiguration in ruleConfigurations
-        let ruleTypeInfo = _ruleTypeResolver.Resolve(ruleConfiguration.RuleType)
-        let config = _ruleConfigurationInstantiator.Instantiate(ruleTypeInfo.ConfigurationType, ruleConfiguration.Configuration)
-        let constructorParameters = ruleTypeInfo.IsConfigurable ? new object[] { config } : new object[0]
-        select (TRule) ruleTypeInfo.Constructor.Invoke(constructorParameters);
-    }
-
-    private class FilteringProjectRuleProxy : IProjectRule
-    {
-      private readonly INameFilter _filter;
-      private readonly IProjectRule _rule;
-
-      public FilteringProjectRuleProxy (INameFilter filter, IProjectRule rule)
-      {
-        _filter = filter;
-        _rule = rule;
-      }
-
-      public IEnumerable&lt;IRuleViolation&gt; Evaluate (IProject target)
-      {
-        if (_filter.IsMatch(target.Name))
-          return _rule.Evaluate(target);
-
-        return Enumerable.Empty&lt;IRuleViolation&gt;();
-      }
-    }
-
-    private class FilteringProjectItemRuleProxy : IProjectItemRule
-    {
-      private readonly INameFilter _appliesTo;
-      private readonly INameFilter _inProject;
-      private readonly IProjectItemRule _rule;
-
-      public FilteringProjectItemRuleProxy (INameFilter appliesTo, INameFilter inProject, IProjectItemRule rule)
-      {
-        _appliesTo = appliesTo;
-        _inProject = inProject;
-        _rule = rule;
-      }
-
-      public IEnumerable&lt;IRuleViolation&gt; Evaluate (IProjectItem target)
-      {
-        if (_inProject.IsMatch(target.Project.Name) &amp;&amp; _appliesTo.IsMatch(target.Name))
-          return _rule.Evaluate(target);
-
-        return Enumerable.Empty&lt;IRuleViolation&gt;();
-      }
+      return Solution.Load(solutionPath, msBuildParsingConfiguration);
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[79,9,79,42,0],[80,11,80,41,0],[82,9,82,51,0],[101,9,101,88,0],[102,11,102,41,0],[104,9,104,51,0],[20,5,22,70,1],[24,7,24,44,1],[25,7,25,70,1],[26,5,26,6,1],[30,7,30,80,1],[31,7,31,82,1],[32,7,32,94,1],[34,7,34,80,1],[39,7,39,74,1],[59,7,60,9,1],[60,81,61,9,1],[61,129,62,9,1],[62,106,63,16,1],[63,78,63,79,1],[60,9,60,81,1],[61,9,61,129,1],[71,7,71,79,1],[73,9,73,26,1],[74,9,74,22,1],[75,7,75,8,1],[92,7,92,113,1],[94,9,94,32,1],[95,9,95,32,1],[96,9,96,22,1],[97,7,97,8,1],[44,40,44,57,1],[44,16,44,36,1],[45,37,45,91,1],[45,18,45,33,1],[46,11,46,95,1],[45,34,45,36,1],[44,37,44,39,1],[47,5,47,6,1],[51,44,51,65,1],[51,16,51,40,1],[52,41,52,103,1],[52,18,52,37,1],[53,11,53,139,1],[52,38,52,40,1],[51,41,51,43,1],[54,5,54,6,1],[62,9,62,106,1],[63,16,63,78,1]]);
+      highlightRanges([[19,5,19,45,1],[21,7,21,20,1],[22,5,22,6,1],[26,7,26,39,1],[27,9,27,59,1],[29,7,29,71,1]]);
     </script>
   </body>
 </html>

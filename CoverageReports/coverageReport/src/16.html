@@ -2,65 +2,72 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\ruleviolation.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\rules\projectconfigrulebase.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
-using JetBrains.Annotations;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Xml.Linq;
+using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.Api.Rules
 {
   /// &lt;summary&gt;
-  ///   A violation of a &lt;see cref=&quot;IRule&quot; /&gt;.
+  ///   Base class for rules that verify the contents of the project configuration file (App.config/Web.config).
   /// &lt;/summary&gt;
-  public interface IRuleViolation
+  public abstract class ProjectConfigRuleBase&lt;TConfiguration&gt; : ConfigurableRule&lt;IProject, TConfiguration&gt;, IProjectRule
+      where TConfiguration : ProjectConfigRuleConfigurationBase
   {
-    /// &lt;summary&gt;
-    ///   The &lt;see cref=&quot;IRule&quot; /&gt; that was violated.
-    /// &lt;/summary&gt;
-    IRule Rule { get; }
+    /// &lt;inheritdoc /&gt;
+    protected ProjectConfigRuleBase (TConfiguration configuration)
+        : base(configuration)
+    {
+    }
+
+    /// &lt;inheritdoc /&gt;
+    public override IEnumerable&lt;IRuleViolation&gt; Evaluate (IProject target)
+    {
+      var configurationItem = target.ConfigurationProjectItem;
+
+      if (configurationItem == null)
+        return Configuration.ReportViolationOnMissingConfigurationFile
+            ? new[] { new RuleViolation(this, target, $&quot;For the project &#39;{target.Name}&#39; no configuration file could be found.&quot;) }
+            : Enumerable.Empty&lt;IRuleViolation&gt;();
+
+      return Evaluate(configurationItem, configurationItem.ConfigurationXml);
+    }
 
     /// &lt;summary&gt;
-    ///   The &lt;see cref=&quot;IRuleTarget&quot; /&gt; that caused the &lt;see cref=&quot;IRuleViolation&quot; /&gt;.
+    ///   Checks the project configuration file (&lt;paramref name=&quot;target&quot; /&gt;) and its contents (&lt;paramref name=&quot;configurationXml&quot; /&gt;).
     /// &lt;/summary&gt;
-    IRuleTarget Target { get; }
-
-    /// &lt;summary&gt;
-    ///   A message that describes the nature of the &lt;see cref=&quot;IRuleViolation&quot; /&gt;.
-    /// &lt;/summary&gt;
-    string Message { get; }
+    /// &lt;returns&gt;&lt;/returns&gt;
+    protected abstract IEnumerable&lt;IRuleViolation&gt; Evaluate (IConfigurationProjectItem target, XDocument configurationXml);
   }
 
-  /// &lt;inheritdoc /&gt;
-  [PublicAPI]
-  public class RuleViolation : IRuleViolation
+  /// &lt;summary&gt;
+  ///   Base class for configuration for &lt;see cref=&quot;ProjectConfigRuleBase{TConfiguration}&quot; /&gt;.
+  /// &lt;/summary&gt;
+  public abstract class ProjectConfigRuleConfigurationBase : ConfigurationElement
   {
-    /// &lt;inheritdoc /&gt;
-    public IRule Rule { get; }
-
-    /// &lt;inheritdoc /&gt;
-    public IRuleTarget Target { get; set; }
-
-    /// &lt;inheritdoc /&gt;
-    public string Message { get; }
-
     /// &lt;summary&gt;
-    ///   Creates a new &lt;see cref=&quot;RuleViolation&quot; /&gt;.
+    ///   Controls whether to report a violation when no configuration file can be found for the project or if the rule should just be skipped in that case.
     /// &lt;/summary&gt;
-    public RuleViolation (IRule rule, IRuleTarget target, string message)
+    [ConfigurationProperty (&quot;reportViolationOnMissingConfigurationFile&quot;)]
+    public bool ReportViolationOnMissingConfigurationFile
     {
-      Rule = rule;
-      Target = target;
-      Message = message;
+      get { return (bool) this[&quot;reportViolationOnMissingConfigurationFile&quot;]; }
+      set { this[&quot;reportViolationOnMissingConfigurationFile&quot;] = value; }
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[32,25,32,29,1],[35,33,35,37,1],[35,38,35,42,1],[38,29,38,33,1],[43,5,43,74,1],[45,7,45,19,1],[46,7,46,23,1],[47,7,47,25,1],[48,5,48,6,1]]);
+      highlightRanges([[18,11,18,30,1],[20,5,20,6,1],[25,7,25,63,1],[27,7,27,37,1],[28,9,30,50,1],[32,7,32,78,1],[53,13,53,77,1],[54,13,54,71,1],[54,72,54,73,1]]);
     </script>
   </body>
 </html>

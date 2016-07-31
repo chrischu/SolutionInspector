@@ -2,39 +2,65 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\extensions\assertnotnullextensions.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\configuration\configurationloader.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
-using System.Diagnostics;
-using JetBrains.Annotations;
+using System.Configuration;
+using System.IO;
+using Wrapperator.Interfaces.Configuration;
+using Wrapperator.Interfaces.IO;
 
-namespace SolutionInspector.Api.Extensions
+namespace SolutionInspector.Api.Configuration
 {
-  /// &lt;summary&gt;
-  ///   Extensions that make it more convenient to assert that a value is not &lt;c&gt;null&lt;/c&gt;.
-  /// &lt;/summary&gt;
-  public static class AssertNotNullExtensions
+  internal interface IConfigurationLoader
   {
-    /// &lt;summary&gt;
-    ///   Asserts that the &lt;paramref name=&quot;obj&quot; /&gt; is not &lt;c&gt;null&lt;/c&gt;.
-    /// &lt;/summary&gt;
-    [AssertionMethod]
-    [ContractAnnotation (&quot;obj: null =&gt; halt&quot;)]
-    [NotNull]
-    public static T AssertNotNull&lt;T&gt; ([CanBeNull] this T obj, string message = null) where T : class
+    ISolutionInspectorConfiguration Load (string configurationFile);
+    ISolutionInspectorConfiguration LoadAppConfigFile ();
+  }
+
+  internal class ConfigurationLoader : IConfigurationLoader
+  {
+    private readonly IFileStatic _file;
+    private readonly IConfigurationManagerStatic _configurationManager;
+
+    public ConfigurationLoader (IFileStatic file, IConfigurationManagerStatic configurationManager)
     {
-      Trace.Assert(obj != null, message ?? &quot;AssertNotNull failed&quot;);
-      return obj;
+      _file = file;
+      _configurationManager = configurationManager;
+    }
+
+    public ISolutionInspectorConfiguration Load (string configurationFile)
+    {
+      return Load(() =&gt; LoadConfigurationFromExternalConfigFile(configurationFile));
+    }
+
+    public ISolutionInspectorConfiguration LoadAppConfigFile ()
+    {
+      return Load(() =&gt; _configurationManager.OpenExeConfiguration(ConfigurationUserLevel.None));
+    }
+
+    private ISolutionInspectorConfiguration Load (Func&lt;IConfiguration&gt; loadConfiguration)
+    {
+      return (ISolutionInspectorConfiguration) loadConfiguration().GetSectionGroup(&quot;solutionInspector&quot;);
+    }
+    
+    private IConfiguration LoadConfigurationFromExternalConfigFile (string configurationFile)
+    {
+      if (!_file.Exists(configurationFile))
+        throw new FileNotFoundException($&quot;Could not find configuration file &#39;{configurationFile}&#39;.&quot;);
+
+      var map = new ExeConfigurationFileMap { ExeConfigFilename = configurationFile };
+      return _configurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[20,7,20,68,1],[21,7,21,18,1]]);
+      highlightRanges([[20,5,20,100,1],[22,7,22,20,1],[23,7,23,52,1],[24,5,24,6,1],[28,7,28,25,1],[28,83,28,85,1],[33,7,33,25,1],[33,96,33,98,1],[38,7,38,105,1],[43,7,43,44,1],[44,9,44,102,1],[46,7,46,87,1],[47,7,47,97,1],[33,25,33,96,1],[28,25,28,83,1]]);
     </script>
   </body>
 </html>

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.defaultrules\nugetpackagesshouldhaveoneversionacrosssolutionrule.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.defaultrules\nugetreferencehintpathsmustbevalidrule.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
@@ -17,31 +17,25 @@ using SolutionInspector.Api.Rules;
 namespace SolutionInspector.DefaultRules
 {
   /// &lt;summary&gt;
-  ///   Verifies that every NuGet package is only referenced in one version across all projects.
+  ///   Verifies that all &lt;see cref=&quot;INuGetReference&quot; /&gt;s in the project have correct hint paths (pointing to an actually
+  ///   existing file).
   /// &lt;/summary&gt;
-  public class NuGetPackagesShouldHaveOneVersionAcrossSolutionRule : SolutionRule
+  public class NuGetReferenceHintPathsMustBeValidRule : ProjectRule
   {
     /// &lt;inheritdoc /&gt;
-    public override IEnumerable&lt;IRuleViolation&gt; Evaluate (ISolution target)
+    public override IEnumerable&lt;IRuleViolation&gt; Evaluate (IProject target)
     {
-      var nuGetPackagesWithMultipleVersions =
-          target.Projects.SelectMany(p =&gt; p.NuGetPackages)
-              .GroupBy(p =&gt; p.Id, p =&gt; p.FullVersionString)
-              .Where(g =&gt; g.Distinct().Count() &gt; 1);
-
-      return from @group in nuGetPackagesWithMultipleVersions
-        let versions = @group.Select(v =&gt; $&quot;&#39;{v}&#39;&quot;)
-        select new RuleViolation(
-            this,
-            target,
-            $&quot;The NuGet package &#39;{@group.Key}&#39; is referenced &quot; +
-            $&quot;in more than one version ({string.Join(&quot;, &quot;, versions)}).&quot;);
+      return target.NuGetReferences.Where(r =&gt; !r.DllFile.Exists).Select(
+          r =&gt; new RuleViolation(
+              this,
+              target,
+              $&quot;The NuGet reference to package &#39;{r.Package.Id}&#39; has an invalid hint path (&#39;{r.HintPath}&#39;).&quot;));
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[17,7,18,43,1],[18,58,19,29,1],[19,33,19,40,1],[19,59,20,27,1],[20,51,20,53,1],[22,7,23,9,1],[23,52,24,16,1],[28,74,28,75,1],[24,16,28,74,1],[18,43,18,58,1],[19,29,19,33,1],[19,40,19,59,1],[20,27,20,51,1],[23,9,23,43,1],[23,51,23,52,1],[23,43,23,51,1]]);
+      highlightRanges([[18,7,18,48,1],[18,65,19,16,1],[22,109,22,111,1],[19,16,22,109,1],[18,48,18,65,1]]);
     </script>
   </body>
 </html>

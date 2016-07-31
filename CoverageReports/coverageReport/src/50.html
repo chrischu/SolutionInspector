@@ -2,40 +2,163 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\filereference.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\objectmodel\nugetpackage.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
-using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
+using System.Xml;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// &lt;summary&gt;
-  ///   Represents a DLL reference via the file system.
+  ///   Represents a NuGet package referenced by a project.
   /// &lt;/summary&gt;
-  public class FileReference : DllReferenceBase
+  [PublicAPI]
+  public interface INuGetPackage : IEquatable&lt;INuGetPackage&gt;
   {
     /// &lt;summary&gt;
-    ///   The hint path that points to the DLL in the file system.
+    ///   The package&#39;s id.
     /// &lt;/summary&gt;
-    public string HintPath { get; }
+    string Id { get; }
 
     /// &lt;summary&gt;
-    ///   Creates a new &lt;see cref=&quot;FileReference&quot; /&gt;.
+    ///   The package&#39;s version.
     /// &lt;/summary&gt;
-    public FileReference (AssemblyName assemblyName, string hintPath)
-        : base(assemblyName)
+    Version Version { get; }
+
+    /// &lt;summary&gt;
+    ///   &lt;c&gt;True&lt;/c&gt; if the package is a pre-release package, &lt;c&gt;false&lt;/c&gt; otherwise.
+    /// &lt;/summary&gt;
+    bool IsPreRelease { get; }
+
+    /// &lt;summary&gt;
+    ///   The package&#39;s pre-release tag (if any).
+    /// &lt;/summary&gt;
+    string PreReleaseTag { get; }
+
+    /// &lt;summary&gt;
+    ///   The package&#39;s full version string in the format &quot;&amp;lt;Version&amp;gt;&amp;lt;PreReleaseTag&amp;gt;&quot;.
+    /// &lt;/summary&gt;
+    string FullVersionString { get; }
+
+    /// &lt;summary&gt;
+    ///   The package&#39;s directory name (relative to the NuGet packages folder)&quot;.
+    /// &lt;/summary&gt;
+    string PackageDirectoryName { get; }
+
+    /// &lt;summary&gt;
+    ///   The package&#39;s target framework.
+    /// &lt;/summary&gt;
+    string TargetFramework { get; }
+
+    /// &lt;summary&gt;
+    ///   &lt;c&gt;True&lt;/c&gt; if the package is only a development dependency, &lt;c&gt;false&lt;/c&gt; otherwise.
+    /// &lt;/summary&gt;
+    bool IsDevelopmentDependency { get; }
+  }
+
+  internal sealed class NuGetPackage : INuGetPackage
+  {
+    public string Id { get; }
+
+    public Version Version { get; }
+
+    public bool IsPreRelease { get; }
+
+    public string PreReleaseTag { get; }
+
+    public string FullVersionString =&gt; $&quot;{Version}{PreReleaseTag}&quot;;
+
+    public string PackageDirectoryName =&gt; $&quot;{Id}.{FullVersionString}&quot;;
+
+    public string TargetFramework { get; }
+
+    public bool IsDevelopmentDependency { get; }
+
+    public NuGetPackage (
+        string id,
+        Version version,
+        bool isPreRelease,
+        [CanBeNull] string preReleaseTag,
+        string targetFramework,
+        bool isDevelopmentDependency)
     {
-      HintPath = hintPath;
+      Id = id;
+      Version = version;
+      IsPreRelease = isPreRelease;
+      PreReleaseTag = preReleaseTag;
+      TargetFramework = targetFramework;
+      IsDevelopmentDependency = isDevelopmentDependency;
+    }
+
+    public static NuGetPackage FromXmlElement (XmlElement packageElement)
+    {
+      var id = packageElement.GetAttribute(&quot;id&quot;);
+      bool isPreRelease = false;
+      string preReleaseTag = null;
+
+      var versionString = packageElement.GetAttribute(&quot;version&quot;);
+      if (versionString.Contains(&quot;-&quot;))
+      {
+        var split = versionString.Split(&#39;-&#39;);
+        isPreRelease = true;
+        preReleaseTag = &quot;-&quot; + split[1];
+        versionString = split[0];
+      }
+
+      var version = Version.Parse(versionString);
+
+      var targetFramework = packageElement.GetAttribute(&quot;targetFramework&quot;);
+
+      var isDevelopmentDependency = packageElement.HasAttribute(&quot;developmentDependency&quot;)
+                                    &amp;&amp; packageElement.GetAttribute(&quot;developmentDependency&quot;) == &quot;true&quot;;
+
+      return new NuGetPackage(id, version, isPreRelease, preReleaseTag, targetFramework, isDevelopmentDependency);
+    }
+
+    public bool Equals ([CanBeNull] INuGetPackage other)
+    {
+      if (ReferenceEquals(null, other))
+        return false;
+      if (ReferenceEquals(this, other))
+        return true;
+      return string.Equals(PackageDirectoryName, other.PackageDirectoryName);
+    }
+
+    public override bool Equals ([CanBeNull] object obj)
+    {
+      if (ReferenceEquals(null, obj))
+        return false;
+      if (ReferenceEquals(this, obj))
+        return true;
+      return obj is INuGetPackage &amp;&amp; Equals((INuGetPackage) obj);
+    }
+
+    [ExcludeFromCodeCoverage]
+    public override int GetHashCode ()
+    {
+      return PackageDirectoryName.GetHashCode();
+    }
+
+    public static bool operator == ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
+    {
+      return Equals(left, right);
+    }
+
+    public static bool operator != ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
+    {
+      return !Equals(left, right);
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[14,30,14,34,1],[20,11,20,29,1],[22,7,22,27,1],[23,5,23,6,1]]);
+      highlightRanges([[57,24,57,28,1],[59,30,59,34,1],[61,32,61,36,1],[63,35,63,39,1],[65,40,65,67,1],[67,43,67,70,1],[69,37,69,41,1],[71,43,71,47,1],[73,5,79,38,1],[81,7,81,15,1],[82,7,82,25,1],[83,7,83,35,1],[84,7,84,37,1],[85,7,85,41,1],[86,7,86,57,1],[87,5,87,6,1],[91,7,91,50,1],[92,7,92,33,1],[93,7,93,35,1],[95,7,95,66,1],[96,7,96,39,1],[98,9,98,46,1],[99,9,99,29,1],[100,9,100,40,1],[101,9,101,34,1],[104,7,104,50,1],[106,7,106,76,1],[108,7,109,103,1],[111,7,111,115,1],[116,7,116,40,1],[117,9,117,22,1],[118,7,118,40,1],[119,9,119,21,1],[120,7,120,78,1],[125,7,125,38,1],[126,9,126,22,1],[127,7,127,38,1],[128,9,128,21,1],[129,7,129,66,1],[140,7,140,34,1],[145,7,145,35,1]]);
     </script>
   </body>
 </html>

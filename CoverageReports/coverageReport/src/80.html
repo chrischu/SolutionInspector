@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\commands\inspectcommand.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\commands\solutioninspectorcommand.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
@@ -10,192 +10,193 @@
     <pre id="content" class="source-code">
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
-using Microsoft.Build.Exceptions;
-using NLog;
-using SolutionInspector.Api.Configuration;
-using SolutionInspector.Api.ObjectModel;
-using SolutionInspector.Api.Reporting;
-using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
+using ManyConsole;
 
 namespace SolutionInspector.Api.Commands
 {
-  internal class InspectCommand : SolutionInspectorCommand&lt;InspectCommand.RawArguments, InspectCommand.ParsedArguments&gt;
+  [PublicAPI]
+  internal interface IArgumentsBuilderWithSetValues&lt;out TArguments&gt;
   {
-    private static readonly Logger s_logger = LogManager.GetCurrentClassLogger();
+    IArgumentsBuilderWithSetValues&lt;TArguments&gt; Option&lt;T&gt; (
+        string longKey,
+        string shortKey,
+        string description,
+        Action&lt;TArguments, T&gt; setValue,
+        T defaultValue = default(T));
 
-    private readonly ISolutionInspectorConfiguration _configuration;
-    private readonly ISolutionLoader _solutionLoader;
-    private readonly IRuleCollectionBuilder _ruleCollectionBuilder;
-    private readonly IViolationReporterFactory _violationReporterFactory;
+    IArgumentsBuilderWithSetValues&lt;TArguments&gt; Flag (string longKey, string shortKey, string description, Action&lt;TArguments, bool&gt; setValue);
+  }
 
-    public InspectCommand (
-        ISolutionInspectorConfiguration configuration,
-        ISolutionLoader solutionLoader,
-        IRuleCollectionBuilder ruleCollectionBuilder,
-        IViolationReporterFactory violationReporterFactory)
-        : base(&quot;inspect&quot;, &quot;Inspects a given solution for rule violations.&quot;)
+  [PublicAPI]
+  internal interface IArgumentsBuilder&lt;out TArguments&gt;
+  {
+    IArgumentsBuilder&lt;TArguments&gt; Option&lt;T&gt; (
+        string longKey,
+        string shortKey,
+        string description,
+        Action&lt;TArguments, T&gt; setValue,
+        T defaultValue = default(T));
+
+    IArgumentsBuilder&lt;TArguments&gt; Flag (string longKey, string shortKey, string description, Action&lt;TArguments, bool&gt; setValue);
+
+    IArgumentsBuilderWithSetValues&lt;TArguments&gt; Values (Action&lt;IValueArgumentsBuilder&lt;TArguments&gt;&gt; configureValueArguments);
+  }
+
+  [PublicAPI]
+  internal interface IValueArgumentsBuilder&lt;out TArguments&gt;
+  {
+    IValueArgumentsBuilder&lt;TArguments&gt; Value (string name, Action&lt;TArguments, string&gt; setValue);
+  }
+
+  internal abstract class SolutionInspectorCommand&lt;TRawArguments, TParsedArguments&gt; : ConsoleCommand
+      where TRawArguments : new()
+  {
+    private readonly TRawArguments _rawArguments;
+    private readonly ArgumentsBuilder&lt;TRawArguments&gt; _rawArgumentsBuilder;
+    private TParsedArguments _parsedArguments;
+
+    [SuppressMessage (&quot;Microsoft.Usage&quot;, &quot;CA2214:DoNotCallOverridableMethodsInConstructors&quot;)]
+    protected SolutionInspectorCommand (string command, string description)
     {
-      _configuration = configuration;
-      _solutionLoader = solutionLoader;
-      _ruleCollectionBuilder = ruleCollectionBuilder;
-      _violationReporterFactory = violationReporterFactory;
+      IsCommand(command, description);
+      SkipsCommandSummaryBeforeRunning();
+      _rawArguments = new TRawArguments();
+      _rawArgumentsBuilder = new ArgumentsBuilder&lt;TRawArguments&gt;(this, _rawArguments);
+      // ReSharper disable once VirtualMemberCallInContructor
+      SetupArguments(_rawArgumentsBuilder);
     }
 
-    protected override void SetupArguments (IArgumentsBuilder&lt;RawArguments&gt; argumentsBuilder)
+    protected abstract void SetupArguments (IArgumentsBuilder&lt;TRawArguments&gt; argumentsBuilder);
+
+    public sealed override int? OverrideAfterHandlingArgumentsBeforeRun ([NotNull] string[] remainingArguments)
     {
-      argumentsBuilder
-          .Option&lt;ViolationReportFormat&gt;(
-              &quot;reportFormat&quot;,
-              &quot;f&quot;,
-              $&quot;Controls the format of the violation report ({string.Join(&quot;|&quot;, Enum.GetNames(typeof(ViolationReportFormat)))}).&quot;,
-              (a, v) =&gt; a.ReportFormat = v)
-          .Option&lt;string&gt;(
-              &quot;reportOutputFile&quot;,
-              &quot;o&quot;,
-              &quot;Writes the violation report to the given file instead of to the console.&quot;,
-              (a, v) =&gt; a.ReportOutputFile = v != null ? v.Trim() : null)
-          .Values(c =&gt; c.Value(&quot;solutionFilePath&quot;, (a, v) =&gt; a.SolutionFilePath = v));
+      _rawArgumentsBuilder.HandleRemainingArguments(remainingArguments);
+      _parsedArguments = ValidateAndParseArguments(_rawArguments, message =&gt; new ConsoleHelpAsException(message));
+
+      return base.OverrideAfterHandlingArgumentsBeforeRun(remainingArguments);
     }
 
-    protected override ParsedArguments ValidateAndParseArguments (RawArguments arguments, Func&lt;string, Exception&gt; reportError)
-    {
-      var solution = ValidateAndParseSolution(arguments, reportError);
-      var rules = _ruleCollectionBuilder.Build(_configuration.Rules);
+    protected abstract TParsedArguments ValidateAndParseArguments (TRawArguments arguments, Func&lt;string, Exception&gt; reportError);
 
-      return new ParsedArguments(solution, rules, arguments.ReportFormat, arguments.ReportOutputFile);
+    public sealed override int Run ([NotNull] string[] remainingArguments)
+    {
+      return Run(_parsedArguments);
     }
 
-    private ISolution ValidateAndParseSolution (RawArguments arguments, Func&lt;string, Exception&gt; reportError)
+    protected abstract int Run (TParsedArguments arguments);
+
+    private class ArgumentsBuilder&lt;TArguments&gt; : IArgumentsBuilder&lt;TArguments&gt;, IArgumentsBuilderWithSetValues&lt;TArguments&gt;
+        where TArguments : new()
     {
-      try
-      {
-        return _solutionLoader.Load(arguments.SolutionFilePath, _configuration.MsBuildParsing);
-      }
-      catch (SolutionNotFoundException)
-      {
-        throw reportError($&quot;Given solution file &#39;{arguments.SolutionFilePath}&#39; could not be found.&quot;);
-      }
-      catch (InvalidProjectFileException ex)
-      {
-        s_logger.Error(ex, &quot;Error while loading solution.&quot;);
-        throw reportError(
-            $&quot;Given file &#39;{arguments.SolutionFilePath}&#39; is not a valid solution file &quot; +
-            &quot;(for detailed error information see the log file &#39;SolutionInspector.log&#39;).&quot;);
-      }
-      catch (Exception ex)
-      {
-        s_logger.Error(ex, &quot;Error while loading solution.&quot;);
-        throw reportError($&quot;Unexpected error when loading solution file &#39;{arguments.SolutionFilePath}: {ex}&quot;);
-      }
-    }
+      private readonly ConsoleCommand _command;
+      private readonly TArguments _arguments;
+      private readonly ValueArgumentsBuilder _valueArgumentsBuilder = new ValueArgumentsBuilder();
 
-    protected override int Run (ParsedArguments arguments)
-    {
-      using (var solution = arguments.Solution)
+      public ArgumentsBuilder (ConsoleCommand command, TArguments arguments)
       {
-        s_logger.Info($&quot;Inspecting solution &#39;{solution.FullPath}&#39;...&quot;);
+        _command = command;
+        _arguments = arguments;
+      }
 
-        var violations = GetRuleViolations(solution, arguments.Rules).ToArray();
+      public IArgumentsBuilder&lt;TArguments&gt; Option&lt;T&gt; (
+          string longKey,
+          string shortKey,
+          string description,
+          Action&lt;TArguments, T&gt; setValue,
+          T defaultValue = default(T))
+      {
+        setValue(_arguments, defaultValue);
+        _command.HasOption&lt;T&gt;($&quot;{shortKey}|{longKey}=&quot;, description, v =&gt; setValue(_arguments, v));
+        return this;
+      }
 
-        if (violations.Any())
+
+      public IArgumentsBuilder&lt;TArguments&gt; Flag (string longKey, string shortKey, string description, Action&lt;TArguments, bool&gt; setValue)
+      {
+        _command.HasOption($&quot;{shortKey}|{longKey}&quot;, description, v =&gt; setValue(_arguments, v != null));
+        return this;
+      }
+
+      public IArgumentsBuilderWithSetValues&lt;TArguments&gt; Values (Action&lt;IValueArgumentsBuilder&lt;TArguments&gt;&gt; configureValueArguments)
+      {
+        configureValueArguments(_valueArgumentsBuilder);
+        _valueArgumentsBuilder.SetupAdditionalArguments(_command);
+        return this;
+      }
+
+      [ExcludeFromCodeCoverage]
+      IArgumentsBuilderWithSetValues&lt;TArguments&gt; IArgumentsBuilderWithSetValues&lt;TArguments&gt;.Option&lt;T&gt; (
+          string longKey,
+          string shortKey,
+          string description,
+          Action&lt;TArguments, T&gt; setValue,
+          T defaultValue)
+      {
+        return (IArgumentsBuilderWithSetValues&lt;TArguments&gt;) Option(longKey, shortKey, description, setValue);
+      }
+
+      [ExcludeFromCodeCoverage]
+      IArgumentsBuilderWithSetValues&lt;TArguments&gt; IArgumentsBuilderWithSetValues&lt;TArguments&gt;.Flag (
+          string longKey,
+          string shortKey,
+          string description,
+          Action&lt;TArguments, bool&gt; setValue)
+      {
+        return (IArgumentsBuilderWithSetValues&lt;TArguments&gt;) Flag(longKey, shortKey, description, setValue);
+      }
+
+      private class ValueArgumentsBuilder : IValueArgumentsBuilder&lt;TArguments&gt;
+      {
+        private readonly List&lt;ValueArgument&gt; _valueArguments = new List&lt;ValueArgument&gt;();
+
+        private string AdditionalArgumentsString =&gt; string.Join(&quot; &quot;, _valueArguments.Select(a =&gt; $&quot;&lt;{a.Name}&gt;&quot;));
+
+        public IValueArgumentsBuilder&lt;TArguments&gt; Value (string name, Action&lt;TArguments, string&gt; setValue)
         {
-          using (var reporter = CreateViolationReporter(arguments))
-            reporter.Report(violations);
-          return 1;
+          _valueArguments.Add(new ValueArgument(name, setValue));
+          return this;
         }
 
-        return 0;
-      }
-    }
-
-    private IViolationReporter CreateViolationReporter (ParsedArguments arguments)
-    {
-      if (arguments.ReportOutputFile != null)
-        return _violationReporterFactory.CreateFileReporter(arguments.ReportFormat, arguments.ReportOutputFile);
-
-      return _violationReporterFactory.CreateConsoleReporter(arguments.ReportFormat);
-    }
-
-    private IEnumerable&lt;IRuleViolation&gt; GetRuleViolations (ISolution solution, IRuleCollection rules)
-    {
-      var ruleViolations = new List&lt;IRuleViolation&gt;();
-      int previousViolationCount = 0;
-
-      s_logger.Info($&quot;Checking for solution rule violations in solution &#39;{solution.FullPath}&#39;...&quot;);
-      foreach (var solutionRule in rules.SolutionRules)
-        ruleViolations.AddRange(solutionRule.Evaluate(solution));
-      s_logger.Info(
-          $&quot;Finished checking for solution rule violations in solution &#39;{solution.FullPath}&#39;: &quot; +
-          $&quot;Found {ruleViolations.Count - previousViolationCount} violations.&quot;);
-
-      foreach (var project in solution.Projects)
-      {
-        s_logger.Info($&quot;Checking for project rule violations in project &#39;{project.FullPath}&#39;...&quot;);
-        previousViolationCount = ruleViolations.Count;
-        foreach (var projectRule in rules.ProjectRules)
-          ruleViolations.AddRange(projectRule.Evaluate(project));
-        s_logger.Info(
-            $&quot;Finished checking for project rule violations in project &#39;{project.FullPath}&#39;: &quot; +
-            $&quot;Found {ruleViolations.Count - previousViolationCount} violations.&quot;);
-      }
-
-      foreach (var project in solution.Projects)
-      {
-        s_logger.Info($&quot;Checking for project item rule violations in project &#39;{project.FullPath}&#39;...&quot;);
-        previousViolationCount = ruleViolations.Count;
-
-        foreach (var projectItem in project.ProjectItems)
+        private class ValueArgument
         {
-          s_logger.Debug($&quot;Checking for project item rule violations in project item &#39;{projectItem.FullPath}&#39;...&quot;);
-          foreach (var projectItemRule in rules.ProjectItemRules)
-            ruleViolations.AddRange(projectItemRule.Evaluate(projectItem));
+          public string Name { get; }
+          public Action&lt;TArguments, string&gt; SetValueAction { get; }
+
+          public ValueArgument (string name, Action&lt;TArguments, string&gt; setValueAction)
+          {
+            Name = name;
+            SetValueAction = setValueAction;
+          }
         }
 
-        s_logger.Info(
-            $&quot;Finished checking for project item rule violations in project &#39;{project.FullPath}&#39;: &quot; +
-            $&quot;Found {ruleViolations.Count - previousViolationCount} violations.&quot;);
+        public void SetupAdditionalArguments (ConsoleCommand command)
+        {
+          command.HasAdditionalArguments(_valueArguments.Count, AdditionalArgumentsString);
+        }
+
+        public void ParseAdditionalArguments (TArguments arguments, string[] remainingArguments)
+        {
+          Trace.Assert(remainingArguments.Length == _valueArguments.Count);
+
+          for (int i = 0; i &lt; remainingArguments.Length; i++)
+            _valueArguments[i].SetValueAction(arguments, remainingArguments[i]);
+        }
       }
 
-      s_logger.Info(
-          $&quot;Finished checking for violations in solution &#39;{solution.FullPath}&#39;: &quot; +
-          $&quot;Found {ruleViolations.Count} total violations.&quot;);
-      return ruleViolations;
-    }
-
-    public class RawArguments
-    {
-      public string SolutionFilePath { get; set; }
-      public ViolationReportFormat ReportFormat { get; set; }
-      public string ReportOutputFile { get; set; }
-    }
-
-    public class ParsedArguments
-    {
-      public ISolution Solution { get; }
-      public IRuleCollection Rules { get; }
-      public ViolationReportFormat ReportFormat { get; }
-      public string ReportOutputFile { get; }
-
-      public ParsedArguments (
-          ISolution solution,
-          IRuleCollection rules,
-          ViolationReportFormat reportFormat,
-          [CanBeNull] string reportOutputFile)
+      public void HandleRemainingArguments (string[] remainingArguments)
       {
-        Solution = solution;
-        Rules = rules;
-        ReportFormat = reportFormat;
-        ReportOutputFile = reportOutputFile;
+        _valueArgumentsBuilder?.ParseAdditionalArguments(_arguments, remainingArguments);
       }
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[67,7,67,40,0],[69,9,69,102,0],[71,7,71,45,0],[73,9,73,61,0],[74,9,76,91,0],[78,7,78,27,0],[80,9,80,61,0],[81,9,81,111,0],[29,11,29,76,1],[31,7,31,38,1],[32,7,32,40,1],[33,7,33,54,1],[34,7,34,60,1],[35,5,35,6,1],[39,7,44,25,1],[44,43,49,25,1],[49,73,50,24,1],[50,85,50,87,1],[51,5,51,6,1],[55,7,55,71,1],[56,7,56,70,1],[58,7,58,103,1],[65,9,65,96,1],[83,5,83,6,1],[87,14,87,47,1],[89,9,89,72,1],[91,9,91,81,1],[93,9,93,30,1],[95,18,95,67,1],[96,13,96,41,1],[97,11,97,20,1],[100,9,100,18,1],[102,5,102,6,1],[106,7,106,46,1],[107,9,107,113,1],[109,7,109,86,1],[114,7,114,55,1],[115,7,115,38,1],[117,7,117,100,1],[118,36,118,55,1],[118,16,118,32,1],[119,9,119,66,1],[118,33,118,35,1],[120,7,122,81,1],[124,31,124,48,1],[124,16,124,27,1],[126,9,126,99,1],[127,9,127,55,1],[128,37,128,55,1],[128,18,128,33,1],[129,11,129,66,1],[128,34,128,36,1],[130,9,132,83,1],[124,28,124,30,1],[135,31,135,48,1],[135,16,135,27,1],[137,9,137,104,1],[138,9,138,55,1],[140,37,140,57,1],[140,18,140,33,1],[142,11,142,116,1],[143,43,143,65,1],[143,20,143,39,1],[144,13,144,76,1],[143,40,143,42,1],[140,34,140,36,1],[147,9,149,83,1],[135,28,135,30,1],[152,7,154,62,1],[155,7,155,29,1],[17,5,17,82,1],[160,40,160,44,1],[160,45,160,49,1],[161,51,161,55,1],[161,56,161,60,1],[162,40,162,44,1],[162,45,162,49,1],[167,35,167,39,1],[168,38,168,42,1],[169,51,169,55,1],[170,40,170,44,1],[172,7,176,47,1],[178,9,178,29,1],[179,9,179,23,1],[180,9,180,37,1],[181,9,181,45,1],[182,7,182,8,1],[44,25,44,43,1],[49,25,49,73,1],[50,24,50,62,1],[50,84,50,85,1],[50,62,50,84,1]]);
+      highlightRanges([[53,5,53,76,1],[55,7,55,39,1],[56,7,56,42,1],[57,7,57,43,1],[58,7,58,87,1],[60,7,60,44,1],[61,5,61,6,1],[67,7,67,73,1],[68,7,68,78,1],[68,113,68,115,1],[70,7,70,79,1],[77,7,77,36,1],[87,7,87,99,1],[89,7,89,77,1],[91,9,91,28,1],[92,9,92,32,1],[93,7,93,8,1],[102,9,102,44,1],[103,9,103,75,1],[103,98,103,100,1],[104,9,104,21,1],[110,9,110,71,1],[110,102,110,104,1],[111,9,111,21,1],[116,9,116,57,1],[117,9,117,67,1],[118,9,118,21,1],[182,9,182,90,1],[183,7,183,8,1],[146,53,146,98,1],[146,111,146,113,1],[150,11,150,66,1],[151,11,151,23,1],[168,11,168,92,1],[169,9,169,10,1],[173,11,173,76,1],[175,16,175,25,1],[176,13,176,81,1],[175,58,175,61,1],[175,27,175,56,1],[177,9,177,10,1],[144,9,144,90,1],[156,32,156,36,1],[157,62,157,66,1],[159,11,159,88,1],[161,13,161,25,1],[162,13,162,45,1],[163,11,163,12,1],[146,98,146,111,1],[103,75,103,98,1],[110,71,110,102,1],[68,78,68,113,1]]);
     </script>
   </body>
 </html>

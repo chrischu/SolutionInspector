@@ -2,77 +2,90 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\objectmodel\projectpropertyoccurrence.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\objectmodel\projectproperty.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
-using JetBrains.Annotations;
-using Microsoft.Build.Construction;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SolutionInspector.Api.ObjectModel
 {
+  ///// &lt;summary&gt;
+  /////   Represents an property of a &lt;see cref=&quot;IProject&quot; /&gt;.
+  ///// &lt;/summary&gt;
+  //public interface IProjectProperty : IProjectPropertyBase
+  //{
+  //  /// &lt;summary&gt;
+  //  ///   The property&#39;s value. Variables contained in the value are not expanded.
+  //  /// &lt;/summary&gt;
+  //  string Value { get; }
+  //}
+
   /// &lt;summary&gt;
-  ///   Represents a &lt;see cref=&quot;IProjectProperty&quot; /&gt;&#39;s occurrence in the source MSBuild file.
+  ///   Represents an property of a &lt;see cref=&quot;IProject&quot; /&gt; and its (possibly multiple) occurrences in the MSBuild file.
   /// &lt;/summary&gt;
-  [PublicAPI]
-  public interface IProjectPropertyOccurrence
+  public interface IProjectProperty
   {
     /// &lt;summary&gt;
-    ///   The value.
+    ///   The property&#39;s name.
     /// &lt;/summary&gt;
-    string Value { get; }
+    string Name { get; }
 
     /// &lt;summary&gt;
-    ///   The condition that must be fulfilled for the occurrence to be active.
+    ///   The property&#39;s value given all other properties have their default values.
     /// &lt;/summary&gt;
-    [CanBeNull]
-    IProjectPropertyCondition Condition { get; }
+    string DefaultValue { get; }
 
     /// &lt;summary&gt;
-    ///   The location of the occurrence in the MSBuild file.
+    ///   The property&#39;s (possibly multiple) occurrences.
     /// &lt;/summary&gt;
-    IProjectLocation Location { get; }
+    IReadOnlyCollection&lt;IProjectPropertyOccurrence&gt; Occurrences { get; }
   }
 
-  [DebuggerDisplay (&quot;{Value} at {Location} when ({Condition})&quot;)]
-  internal class ProjectPropertyOccurrence : IProjectPropertyOccurrence
+  [DebuggerDisplay (&quot;{Name}&quot;)]
+  internal class ProjectProperty : IProjectProperty, IEnumerable&lt;IProjectPropertyOccurrence&gt;
   {
-    public string Value { get; }
+    private readonly List&lt;IProjectPropertyOccurrence&gt; _occurrences = new List&lt;IProjectPropertyOccurrence&gt;();
 
-    [CanBeNull]
-    public IProjectPropertyCondition Condition { get; }
+    public string Name { get; }
+    public string DefaultValue { get; }
 
-    public IProjectLocation Location { get; }
+    [ExcludeFromCodeCoverage]
+    public IReadOnlyCollection&lt;IProjectPropertyOccurrence&gt; Occurrences =&gt; _occurrences;
 
-    public ProjectPropertyOccurrence (string value, [CanBeNull] IProjectPropertyCondition condition, IProjectLocation location)
+    public ProjectProperty (string name, string defaultValue)
     {
-      Value = value;
-      Condition = condition;
-      Location = location;
+      Name = name;
+      DefaultValue = defaultValue;
     }
 
-    public ProjectPropertyOccurrence (ProjectPropertyElement property)
-        : this(property.Value, CreateCondition(property), new ProjectLocation(property))
+    public void Add (IProjectPropertyOccurrence occurrence)
     {
+      _occurrences.Add(occurrence);
     }
 
-    private static ProjectPropertyCondition CreateCondition (ProjectPropertyElement property)
+    [ExcludeFromCodeCoverage]
+    public IEnumerator&lt;IProjectPropertyOccurrence&gt; GetEnumerator ()
     {
-      var condition = new ProjectPropertyCondition(property);
-      if (condition.Parent != null || condition.Self != null)
-        return condition;
+      return _occurrences.GetEnumerator();
+    }
 
-      return null;
+    [ExcludeFromCodeCoverage]
+    IEnumerator IEnumerable.GetEnumerator ()
+    {
+      return GetEnumerator();
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[34,27,34,31,1],[37,50,37,54,1],[39,40,39,44,1],[41,5,41,128,1],[43,7,43,21,1],[44,7,44,29,1],[45,7,45,27,1],[46,5,46,6,1],[49,11,49,89,1],[51,5,51,6,1],[55,7,55,62,1],[56,7,56,62,1],[57,9,57,26,1],[59,7,59,19,1]]);
+      highlightRanges([[46,26,46,30,1],[47,34,47,38,1],[44,5,44,109,1],[52,5,52,62,1],[54,7,54,19,1],[55,7,55,35,1],[56,5,56,6,1],[60,7,60,36,1],[61,5,61,6,1]]);
     </script>
   </body>
 </html>

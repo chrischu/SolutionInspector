@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\projectconfigrulebase.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\utilities\namefilter.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
@@ -10,64 +10,53 @@
     <pre id="content" class="source-code">
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.ComponentModel;
 using System.Linq;
-using System.Xml.Linq;
-using SolutionInspector.Api.ObjectModel;
+using System.Text.RegularExpressions;
 
-namespace SolutionInspector.Api.Rules
+namespace SolutionInspector.Api.Utilities
 {
   /// &lt;summary&gt;
-  ///   Base class for rules that verify the contents of the project configuration file (App.config/Web.config).
+  ///   Filter that checks a string against a set of include/exclude filters.
   /// &lt;/summary&gt;
-  public abstract class ProjectConfigRuleBase&lt;TConfiguration&gt; : ConfigurableRule&lt;IProject, TConfiguration&gt;, IProjectRule
-      where TConfiguration : ProjectConfigRuleConfigurationBase
+  public interface INameFilter
   {
-    /// &lt;inheritdoc /&gt;
-    protected ProjectConfigRuleBase (TConfiguration configuration)
-        : base(configuration)
-    {
-    }
-
-    /// &lt;inheritdoc /&gt;
-    public override IEnumerable&lt;IRuleViolation&gt; Evaluate (IProject target)
-    {
-      var configurationItem = target.ConfigurationProjectItem;
-
-      if (configurationItem == null)
-        return Configuration.ReportViolationOnMissingConfigurationFile
-            ? new[] { new RuleViolation(this, target, $&quot;For the project &#39;{target.Name}&#39; no configuration file could be found.&quot;) }
-            : Enumerable.Empty&lt;IRuleViolation&gt;();
-
-      return Evaluate(configurationItem, configurationItem.ConfigurationXml);
-    }
-
     /// &lt;summary&gt;
-    ///   Checks the project configuration file (&lt;paramref name=&quot;target&quot; /&gt;) and its contents (&lt;paramref name=&quot;configurationXml&quot; /&gt;).
+    ///   Returns &lt;c&gt;true&lt;/c&gt; if the given &lt;paramref name=&quot;name&quot; /&gt; matches the filter, &lt;c&gt;false&lt;/c&gt; otherwise.
     /// &lt;/summary&gt;
-    /// &lt;returns&gt;&lt;/returns&gt;
-    protected abstract IEnumerable&lt;IRuleViolation&gt; Evaluate (IConfigurationProjectItem target, XDocument configurationXml);
+    bool IsMatch (string name);
   }
 
-  /// &lt;summary&gt;
-  ///   Base class for configuration for &lt;see cref=&quot;ProjectConfigRuleBase{TConfiguration}&quot; /&gt;.
-  /// &lt;/summary&gt;
-  public abstract class ProjectConfigRuleConfigurationBase : ConfigurationElement
+  [TypeConverter (typeof(NameFilterConverter))]
+  internal class NameFilter : INameFilter
   {
-    /// &lt;summary&gt;
-    ///   Controls whether to report a violation when no configuration file can be found for the project or if the rule should just be skipped in that case.
-    /// &lt;/summary&gt;
-    [ConfigurationProperty (&quot;reportViolationOnMissingConfigurationFile&quot;)]
-    public bool ReportViolationOnMissingConfigurationFile
+    private readonly Regex[] _includeFilters;
+    private readonly Regex[] _excludeFilters;
+
+    public NameFilter (IEnumerable&lt;string&gt; includes, IEnumerable&lt;string&gt; excludes = null)
     {
-      get { return (bool) this[&quot;reportViolationOnMissingConfigurationFile&quot;]; }
-      set { this[&quot;reportViolationOnMissingConfigurationFile&quot;] = value; }
+      _includeFilters = includes.Select(s =&gt; new Regex($&quot;^{s.Replace(&quot;*&quot;, &quot;.*&quot;)}$&quot;, RegexOptions.Compiled)).ToArray();
+      _excludeFilters = (excludes ?? Enumerable.Empty&lt;string&gt;()).Select(s =&gt; new Regex($&quot;^{s.Replace(&quot;*&quot;, &quot;.*&quot;)}$&quot;, RegexOptions.Compiled)).ToArray();
+    }
+
+    public bool IsMatch (string name)
+    {
+      return _includeFilters.Any(f =&gt; f.IsMatch(name)) &amp;&amp; !_excludeFilters.Any(f =&gt; f.IsMatch(name));
+    }
+
+    public override string ToString ()
+    {
+      var filters =
+          _includeFilters.Select(r =&gt; &quot;+&quot; + r.ToString().TrimStart(&#39;^&#39;).TrimEnd(&#39;$&#39;).Replace(&quot;.*&quot;, &quot;*&quot;))
+              .Concat(_excludeFilters.Select(r =&gt; &quot;-&quot; + r.ToString().TrimStart(&#39;^&#39;).TrimEnd(&#39;$&#39;).Replace(&quot;.*&quot;, &quot;*&quot;)));
+
+      return string.Join(&quot;;&quot;, filters);
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[18,11,18,30,1],[20,5,20,6,1],[25,7,25,63,1],[27,7,27,37,1],[28,9,30,50,1],[32,7,32,78,1],[53,13,53,77,1],[54,13,54,71,1],[54,72,54,73,1]]);
+      highlightRanges([[26,5,26,90,1],[28,7,28,46,1],[28,107,28,119,1],[29,7,29,78,1],[29,139,29,151,1],[30,5,30,6,1],[34,7,34,39,1],[34,54,34,85,1],[34,100,34,102,1],[39,7,40,39,1],[40,104,41,51,1],[41,116,41,119,1],[43,7,43,40,1],[28,46,28,107,1],[29,78,29,139,1],[40,39,40,104,1],[41,51,41,116,1],[34,39,34,54,1],[34,85,34,100,1]]);
     </script>
   </body>
 </html>

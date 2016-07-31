@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\rules\rulecollection.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\utilities\tablewriter.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
@@ -10,37 +10,292 @@
     <pre id="content" class="source-code">
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using JetBrains.Annotations;
+using SolutionInspector.Api.Extensions;
 
-namespace SolutionInspector.Api.Rules
+namespace SolutionInspector.Api.Utilities
 {
-  internal interface IRuleCollection
+  [PublicAPI]
+  internal interface ITableWriter
   {
-    IReadOnlyCollection&lt;ISolutionRule&gt; SolutionRules { get; }
-    IReadOnlyCollection&lt;IProjectRule&gt; ProjectRules { get; }
-    IReadOnlyCollection&lt;IProjectItemRule&gt; ProjectItemRules { get; }
+    void Write&lt;T&gt; (TextWriter writer, IEnumerable&lt;T&gt; rows, params Expression&lt;Func&lt;T, object&gt;&gt;[] columnSelectors);
+    void Write&lt;T&gt; (TextWriter writer, IEnumerable&lt;T&gt; rows, string[] headers, params Func&lt;T, object&gt;[] columnSelectors);
   }
 
-  internal class RuleCollection : IRuleCollection
+  internal class TableWriter : ITableWriter
   {
-    public IReadOnlyCollection&lt;ISolutionRule&gt; SolutionRules { get; }
-    public IReadOnlyCollection&lt;IProjectRule&gt; ProjectRules { get; }
-    public IReadOnlyCollection&lt;IProjectItemRule&gt; ProjectItemRules { get; }
+    private readonly TableWriterOptions _options;
 
-    public RuleCollection (
-        IEnumerable&lt;ISolutionRule&gt; solutionRules,
-        IEnumerable&lt;IProjectRule&gt; projectRules,
-        IEnumerable&lt;IProjectItemRule&gt; projectItemRules)
+    public TableWriter (TableWriterOptions options = null)
     {
-      SolutionRules = solutionRules.ToArray();
-      ProjectRules = projectRules.ToArray();
-      ProjectItemRules = projectItemRules.ToArray();
+      _options = options ?? new TableWriterOptions();
+    }
+
+    public void Write&lt;T&gt; (TextWriter writer, IEnumerable&lt;T&gt; rows, params Expression&lt;Func&lt;T, object&gt;&gt;[] columnSelectors)
+    {
+      var headers = columnSelectors.Select(GetMemberName).ToArray();
+      var selectors = columnSelectors.Select(exp =&gt; exp.Compile()).ToArray();
+      Write(writer, rows, headers, selectors);
+    }
+
+    public void Write&lt;T&gt; (TextWriter writer, IEnumerable&lt;T&gt; rows, string[] headers, params Func&lt;T, object&gt;[] columnSelectors)
+    {
+      Write(writer, rows.ToArray(), headers, columnSelectors);
+    }
+
+    private void Write&lt;T&gt; (TextWriter writer, T[] rows, string[] headers, Func&lt;T, object&gt;[] columnSelectors)
+    {
+      Trace.Assert(headers.Length == columnSelectors.Length);
+
+      var cells = new string[rows.Length + 1, columnSelectors.Length];
+
+      // Fill headers
+      for (int colIndex = 0; colIndex &lt; cells.GetLength(1); colIndex++)
+      {
+        cells[0, colIndex] = headers[colIndex];
+      }
+
+      // Fill table rows
+      for (int rowIndex = 1; rowIndex &lt; cells.GetLength(0); rowIndex++)
+      {
+        for (int colIndex = 0; colIndex &lt; cells.GetLength(1); colIndex++)
+        {
+          object value = columnSelectors[colIndex].Invoke(rows[rowIndex - 1]);
+
+          cells[rowIndex, colIndex] = value?.ToString() ?? &quot;null&quot;;
+        }
+      }
+
+      Write(writer, cells);
+    }
+
+    private void Write (TextWriter writer, string[,] cells)
+    {
+      var columnWidthRanges = CalculatePreferredColumnWidthRanges(cells);
+      var availableWidth = CalculateAvailableWidth(cells, columnWidthRanges);
+      var columnWidths = CalculateColumnWidths(columnWidthRanges, availableWidth);
+
+      WriteRowSeparator(writer, columnWidths, -1);
+
+      WriteHeaderRow(writer, cells, columnWidths);
+      WriteRowSeparator(writer, columnWidths, 0);
+
+      for (int rowIndex = 1; rowIndex &lt; cells.GetLength(0); rowIndex++)
+      {
+        WriteRow(writer, cells, rowIndex, columnWidths);
+
+        if (rowIndex + 1 &lt; cells.GetLength(0))
+          WriteRowSeparator(writer, columnWidths, 0);
+      }
+
+      WriteRowSeparator(writer, columnWidths, 1);
+    }
+
+    private void WriteHeaderRow (TextWriter writer, string[,] cells, int[] columnWidths)
+    {
+      writer.Write(_options.Characters.Vertical);
+
+      for (int colIndex = 0; colIndex &lt; columnWidths.Length; colIndex++)
+      {
+        writer.Write(&#39; &#39;);
+
+        var header = cells[0, colIndex];
+        var excessWidth = columnWidths[colIndex] - header.Length;
+
+        int left = 0;
+        int right = 0;
+        if (excessWidth &gt; 0)
+        {
+          left = excessWidth / 2 + (excessWidth % 2 == 0 ? 0 : 1);
+          right = excessWidth - left;
+        }
+
+        writer.Write(new string(&#39; &#39;, left));
+        writer.Write(header);
+        writer.Write(new string(&#39; &#39;, right));
+
+        writer.Write(&#39; &#39;);
+        writer.Write(_options.Characters.Vertical);
+      }
+
+      writer.WriteLine();
+    }
+
+    private void WriteRow (TextWriter writer, string[,] cells, int rowIndex, int[] columnWidths)
+    {
+      var row = new string[cells.GetLength(1)][];
+
+      for (int colIndex = 0; colIndex &lt; cells.GetLength(1); colIndex++)
+        row[colIndex] = SplitIntoLines(cells[rowIndex, colIndex], columnWidths[colIndex]).ToArray();
+
+      var lineCount = row.Max(r =&gt; r.Length);
+      for (int lineIndex = 0; lineIndex &lt; lineCount; lineIndex++)
+      {
+        writer.Write(_options.Characters.Vertical);
+
+        for (int colIndex = 0; colIndex &lt; row.Length; colIndex++)
+        {
+          writer.Write(&#39; &#39;);
+
+          writer.Write(
+              lineIndex &gt;= row[colIndex].Length
+                  ? new string(&#39; &#39;, columnWidths[colIndex])
+                  : row[colIndex][lineIndex].PadRight(columnWidths[colIndex]));
+
+          writer.Write(&#39; &#39;);
+          writer.Write(_options.Characters.Vertical);
+        }
+
+        writer.WriteLine();
+      }
+    }
+
+    private IEnumerable&lt;string&gt; SplitIntoLines (string cellValue, int columnWidth)
+    {
+      var sb = new StringBuilder();
+
+      var words = cellValue.Split(new[] { &#39; &#39; }, StringSplitOptions.RemoveEmptyEntries);
+
+      foreach (var word in words)
+      {
+        if (sb.Length + word.Length &gt; columnWidth)
+        {
+          Trace.Assert(sb.Length &gt; 0);
+          sb.Remove(sb.Length - 1, 1);
+          yield return sb.ToString();
+          sb.Clear();
+        }
+
+        sb.Append(word);
+        sb.Append(&#39; &#39;);
+      }
+
+      Trace.Assert(sb.Length &gt; 0);
+      sb.Remove(sb.Length - 1, 1);
+      yield return sb.ToString();
+    }
+
+    private void WriteRowSeparator (TextWriter writer, int[] columnWidths, int indicator)
+    {
+      var start = indicator &lt; 0
+          ? _options.Characters.TopLeftCorner
+          : indicator &gt; 0 ? _options.Characters.BottomLeftCorner : _options.Characters.LeftMiddle;
+      var end = indicator &lt; 0
+          ? _options.Characters.TopRightCorner
+          : indicator &gt; 0 ? _options.Characters.BottomRightCorner : _options.Characters.RightMiddle;
+      var cross = indicator &lt; 0 ? _options.Characters.TopMiddle : indicator &gt; 0 ? _options.Characters.BottomMiddle : _options.Characters.Cross;
+
+      writer.Write(start);
+
+      for (int i = 0; i &lt; columnWidths.Length; i++)
+      {
+        writer.Write(new string(_options.Characters.Horizontal, columnWidths[i] + 2));
+        if (i + 1 &lt; columnWidths.Length)
+          writer.Write(cross);
+      }
+
+      writer.WriteLine(end);
+    }
+
+    private int[] CalculateColumnWidths (WidthRange[] columnWidthRanges, int availableWidth)
+    {
+      var columnWidths = columnWidthRanges.Select(r =&gt; r.Min).ToArray();
+
+      int dividableWidth = availableWidth - columnWidths.Sum();
+
+      for (int i = 0; i &lt; columnWidths.Length; i++)
+      {
+        if (columnWidthRanges[i].Diff != 0)
+          columnWidths[i] += (int) Math.Floor((decimal) dividableWidth / columnWidthRanges[i].Diff);
+      }
+
+      dividableWidth = availableWidth - columnWidths.Sum();
+      var index = 0;
+      while (dividableWidth &gt; 0 &amp;&amp; columnWidths.Select((w, i) =&gt; new { w, i }).Any(x =&gt; x.w &lt; columnWidthRanges[x.i].Max))
+      {
+        if (columnWidths[index] &lt; columnWidthRanges[index].Max)
+        {
+          columnWidths[index] ++;
+          dividableWidth--;
+        }
+        index = (index + 1) % columnWidths.Length;
+      }
+
+      return columnWidths;
+    }
+
+    private WidthRange[] CalculatePreferredColumnWidthRanges (string[,] cells)
+    {
+      var widthRanges = new WidthRange[cells.GetLength(1)];
+
+      for (int colIndex = 0; colIndex &lt; cells.GetLength(1); colIndex++)
+      {
+        widthRanges[colIndex] = new WidthRange();
+
+        for (int rowIndex = 0; rowIndex &lt; cells.GetLength(0); rowIndex++)
+        {
+          var cellValue = cells[rowIndex, colIndex];
+          var cellMax = cellValue.Length;
+          var cellMin = cellValue.Split(new[] { &#39; &#39; }, StringSplitOptions.RemoveEmptyEntries).Max(s =&gt; s.Length);
+
+          widthRanges[colIndex].TrySetNewMax(cellMax);
+          widthRanges[colIndex].TrySetNewMin(cellMin);
+        }
+      }
+
+      return widthRanges;
+    }
+
+    private int CalculateAvailableWidth (string[,] cells, WidthRange[] widthRanges)
+    {
+      var widthForLines =
+          2 * 2 + // outer lines &#39;| &#39; and &#39; |&#39;
+          (cells.GetLength(1) - 1) * 3 + // inner lines &#39; | &#39;
+          1; // fixes line break issues in Win10 command line
+
+      var availableWidth = _options.PreferredTableWidth - widthForLines - 1;
+
+      var minimumRequiredWidth = widthRanges.Sum(r =&gt; r.Min);
+
+      if (availableWidth &lt; minimumRequiredWidth)
+        availableWidth = minimumRequiredWidth;
+
+      return availableWidth;
+    }
+
+    private string GetMemberName&lt;T&gt; (Expression&lt;Func&lt;T, object&gt;&gt; expression)
+    {
+      var memberExpression = expression.Body as MemberExpression ?? ((UnaryExpression) expression.Body).Operand as MemberExpression;
+      return memberExpression.AssertNotNull().Member.Name;
+    }
+
+    private class WidthRange
+    {
+      public int Max { get; private set; } = int.MinValue;
+      public int Min { get; private set; } = int.MinValue;
+
+      public int Diff =&gt; Max - Min;
+
+      public void TrySetNewMax (int max)
+      {
+        Max = Math.Max(max, Max);
+      }
+
+      public void TrySetNewMin (int min)
+      {
+        Min = Math.Max(min, Min);
+      }
     }
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[16,63,16,67,1],[17,61,17,65,1],[18,69,18,73,1],[20,5,23,56,1],[25,7,25,47,1],[26,7,26,45,1],[27,7,27,53,1],[28,5,28,6,1]]);
+      highlightRanges([[24,5,24,59,1],[26,7,26,54,1],[27,5,27,6,1],[31,7,31,69,1],[32,7,32,53,1],[32,66,32,78,1],[33,7,33,47,1],[34,5,34,6,1],[38,7,38,63,1],[39,5,39,6,1],[43,7,43,62,1],[45,7,45,71,1],[48,12,48,28,1],[50,9,50,48,1],[48,61,48,71,1],[48,30,48,59,1],[54,12,54,28,1],[56,14,56,30,1],[58,11,58,79,1],[60,11,60,67,1],[56,63,56,73,1],[56,32,56,61,1],[54,61,54,71,1],[54,30,54,59,1],[64,7,64,28,1],[65,5,65,6,1],[69,7,69,74,1],[70,7,70,78,1],[71,7,71,83,1],[73,7,73,51,1],[75,7,75,51,1],[76,7,76,50,1],[78,12,78,28,1],[80,9,80,57,1],[82,9,82,47,1],[83,11,83,54,1],[78,61,78,71,1],[78,30,78,59,1],[86,7,86,50,1],[87,5,87,6,1],[91,7,91,50,1],[93,12,93,28,1],[95,9,95,27,1],[97,9,97,41,1],[98,9,98,66,1],[100,9,100,22,1],[101,9,101,23,1],[102,9,102,29,1],[104,11,104,67,1],[105,11,105,38,1],[108,9,108,45,1],[109,9,109,30,1],[110,9,110,46,1],[112,9,112,27,1],[113,9,113,52,1],[93,62,93,72,1],[93,30,93,60,1],[116,7,116,26,1],[117,5,117,6,1],[121,7,121,50,1],[123,12,123,28,1],[124,9,124,101,1],[123,61,123,71,1],[123,30,123,59,1],[126,7,126,36,1],[126,44,126,46,1],[127,12,127,29,1],[129,9,129,52,1],[131,14,131,30,1],[133,11,133,29,1],[135,11,138,80,1],[140,11,140,29,1],[141,11,141,54,1],[131,55,131,65,1],[131,32,131,53,1],[144,9,144,28,1],[127,54,127,65,1],[127,31,127,52,1],[146,5,146,6,1],[175,7,177,99,1],[178,7,180,101,1],[181,7,181,144,1],[183,7,183,27,1],[185,12,185,21,1],[187,9,187,87,1],[188,9,188,41,1],[189,11,189,31,1],[185,48,185,51,1],[185,23,185,46,1],[192,7,192,29,1],[193,5,193,6,1],[197,7,197,56,1],[197,61,197,73,1],[199,7,199,64,1],[201,12,201,21,1],[203,9,203,44,1],[204,11,204,101,1],[201,48,201,51,1],[201,23,201,46,1],[207,7,207,60,1],[208,7,208,21,1],[211,9,211,64,1],[213,11,213,34,1],[214,11,214,28,1],[216,9,216,51,1],[209,7,209,66,1],[209,78,209,89,1],[209,121,209,123,1],[219,7,219,27,1],[224,7,224,60,1],[226,12,226,28,1],[228,9,228,50,1],[230,14,230,30,1],[232,11,232,53,1],[233,11,233,42,1],[234,11,234,104,1],[234,112,234,114,1],[236,11,236,55,1],[237,11,237,55,1],[230,63,230,73,1],[230,32,230,61,1],[226,61,226,71,1],[226,30,226,59,1],[241,7,241,26,1],[246,7,249,13,1],[251,7,251,77,1],[253,7,253,55,1],[253,60,253,62,1],[255,7,255,49,1],[256,9,256,47,1],[258,7,258,29,1],[263,7,263,133,1],[264,7,264,59,1],[269,24,269,28,1],[269,29,269,41,1],[270,24,270,28,1],[270,29,270,41,1],[272,26,272,35,1],[276,9,276,34,1],[277,7,277,8,1],[281,9,281,34,1],[282,7,282,8,1],[269,46,269,58,1],[270,46,270,58,1],[32,53,32,66,1],[126,36,126,44,1],[197,56,197,61,1],[209,66,209,78,1],[234,104,234,112,1],[253,55,253,60,1],[150,7,150,36,1],[152,7,152,89,1],[154,28,154,33,1],[154,16,154,24,1],[156,9,156,51,1],[158,11,158,39,1],[159,11,159,39,1],[160,11,160,38,1],[161,11,161,22,1],[164,9,164,25,1],[165,9,165,24,1],[166,7,166,8,1],[154,25,154,27,1],[168,7,168,35,1],[169,7,169,35,1],[170,7,170,34,1],[171,5,171,6,1],[209,89,209,121,1]]);
     </script>
   </body>
 </html>

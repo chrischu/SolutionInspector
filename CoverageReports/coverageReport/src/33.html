@@ -2,55 +2,35 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>d:\development\solutioninspector_0.1.0\src\solutioninspector.api\reporting\iviolationreporter.cs</title>
+    <title>d:\development\solutioninspector\src\solutioninspector.api\reporting\ruleviolationviewmodel.cs</title>
     <script type="text/javascript" src="../js/dotcover.sourceview.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/dotcover.report.css" />
   </head>
   <body>
     <pre id="content" class="source-code">
 using System;
-using System.Collections.Generic;
-using System.IO;
-using SolutionInspector.Api.Rules;
 
 namespace SolutionInspector.Api.Reporting
 {
-  /// &lt;summary&gt;
-  ///   Reports violations in a configured &lt;see cref=&quot;ViolationReportFormat&quot; /&gt;.
-  /// &lt;/summary&gt;
-  public interface IViolationReporter : IDisposable
+  internal class RuleViolationViewModel
   {
-    /// &lt;summary&gt;
-    ///   Report all given &lt;paramref name=&quot;violations&quot; /&gt;.
-    /// &lt;/summary&gt;
-    void Report (IEnumerable&lt;IRuleViolation&gt; violations);
-  }
+    public int Index { get; }
+    public string Rule { get; }
+    public string Target { get; }
+    public string Message { get; }
 
-  internal abstract class ViolationReporterBase : IViolationReporter
-  {
-    private readonly TextWriter _writer;
-
-    protected ViolationReporterBase (TextWriter writer)
+    public RuleViolationViewModel (int index, string rule, string target, string message)
     {
-      _writer = writer;
+      Index = index;
+      Rule = rule;
+      Target = target;
+      Message = message;
     }
-
-    public void Dispose ()
-    {
-      _writer.Dispose();
-    }
-
-    public void Report (IEnumerable&lt;IRuleViolation&gt; violations)
-    {
-      Report(_writer, violations);
-    }
-
-    protected abstract void Report (TextWriter writer, IEnumerable&lt;IRuleViolation&gt; violations);
   }
 }
     </pre>
     <script type="text/javascript">
-      highlightRanges([[23,5,23,56,0],[25,7,25,24,0],[26,5,26,6,0],[30,7,30,25,0],[31,5,31,6,0],[35,7,35,35,0],[36,5,36,6,0]]);
+      highlightRanges([[7,24,7,28,1],[8,26,8,30,1],[9,28,9,32,1],[10,29,10,33,1],[12,5,12,90,1],[14,7,14,21,1],[15,7,15,19,1],[16,7,16,23,1],[17,7,17,25,1],[18,5,18,6,1]]);
     </script>
   </body>
 </html>
