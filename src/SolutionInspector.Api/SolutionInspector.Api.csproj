@@ -110,6 +110,7 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="Commands\InitializeCommand.cs" />
     <Compile Include="Configuration\ConfigurationLoader.cs" />
     <Compile Include="MsBuildInstallationChecker.cs" />
     <Compile Include="Commands\InspectCommand.cs" />
