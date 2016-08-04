@@ -13,6 +13,7 @@ using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
 using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.Configuration;
+using Wrapperator.Interfaces.Diagnostics;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
 using Wrapperator.Wrappers;
@@ -51,6 +52,7 @@ namespace SolutionInspector.Api
       builder.Register(ctx => Wrapper.Directory).As<IDirectoryStatic>();
       builder.Register(ctx => Wrapper.Assembly).As<IAssemblyStatic>();
       builder.Register(ctx => Wrapper.ConfigurationManager).As<IConfigurationManagerStatic>();
+      builder.Register(ctx => Wrapper.Process).As<IProcessStatic>();
 
       builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
 
@@ -89,6 +91,7 @@ namespace SolutionInspector.Api
               ctx.Resolve<IFileStatic>(),
               ctx.Resolve<IConsoleStatic>())
           ).As<ConsoleCommand>();
+      builder.RegisterType<ConfigureCommand>().As<ConsoleCommand>();
 
       builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();
 

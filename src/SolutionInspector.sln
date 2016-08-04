@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.Api", "SolutionInspector.Api\SolutionInspector.Api.csproj", "{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}"
 EndProject
@@ -53,6 +53,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CF675B
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector", "SolutionInspector\SolutionInspector.csproj", "{9E33C5B1-89AD-4A24-82FA-6C9489159A54}"
+	ProjectSection(ProjectDependencies) = postProject
+		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B} = {33E14DD0-F0B5-4624-89EA-28C5F7630E5B}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.DefaultRules", "SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj", "{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}"
 EndProject
@@ -64,6 +67,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Docs", ".Docs", "{D8707020
 		..\README.md = ..\README.md
 		..\ROADMAP.md = ..\ROADMAP.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.ConfigurationUi", "SolutionInspector.ConfigurationUi\SolutionInspector.ConfigurationUi.csproj", "{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +104,10 @@ Global
 		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
