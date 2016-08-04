@@ -160,7 +160,7 @@
     <Compile Include="Rules\RuleAssemblyNotFoundException.cs" />
     <Compile Include="Utilities\NameFilterConverter.cs" />
     <Compile Include="Utilities\NameFilter.cs" />
-    <Compile Include="Configuration\SolutionCheckerConfiguration.cs" />
+    <Compile Include="Configuration\SolutionInspectorConfiguration.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\AssertNotNullExtensions.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
