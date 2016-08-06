@@ -14,16 +14,18 @@ namespace SolutionInspector.Api.Utilities
     /// <summary>
     ///   Returns <c>true</c> if the given <paramref name="name" /> matches the filter, <c>false</c> otherwise.
     /// </summary>
-    bool IsMatch (string name);
+    bool IsMatch(string name);
   }
 
+  /// <inheritdoc />
   [TypeConverter (typeof(NameFilterConverter))]
-  internal class NameFilter : INameFilter
+  public class NameFilter : INameFilter
   {
     private readonly Regex[] _includeFilters;
     private readonly Regex[] _excludeFilters;
 
-    public NameFilter (IEnumerable<string> includes, IEnumerable<string> excludes = null)
+    /// <inheritdoc />
+    public NameFilter(IEnumerable<string> includes, IEnumerable<string> excludes = null)
     {
       _includeFilters = includes.Select(s => new Regex($"^{s.Replace("*", ".*")}$", RegexOptions.Compiled)).ToArray();
       _excludeFilters = (excludes ?? Enumerable.Empty<string>()).Select(s => new Regex($"^{s.Replace("*", ".*")}$", RegexOptions.Compiled)).ToArray();

@@ -32,12 +32,12 @@ namespace SolutionInspector.Api.Tests.Utilities
 
     class when_converting_to
     {
-      Establish ctx = () => { NameFilter = new NameFilter(new[] { "A", "B" }, new[] { "C", "D" }); };
+      Establish ctx = () => { NameFilter = new NameFilter(new[] { "A", "*B", "C*", "*D*" }, new[] { "E", "*F", "G*", "*H*" }); };
 
       Because of = () => Result = ConvertTo(NameFilter);
 
-      It returns_ToString_result = () =>
-          Result.Should().Be(NameFilter.ToString());
+      It converts = () =>
+          Result.Should().Be("+A;+*B;+C*;+*D*;-E;-*F;-G*;-*H*");
 
       static NameFilter NameFilter;
       static string Result;
@@ -81,6 +81,23 @@ namespace SolutionInspector.Api.Tests.Utilities
       static NameFilter NameFilter;
       static string NameFilterString;
       static NameFilter Result;
+    }
+
+    class when_converting_from_with_invalid_format
+    {
+      Establish ctx = () =>
+      {
+        NameFilterString = "THIS IS NOT A NAMEFILTER";
+      };
+
+      Because of = () => Exception = Catch.Exception(() => ConvertFrom(NameFilterString));
+
+      It throws = () =>
+          Exception.Should().Be<FormatException>().WithMessage($"The filter string '{NameFilterString}' is not in the correct format.");
+
+      static NameFilter NameFilter;
+      static string NameFilterString;
+      static Exception Exception;
     }
 
     class when_converting_from_with_null_value

@@ -5,13 +5,6 @@ using JetBrains.Annotations;
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
-  ///   A SolutionInspector rule.
-  /// </summary>
-  public interface IRule
-  {
-  }
-
-  /// <summary>
   ///   A SolutionInspector rule that applies to the given <typeparamref name="TTarget" />.
   /// </summary>
   [PublicAPI]

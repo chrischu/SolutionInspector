@@ -90,7 +90,6 @@ function Run() {
     Clean
     Restore-NuGetPackages
     Update-AssemblyInfos
-    Update-SolutionInspectorConfig
     Build
     Run-ReSharperCodeInspection -Condition $RunReSharperCodeInspection
     Run-Tests -Condition $RunTests
@@ -121,21 +120,6 @@ BuildTask Update-AssemblyInfos {
 BuildTask Restore-AssemblyInfos {
   Restore-AssemblyInfo $AssemblyInfoSharedFile
 }
-
-BuildTask Update-SolutionInspectorConfig {
-  $solutionInspectorProject = $Projects | ?{ $_.ProjectName -eq "SolutionInspector" }
-
-  Apply-XdtTransform $solutionInspectorProject "Template.SolutionInspectorConfig" "..\SolutionInspector.Api\App.config.uninstall.xdt"
-  Apply-XdtTransform $solutionInspectorProject "Template.SolutionInspectorConfig" "..\SolutionInspector.Api\App.config.install.xdt"
-  Apply-XdtTransform $solutionInspectorProject "Template.SolutionInspectorConfig" "..\SolutionInspector.DefaultRules\App.config.install.xdt"
-  Format-Xml (Join-Path $($solutionInspectorProject.ProjectDir) "Template.SolutionInspectorConfig")
-
-  Apply-XdtTransform $solutionInspectorProject "App.config" "..\SolutionInspector.Api\App.config.uninstall.xdt"
-  Apply-XdtTransform $solutionInspectorProject "App.config" "..\SolutionInspector.Api\App.config.install.xdt"
-  Apply-XdtTransform $solutionInspectorProject "App.config" "..\SolutionInspector.DefaultRules\App.config.install.xdt"
-  Format-Xml (Join-Path $($solutionInspectorProject.ProjectDir) "App.config")
-}
-
 
 BuildTask Build {
   Build-Solution $SolutionFile $Projects $Configuration $TreatWarningsAsErrors $RunFxCopCodeAnalysis $FxCopResultsDirectory
