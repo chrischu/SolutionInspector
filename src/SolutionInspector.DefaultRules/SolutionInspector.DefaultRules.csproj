@@ -97,8 +97,7 @@
       <Link>Properties\SharedTemplate.nuspec</Link>
       <SubType>Designer</SubType>
     </None>
-    <Content Include="App.config.install.xdt" />
-    <Content Include="App.config.uninstall.xdt" />
+    <None Include="Template.SolutionInspectorRuleset" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

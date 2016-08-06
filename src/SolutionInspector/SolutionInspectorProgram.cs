@@ -8,7 +8,7 @@ namespace SolutionInspector
   {
     public static int Main (string[] args)
     {
-      return Api.SolutionInspector.Run(args);
+      return SolutionInspector.Run(args);
     }
   }
 }

@@ -14,7 +14,7 @@ namespace SolutionInspector.Api.Utilities
     /// <summary>
     ///   Returns <c>true</c> if the given <paramref name="name" /> matches the filter, <c>false</c> otherwise.
     /// </summary>
-    bool IsMatch (string name);
+    bool IsMatch(string name);
   }
 
   [TypeConverter (typeof(NameFilterConverter))]

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Xml.Linq;
 using SolutionInspector.Api.ObjectModel;
@@ -37,21 +36,5 @@ namespace SolutionInspector.Api.Rules
     /// </summary>
     /// <returns></returns>
     protected abstract IEnumerable<IRuleViolation> Evaluate (IConfigurationProjectItem target, XDocument configurationXml);
-  }
-
-  /// <summary>
-  ///   Base class for configuration for <see cref="ProjectConfigRuleBase{TConfiguration}" />.
-  /// </summary>
-  public abstract class ProjectConfigRuleConfigurationBase : ConfigurationElement
-  {
-    /// <summary>
-    ///   Controls whether to report a violation when no configuration file can be found for the project or if the rule should just be skipped in that case.
-    /// </summary>
-    [ConfigurationProperty ("reportViolationOnMissingConfigurationFile")]
-    public bool ReportViolationOnMissingConfigurationFile
-    {
-      get { return (bool) this["reportViolationOnMissingConfigurationFile"]; }
-      set { this["reportViolationOnMissingConfigurationFile"] = value; }
-    }
   }
 }

@@ -8,7 +8,7 @@ namespace SolutionInspector.Api.Utilities
   ///   Represents errors that occurs when trying to load a solution file that does not exist.
   /// </summary>
   [Serializable]
-  public class SolutionNotFoundException : Exception
+  public class SolutionNotFoundException : Exception 
   {
     /// <summary>
     ///   Creates a new <see cref="SolutionNotFoundException" />

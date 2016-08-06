@@ -4,13 +4,6 @@ using System.Configuration;
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
-  ///   A SolutionInspector that is configurable via C# configuration classes.
-  /// </summary>
-  public interface IConfigurableRule : IRule
-  {
-  }
-
-  /// <summary>
   ///   A SolutionInspector rule that applies to the given <typeparamref name="TTarget" /> and can be configured using the
   ///   <typeparamref name="TConfiguration" />.
   /// </summary>

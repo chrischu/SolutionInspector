@@ -124,9 +124,6 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="Commands\InitializeCommand.cs" />
-    <Compile Include="Configuration\ConfigurationLoader.cs" />
-    <Compile Include="Commands\InspectCommand.cs" />
     <Compile Include="Configuration\Infrastructure\ConfigurationElementCollectionBase.cs" />
     <Compile Include="Configuration\Infrastructure\KeyedConfigurationElement.cs" />
     <Compile Include="Configuration\Infrastructure\KeyedConfigurationElementCollectionBase.cs" />
@@ -138,53 +135,51 @@
     <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportsConfigurationSection.cs" />
     <Compile Include="Configuration\Rules\ProjectItemRulesConfigurationCollection.cs" />
     <Compile Include="Configuration\Rules\ProjectItemRuleGroupConfigurationElement.cs" />
+    <Compile Include="Configuration\SolutionInspectorRuleset.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="ObjectModel\ConfigurationProjectItem.cs" />
-    <Compile Include="ObjectModel\EvaluatedProjectPropertyValue.cs" />
-    <Compile Include="ObjectModel\ProjectLocation.cs" />
-    <Compile Include="ObjectModel\ProjectPropertyOccurrence.cs" />
-    <Compile Include="ObjectModel\ReferenceBase.cs" />
+    <Compile Include="ObjectModel\IAdvancedProject.cs" />
+    <Compile Include="ObjectModel\IConfigurationProjectItem.cs" />
+    <Compile Include="ObjectModel\IDllReference.cs" />
+    <Compile Include="ObjectModel\IEvaluatedProjectPropertyValue.cs" />
+    <Compile Include="ObjectModel\IFileReference.cs" />
+    <Compile Include="ObjectModel\IGacReference.cs" />
+    <Compile Include="ObjectModel\INuGetPackage.cs" />
+    <Compile Include="ObjectModel\INuGetReference.cs" />
+    <Compile Include="ObjectModel\IProject.cs" />
+    <Compile Include="ObjectModel\IProjectItem.cs" />
+    <Compile Include="ObjectModel\IProjectItemInclude.cs" />
+    <Compile Include="ObjectModel\IProjectLocation.cs" />
+    <Compile Include="ObjectModel\IProjectProperty.cs" />
+    <Compile Include="ObjectModel\IProjectPropertyCondition.cs" />
+    <Compile Include="ObjectModel\IProjectPropertyOccurrence.cs" />
+    <Compile Include="ObjectModel\IProjectReference.cs" />
+    <Compile Include="ObjectModel\IReference.cs" />
+    <Compile Include="ObjectModel\ISolution.cs" />
+    <Compile Include="Reporting\IViolationReporter.cs" />
     <Compile Include="Reporting\ViolationReporterRegistrationExtensions.cs" />
-    <Compile Include="Rules\FilteringProjectItemRuleProxy.cs" />
-    <Compile Include="Rules\FilteringProjectRuleProxy.cs" />
-    <Compile Include="Utilities\HashCodeHelper.cs" />
-    <Compile Include="ObjectModel\ProjectItemInclude.cs" />
-    <Compile Include="ObjectModel\ProjectProperty.cs" />
-    <Compile Include="ObjectModel\ProjectPropertyCondition.cs" />
-    <Compile Include="Reporting\VisualStudioViolationReporter.cs" />
+    <Compile Include="Rules\ConfigurableProjectItemRule.cs" />
+    <Compile Include="Rules\ConfigurableProjectRule.cs" />
+    <Compile Include="Rules\ConfigurableSolutionRule.cs" />
+    <Compile Include="Rules\IConfigurableRule.cs" />
     <Compile Include="Rules\InvalidRuleAssemblyException.cs" />
-    <Compile Include="Rules\RuleAssemblyLoader.cs" />
+    <Compile Include="Rules\IProjectItemRule.cs" />
+    <Compile Include="Rules\IProjectRule.cs" />
+    <Compile Include="Rules\IRule.cs" />
+    <Compile Include="Rules\IRuleViolation.cs" />
+    <Compile Include="Rules\ISolutionRule.cs" />
     <Compile Include="Rules\ProjectConfigRuleBase.cs" />
+    <Compile Include="Rules\ProjectConfigRuleConfigurationBase.cs" />
     <Compile Include="Rules\ProjectItemRule.cs" />
     <Compile Include="Rules\RuleAssemblyNotFoundException.cs" />
-    <Compile Include="Utilities\NameFilterConverter.cs" />
-    <Compile Include="Utilities\NameFilter.cs" />
     <Compile Include="Configuration\SolutionInspectorConfiguration.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\AssertNotNullExtensions.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
-    <Compile Include="ObjectModel\AdvancedProject.cs" />
     <Compile Include="ObjectModel\BuildConfiguration.cs" />
-    <Compile Include="ObjectModel\DllReferenceBase.cs" />
-    <Compile Include="ObjectModel\FileReference.cs" />
-    <Compile Include="ObjectModel\GacReference.cs" />
-    <Compile Include="ObjectModel\NuGetPackage.cs" />
-    <Compile Include="ObjectModel\NuGetReference.cs" />
-    <Compile Include="ObjectModel\Project.cs" />
-    <Compile Include="ObjectModel\ProjectItem.cs" />
     <Compile Include="ObjectModel\ProjectItemBuildAction.cs" />
     <Compile Include="ObjectModel\ProjectOutputType.cs" />
-    <Compile Include="ObjectModel\ProjectReference.cs" />
-    <Compile Include="ObjectModel\Solution.cs" />
-    <Compile Include="Reporting\IViolationReporter.cs" />
-    <Compile Include="Reporting\RuleViolationViewModel.cs" />
-    <Compile Include="Reporting\RuleViolationViewModelConverter.cs" />
-    <Compile Include="Reporting\TableViolationReporter.cs" />
-    <Compile Include="Reporting\ViolationReporterFactory.cs" />
     <Compile Include="Reporting\ViolationReportFormat.cs" />
-    <Compile Include="Reporting\XmlViolationReporter.cs" />
-    <Compile Include="Commands\SolutionInspectorCommand.cs" />
     <Compile Include="Configuration\Rules\ProjectRuleGroupConfigurationElement.cs" />
     <Compile Include="Configuration\Rules\ProjectRulesConfigurationCollection.cs" />
     <Compile Include="Configuration\Rules\RuleConfigurationCollection.cs" />
@@ -196,25 +191,17 @@
     <Compile Include="Rules\IRuleTarget.cs" />
     <Compile Include="Rules\ProjectRule.cs" />
     <Compile Include="Rules\Rule.cs" />
-    <Compile Include="Rules\RuleCollection.cs" />
-    <Compile Include="Rules\RuleCollectionBuilder.cs" />
-    <Compile Include="Rules\RuleConfigurationInstantiator.cs" />
-    <Compile Include="Rules\RuleTypeInfo.cs" />
-    <Compile Include="Rules\RuleTypeResolver.cs" />
     <Compile Include="Rules\RuleTypeResolvingException.cs" />
     <Compile Include="Rules\RuleTypeUtility.cs" />
     <Compile Include="Rules\RuleViolation.cs" />
     <Compile Include="Rules\SolutionRule.cs" />
-    <Compile Include="SolutionInspector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\BuildConfigurationFilter.cs" />
     <Compile Include="Utilities\BuildConfigurationFilterConverter.cs" />
     <Compile Include="Utilities\CollectionDifferenceFinder.cs" />
     <Compile Include="Utilities\CollectionDifferences.cs" />
-    <Compile Include="Utilities\TableWriter.cs" />
-    <Compile Include="Utilities\TableWriterCharacters.cs" />
-    <Compile Include="Utilities\TableWriterOptions.cs" />
-    <Compile Include="Utilities\SolutionLoader.cs" />
+    <Compile Include="Utilities\NameFilter.cs" />
+    <Compile Include="Utilities\NameFilterConverter.cs" />
     <Compile Include="Utilities\SolutionNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -222,14 +209,7 @@
       <Link>Properties\SharedTemplate.nuspec</Link>
       <SubType>Designer</SubType>
     </None>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="App.config.uninstall.xdt" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App.config.install.xdt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
