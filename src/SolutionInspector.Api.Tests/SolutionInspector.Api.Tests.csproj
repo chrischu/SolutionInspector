@@ -100,12 +100,8 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="Configuration\Infrastructure\ConfigurationElementCollectionBaseSpec.cs" />
-    <Compile Include="Configuration\Infrastructure\KeyedConfigurationElementCollectionBaseSpec.cs" />
-    <Compile Include="Configuration\MsBuildParsing\MsBuildParsingConfigurationSectionSpec.cs" />
-    <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportsConfigurationSectionSpec.cs" />
-    <Compile Include="Configuration\Rules\ProjectConfigRuleBaseSpec.cs" />
-    <Compile Include="Configuration\Rules\RuleConfigurationElementSpec.cs" />
+    <Compile Include="Configuration\ConfigurationElementCollectionBaseSpec.cs" />
+    <Compile Include="Configuration\KeyedConfigurationElementCollectionBaseSpec.cs" />
     <Compile Include="Extensions\EnumerableExtensionsSpec.cs" />
     <Compile Include="Extensions\DictionaryExtensionsSpec.cs" />
     <Compile Include="Extensions\StringExtensionsSpec.cs" />
@@ -114,14 +110,18 @@
     <Compile Include="ObjectModel\BuildConfigurationSpec.cs" />
     <Compile Include="Utilities\BuildConfigurationFilterConverterSpec.cs" />
     <Compile Include="Utilities\NameFilterConverterSpec.cs" />
+    <Compile Include="Utilities\BuildConfigurationFilterSpec.cs" />
     <Compile Include="Utilities\NameFilterSpec.cs" />
-    <Compile Include="Configuration\Rules\RulesConfigurationSectionSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rules\RuleTypeUtilitySpec.cs" />
     <Compile Include="Utilities\CollectionDifferenceFinderSpec.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
+      <Project>{25E030C5-78B1-4A5C-BB25-6ECCB892971C}</Project>
+      <Name>SolutionInspector.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj">
       <Project>{D154C744-EAB0-479A-BA22-B822AAFD3774}</Project>
       <Name>SolutionInspector.TestInfrastructure</Name>

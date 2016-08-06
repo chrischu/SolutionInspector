@@ -2,10 +2,10 @@
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
   <configSections xdt:Transform="InsertIfMissing">
     <sectionGroup xdt:Transform="InsertIfMissing" name="solutionInspectorRuleset"
-                  type="SolutionInspector.Configuration.SolutionInspectorRuleset, SolutionInspector.Api">
+                  type="SolutionInspector.Configuration.SolutionInspectorRuleset, SolutionInspector.Configuration">
       <section name="ruleAssemblyImports"
-               type="SolutionInspector.Api.Configuration.RuleAssemblyImports.RuleAssemblyImportsConfigurationSection, SolutionInspector.Api" />
-      <section name="rules" type="SolutionInspector.Configuration.Rules.RulesConfigurationSection, SolutionInspector.Api" />
+               type="SolutionInspector.Configuration.RuleAssemblyImports.RuleAssemblyImportsConfigurationSection, SolutionInspector.Configuration" />
+      <section name="rules" type="SolutionInspector.Configuration.Rules.RulesConfigurationSection, SolutionInspector.Configuration" />
     </sectionGroup>
   </configSections>
 

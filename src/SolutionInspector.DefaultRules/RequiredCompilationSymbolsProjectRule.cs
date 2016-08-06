@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
-using SolutionInspector.Api.Configuration.Infrastructure;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;

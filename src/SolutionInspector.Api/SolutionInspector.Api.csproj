@@ -124,20 +124,11 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="Configuration\Infrastructure\ConfigurationElementCollectionBase.cs" />
-    <Compile Include="Configuration\Infrastructure\KeyedConfigurationElement.cs" />
-    <Compile Include="Configuration\Infrastructure\KeyedConfigurationElementCollectionBase.cs" />
-    <Compile Include="Configuration\MsBuildParsing\MsBuildParsingConfigurationSection.cs" />
-    <Compile Include="Configuration\MsBuildParsing\ProjectBuildActionConfigurationElement.cs" />
-    <Compile Include="Configuration\MsBuildParsing\ProjectBuildActionsConfigurationElement.cs" />
-    <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportConfigurationElement.cs" />
-    <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportsConfigurationCollection.cs" />
-    <Compile Include="Configuration\RuleAssemblyImports\RuleAssemblyImportsConfigurationSection.cs" />
-    <Compile Include="Configuration\Rules\ProjectItemRulesConfigurationCollection.cs" />
-    <Compile Include="Configuration\Rules\ProjectItemRuleGroupConfigurationElement.cs" />
-    <Compile Include="Configuration\SolutionInspectorRuleset.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
+    <Compile Include="Configuration\KeyedConfigurationElement.cs" />
+    <Compile Include="Configuration\KeyedConfigurationElementCollectionBase.cs" />
     <Compile Include="ObjectModel\IAdvancedProject.cs" />
     <Compile Include="ObjectModel\IConfigurationProjectItem.cs" />
     <Compile Include="ObjectModel\IDllReference.cs" />
@@ -172,7 +163,6 @@
     <Compile Include="Rules\ProjectConfigRuleConfigurationBase.cs" />
     <Compile Include="Rules\ProjectItemRule.cs" />
     <Compile Include="Rules\RuleAssemblyNotFoundException.cs" />
-    <Compile Include="Configuration\SolutionInspectorConfiguration.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\AssertNotNullExtensions.cs" />
     <Compile Include="Extensions\XmlExtensions.cs" />
@@ -180,12 +170,6 @@
     <Compile Include="ObjectModel\ProjectItemBuildAction.cs" />
     <Compile Include="ObjectModel\ProjectOutputType.cs" />
     <Compile Include="Reporting\ViolationReportFormat.cs" />
-    <Compile Include="Configuration\Rules\ProjectRuleGroupConfigurationElement.cs" />
-    <Compile Include="Configuration\Rules\ProjectRulesConfigurationCollection.cs" />
-    <Compile Include="Configuration\Rules\RuleConfigurationCollection.cs" />
-    <Compile Include="Configuration\Rules\RuleConfigurationElement.cs" />
-    <Compile Include="Configuration\Rules\RulesConfigurationElement.cs" />
-    <Compile Include="Configuration\Rules\RulesConfigurationSection.cs" />
     <Compile Include="Properties\InternalsVisibleTo.cs" />
     <Compile Include="Rules\ConfigurableRule.cs" />
     <Compile Include="Rules\IRuleTarget.cs" />

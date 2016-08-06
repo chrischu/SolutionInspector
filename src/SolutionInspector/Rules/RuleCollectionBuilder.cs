@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SolutionInspector.Api.Configuration.Rules;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration.Rules;
 
 namespace SolutionInspector.Rules
 {

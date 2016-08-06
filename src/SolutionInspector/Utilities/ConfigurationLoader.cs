@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
-using SolutionInspector.Api.Configuration;
+using SolutionInspector.Configuration;
 using Wrapperator.Interfaces.Configuration;
 using Wrapperator.Interfaces.IO;
 

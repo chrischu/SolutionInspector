@@ -38,8 +38,8 @@ namespace SolutionInspector.Api.Tests.Utilities
 
       Because of = () => Result = ConvertTo(BuildConfigurationFilter);
 
-      It returns_ToString_result = () =>
-          Result.Should().Be(BuildConfigurationFilter.ToString());
+      It converts = () =>
+          Result.Should().Be("A|B,C|D");
 
       static BuildConfigurationFilter BuildConfigurationFilter;
       static string Result;

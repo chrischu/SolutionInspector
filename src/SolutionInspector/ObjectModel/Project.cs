@@ -8,10 +8,10 @@ using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
-using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration.MsBuildParsing;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Wrappers;
 

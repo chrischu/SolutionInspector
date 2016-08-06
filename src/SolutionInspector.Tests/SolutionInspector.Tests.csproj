@@ -168,6 +168,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
+      <Project>{25E030C5-78B1-4A5C-BB25-6ECCB892971C}</Project>
+      <Name>SolutionInspector.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj">
       <Project>{D154C744-EAB0-479A-BA22-B822AAFD3774}</Project>
       <Name>SolutionInspector.TestInfrastructure</Name>

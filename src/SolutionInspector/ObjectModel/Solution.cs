@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Construction;
-using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration.MsBuildParsing;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Wrappers;
 

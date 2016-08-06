@@ -167,6 +167,10 @@
     <None Include="Properties\SolutionInspector.tool.nuspec" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
+      <Project>{25E030C5-78B1-4A5C-BB25-6ECCB892971C}</Project>
+      <Name>SolutionInspector.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj">
       <Project>{bcb0a8e8-f220-46fb-9b07-9b2b3f9809b1}</Project>
       <Name>SolutionInspector.DefaultRules</Name>

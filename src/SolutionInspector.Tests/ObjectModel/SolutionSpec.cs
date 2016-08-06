@@ -5,9 +5,9 @@ using System.Reflection;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
-using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Configuration.MsBuildParsing;
 using SolutionInspector.ObjectModel;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 

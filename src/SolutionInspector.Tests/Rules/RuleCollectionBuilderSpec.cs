@@ -5,10 +5,10 @@ using FakeItEasy;
 using Fasterflect;
 using FluentAssertions;
 using Machine.Specifications;
-using SolutionInspector.Api.Configuration.Rules;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
+using SolutionInspector.Configuration.Rules;
 using SolutionInspector.Rules;
 using SolutionInspector.TestInfrastructure;
 
