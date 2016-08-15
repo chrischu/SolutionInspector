@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
@@ -10,6 +10,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that a project's property has the expected value.
   /// </summary>
+  [Description ("Verifies that a project's property has the expected value.")]
   public class ProjectPropertyRule : ConfigurableProjectRule<ProjectPropertyRuleConfiguration>
   {
     /// <inheritdoc />
@@ -42,6 +43,7 @@ namespace SolutionInspector.DefaultRules
     ///   The property to check.
     /// </summary>
     [ConfigurationProperty ("property", DefaultValue = "", IsRequired = true)]
+    [Description ("The property to check.")]
     public string Property
     {
       get { return (string) this["property"]; }
@@ -52,6 +54,7 @@ namespace SolutionInspector.DefaultRules
     ///   The expected property value to check against.
     /// </summary>
     [ConfigurationProperty ("expectedValue", DefaultValue = "", IsRequired = true)]
+    [Description ("The expected property value to check against.")]
     public string ExpectedValue
     {
       get { return (string) this["expectedValue"]; }

@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 
@@ -9,6 +9,8 @@ namespace SolutionInspector.DefaultRules
   ///   Verifies that all <see cref="IProjectReference" />s in the project are valid (i.e. point to existing csproj files included in the solution
   ///   and have the correct project GUID).
   /// </summary>
+  [Description ("Verifies that all project references in the project are valid (i.e. point to existing csproj files included in the solution " +
+                "and have the correct project GUID).")]
   public class ProjectReferencesMustBeValidRule : ProjectRule
   {
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
@@ -32,22 +34,23 @@ namespace SolutionInspector.DefaultRules
             if (projectReferencedByGuid != null)
             {
               yield return
-                new RuleViolation(
-                    this,
-                    target,
-                    $"The reference to project '{projectReference.ReferencedProjectName}' ('{projectReference.Include}') is invalid because the " +
-                    "referenced project file could not be found. However, there is a project that matches the given project guid: " +
-                    $"'{projectReferencedByGuid.Name}' ('{target.GetIncludePathFor(projectReferencedByGuid)}'). Did you mean to reference that one?");
+                  new RuleViolation(
+                      this,
+                      target,
+                      $"The reference to project '{projectReference.ReferencedProjectName}' ('{projectReference.Include}') is invalid because the " +
+                      "referenced project file could not be found. However, there is a project that matches the given project guid: " +
+                      $"'{projectReferencedByGuid.Name}' ('{target.GetIncludePathFor(projectReferencedByGuid)}'). Did you mean to reference that one?")
+                  ;
             }
             else
             {
               yield return
-                new RuleViolation(
-                    this,
-                    target,
-                    $"The reference to project '{projectReference.ReferencedProjectName}' ('{projectReference.Include}') is invalid because the " +
-                    "referenced project file could not be found and the solution does not contain a project that at least matches the specified" +
-                    $"referenced project GUID ({projectReference.ReferencedProjectGuid.Value}).");
+                  new RuleViolation(
+                      this,
+                      target,
+                      $"The reference to project '{projectReference.ReferencedProjectName}' ('{projectReference.Include}') is invalid because the " +
+                      "referenced project file could not be found and the solution does not contain a project that at least matches the specified" +
+                      $"referenced project GUID ({projectReference.ReferencedProjectGuid.Value}).");
             }
           }
           else

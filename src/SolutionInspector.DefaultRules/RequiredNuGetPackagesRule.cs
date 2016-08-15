@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
@@ -12,6 +13,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that the project references all the NuGet packages configured via <see cref="RequiredNuGetPackagesRuleConfiguration" />.
   /// </summary>
+  [Description("Verifies that the project references all the configured NuGet packages.")]
   public class RequiredNuGetPackagesRule : ConfigurableProjectRule<RequiredNuGetPackagesRuleConfiguration>
   {
     /// <inheritdoc />
@@ -35,7 +37,7 @@ namespace SolutionInspector.DefaultRules
   public class RequiredNuGetPackagesRuleConfiguration : KeyedConfigurationElementCollectionBase<RequiredNuGetPackageConfigurationElement, string>
   {
     /// <inheritdoc />
-    protected override string ElementName => "nuGetPackage";
+    protected override string ElementName => "nuGetPackage"; // TODO
   }
 
   /// <summary>
@@ -50,6 +52,7 @@ namespace SolutionInspector.DefaultRules
     ///   The id of the required NuGet package.
     /// </summary>
     [ConfigurationProperty ("id", DefaultValue = "", IsRequired = true, IsKey = true)]
+    [Description("The id of the required NuGet package.")]
     public string Id
     {
       get { return (string) this["id"]; }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -16,6 +15,7 @@ namespace SolutionInspector.DefaultRules
   ///   Verifies that all the compilation symbols (configured in <see cref="RequiredCompilationSymbolsProjectRuleConfiguration" />) are configured in the
   ///   project.
   /// </summary>
+  [Description ("Verifies that all the compilation symbols (see 'requiredCompilationSymbols') are configured in the project.")]
   public class RequiredCompilationSymbolsProjectRule : ConfigurableProjectRule<RequiredCompilationSymbolsProjectRuleConfiguration>
   {
     /// <inheritdoc />
@@ -74,6 +74,7 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [TypeConverter (typeof(BuildConfigurationFilterConverter))]
     [ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
+    [Description ("Filter that controlls which build configuration this rule applies to.")]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
       get { return (BuildConfigurationFilter) this["buildConfigurationFilter"]; }
@@ -85,6 +86,7 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("requiredCompilationSymbols", DefaultValue = "", IsRequired = true)]
+    [Description ("All the compilation symbols that are required and are therefore checked.")]
     public CommaDelimitedStringCollection RequiredCompilationSymbols
     {
       get { return (CommaDelimitedStringCollection) this["requiredCompilationSymbols"]; }

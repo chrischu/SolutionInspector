@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
@@ -10,6 +10,8 @@ namespace SolutionInspector.DefaultRules
   ///   Verifies project items have custom tool and custom tool namespace set that is configured via
   ///   <see cref="ProjectItemMustHaveCustomToolSetRuleConfiguration" />.
   /// </summary>
+  [Description ("Verifies project items have custom tool and custom tool namespace set that is configured via 'expectedCustomTool' " +
+                "and 'expectedCustomToolNamespace'.")]
   public class ProjectItemMustHaveCustomToolSetRule : ConfigurableProjectItemRule<ProjectItemMustHaveCustomToolSetRuleConfiguration>
   {
     /// <inheritdoc />
@@ -44,9 +46,10 @@ namespace SolutionInspector.DefaultRules
   public class ProjectItemMustHaveCustomToolSetRuleConfiguration : ConfigurationElement
   {
     /// <summary>
-    ///   Expected custom tool.
+    ///   The expected custom tool.
     /// </summary>
     [ConfigurationProperty ("expectedCustomTool", DefaultValue = "", IsRequired = true)]
+    [Description("The expected custom tool.")]
     public string ExpectedCustomTool
     {
       get { return (string) this["expectedCustomTool"]; }
@@ -54,9 +57,10 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    ///   Expected custom tool namespace.
+    ///   The expected custom tool namespace.
     /// </summary>
     [ConfigurationProperty ("expectedCustomToolNamespace")]
+    [Description("The expected custom tool namespace.")]
     public string ExpectedCustomToolNamespace
     {
       get { return (string) this["expectedCustomToolNamespace"]; }

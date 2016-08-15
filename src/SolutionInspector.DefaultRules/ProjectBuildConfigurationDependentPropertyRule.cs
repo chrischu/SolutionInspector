@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -14,6 +13,8 @@ namespace SolutionInspector.DefaultRules
   ///   Verifies that a project's property has the expected value in the build configurations matched by the
   ///   <see cref="ProjectBuildConfigurationDependentPropertyRuleConfiguration.BuildConfigurationFilter" />.
   /// </summary>
+  [Description ("Verifies that a project's property has the expected value in the build configurations matched by the" +
+                "provided 'buildConfigurationFilter'.")]
   public class ProjectBuildConfigurationDependentPropertyRule : ConfigurableProjectRule<ProjectBuildConfigurationDependentPropertyRuleConfiguration>
   {
     /// <inheritdoc />
@@ -50,10 +51,11 @@ namespace SolutionInspector.DefaultRules
   public class ProjectBuildConfigurationDependentPropertyRuleConfiguration : ConfigurationElement
   {
     /// <summary>
-    ///   Controlls in which build configurations the <see cref="Property" /> is checked against the <see cref="ExpectedValue" />.
+    ///   Controls in which build configurations the <see cref="Property" /> is checked against the <see cref="ExpectedValue" />.
     /// </summary>
     [TypeConverter (typeof(BuildConfigurationFilterConverter))]
     [ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
+    [Description ("Controls in which build configurations the 'property' is checked against the 'expectedValue'.")]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
       get { return (BuildConfigurationFilter) this["buildConfigurationFilter"]; }
@@ -61,9 +63,10 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    ///   The property to check.
+    ///   Name of the property to check.
     /// </summary>
     [ConfigurationProperty ("property", DefaultValue = "", IsRequired = true)]
+    [Description ("Name of the property to check.")]
     public string Property
     {
       get { return (string) this["property"]; }
@@ -74,6 +77,7 @@ namespace SolutionInspector.DefaultRules
     ///   The expected property value to check against.
     /// </summary>
     [ConfigurationProperty ("expectedValue", DefaultValue = "", IsRequired = true)]
+    [Description ("The expected property value to check against.")]
     public string ExpectedValue
     {
       get { return (string) this["expectedValue"]; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
@@ -12,6 +13,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that all expected combinations of build configuration/platform are present in the solution.
   /// </summary>
+  [Description("Verifies that all expected combinations of build configuration/platform are present in the solution.")]
   public class SolutionBuildConfigurationsRule : ConfigurableSolutionRule<SolutionBuildConfigurationsRuleConfiguration>
   {
     private readonly ICollectionDifferenceFinder _collectionDifferenceFinder;
@@ -46,13 +48,14 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Configuration for the <see cref="SolutionBuildConfigurationsRule" />.
   /// </summary>
-  public class SolutionBuildConfigurationsRuleConfiguration : ConfigurationElement
+  public class SolutionBuildConfigurationsRuleConfiguration : SerializableConfigurationElement
   {
     /// <summary>
-    ///   A list of expected configurations (e.g. Build, Release).
+    ///   "A list of expected configurations (e.g. 'Build', 'Release')."
     /// </summary>
     [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("expectedConfigurations", DefaultValue = "", IsRequired = true)]
+    [Description("A list of expected configurations (e.g. 'Build', 'Release').")]
     public CommaDelimitedStringCollection Configurations
     {
       get { return (CommaDelimitedStringCollection) this["expectedConfigurations"]; }
@@ -60,10 +63,11 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    ///   A list of expected platforms (e.g. AnyCPU, x64).
+    ///   A list of expected platforms (e.g. 'Any CPU', 'x64).
     /// </summary>
     [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("expectedPlatforms", DefaultValue = "", IsRequired = true)]
+    [Description("A list of expected platforms (e.g. 'Any CPU', 'x64).")]
     public CommaDelimitedStringCollection Platforms
     {
       get { return (CommaDelimitedStringCollection) this["expectedPlatforms"]; }

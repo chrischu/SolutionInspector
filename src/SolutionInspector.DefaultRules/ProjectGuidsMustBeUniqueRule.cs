@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
@@ -10,6 +10,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that every project has a unique GUID.
   /// </summary>
+  [Description ("Verifies that every project has a unique GUID.")]
   public class ProjectGuidsMustBeUniqueRule : SolutionRule
   {
     /// <inheritdoc />

@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
@@ -10,6 +10,8 @@ namespace SolutionInspector.DefaultRules
   ///   Verifies that all non-development <see cref="INuGetReference" />s in the project have their 'IsPrivate' flag (also referred to as
   ///   'Copy Local') set to true.
   /// </summary>
+  [Description ("Verifies that all non-development NuGet references in the project have their 'IsPrivate' flag " +
+                "(also referred to as 'Copy Local') set to true.")]
   public class NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRule : ProjectRule
   {
     /// <inheritdoc />

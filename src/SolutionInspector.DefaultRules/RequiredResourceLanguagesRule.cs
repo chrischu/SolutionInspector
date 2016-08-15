@@ -11,6 +11,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Checks that all given resource files are localized in all given languages in the project.
   /// </summary>
+  [Description("Checks that all given resource files are localized in all given languages in the project.")]
   public class RequiredResourceLanguagesRule : ConfigurableProjectRule<RequiredResourceLanguagesRuleConfiguration>
   {
     /// <inheritdoc />
@@ -57,6 +58,7 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("requiredResources", DefaultValue = "", IsRequired = true)]
+    [Description("List of required resources (e.g. 'Resources').")]
     public CommaDelimitedStringCollection RequiredResources
     {
       get { return (CommaDelimitedStringCollection) this["requiredResources"]; }
@@ -68,6 +70,7 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("requiredLanguages", DefaultValue = "", IsRequired = true)]
+    [Description("List of required languages (e.g. 'de', 'pl').")]
     public CommaDelimitedStringCollection RequiredLanguages
     {
       get { return (CommaDelimitedStringCollection) this["requiredLanguages"]; }

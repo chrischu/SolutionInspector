@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
@@ -10,6 +10,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that all <see cref="IProjectProperty" />s included in the project have unique names.
   /// </summary>
+  [Description ("Verifies that all project properties included in the project have unique names.")]
   public class ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule : ProjectRule
   {
     /// <inheritdoc />

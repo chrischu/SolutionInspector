@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
@@ -9,6 +10,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that a project is configured so that XML documentation is generated.
   /// </summary>
+  [Description("Verifies that a project is configured so that XML documentation is generated.")]
   public class ProjectMustProvideXmlDocumentationRule : ProjectRule
   {
     /// <inheritdoc />

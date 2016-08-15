@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
@@ -9,6 +9,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that every NuGet package is only referenced in one version across all projects.
   /// </summary>
+  [Description ("Verifies that every NuGet package is only referenced in one version across all projects.")]
   public class NuGetPackagesShouldHaveOneVersionAcrossSolutionRule : SolutionRule
   {
     /// <inheritdoc />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -17,9 +18,12 @@ namespace SolutionInspector.DefaultRules
   ///   and returns a violation if it does not evaluate to <c>true</c>.
   /// </summary>
   /// <remarks>
-  /// Please note that in order to make writing XPath expressions easier all namespaces are ignored. To change this configure the rule like this:
-  /// <code>&lt;rule type="..." xPath="..." ignoreNamespaces="false" /&gt;</code>
+  ///   Please note that in order to make writing XPath expressions easier all namespaces are ignored. To change this configure the rule like this:
+  ///   <code>&lt;rule type="..." xPath="..." ignoreNamespaces="false" /&gt;</code>
   /// </remarks>
+  [Description (
+      "Evaluates an XPath expression (configured via 'xPath') against the project XML file and returns a violation if it does not " +
+      "evaluate to true. By default all XML namespaces are ignored, if that is not desirable, change the 'ignoreNamespaces' property to false")]
   public class ProjectXPathRule : ConfigurableProjectRule<ProjectXPathRuleConfiguration>
   {
     /// <inheritdoc />
@@ -104,6 +108,7 @@ namespace SolutionInspector.DefaultRules
     ///   XPath expression that should evaluate to true.
     /// </summary>
     [ConfigurationProperty ("xPath", DefaultValue = "", IsRequired = true)]
+    [Description("XPath expression that should evaluate to true.")]
     public string XPath
     {
       get { return (string) this["xPath"]; }
@@ -111,9 +116,10 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    ///   Controls whether XML namespaces should be ignored or not.
+    ///   Controls whether XML namespaces should be ignored or not during XPath evaluation
     /// </summary>
     [ConfigurationProperty ("ignoreNamespaces", DefaultValue = true, IsRequired = false)]
+    [Description("Controls whether XML namespaces should be ignored or not during XPath evaluation.")]
     public bool IgnoreNamespaces
     {
       get { return (bool) this["ignoreNamespaces"]; }

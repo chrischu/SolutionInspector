@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
@@ -9,6 +9,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies project items have the build action set that is configured via <see cref="ProjectItemMustHaveCorrectBuildActionRuleConfiguration" />.
   /// </summary>
+  [Description ("Verifies project items have the build action set that is configured in 'expectedBuildAction'.")]
   public class ProjectItemMustHaveCorrectBuildActionRule : ConfigurableProjectItemRule<ProjectItemMustHaveCorrectBuildActionRuleConfiguration>
   {
     /// <inheritdoc />
@@ -34,9 +35,10 @@ namespace SolutionInspector.DefaultRules
   public class ProjectItemMustHaveCorrectBuildActionRuleConfiguration : ConfigurationElement
   {
     /// <summary>
-    ///   Expected build action.
+    ///   The expected build action.
     /// </summary>
     [ConfigurationProperty ("expectedBuildAction", DefaultValue = "", IsRequired = true)]
+    [Description ("The expected build action.")]
     public string ExpectedBuildAction
     {
       get { return (string) this["expectedBuildAction"]; }
