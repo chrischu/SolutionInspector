@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
@@ -39,7 +40,7 @@ namespace SolutionInspector.DefaultRules.Tests
 
       SUT =
           new RequiredNuGetPackagesRule(
-              new RequiredNuGetPackagesRuleConfiguration { new RequiredNuGetPackageConfigurationElement { Id = "Package" } });
+              new RequiredNuGetPackagesRuleConfiguration { RequiredNuGetPackages = new CommaDelimitedStringCollection { "Package" } });
     };
 
     class when_evaluating_and_all_NuGet_packages_are_there
@@ -48,15 +49,15 @@ namespace SolutionInspector.DefaultRules.Tests
           () =>
           {
             var nuGetPackage = FakeHelper.CreateAndConfigure<INuGetPackage>(
-              c =>
-              {
-                A.CallTo(() => c.Id).Returns("Package");
-                A.CallTo(() => c.Version).Returns(new Version(0, 0, 1));
-                A.CallTo(() => c.IsPreRelease).Returns(false);
-                A.CallTo(() => c.PreReleaseTag).Returns(null);
-                A.CallTo(() => c.TargetFramework).Returns("net461");
-                A.CallTo(() => c.IsDevelopmentDependency).Returns(false);
-              });
+                c =>
+                {
+                  A.CallTo(() => c.Id).Returns("Package");
+                  A.CallTo(() => c.Version).Returns(new Version(0, 0, 1));
+                  A.CallTo(() => c.IsPreRelease).Returns(false);
+                  A.CallTo(() => c.PreReleaseTag).Returns(null);
+                  A.CallTo(() => c.TargetFramework).Returns("net461");
+                  A.CallTo(() => c.IsDevelopmentDependency).Returns(false);
+                });
 
             A.CallTo(() => Project.NuGetPackages).Returns(new[] { nuGetPackage });
           };

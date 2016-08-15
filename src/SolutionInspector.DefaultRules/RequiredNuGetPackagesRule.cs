@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
-using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 
@@ -13,7 +11,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that the project references all the NuGet packages configured via <see cref="RequiredNuGetPackagesRuleConfiguration" />.
   /// </summary>
-  [Description("Verifies that the project references all the configured NuGet packages.")]
+  [Description ("Verifies that the project references all the configured NuGet packages.")]
   public class RequiredNuGetPackagesRule : ConfigurableProjectRule<RequiredNuGetPackagesRuleConfiguration>
   {
     /// <inheritdoc />
@@ -25,38 +23,27 @@ namespace SolutionInspector.DefaultRules
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
-      return from requiredNuGetPackage in Configuration
-        where target.NuGetPackages.All(p => p.Id != requiredNuGetPackage.Id)
-        select new RuleViolation(this, target, $"Required NuGet package '{requiredNuGetPackage.Id}' is missing.");
+      foreach (var requiredNuGetPackageId in Configuration.RequiredNuGetPackages)
+        if (target.NuGetPackages.All(p => p.Id != requiredNuGetPackageId))
+          yield return new RuleViolation(this, target, $"Required NuGet package '{requiredNuGetPackageId}' is missing.");
     }
   }
 
   /// <summary>
   ///   Configuration for the <see cref="RequiredNuGetPackagesRule" />.
   /// </summary>
-  public class RequiredNuGetPackagesRuleConfiguration : KeyedConfigurationElementCollectionBase<RequiredNuGetPackageConfigurationElement, string>
+  public class RequiredNuGetPackagesRuleConfiguration : ConfigurationElement
   {
-    /// <inheritdoc />
-    protected override string ElementName => "nuGetPackage"; // TODO
-  }
-
-  /// <summary>
-  ///   Configuration element that represents a required NuGet package.
-  /// </summary>
-  public class RequiredNuGetPackageConfigurationElement : KeyedConfigurationElement<string>
-  {
-    /// <inheritdoc />
-    public override string KeyName => "id";
-
     /// <summary>
-    ///   The id of the required NuGet package.
+    ///   All the required NuGet package ids (e.g. 'Autofac').
     /// </summary>
-    [ConfigurationProperty ("id", DefaultValue = "", IsRequired = true, IsKey = true)]
-    [Description("The id of the required NuGet package.")]
-    public string Id
+    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
+    [ConfigurationProperty ("requiredNuGetPackages", DefaultValue = "", IsRequired = true)]
+    [Description ("All the required NuGet package ids (e.g. 'Autofac').")]
+    public CommaDelimitedStringCollection RequiredNuGetPackages
     {
-      get { return (string) this["id"]; }
-      set { this["id"] = value; }
+      get { return (CommaDelimitedStringCollection) this["requiredNuGetPackages"]; }
+      [UsedImplicitly] set { this["requiredNuGetPackages"] = value; }
     }
   }
 }
