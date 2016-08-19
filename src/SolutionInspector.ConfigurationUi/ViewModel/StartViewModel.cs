@@ -1,4 +1,3 @@
-using System;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -11,13 +10,13 @@ namespace SolutionInspector.ConfigurationUi.ViewModel
   [UsedImplicitly /* by ViewModelLocator */]
   internal class StartViewModel : ViewModelBase
   {
-    private readonly IWindowManager _windowManager;
     private readonly IDialogManager _dialogManager;
+    private readonly IWindowManager _windowManager;
 
-    public StartViewModel (IWindowManager windowManager, IDialogManager dialogManager)
+    public StartViewModel (IDialogManager dialogManager, IWindowManager windowManager)
     {
-      _windowManager = windowManager;
       _dialogManager = dialogManager;
+      _windowManager = windowManager;
     }
 
     public ICommand CreateNewConfigurationCommand => new RelayCommand(CreateNewConfiguration);
@@ -30,17 +29,12 @@ namespace SolutionInspector.ConfigurationUi.ViewModel
 
     private void LoadExistingConfiguration ()
     {
-      var file = _dialogManager.OpenFile(new DialogManager.FileFilter(name: "SolutionInspector configuration files", extensions: "SolutionInspectorConfig"));
-      if (file == null)
+      var configurationFilePath = _dialogManager.OpenFile(new DialogManager.FileFilter(name: "SolutionInspector ruleset files", extensions: "SolutionInspectorRuleset"));
+      if (configurationFilePath == null)
         return;
 
-      ProcessConfigurationFileAndSwitchToMain(file);
-    }
-
-    private void ProcessConfigurationFileAndSwitchToMain(string configurationFilePath)
-    {
-      MessengerInstance.Send<LoadConfigurationFileMessage, MainViewModel>(new LoadConfigurationFileMessage(configurationFilePath));
       _windowManager.SwitchTo<MainWindow>();
+      MessengerInstance.Send(new LoadConfigurationFileMessage(configurationFilePath));
     }
   }
 }

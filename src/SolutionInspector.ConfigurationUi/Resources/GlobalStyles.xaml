@@ -18,6 +18,7 @@
     </Setter>
 
     <Setter Property="Title" Value="Configuration" />
+    <Setter Property="TitleAlignment" Value="Center" />
     <Setter Property="BorderBrush" Value="{StaticResource AccentColorBrush}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="TitleCaps" Value="False" />

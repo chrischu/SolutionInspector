@@ -5,11 +5,13 @@ using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Build.Exceptions;
 using NLog;
+using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
 using SolutionInspector.Configuration;
+using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
 using SolutionInspector.Utilities;
@@ -75,7 +77,7 @@ namespace SolutionInspector.Commands
       return new ParsedArguments(solution, rules, arguments.ReportFormat, arguments.ReportOutputFile, configuration);
     }
 
-    private ISolutionInspectorRuleset ValidateAndLoadRulesConfiguration (RawArguments arguments, Func<string, Exception> reportError)
+    private ISolutionInspectorRulesetConfiguration ValidateAndLoadRulesConfiguration (RawArguments arguments, Func<string, Exception> reportError)
     {
       try
       {
@@ -129,7 +131,7 @@ namespace SolutionInspector.Commands
       {
         s_logger.Info("Loading rule assemblies...");
 
-        _ruleAssemblyLoader.LoadRuleAssemblies(arguments.Configuration.RuleAssemblyImports.Imports);
+        _ruleAssemblyLoader.LoadRuleAssemblies(arguments.Configuration.RuleAssemblyImports);
 
         s_logger.Info($"Inspecting solution '{solution.FullPath}'...");
 
@@ -214,14 +216,14 @@ namespace SolutionInspector.Commands
       public IRuleCollection Rules { get; }
       public ViolationReportFormat ReportFormat { get; }
       public string ReportOutputFile { get; }
-      public ISolutionInspectorRuleset Configuration { get; }
+      public ISolutionInspectorRulesetConfiguration Configuration { get; }
 
       public ParsedArguments (
           ISolution solution,
           IRuleCollection rules,
           ViolationReportFormat reportFormat,
           [CanBeNull] string reportOutputFile,
-          ISolutionInspectorRuleset configuration)
+          ISolutionInspectorRulesetConfiguration configuration)
       {
         Solution = solution;
         Rules = rules;

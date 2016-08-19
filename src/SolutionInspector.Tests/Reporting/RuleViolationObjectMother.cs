@@ -1,5 +1,4 @@
-﻿using System;
-using FakeItEasy;
+﻿using FakeItEasy;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.TestInfrastructure;
 

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Xml.Linq;
 using FluentAssertions;
 using Machine.Specifications;
-using SolutionInspector.Configuration.Rules;
-using SolutionInspector.TestInfrastructure.Configuration;
+using SolutionInspector.Api.Configuration.Ruleset;
+using SolutionInspector.Commons.Extensions;
 
 #region R# preamble for Machine.Specifications files
 
@@ -28,41 +27,58 @@ namespace SolutionInspector.Configuration.Tests.Rules
   {
     static RuleConfigurationElement SUT;
 
-    Establish ctx = () => { SUT = new RuleConfigurationElement(); };
-
     class when_deserializing_rule_with_complex_configuration_and_then_deserializing_configuration
     {
       Because of = () =>
       {
-        ConfigurationHelper.DeserializeElement(SUT, @"<rule type=""Namespace.RuleName, Assembly"" direct=""Direct"">
+        var xElement = XElement.Parse(@"<rule type=""Namespace.RuleName, Assembly"" direct=""Direct"">
   <sub indirect=""Indirect"" />
 </rule>");
-        Result = new RuleConfiguration();
-        ConfigurationHelper.DeserializeElement(Result, SUT.Configuration.OuterXml);
+
+        SUT = ConfigurationElement.Load<RuleConfigurationElement>(xElement);
+        RuleConfiguration = ConfigurationElement.Load<RuleConfiguration>(xElement);
       };
 
       It deserializes_configuration = () =>
       {
-        Result.Direct.Should().Be("Direct");
-        Result.Sub.Indirect.Should().Be("Indirect");
+        SUT.RuleType.Should().Be("Namespace.RuleName, Assembly");
+
+        RuleConfiguration.Direct.Should().Be("Direct");
+        RuleConfiguration.Sub.Indirect.Should().Be("Indirect");
       };
 
-      static RuleConfiguration Result;
+      static RuleConfiguration RuleConfiguration;
+    }
+
+    class when_changing_the_rule_type
+    {
+      Establish ctx = () =>
+      {
+       XElement = XElement.Parse(@"<rule type=""Namespace.RuleName, Assembly"" />");
+        SUT = ConfigurationElement.Load<RuleConfigurationElement>(XElement);
+      };
+
+      Because of = () => SUT.RuleType = "Changed";
+
+      It changes_rule_type = () =>
+            XElement.Attribute("type").AssertNotNull().Value.Should().Be("Changed");
+
+      static XElement XElement;
     }
 
     class SubConfiguration : ConfigurationElement
     {
-      [ConfigurationProperty ("indirect", DefaultValue = "", IsRequired = true)]
-      public string Indirect => (string) this["indirect"];
+      [ConfigurationValue]
+      public string Indirect => GetConfigurationProperty<string>();
     }
 
     class RuleConfiguration : ConfigurationElement
     {
-      [ConfigurationProperty ("direct", DefaultValue = "", IsRequired = true)]
-      public string Direct => (string) this["direct"];
+      [ConfigurationValue]
+      public string Direct => GetConfigurationProperty<string>();
 
-      [ConfigurationProperty ("sub")]
-      public SubConfiguration Sub => (SubConfiguration) this["sub"];
+      [ConfigurationSubelement]
+      public SubConfiguration Sub => GetConfigurationSubelement<SubConfiguration>();
     }
   }
 }

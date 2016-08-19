@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Autofac;
@@ -10,6 +9,7 @@ using NLog;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Commands;
 using SolutionInspector.Configuration;
+using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
 using SolutionInspector.Utilities;
@@ -61,6 +61,8 @@ namespace SolutionInspector
       builder.Register(ctx => Wrapper.ConfigurationManager).As<IConfigurationManagerStatic>();
       builder.Register(ctx => Wrapper.Process).As<IProcessStatic>();
 
+      builder.RegisterType<Configuration.ConfigurationManager>().As<IConfigurationManager>();
+
       builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
 
       builder.RegisterType<RuleAssemblyLoader>().As<IRuleAssemblyLoader>();
@@ -102,7 +104,7 @@ namespace SolutionInspector
 
       builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();
 
-      builder.Register(ctx => (ISolutionInspectorConfiguration) ConfigurationManager.GetSection("solutionInspector"))
+      builder.Register(ctx => (ISolutionInspectorConfiguration) System.Configuration.ConfigurationManager.GetSection("solutionInspector"))
           .As<ISolutionInspectorConfiguration>()
           .SingleInstance();
 

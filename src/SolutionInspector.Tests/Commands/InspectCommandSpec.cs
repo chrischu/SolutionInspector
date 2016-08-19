@@ -6,6 +6,7 @@ using FluentAssertions;
 using Machine.Specifications;
 using ManyConsole;
 using Microsoft.Build.Exceptions;
+using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
@@ -13,7 +14,7 @@ using SolutionInspector.Api.Utilities;
 using SolutionInspector.Commands;
 using SolutionInspector.Configuration;
 using SolutionInspector.Configuration.MsBuildParsing;
-using SolutionInspector.Configuration.Rules;
+using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
 using SolutionInspector.TestInfrastructure;
@@ -55,7 +56,7 @@ namespace SolutionInspector.Tests.Commands
     static IRuleAssemblyLoader RuleAssemblyLoader;
 
     static ISolutionInspectorConfiguration SolutionInspectorConfiguration;
-    static ISolutionInspectorRuleset SolutionInspectorRuleset;
+    static ISolutionInspectorRulesetConfiguration SolutionInspectorRuleset;
     static IRulesConfiguration RulesConfiguration;
 
     static ISolutionRule SolutionRule;
@@ -90,7 +91,7 @@ namespace SolutionInspector.Tests.Commands
       SolutionInspectorConfiguration = A.Fake<ISolutionInspectorConfiguration>();
       A.CallTo(() => SolutionInspectorConfiguration.MsBuildParsing).Returns(A.Fake<IMsBuildParsingConfiguration>());
 
-      SolutionInspectorRuleset = A.Fake<ISolutionInspectorRuleset>();
+      SolutionInspectorRuleset = A.Fake<ISolutionInspectorRulesetConfiguration>();
 
       RulesConfiguration = A.Fake<IRulesConfiguration>();
       A.CallTo(() => SolutionInspectorRuleset.Rules).Returns(RulesConfiguration);
@@ -409,7 +410,7 @@ namespace SolutionInspector.Tests.Commands
     class it_executes_the_command_correctly
     {
       It loads_rule_assemblies = () =>
-          A.CallTo(() => RuleAssemblyLoader.LoadRuleAssemblies(SolutionInspectorRuleset.RuleAssemblyImports.Imports)).MustHaveHappened();
+          A.CallTo(() => RuleAssemblyLoader.LoadRuleAssemblies(SolutionInspectorRuleset.RuleAssemblyImports)).MustHaveHappened();
 
       It loads_solution = () =>
           A.CallTo(() => SolutionLoader.Load("solution", SolutionInspectorConfiguration.MsBuildParsing)).MustHaveHappened();

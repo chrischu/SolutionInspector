@@ -47,12 +47,12 @@
       <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions, Version=4.12.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.12.0\lib\net45\FluentAssertions.dll</HintPath>
+    <Reference Include="FluentAssertions, Version=4.16.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.16.0\lib\net45\FluentAssertions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.12.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.12.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+    <Reference Include="FluentAssertions.Core, Version=4.16.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.16.0\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
@@ -87,12 +87,12 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Wrapperator.Interfaces, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Interfaces.0.9.0\lib\net452\Wrapperator.Interfaces.dll</HintPath>
+    <Reference Include="Wrapperator.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wrapperator.Interfaces.1.0.0\lib\net452\Wrapperator.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Wrapperator.Wrappers, Version=0.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Wrappers.0.9.0\lib\net452\Wrapperator.Wrappers.dll</HintPath>
+    <Reference Include="Wrapperator.Wrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wrapperator.Wrappers.1.0.0\lib\net452\Wrapperator.Wrappers.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -100,15 +100,37 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="MsBuildParsing\MsBuildParsingConfigurationSectionSpec.cs" />
-    <Compile Include="RuleAssemblyImports\RuleAssemblyImportsConfigurationSectionSpec.cs" />
+    <Compile Include="ConfigurationConverterAttributeSpec.cs" />
+    <Compile Include="ConfigurationDocumentSpec.cs" />
+    <Compile Include="ConfigurationBaseSpec.cs" />
     <Compile Include="Rules\ProjectConfigRuleBaseSpec.cs" />
     <Compile Include="Rules\RuleConfigurationElementSpec.cs" />
     <Compile Include="Rules\RulesConfigurationSectionSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validation\Dynamic\DynamicConfigurationTypeWalkerSpec.cs" />
+    <Compile Include="Validation\Dynamic\Validators\ValidationAttributeValidatorSpec.cs" />
+    <Compile Include="Validation\Dynamic\Validators\RequiredValidatorValidatorSpec.cs" />
+    <Compile Include="Validation\Dynamic\Validators\CollectionElementCountValidatorSpec.cs" />
+    <Compile Include="Validation\Static\StaticConfigurationTypeWalkerSpec.cs" />
+    <Compile Include="Validation\Static\Validators\XmlNameValidatorSpec.cs" />
+    <Compile Include="Validation\Static\Validators\XmlNameUniquenessValidatorSpec.cs" />
+    <Compile Include="Validation\Static\Validators\SingleDefaultCollectionValidatorSpec.cs" />
+    <Compile Include="Validation\Static\Validators\DefaultCollectionMustNotSpecifyCollectionNameValidatorSpec.cs" />
+    <Compile Include="Validation\Static\Validators\ConfigurationValueTypeValidatorSpec.cs" />
+    <Compile Include="Validation\Static\Validators\ConfigurationSubelementTypeValidatorSpec.cs" />
+    <Compile Include="Validation\Static\Validators\ConfigurationConverterValidatorSpec.cs" />
+    <Compile Include="Validation\Static\Validators\ConfigurationCollectionTypeValidatorSpec.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj">
+      <Project>{023C6DC1-D26D-4034-AB57-9B24ACA4EE8C}</Project>
+      <Name>SolutionInspector.Api.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj">
+      <Project>{61A5E798-3EB1-4362-B08A-CDDA370D17B6}</Project>
+      <Name>SolutionInspector.Commons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
       <Project>{25E030C5-78B1-4A5C-BB25-6ECCB892971C}</Project>
       <Name>SolutionInspector.Configuration</Name>

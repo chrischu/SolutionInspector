@@ -1,5 +1,3 @@
-using System;
-
 namespace SolutionInspector.ConfigurationUi.Messages
 {
   internal class LoadConfigurationFileMessage

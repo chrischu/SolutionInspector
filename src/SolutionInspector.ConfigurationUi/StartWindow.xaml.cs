@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using MahApps.Metro.Controls;
+﻿using System.Windows;
 
 namespace SolutionInspector.ConfigurationUi
 {

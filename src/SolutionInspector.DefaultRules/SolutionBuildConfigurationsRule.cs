@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
-using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
+using SolutionInspector.Commons.Utilities;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -48,7 +47,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Configuration for the <see cref="SolutionBuildConfigurationsRule" />.
   /// </summary>
-  public class SolutionBuildConfigurationsRuleConfiguration : SerializableConfigurationElement
+  public class SolutionBuildConfigurationsRuleConfiguration : ConfigurationElement
   {
     /// <summary>
     ///   "A list of expected configurations (e.g. 'Build', 'Release')."

@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using JetBrains.Annotations;
-using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Commons.Extensions;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Wrappers;
 
 namespace SolutionInspector.ObjectModel
 {
-  [PublicAPI]
   internal class ProjectItem : IProjectItem
   {
     private readonly List<ProjectItem> _children = new List<ProjectItem>();

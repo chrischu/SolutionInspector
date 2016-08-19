@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SolutionInspector.ConfigurationUi
+﻿namespace SolutionInspector.ConfigurationUi
 {
   public partial class MainWindow
   {

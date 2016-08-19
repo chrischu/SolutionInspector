@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.ObjectModel
 {
-  [PublicAPI]
   internal class AdvancedProject : IAdvancedProject
   {
     private readonly Project _project;

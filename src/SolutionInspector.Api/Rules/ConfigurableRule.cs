@@ -1,6 +1,3 @@
-using System;
-using System.Configuration;
-
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
@@ -9,7 +6,7 @@ namespace SolutionInspector.Api.Rules
   /// </summary>
   public interface IConfigurableRule<in TTarget, out TConfiguration> : IRule<TTarget>, IConfigurableRule
       where TTarget : IRuleTarget
-      where TConfiguration : ConfigurationElement
+    //where TConfiguration : ConfigurationElement // TODO
   {
     /// <summary>
     ///   Configuration.
@@ -20,7 +17,7 @@ namespace SolutionInspector.Api.Rules
   /// <inheritdoc />
   public abstract class ConfigurableRule<TTarget, TConfiguration> : Rule<TTarget>, IConfigurableRule<TTarget, TConfiguration>
       where TTarget : IRuleTarget
-      where TConfiguration : ConfigurationElement
+      //where TConfiguration : ConfigurationElement // TODO
   {
     /// <inheritdoc />
     public TConfiguration Configuration { get; }

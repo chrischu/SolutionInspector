@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
+using SolutionInspector.Configuration;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
@@ -50,16 +49,14 @@ namespace SolutionInspector.DefaultRules.Tests
       A.CallTo(() => Project.Advanced).Returns(AdvancedProject);
       A.CallTo(() => Project.BuildConfigurations).Returns(new[] { IncludedBuildConfiguration, FilteredBuildConfiguration });
 
-      SUT = new RequiredCompilationSymbolsProjectRule(
-          new RequiredCompilationSymbolsProjectRuleConfiguration
-          {
-              new RequiredCompilationSymbolsConfigurationElement
-              {
-                  BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("Included", "*")),
-                  RequiredCompilationSymbols = new CommaDelimitedStringCollection { "TRACE", "DEBUG" }
-              }
-          }
-          );
+      var requiredCompilationSymbolsProjectRuleConfiguration = ConfigurationElement.Create<RequiredCompilationSymbolsProjectRuleConfiguration>(
+        initialize: e =>
+        {
+          var item = e.RequiredCompilationSymbols.AddNew();
+          item.BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("Included", "*"));
+          item.RequiredCompilationSymbols.Add("TRACE", "DEBUG");
+        });
+      SUT = new RequiredCompilationSymbolsProjectRule(requiredCompilationSymbolsProjectRuleConfiguration);
     };
 
     class when_all_required_symbols_are_there

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
 using SolutionInspector.Rules;
 using SolutionInspector.TestInfrastructure;
 

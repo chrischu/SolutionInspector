@@ -31,7 +31,7 @@
             VerticalContentAlignment="Center"
             Command="{Binding CreateNewConfigurationCommand}">
       <StackPanel HorizontalAlignment="Stretch">
-        <Image Margin="50,0" Source="{StaticResource New}" />
+        <Image Margin="50,0" Source="{StaticResource NewIcon}" />
         <TextBlock Style="{StaticResource IconText}">
           Create New
           <LineBreak />
@@ -45,7 +45,7 @@
             VerticalContentAlignment="Center"
             Command="{Binding LoadExistingConfigurationCommand}">
       <StackPanel HorizontalAlignment="Stretch">
-        <Image Margin="50,0" Source="{StaticResource Open}" />
+        <Image Margin="50,0" Source="{StaticResource OpenIcon}" />
         <TextBlock Style="{StaticResource IconText}">
           Open Existing
           <LineBreak />

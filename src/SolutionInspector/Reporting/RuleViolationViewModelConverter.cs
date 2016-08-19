@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Reporting
 {

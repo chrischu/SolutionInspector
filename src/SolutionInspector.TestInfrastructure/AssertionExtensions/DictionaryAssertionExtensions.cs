@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FluentAssertions;
+using FluentAssertions.Collections;
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
   public static class DictionaryAssertionExtensions
   {
-    public static void ShouldNotContainKey<TKey, TValue> (this IReadOnlyDictionary<TKey, TValue> dictionary, TKey key)
+    public static GenericDictionaryAssertions<TKey, TValue> Should<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary)
     {
-      TValue value;
-      dictionary.TryGetValue(key, out value).Should().BeFalse();
+      return (dictionary as IDictionary<TKey, TValue>).Should();
     }
   }
 }

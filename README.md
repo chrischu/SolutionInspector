@@ -1,4 +1,4 @@
-# SolutionInspector ![Icon](https://raw.githubusercontent.com/chrischu/SolutionInspector/master/media/icon.png)
+# SolutionInspector <img src="https://raw.githubusercontent.com/chrischu/SolutionInspector/master/media/icon.png" height="20">
 [![Develop Build][appveyor_develop]](https://ci.appveyor.com/project/chrischu/solutioninspector)
 [![Master Build][appveyor_master]](https://ci.appveyor.com/project/chrischu/solutioninspector)
 [![Coverage][coverage]](http://chrischu.github.io/SolutionInspector/CoverageReports/coverageReport.html)

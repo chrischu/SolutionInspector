@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SolutionInspector.Api.Reporting
+﻿namespace SolutionInspector.Api.Reporting
 {
   /// <summary>
   ///   The format used for the violation report.

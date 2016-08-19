@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 

@@ -16,6 +16,8 @@
       <!-- Example: <import path="File.dll" /> -->
       <!-- When using directories all assemblies (files with an extension of '.dll') are imported -->
       <!-- Example: <import path="Directory" /> -->
+      <import path="Directory" />
+      <import path="File.dll" />
     </ruleAssemblyImports>
     <rules>
       <solutionRules>

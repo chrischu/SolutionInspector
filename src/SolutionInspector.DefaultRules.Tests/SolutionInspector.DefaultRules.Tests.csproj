@@ -51,12 +51,12 @@
       <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions, Version=4.12.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.12.0\lib\net45\FluentAssertions.dll</HintPath>
+    <Reference Include="FluentAssertions, Version=4.16.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.16.0\lib\net45\FluentAssertions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.12.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.12.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+    <Reference Include="FluentAssertions.Core, Version=4.16.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.16.0\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
@@ -126,6 +126,14 @@
     <Compile Include="SolutionBuildConfigurationsRuleSpec.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj">
+      <Project>{023C6DC1-D26D-4034-AB57-9B24ACA4EE8C}</Project>
+      <Name>SolutionInspector.Api.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
+      <Project>{25e030c5-78b1-4a5c-bb25-6eccb892971c}</Project>
+      <Name>SolutionInspector.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj">
       <Project>{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}</Project>
       <Name>SolutionInspector.DefaultRules</Name>

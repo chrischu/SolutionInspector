@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using JetBrains.Annotations;
-using SolutionInspector.Api.Extensions;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Utilities
 {

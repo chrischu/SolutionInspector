@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
-using SolutionInspector.Api.Extensions;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
+using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -53,35 +53,34 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Controls in which build configurations the <see cref="Property" /> is checked against the <see cref="ExpectedValue" />.
     /// </summary>
-    [TypeConverter (typeof(BuildConfigurationFilterConverter))]
-    [ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("Controls in which build configurations the 'property' is checked against the 'expectedValue'.")]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
-      get { return (BuildConfigurationFilter) this["buildConfigurationFilter"]; }
-      set { this["buildConfigurationFilter"] = value; }
+      get { return GetConfigurationProperty<BuildConfigurationFilter>(); }
+      set { SetConfigurationProperty(value); }
     }
 
     /// <summary>
     ///   Name of the property to check.
     /// </summary>
-    [ConfigurationProperty ("property", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("Name of the property to check.")]
     public string Property
     {
-      get { return (string) this["property"]; }
-      set { this["property"] = value; }
+      get { return GetConfigurationProperty<string>(); }
+      set { SetConfigurationProperty(value); }
     }
 
     /// <summary>
     ///   The expected property value to check against.
     /// </summary>
-    [ConfigurationProperty ("expectedValue", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("The expected property value to check against.")]
     public string ExpectedValue
     {
-      get { return (string) this["expectedValue"]; }
-      set { this["expectedValue"] = value; }
+      get { return GetConfigurationProperty<string>(); }
+      set { SetConfigurationProperty(value); }
     }
   }
 }

@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration;
-using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
+using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -27,7 +26,7 @@ namespace SolutionInspector.DefaultRules
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
-      foreach (var config in Configuration)
+      foreach (var config in Configuration.RequiredCompilationSymbols)
       {
         var matchingBuildConfigs = target.BuildConfigurations.Where(c => config.BuildConfigurationFilter.IsMatch(c));
 
@@ -54,43 +53,44 @@ namespace SolutionInspector.DefaultRules
   ///   Configuration for the <see cref="RequiredCompilationSymbolsProjectRule" />.
   /// </summary>
   [UsedImplicitly /* by configuration */]
-  public class RequiredCompilationSymbolsProjectRuleConfiguration
-      : KeyedConfigurationElementCollectionBase<RequiredCompilationSymbolsConfigurationElement, BuildConfigurationFilter>
+  public class RequiredCompilationSymbolsProjectRuleConfiguration : ConfigurationElement
   {
-    protected override string ElementName => "requiredCompilationSymbols";
+    [ConfigurationCollection]
+    public ConfigurationElementCollection<RequiredCompilationSymbolsConfigurationElement> RequiredCompilationSymbols
+    {
+      get { return GetConfigurationCollection<RequiredCompilationSymbolsConfigurationElement>(); }
+    }
   }
 
   /// <summary>
   ///   Configuration for which compilation symbols (<see cref="RequiredCompilationSymbols" />) are required in the build configurations matching the
   ///   <see cref="BuildConfigurationFilter" />.
   /// </summary>
-  public class RequiredCompilationSymbolsConfigurationElement : KeyedConfigurationElement<BuildConfigurationFilter>
+  public class RequiredCompilationSymbolsConfigurationElement : ConfigurationElement
   {
-    /// <inheritdoc />
-    public override string KeyName => "buildConfigurationFilter";
-
     /// <summary>
     ///   Filter that controlls which build configuration this <see cref="RequiredCompilationSymbolsConfigurationElement" /> applies to.
     /// </summary>
-    [TypeConverter (typeof(BuildConfigurationFilterConverter))]
-    [ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
+    [System.Configuration.ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
     [Description ("Filter that controlls which build configuration this rule applies to.")]
+    [ConfigurationValue]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
-      get { return (BuildConfigurationFilter) this["buildConfigurationFilter"]; }
-      [UsedImplicitly] set { this["buildConfigurationFilter"] = value; }
+      get { return GetConfigurationProperty<BuildConfigurationFilter>(); }
+      [UsedImplicitly] set { SetConfigurationProperty(value); }
     }
 
     /// <summary>
     ///   All the compilation symbols that are required and are therefore checked.
     /// </summary>
-    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
-    [ConfigurationProperty ("requiredCompilationSymbols", DefaultValue = "", IsRequired = true)]
+    [System.Configuration.ConfigurationProperty ("requiredCompilationSymbols", DefaultValue = "", IsRequired = true)]
     [Description ("All the compilation symbols that are required and are therefore checked.")]
-    public CommaDelimitedStringCollection RequiredCompilationSymbols
+    [ConfigurationValue]
+    public CommaSeparatedStringCollection RequiredCompilationSymbols
     {
-      get { return (CommaDelimitedStringCollection) this["requiredCompilationSymbols"]; }
-      [UsedImplicitly] set { this["requiredCompilationSymbols"] = value; }
+      get { return GetConfigurationProperty<CommaSeparatedStringCollection>(); }
+      [UsedImplicitly]
+      set { SetConfigurationProperty(value); }
     }
   }
 }

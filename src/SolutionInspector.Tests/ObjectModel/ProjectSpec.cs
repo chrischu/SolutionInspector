@@ -7,8 +7,8 @@ using System.Xml.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
-using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration.MsBuildParsing;
 using SolutionInspector.ObjectModel;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
@@ -106,7 +106,7 @@ namespace SolutionInspector.Tests.ObjectModel
         debugProperties[propertyName].Should().BeLike(new EvaluatedProjectPropertyValue("LOL", occurrence));
 
         var releaseProperties = Result.Advanced.EvaluateProperties(new BuildConfiguration("Release", "AnyCPU"));
-        releaseProperties.ShouldNotContainKey(propertyName);
+        releaseProperties.Should().NotContainKey(propertyName);
       };
 
       It parses_property_dependent_properties = () =>
@@ -126,7 +126,7 @@ namespace SolutionInspector.Tests.ObjectModel
 
         var propertiesBasedOnFalseCondition =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Property", "false" } });
-        propertiesBasedOnFalseCondition.ShouldNotContainKey(propertyName);
+        propertiesBasedOnFalseCondition.Should().NotContainKey(propertyName);
       };
 
       It parses_property_without_condition_but_with_conditional_parent = () =>
@@ -147,7 +147,7 @@ namespace SolutionInspector.Tests.ObjectModel
 
         var propertiesBasedOnFalseCondition =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "false" } });
-        propertiesBasedOnFalseCondition.ShouldNotContainKey(propertyName);
+        propertiesBasedOnFalseCondition.Should().NotContainKey(propertyName);
       };
 
       It parses_property_with_condition_and_with_conditional_parent = () =>
@@ -167,11 +167,11 @@ namespace SolutionInspector.Tests.ObjectModel
 
         var propertiesBasedOnFalseCondition1 =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "false" } });
-        propertiesBasedOnFalseCondition1.ShouldNotContainKey(propertyName);
+        propertiesBasedOnFalseCondition1.Should().NotContainKey(propertyName);
 
         var propertiesBasedOnFalseCondition2 =
             Result.Advanced.EvaluateProperties(new Dictionary<string, string> { { "Parent", "true" }, { "Self", "false" } });
-        propertiesBasedOnFalseCondition2.ShouldNotContainKey(propertyName);
+        propertiesBasedOnFalseCondition2.Should().NotContainKey(propertyName);
       };
 
       It parses_property_that_is_contained_more_than_once_with_differing_conditions = () =>

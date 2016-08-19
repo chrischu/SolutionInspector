@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
+using SolutionInspector.Configuration;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #region R# preamble for Machine.Specifications files
@@ -62,13 +62,17 @@ namespace SolutionInspector.DefaultRules.Tests
       Property = "Property";
       ExpectedValue = "ExpectedValue";
 
+      var projectBuildConfigurationDependentPropertyRuleConfiguration =
+          ConfigurationElement.Create<ProjectBuildConfigurationDependentPropertyRuleConfiguration>(
+            initialize: e =>
+            {
+              e.Property = Property;
+              e.ExpectedValue = ExpectedValue;
+              e.BuildConfigurationFilter = FilterIncludeOneOnly;
+            });
+
       SUT = new ProjectBuildConfigurationDependentPropertyRule(
-          new ProjectBuildConfigurationDependentPropertyRuleConfiguration
-          {
-              Property = Property,
-              ExpectedValue = ExpectedValue,
-              BuildConfigurationFilter = FilterIncludeOneOnly
-          });
+              projectBuildConfigurationDependentPropertyRuleConfiguration);
     };
 
     class when_evaluating_property_with_same_value
@@ -82,7 +86,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It does_not_return_violations = () =>
-          Result.Should().BeEmpty();
+            Result.Should().BeEmpty();
 
       static IEnumerable<IRuleViolation> Result;
     }
@@ -98,12 +102,12 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violation = () =>
-          Result.ShouldAllBeLike(
-              new RuleViolation(
-                  SUT,
-                  Project,
-                  "Unexpected value for property 'Property' in build configuration " +
-                  $"'{BuildConfiguration1}', was 'ActualValue' but should be 'ExpectedValue'."));
+        Result.ShouldAllBeLike(
+          new RuleViolation(
+            SUT,
+            Project,
+            "Unexpected value for property 'Property' in build configuration " +
+            $"'{BuildConfiguration1}', was 'ActualValue' but should be 'ExpectedValue'."));
 
       static IEnumerable<IRuleViolation> Result;
     }
@@ -119,12 +123,12 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violation = () =>
-          Result.ShouldAllBeLike(
-              new RuleViolation(
-                  SUT,
-                  Project,
-                  "Unexpected value for property 'Property' in build configuration " +
-                  $"'{BuildConfiguration1}', was '<null>' but should be 'ExpectedValue'."));
+        Result.ShouldAllBeLike(
+          new RuleViolation(
+            SUT,
+            Project,
+            "Unexpected value for property 'Property' in build configuration " +
+            $"'{BuildConfiguration1}', was '<null>' but should be 'ExpectedValue'."));
 
       static IEnumerable<IRuleViolation> Result;
     }
@@ -140,7 +144,7 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_no_violations = () =>
-          Result.Should().BeEmpty();
+            Result.Should().BeEmpty();
 
       static IEnumerable<IRuleViolation> Result;
     }
@@ -150,12 +154,13 @@ namespace SolutionInspector.DefaultRules.Tests
       Establish ctx = () =>
       {
         SUT = new ProjectBuildConfigurationDependentPropertyRule(
-            new ProjectBuildConfigurationDependentPropertyRuleConfiguration
-            {
-                Property = Property,
-                ExpectedValue = ExpectedValue,
-                BuildConfigurationFilter = FilterIncludeOneAndTwo
-            });
+                ConfigurationElement.Create<ProjectBuildConfigurationDependentPropertyRuleConfiguration>(
+                  initialize: e =>
+                  {
+                    e.Property = Property;
+                    e.ExpectedValue = ExpectedValue;
+                    e.BuildConfigurationFilter = FilterIncludeOneAndTwo;
+                  }));
 
         ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration1, Property, "ActualValue");
         ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(AdvancedProject, BuildConfiguration2, Property, "ActualValue");
@@ -165,17 +170,17 @@ namespace SolutionInspector.DefaultRules.Tests
       Because of = () => Result = SUT.Evaluate(Project);
 
       It returns_violations_from_evaluated_configurations = () =>
-          Result.ShouldAllBeLike(
-              new RuleViolation(
-                  SUT,
-                  Project,
-                  "Unexpected value for property 'Property' in build configuration " +
-                  $"'{BuildConfiguration1}', was 'ActualValue' but should be 'ExpectedValue'."),
-              new RuleViolation(
-                  SUT,
-                  Project,
-                  "Unexpected value for property 'Property' in build configuration " +
-                  $"'{BuildConfiguration2}', was 'ActualValue' but should be 'ExpectedValue'."));
+        Result.ShouldAllBeLike(
+          new RuleViolation(
+            SUT,
+            Project,
+            "Unexpected value for property 'Property' in build configuration " +
+            $"'{BuildConfiguration1}', was 'ActualValue' but should be 'ExpectedValue'."),
+          new RuleViolation(
+            SUT,
+            Project,
+            "Unexpected value for property 'Property' in build configuration " +
+            $"'{BuildConfiguration2}', was 'ActualValue' but should be 'ExpectedValue'."));
 
       static IEnumerable<IRuleViolation> Result;
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.TestInfrastructure;

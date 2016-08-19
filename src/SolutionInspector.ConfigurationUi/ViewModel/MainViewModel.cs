@@ -1,6 +1,11 @@
-using System;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using JetBrains.Annotations;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using SolutionInspector.ConfigurationUi.Configuration;
 using SolutionInspector.ConfigurationUi.Messages;
 
 namespace SolutionInspector.ConfigurationUi.ViewModel
@@ -8,6 +13,8 @@ namespace SolutionInspector.ConfigurationUi.ViewModel
   [UsedImplicitly /* by ViewModelLocator */]
   internal class MainViewModel : ViewModelBase
   {
+    private string _configurationFilePath;
+
     public MainViewModel ()
     {
       ////if (IsInDesignMode)
@@ -19,12 +26,27 @@ namespace SolutionInspector.ConfigurationUi.ViewModel
       ////    // Code runs "for real"
       ////}
 
-      MessengerInstance.Register<LoadConfigurationFileMessage>(this, LoadConfigurationFile);
+      Messenger.Default.Register<LoadConfigurationFileMessage>(this, LoadConfigurationFile);
     }
 
-    private void LoadConfigurationFile (LoadConfigurationFileMessage loadConfigurationFileMessage)
+    public RulesetViewModel Ruleset { get; private set; }
+
+    public ICommand SaveCommand => new RelayCommand(ExecuteSave);
+
+    private void ExecuteSave ()
     {
-      throw new NotImplementedException();
+      Ruleset.Save(_configurationFilePath);
+    }
+
+    private async void LoadConfigurationFile (LoadConfigurationFileMessage loadConfigurationFileMessage)
+    {
+      var controller = await ((MetroWindow) App.Current.MainWindow).ShowProgressAsync("Loading Ruleset…", null);
+      controller.SetIndeterminate();
+
+      _configurationFilePath = loadConfigurationFileMessage.ConfigurationFilePath;
+      Ruleset = null; //TODO await Task.Run(() => _rulesetLoader.Load(loadConfigurationFileMessage.ConfigurationFilePath));
+
+      await controller.CloseAsync();
     }
   }
 }

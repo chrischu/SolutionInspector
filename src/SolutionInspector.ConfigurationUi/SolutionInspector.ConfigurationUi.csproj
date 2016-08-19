@@ -38,7 +38,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -47,7 +47,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -96,6 +96,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -113,26 +114,60 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfBindingErrors, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfBindingErrors.1.0\lib\net46\WpfBindingErrors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Wrapperator.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wrapperator.Interfaces.1.0.0\lib\net452\Wrapperator.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Wrapperator.Wrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wrapperator.Wrappers.1.0.0\lib\net452\Wrapperator.Wrappers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="Configuration\RulesetLoader.cs" />
+    <Compile Include="Controls\CommaDelimitedStringCollection\CommaDelimitedStringCollectionViewModel.cs" />
+    <Compile Include="Controls\IConfigurationControl.cs" />
+    <Compile Include="Controls\ConfigurationControlRetriever.cs" />
+    <Compile Include="Controls\ConfigurationControlBase.cs" />
+    <Compile Include="Converters\ExpectedValueToVisibilityConverter.cs" />
+    <Compile Include="Infrastructure\AsyncCommand.cs" />
+    <Compile Include="Infrastructure\DocumentationRetriever.cs" />
+    <Compile Include="Infrastructure\NotifyTaskCompletion.cs" />
     <Compile Include="Services\DialogManager.cs" />
+    <Compile Include="Services\LoadManager.cs" />
     <Compile Include="Services\WindowManager.cs" />
     <Compile Include="Messages\LoadConfigurationFileMessage.cs" />
+    <Compile Include="Infrastructure\AdvancedObservableCollection.cs" />
+    <Compile Include="ViewModel\ConfigurationViewModel.cs" />
+    <Compile Include="ViewModel\ImportsViewModel.cs" />
+    <Compile Include="ViewModel\ImportViewModel.cs" />
+    <Compile Include="ViewModel\RulesetViewModel.cs" />
     <Compile Include="ViewModel\StartViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="Controls\CommaDelimitedStringCollection\CommaDelimitedStringCollectionTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\GlobalStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\VisualStudioPurple.xaml">
+    <Resource Include="Resources\VisualStudioPurple.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
+    </Resource>
     <Page Include="Resources\Icons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -206,7 +241,28 @@
       <SubType>Designer</SubType>
     </Resource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj">
+      <Project>{023C6DC1-D26D-4034-AB57-9B24ACA4EE8C}</Project>
+      <Name>SolutionInspector.Api.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
+      <Project>{84eb4f29-70f0-462b-ba37-da6f9261c8c8}</Project>
+      <Name>SolutionInspector.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
+      <Project>{25E030C5-78B1-4A5C-BB25-6ECCB892971C}</Project>
+      <Name>SolutionInspector.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj">
+      <Project>{bcb0a8e8-f220-46fb-9b07-9b2b3f9809b1}</Project>
+      <Name>SolutionInspector.DefaultRules</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.Internals\SolutionInspector.Internals.csproj">
+      <Project>{7648637C-44A7-461C-AC4B-39DFCECA4937}</Project>
+      <Name>SolutionInspector.Internals</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

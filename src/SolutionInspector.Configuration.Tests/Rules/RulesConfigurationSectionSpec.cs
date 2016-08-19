@@ -1,9 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using System.Xml.Linq;
 using FluentAssertions;
 using Machine.Specifications;
-using SolutionInspector.Configuration.Rules;
-using SolutionInspector.TestInfrastructure.Configuration;
+using SolutionInspector.Api.Configuration.Ruleset;
 
 #region R# preamble for Machine.Specifications files
 
@@ -23,43 +22,70 @@ using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Configuration.Tests.Rules
 {
-  [Subject (typeof(RulesConfigurationSection))]
+  [Subject (typeof(RulesConfigurationElement))]
   class RulesConfigurationSectionSpec
   {
-    static RulesConfigurationSection SUT;
-
-    Establish ctx = () => { SUT = new RulesConfigurationSection(); };
+    static RulesConfigurationElement SUT;
 
     class when_deserializing_config
     {
-      Because of = () => ConfigurationHelper.DeserializeSection(SUT, RulesConfigurationSection.ExampleConfiguration);
+      Because of = () => SUT = ConfigurationElement.Load<RulesConfigurationElement>(XElement.Parse(@"<rules>
+  <solutionRules>
+    <rule type=""Namespace.Rule, Assembly"" property=""Property"">
+      <innerConfig property=""InnerProperty"" />
+    </rule>
+  </solutionRules>
+  <projectRules>
+    <projectRuleGroup appliesTo=""*"">
+      <rule type=""Namespace.Rule, Assembly"" property=""Property"">
+        <innerConfig property=""InnerProperty"" />
+      </rule>
+    </projectRuleGroup>
+    <projectRuleGroup appliesTo=""+Inc*lude;-Exc*lude"">
+      <rule type=""Namespace.Rule, Assembly"" property=""Property"">
+        <innerConfig property=""InnerProperty"" />
+      </rule>
+    </projectRuleGroup>
+    <projectRuleGroup appliesTo=""Project"">
+      <rule type=""Namespace.Rule, Assembly"" property=""Property"">
+        <innerConfig property=""InnerProperty"" />
+      </rule>
+    </projectRuleGroup>
+  </projectRules>
+  <projectItemRules>
+    <projectItemRuleGroup appliesTo=""App.config"" inProject=""Project"">
+      <rule type=""Namespace.Rule, Assembly"" property=""Property"">
+        <innerConfig property=""InnerProperty"" />
+      </rule>
+    </projectItemRuleGroup>
+  </projectItemRules>
+</rules>"));
 
       It reads_solution_rules = () =>
           AssertRule(SUT.SolutionRules.Single());
 
       It reads_project_rule_groups = () =>
       {
-        var allGroup = SUT.ProjectRules.GetElement("+*");
+        var allGroup = SUT.ProjectRuleGroups[0];
         AssertRule(allGroup.Rules.Single());
 
-        var filterGroup = SUT.ProjectRules.GetElement("+Inc*lude;-Exc*lude");
+        var filterGroup = SUT.ProjectRuleGroups[1];
         AssertRule(filterGroup.Rules.Single());
 
-        var exactGroup = SUT.ProjectRules.GetElement("+Project");
+        var exactGroup = SUT.ProjectRuleGroups[2];
         AssertRule(exactGroup.Rules.Single());
       };
 
       It reads_file_rules_groups = () =>
       {
-        var exactGroup = SUT.ProjectItemRules.GetElement("+Project +App.config");
+        var exactGroup = SUT.ProjectItemRuleGroups[0];
         AssertRule(exactGroup.Rules.Single());
       };
     }
 
-    static void AssertRule (IRuleConfiguration rule)
+    static void AssertRule (RuleConfigurationElement rule)
     {
       rule.RuleType.Should().Be("Namespace.Rule, Assembly");
-      rule.Configuration.OuterXml.Should().Be(@"<rule property=""Property""><innerConfig property=""InnerProperty"" /></rule>");
     }
   }
 }

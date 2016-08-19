@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Configuration.Rules;
+using SolutionInspector.Internals;
 
 namespace SolutionInspector.Rules
 {
@@ -57,7 +57,7 @@ namespace SolutionInspector.Rules
     {
       return from ruleConfiguration in ruleConfigurations
         let ruleTypeInfo = _ruleTypeResolver.Resolve(ruleConfiguration.RuleType)
-        let config = _ruleConfigurationInstantiator.Instantiate(ruleTypeInfo.ConfigurationType, ruleConfiguration.Configuration)
+        let config = _ruleConfigurationInstantiator.Instantiate(ruleTypeInfo.ConfigurationType, ruleConfiguration.Element)
         let constructorParameters = ruleTypeInfo.IsConfigurable ? new object[] { config } : new object[0]
         select (TRule) ruleTypeInfo.Constructor.Invoke(constructorParameters);
     }

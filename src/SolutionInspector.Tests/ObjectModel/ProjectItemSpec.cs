@@ -6,8 +6,8 @@ using System.Reflection;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
-using SolutionInspector.Api.Extensions;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration.MsBuildParsing;
 using SolutionInspector.ObjectModel;
 

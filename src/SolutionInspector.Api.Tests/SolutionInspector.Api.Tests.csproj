@@ -47,12 +47,12 @@
       <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions, Version=4.12.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.12.0\lib\net45\FluentAssertions.dll</HintPath>
+    <Reference Include="FluentAssertions, Version=4.16.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.16.0\lib\net45\FluentAssertions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.12.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.12.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+    <Reference Include="FluentAssertions.Core, Version=4.16.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.16.0\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
@@ -102,19 +102,10 @@
     </Compile>
     <Compile Include="Configuration\ConfigurationElementCollectionBaseSpec.cs" />
     <Compile Include="Configuration\KeyedConfigurationElementCollectionBaseSpec.cs" />
-    <Compile Include="Extensions\EnumerableExtensionsSpec.cs" />
-    <Compile Include="Extensions\DictionaryExtensionsSpec.cs" />
-    <Compile Include="Extensions\StringExtensionsSpec.cs" />
-    <Compile Include="Extensions\XmlExtensionsSpec.cs" />
     <Compile Include="ObjectModel\ProjectItemBuildActionSpec.cs" />
     <Compile Include="ObjectModel\BuildConfigurationSpec.cs" />
-    <Compile Include="Utilities\BuildConfigurationFilterConverterSpec.cs" />
-    <Compile Include="Utilities\NameFilterConverterSpec.cs" />
-    <Compile Include="Utilities\BuildConfigurationFilterSpec.cs" />
-    <Compile Include="Utilities\NameFilterSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rules\RuleTypeUtilitySpec.cs" />
-    <Compile Include="Utilities\CollectionDifferenceFinderSpec.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

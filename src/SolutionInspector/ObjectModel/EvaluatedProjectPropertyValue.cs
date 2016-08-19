@@ -1,4 +1,3 @@
-using System;
 using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.ObjectModel

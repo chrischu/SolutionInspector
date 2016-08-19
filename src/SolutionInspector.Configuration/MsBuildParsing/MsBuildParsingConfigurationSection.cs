@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -18,7 +17,7 @@ namespace SolutionInspector.Configuration.MsBuildParsing
     bool IsValidProjectItemType (string projectItemType);
   }
 
-  internal class MsBuildParsingConfigurationSection : ConfigurationSection, IMsBuildParsingConfiguration
+  internal class MsBuildParsingConfigurationSection : System.Configuration.ConfigurationSection, IMsBuildParsingConfiguration
   {
     private Lazy<HashSet<string>> _projectBuildActionsHashSet;
 
@@ -33,7 +32,7 @@ namespace SolutionInspector.Configuration.MsBuildParsing
       _projectBuildActionsHashSet = new Lazy<HashSet<string>>(() => new HashSet<string>(ProjectBuildActions.Select(a => a.Name)));
     }
 
-    [ConfigurationProperty ("projectBuildActions")]
+    [System.Configuration.ConfigurationProperty ("projectBuildActions")]
     public ProjectBuildActionsConfigurationElement ProjectBuildActions => (ProjectBuildActionsConfigurationElement) this["projectBuildActions"];
 
     public bool IsValidProjectItemType (string projectItemType)

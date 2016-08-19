@@ -101,10 +101,22 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj">
+      <Project>{023C6DC1-D26D-4034-AB57-9B24ACA4EE8C}</Project>
+      <Name>SolutionInspector.Api.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
       <Project>{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}</Project>
       <Name>SolutionInspector.Api</Name>
       <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj">
+      <Project>{61A5E798-3EB1-4362-B08A-CDDA370D17B6}</Project>
+      <Name>SolutionInspector.Commons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
+      <Project>{25e030c5-78b1-4a5c-bb25-6eccb892971c}</Project>
+      <Name>SolutionInspector.Configuration</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

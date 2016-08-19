@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using SolutionInspector.Api.Extensions;
+using SolutionInspector.Commons.Extensions;
 using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;

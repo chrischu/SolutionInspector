@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Machine.Specifications;
 using SolutionInspector.ObjectModel;
 using SolutionInspector.TestInfrastructure;
