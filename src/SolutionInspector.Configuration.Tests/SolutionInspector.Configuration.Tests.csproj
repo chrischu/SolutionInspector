@@ -107,7 +107,6 @@
     <Compile Include="ConfigurationConverterAttributeSpec.cs" />
     <Compile Include="ConfigurationDocumentSpec.cs" />
     <Compile Include="ConfigurationBaseSpec.cs" />
-    <Compile Include="Rules\ProjectConfigRuleBaseSpec.cs" />
     <Compile Include="Rules\RuleConfigurationElementSpec.cs" />
     <Compile Include="Rules\RulesConfigurationSectionSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

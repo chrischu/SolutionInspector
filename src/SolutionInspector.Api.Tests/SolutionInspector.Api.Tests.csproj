@@ -104,13 +104,13 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="Configuration\ConfigurationElementCollectionBaseSpec.cs" />
-    <Compile Include="Configuration\KeyedConfigurationElementCollectionBaseSpec.cs" />
-    <Compile Include="ObjectModel\ProjectItemBuildActionSpec.cs" />
-    <Compile Include="ObjectModel\BuildConfigurationSpec.cs" />
+    <Compile Include="Configuration\ConfigurationElementCollectionBaseTests.cs" />
+    <Compile Include="Configuration\KeyedConfigurationElementCollectionBaseTests.cs" />
+    <Compile Include="ObjectModel\ProjectItemBuildActionTests.cs" />
+    <Compile Include="ObjectModel\BuildConfigurationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rules\ProjectConfigRuleBaseSpec.cs" />
-    <Compile Include="Rules\RuleTypeUtilitySpec.cs" />
+    <Compile Include="Rules\ProjectConfigRuleBaseTests.cs" />
+    <Compile Include="Rules\RuleTypeUtilityTests.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

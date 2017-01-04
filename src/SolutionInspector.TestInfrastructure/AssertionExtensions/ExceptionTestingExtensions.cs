@@ -23,6 +23,13 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
       objectAssertions.Be<ArgumentException>().WithMessage(expectedMessage);
     }
 
+    public static void ShouldThrowArgumentException(this Action action, string message, string parameterName)
+    {
+      var expectedMessage = new ArgumentException(message, parameterName).Message;
+
+      action.ShouldThrow<ArgumentException>().WithMessage(expectedMessage);
+    }
+
     [PublicAPI]
     public static ExceptionAssertions<TException> WithInnerException<TException> (
         this ExceptionAssertions<TException> exceptionAssertions,
