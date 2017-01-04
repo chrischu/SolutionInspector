@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -39,14 +38,6 @@
     <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FakeItEasy, Version=2.2.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
-      <HintPath>..\packages\FakeItEasy.2.2.0\lib\net40\FakeItEasy.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Fasterflect, Version=2.1.3.0, Culture=neutral, PublicKeyToken=38d18473284c1ca7, processorArchitecture=MSIL">
-      <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FluentAssertions, Version=4.16.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.16.0\lib\net45\FluentAssertions.dll</HintPath>
       <Private>True</Private>
@@ -59,40 +50,27 @@
       <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Machine.Specifications.Clr4, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ManyConsole, Version=0.4.2.20, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ManyConsole.0.4.2.20\lib\ManyConsole.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NDesk.Options, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NullGuard, Version=1.4.6.0, Culture=neutral, PublicKeyToken=1958ac8092168428, processorArchitecture=MSIL">
       <HintPath>..\packages\NullGuard.Fody.1.4.6\lib\dotnet\NullGuard.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Wrapperator.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Interfaces.1.0.0\lib\net452\Wrapperator.Interfaces.dll</HintPath>
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Wrapperator.Wrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Wrappers.1.0.0\lib\net452\Wrapperator.Wrappers.dll</HintPath>
+    <Reference Include="xunit.assert, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.1.0\lib\dotnet\xunit.assert.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.1.0\lib\dotnet\xunit.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.1.0.3179, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.1.0\lib\net45\xunit.execution.desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -100,15 +78,14 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="BuildConfigurationFilterConverterSpec.cs" />
-    <Compile Include="BuildConfigurationFilterSpec.cs" />
-    <Compile Include="MsBuildParsing\MsBuildParsingConfigurationSectionSpec.cs" />
-    <Compile Include="NameFilterConverterSpec.cs" />
-    <Compile Include="NameFilterSpec.cs" />
+    <Compile Include="BuildConfigurationFilterConverterTests.cs" />
+    <Compile Include="BuildConfigurationFilterTests.cs" />
+    <Compile Include="MsBuildParsing\MsBuildParsingConfigurationSectionTests.cs" />
+    <Compile Include="NameFilterConverterTests.cs" />
+    <Compile Include="NameFilterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rules\ProjectConfigRuleBaseSpec.cs" />
-    <Compile Include="Rules\RuleConfigurationElementSpec.cs" />
-    <Compile Include="Rules\RulesConfigurationSectionSpec.cs" />
+    <Compile Include="Rules\RuleConfigurationElementTests.cs" />
+    <Compile Include="Rules\RulesConfigurationSectionTests.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -116,17 +93,9 @@
       <Project>{023C6DC1-D26D-4034-AB57-9B24ACA4EE8C}</Project>
       <Name>SolutionInspector.Api.Configuration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj">
-      <Project>{61A5E798-3EB1-4362-B08A-CDDA370D17B6}</Project>
-      <Name>SolutionInspector.Commons</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
       <Project>{25E030C5-78B1-4A5C-BB25-6ECCB892971C}</Project>
       <Name>SolutionInspector.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj">
-      <Project>{D154C744-EAB0-479A-BA22-B822AAFD3774}</Project>
-      <Name>SolutionInspector.TestInfrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
       <Project>{84eb4f29-70f0-462b-ba37-da6f9261c8c8}</Project>
@@ -140,7 +109,6 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

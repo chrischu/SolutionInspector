@@ -77,7 +77,7 @@ namespace SolutionInspector.Api.ObjectModel
     public static BuildConfiguration Parse (string s)
     {
       if (!s_regex.IsMatch(s))
-        throw new ArgumentException($"The value '{s}' is not a valid string representation of a {nameof(BuildConfiguration)}.", nameof(s));
+        throw new FormatException($"The value '{s}' is not a valid string representation of a {nameof(BuildConfiguration)}.");
 
       var split = s.Split('|');
       return new BuildConfiguration(split[0], split[1]);

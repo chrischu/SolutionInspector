@@ -25,7 +25,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 #endregion
 
-namespace SolutionInspector.Api.Configuration.Tests.Rules
+namespace SolutionInspector.Api.Tests.Rules
 {
   [Subject (typeof(ProjectConfigRuleBase<>))]
   class ProjectConfigRuleBaseSpec
