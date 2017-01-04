@@ -59,14 +59,6 @@
       <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Machine.Specifications.Clr4, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ManyConsole, Version=0.4.2.20, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ManyConsole.0.4.2.20\lib\ManyConsole.dll</HintPath>
       <Private>True</Private>
