@@ -1,17 +1,17 @@
 ﻿using FluentAssertions;
 using JetBrains.Annotations;
+using NUnit.Framework;
 using SolutionInspector.Commons.Extensions;
-using Xunit;
 
 namespace SolutionInspector.Commons.Tests.Extensions
 {
   public class StringExtensionsTests
   {
-    [Theory]
-    [InlineData ("StuffSuffix", "Stuff")]
-    [InlineData ("Stuff", "Stuff")]
-    [InlineData (null, null)]
-    [InlineData ("StuffSuffixSuffix", "StuffSuffix")]
+    [Test]
+    [TestCase ("StuffSuffix", "Stuff")]
+    [TestCase ("Stuff", "Stuff")]
+    [TestCase (null, null)]
+    [TestCase ("StuffSuffixSuffix", "StuffSuffix")]
     public void RemoveSuffix ([CanBeNull] string input, [CanBeNull] string expected)
     {
       // ACT

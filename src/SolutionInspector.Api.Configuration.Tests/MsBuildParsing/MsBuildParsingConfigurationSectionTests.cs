@@ -1,14 +1,14 @@
 ﻿using System.Xml.Linq;
 using FluentAssertions;
+using NUnit.Framework;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Configuration;
-using Xunit;
 
 namespace SolutionInspector.Api.Configuration.Tests.MsBuildParsing
 {
   public class MsBuildParsingConfigurationSectionTests
   {
-    [Fact]
+    [Test]
     public void Loading ()
     {
       var element = XDocument.Parse(MsBuildParsingConfigurationSection.ExampleConfiguration).Root;

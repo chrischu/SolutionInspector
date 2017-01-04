@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using NUnit.Framework;
 using SolutionInspector.Commons.Extensions;
-using Xunit;
 
 namespace SolutionInspector.Commons.Tests.Extensions
 {
   public class EnumerableExtensionsTests
   {
-    [Theory]
-    [InlineData(new int[0], false)]
-    [InlineData(new[] { 7 }, false)]
-    [InlineData(new[] { 7, 9 }, true)]
+    [Test]
+    [TestCase(new int[0], false)]
+    [TestCase(new[] { 7 }, false)]
+    [TestCase(new[] { 7, 9 }, true)]
     
     public void ContainsMoreThanOne(IEnumerable<int> enumerable, bool expected)
     {

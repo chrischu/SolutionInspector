@@ -1,6 +1,6 @@
 ﻿using System;
 using FluentAssertions;
-using Xunit;
+using NUnit.Framework;
 
 namespace SolutionInspector.Api.Configuration.Tests
 {
@@ -13,7 +13,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       _sut = new NameFilterConverter();
     }
 
-    [Fact]
+    [Test]
     public void ConvertTo()
     {
       var filter = new NameFilter(new[] { "A", "*B", "C*", "*D*" }, new[] { "E", "*F", "G*", "*H*" });
@@ -25,7 +25,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       result.Should().Be("+A;+*B;+C*;+*D*;-E;-*F;-G*;-*H*");
     }
 
-    [Fact]
+    [Test]
     public void ConvertTo_WithNull_ReturnsNull()
     {
       // ACT
@@ -35,7 +35,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       result.Should().BeNull();
     }
 
-    [Fact]
+    [Test]
     public void ConvertFrom()
     {
       var filter = new NameFilter(new[] { "A", "B" }, new[] { "B" });
@@ -49,7 +49,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       result.IsMatch("X").Should().BeFalse();
     }
 
-    [Fact]
+    [Test]
     public void ConvertFrom_WithNull_ReturnsNull()
     {
       // ACT
@@ -59,7 +59,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       result.Should().BeNull();
     }
 
-    [Fact]
+    [Test]
     public void ConvertFrom_WithInvalidFormat_Throws()
     {
       var filterString = "THIS IS NOT A NAMEFILTER";

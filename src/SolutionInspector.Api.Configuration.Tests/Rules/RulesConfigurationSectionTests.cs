@@ -1,14 +1,14 @@
 ﻿using System.Xml.Linq;
 using FluentAssertions;
+using NUnit.Framework;
 using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Configuration;
-using Xunit;
 
 namespace SolutionInspector.Api.Configuration.Tests.Rules
 {
   public class RulesConfigurationSectionTests
   {
-    [Fact]
+    [Test]
     public void Loading ()
     {
       var element = XElement.Parse(@"<rules>

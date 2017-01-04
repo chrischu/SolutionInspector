@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
+using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
-using Xunit;
 
 namespace SolutionInspector.Api.Configuration.Tests
 {
@@ -14,7 +14,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       _sut = new BuildConfigurationFilterConverter();
     }
 
-    [Fact]
+    [Test]
     public void ConvertTo ()
     {
       var filter = new BuildConfigurationFilter(new BuildConfiguration("A", "B"), new BuildConfiguration("C", "D"));
@@ -26,7 +26,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       result.Should().Be("A|B,C|D");
     }
 
-    [Fact]
+    [Test]
     public void ConvertTo_WithNull_ReturnsNull()
     {
       // ACT
@@ -36,7 +36,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       result.Should().BeNull();
     }
 
-    [Fact]
+    [Test]
     public void ConvertFrom()
     {
       var buildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("A", "B"), new BuildConfiguration("C", "D"));
@@ -51,7 +51,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       result.IsMatch(new BuildConfiguration("X", "Y")).Should().BeFalse();
     }
 
-    [Fact]
+    [Test]
     public void ConvertFrom_WithNull_ReturnsNull()
     {
       // ACT
@@ -61,7 +61,7 @@ namespace SolutionInspector.Api.Configuration.Tests
       result.Should().BeNull();
     }
 
-    [Fact]
+    [Test]
     public void ConvertFrom_WithInvalidFormat_Throws()
     {
       var filterString = "NOT A BUILD CONFIGURATION FILTER";

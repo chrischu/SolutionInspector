@@ -1,19 +1,19 @@
 ﻿using FluentAssertions;
+using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
-using Xunit;
 
 namespace SolutionInspector.Api.Configuration.Tests
 {
   public class BuildConfigurationFilterTests
   {
-    [Theory]
-    [InlineData("A|B", "A|B", true)]
-    [InlineData("A|B", "A|Y", false)]
-    [InlineData("A|B", "X|B", false)]
-    [InlineData("A|B", "X|Y", false)]
-    [InlineData("A|*", "A|Y", true)]
-    [InlineData("*|B", "X|B", true)]
-    [InlineData("*|*", "X|Y", true)]
+    [Test]
+    [TestCase("A|B", "A|B", true)]
+    [TestCase("A|B", "A|Y", false)]
+    [TestCase("A|B", "X|B", false)]
+    [TestCase("A|B", "X|Y", false)]
+    [TestCase("A|*", "A|Y", true)]
+    [TestCase("*|B", "X|B", true)]
+    [TestCase("*|*", "X|Y", true)]
     public void IsMatch(string filterString, string configurationString, bool expectedResult)
     {
       var filter = new BuildConfigurationFilterConverter().ConvertFrom(filterString);

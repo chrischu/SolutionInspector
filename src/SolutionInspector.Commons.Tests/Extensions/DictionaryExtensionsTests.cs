@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using NUnit.Framework;
 using SolutionInspector.Commons.Extensions;
-using Xunit;
 
 namespace SolutionInspector.Commons.Tests.Extensions
 {
   public class DictionaryExtensionsTests
   {
-    [Fact]
+    [Test]
     public void GetValueOrDefault_ValueExists_ReturnsValue()
     {
       var dictionary = new Dictionary<string, int> { { "key", 7 } };
@@ -19,7 +19,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
       result.Should().Be(7);
     }
 
-    [Fact]
+    [Test]
     public void GetValueOrDefault_ValueDoesNotExist_ReturnsValue()
     {
       var dictionary = new Dictionary<string, int>();

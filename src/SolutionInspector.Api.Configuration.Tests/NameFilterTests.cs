@@ -1,19 +1,19 @@
 ﻿using FluentAssertions;
-using Xunit;
+using NUnit.Framework;
 
 namespace SolutionInspector.Api.Configuration.Tests
 {
   public class NameFilterTests
   {
-    [Theory]
-    [InlineData("Include", "Include", true)]
-    [InlineData("Include", "NotIncluded", false)]
-    [InlineData("Inc*lude", "IncXYZlude", true)]
-    [InlineData("Inc*lude", "NotIncluded", false)]
-    [InlineData("+*Include;-ExcludedInclude", "XYZInclude", true)]
-    [InlineData("+*Include;-ExcludedInclude", "ExcludedInclude", false)]
-    [InlineData("+*Include;-Exc*ludedInclude", "XYZInclude", true)]
-    [InlineData("+*Include;-Exc*ludedInclude", "ExcXYZludedInclude", false)]
+    [Test]
+    [TestCase("Include", "Include", true)]
+    [TestCase("Include", "NotIncluded", false)]
+    [TestCase("Inc*lude", "IncXYZlude", true)]
+    [TestCase("Inc*lude", "NotIncluded", false)]
+    [TestCase("+*Include;-ExcludedInclude", "XYZInclude", true)]
+    [TestCase("+*Include;-ExcludedInclude", "ExcludedInclude", false)]
+    [TestCase("+*Include;-Exc*ludedInclude", "XYZInclude", true)]
+    [TestCase("+*Include;-Exc*ludedInclude", "ExcXYZludedInclude", false)]
     public void IsMatch(string filterString, string testString, bool expectedResult)
     {
       var filter = new NameFilterConverter().ConvertFrom(filterString);

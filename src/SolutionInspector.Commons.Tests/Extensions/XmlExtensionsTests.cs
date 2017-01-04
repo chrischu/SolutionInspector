@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Xml;
 using FluentAssertions;
+using NUnit.Framework;
 using SolutionInspector.Commons.Extensions;
-using Xunit;
 
 namespace SolutionInspector.Commons.Tests.Extensions
 {
   public class XmlExtensionsTests
   {
-    [Fact]
+    [Test]
     public void AddAttribute_DefaultCase_Works ()
     {
       var element = CreateXmlElement("element");
@@ -22,7 +22,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
       attribute.Value.Should().Be("value");
     }
 
-    [Fact]
+    [Test]
     public void AddAttribute_WithExistingAttribute_OverridesValue ()
     {
       var element = CreateXmlElement("element");
@@ -39,7 +39,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
       element.Attributes.Count.Should().Be(1);
     }
 
-    [Fact]
+    [Test]
     public void AddElement_DefaultCase_Works ()
     {
       var element = CreateXmlElement("element");
@@ -53,7 +53,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
       child.InnerText.Should().Be("value");
     }
 
-    [Fact]
+    [Test]
     public void AddElement_WithExistingElement_AddsAnotherElement ()
     {
       var element = CreateXmlElement("element");
@@ -72,7 +72,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
       element.ChildNodes[1].InnerText.Should().Be("newvalue");
     }
 
-    [Fact]
+    [Test]
     public void RemoveAllChildren_ElementWithAttributesAndElements_RemovesElementsButLeavesAttributes ()
     {
       var element = CreateXmlElement("element");
@@ -87,7 +87,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
       element.ChildNodes.Should().BeEmpty();
     }
 
-    [Fact]
+    [Test]
     public void RemoveAttributesWhere_WithMultipleAttributes_RemovesOnlyMatchingAttributes()
     {
       var element = CreateXmlElement("element");
@@ -102,7 +102,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
       element.Attributes[0].Name.Should().Be("attr2");
     }
 
-    [Fact]
+    [Test]
     public void RemoveAttributesWhere_WithoutAttributes_DoesNotThrow()
     {
       var element = CreateXmlElement("element");
