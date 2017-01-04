@@ -97,6 +97,7 @@
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="AssertionExtensions\ExceptionTestingExtensions.cs" />
     <Compile Include="AssertionExtensions\ObjectStructuralEqualityExtensions.cs" />
+    <Compile Include="Dev.cs" />
     <Compile Include="FakeHelper.cs" />
     <Compile Include="Some.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

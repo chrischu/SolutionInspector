@@ -104,25 +104,23 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="ConfigurationConverterAttributeSpec.cs" />
-    <Compile Include="ConfigurationDocumentSpec.cs" />
-    <Compile Include="ConfigurationBaseSpec.cs" />
-    <Compile Include="Rules\RuleConfigurationElementSpec.cs" />
-    <Compile Include="Rules\RulesConfigurationSectionSpec.cs" />
+    <Compile Include="ConfigurationConverterAttributeTests.cs" />
+    <Compile Include="ConfigurationDocumentTests.cs" />
+    <Compile Include="ConfigurationBaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Validation\Dynamic\DynamicConfigurationTypeWalkerSpec.cs" />
-    <Compile Include="Validation\Dynamic\Validators\ValidationAttributeValidatorSpec.cs" />
-    <Compile Include="Validation\Dynamic\Validators\RequiredValidatorValidatorSpec.cs" />
-    <Compile Include="Validation\Dynamic\Validators\CollectionElementCountValidatorSpec.cs" />
-    <Compile Include="Validation\Static\StaticConfigurationTypeWalkerSpec.cs" />
-    <Compile Include="Validation\Static\Validators\XmlNameValidatorSpec.cs" />
-    <Compile Include="Validation\Static\Validators\XmlNameUniquenessValidatorSpec.cs" />
-    <Compile Include="Validation\Static\Validators\SingleDefaultCollectionValidatorSpec.cs" />
-    <Compile Include="Validation\Static\Validators\DefaultCollectionMustNotSpecifyCollectionNameValidatorSpec.cs" />
-    <Compile Include="Validation\Static\Validators\ConfigurationValueTypeValidatorSpec.cs" />
-    <Compile Include="Validation\Static\Validators\ConfigurationSubelementTypeValidatorSpec.cs" />
-    <Compile Include="Validation\Static\Validators\ConfigurationConverterValidatorSpec.cs" />
-    <Compile Include="Validation\Static\Validators\ConfigurationCollectionTypeValidatorSpec.cs" />
+    <Compile Include="Validation\Dynamic\DynamicConfigurationTypeWalkerTest.cs" />
+    <Compile Include="Validation\Dynamic\Validators\ValidationAttributeValidatorTests.cs" />
+    <Compile Include="Validation\Dynamic\Validators\RequiredValidatorTests.cs" />
+    <Compile Include="Validation\Dynamic\Validators\CollectionElementCountValidatorTests.cs" />
+    <Compile Include="Validation\Static\StaticConfigurationTypeWalkerTests.cs" />
+    <Compile Include="Validation\Static\Validators\XmlNameValidatorTests.cs" />
+    <Compile Include="Validation\Static\Validators\XmlNameUniquenessValidatorTests.cs" />
+    <Compile Include="Validation\Static\Validators\SingleDefaultCollectionValidatorTests.cs" />
+    <Compile Include="Validation\Static\Validators\DefaultCollectionMustNotSpecifyCollectionNameValidatorTests.cs" />
+    <Compile Include="Validation\Static\Validators\ConfigurationValueTypeValidatorTests.cs" />
+    <Compile Include="Validation\Static\Validators\ConfigurationSubelementTypeValidatorTests.cs" />
+    <Compile Include="Validation\Static\Validators\ConfigurationConverterValidatorTests.cs" />
+    <Compile Include="Validation\Static\Validators\ConfigurationCollectionTypeValidatorTests.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
