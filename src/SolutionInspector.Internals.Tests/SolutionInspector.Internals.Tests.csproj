@@ -104,10 +104,10 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="RuleConfigurationInstantiatorSpec.cs" />
-    <Compile Include="RuleTypeResolverSpec.cs" />
+    <Compile Include="RuleConfigurationInstantiatorTests.cs" />
+    <Compile Include="RuleTypeResolverTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RuleAssemblyLoaderSpec.cs" />
+    <Compile Include="RuleAssemblyLoaderTests.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
