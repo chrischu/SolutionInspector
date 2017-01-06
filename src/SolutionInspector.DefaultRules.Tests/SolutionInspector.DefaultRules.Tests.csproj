@@ -105,29 +105,29 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRuleSpec.cs" />
-    <Compile Include="NuGetReferenceHintPathsMustBeValidRuleSpec.cs" />
-    <Compile Include="RequiredResourceLanguagesRuleSpec.cs" />
-    <Compile Include="ProjectItemMustNotBeIncludedByWildcardRuleSpec.cs" />
-    <Compile Include="ProjectItemMustBeIncludedByWildcardRuleSpec.cs" />
-    <Compile Include="ProjectReferencesMustBeValidRuleSpec.cs" />
-    <Compile Include="ProjectShouldNotContainProjectPropertiesWithDuplicateNameRuleSpec.cs" />
-    <Compile Include="ProjectShouldNotContainProjectItemsWithDuplicateIncludesRuleSpec.cs" />
-    <Compile Include="ProjectItemsMustBePresentRuleSpec.cs" />
-    <Compile Include="ProjectItemMustHaveCorrectBuildActionRuleSpec.cs" />
-    <Compile Include="ProjectItemMustHaveCustomToolSetRuleSpec.cs" />
-    <Compile Include="ProjectConfigFileShouldHaveCorrectFrameworkVersionRuleSpec.cs" />
+    <Compile Include="NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRuleTests.cs" />
+    <Compile Include="NuGetReferenceHintPathsMustBeValidRuleTests.cs" />
+    <Compile Include="RequiredResourceLanguagesRuleTests.cs" />
+    <Compile Include="ProjectItemMustNotBeIncludedByWildcardRuleTests.cs" />
+    <Compile Include="ProjectItemMustBeIncludedByWildcardRuleTests.cs" />
+    <Compile Include="ProjectReferencesMustBeValidRuleTests.cs" />
+    <Compile Include="ProjectShouldNotContainProjectPropertiesWithDuplicateNameRuleTests.cs" />
+    <Compile Include="ProjectShouldNotContainProjectItemsWithDuplicateIncludesRuleTests.cs" />
+    <Compile Include="ProjectItemsMustBePresentRuleTests.cs" />
+    <Compile Include="ProjectItemMustHaveCorrectBuildActionRuleTests.cs" />
+    <Compile Include="ProjectItemMustHaveCustomToolSetRuleTests.cs" />
+    <Compile Include="ProjectConfigFileShouldHaveCorrectFrameworkVersionRuleTests.cs" />
     <Compile Include="ProjectPropertyFakeUtility.cs" />
-    <Compile Include="ProjectXPathRuleSpec.cs" />
+    <Compile Include="ProjectXPathRuleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NuGetPackagesShouldHaveOneVersionAcrossSolutionRuleSpec.cs" />
-    <Compile Include="ProjectBuildConfigurationDependentPropertyRuleSpec.cs" />
-    <Compile Include="ProjectMustProvideXmlDocumentationRuleSpec.cs" />
-    <Compile Include="ProjectPropertyRuleSpec.cs" />
-    <Compile Include="RequiredCompilationSymbolsProjectRuleSpec.cs" />
-    <Compile Include="RequiredNuGetPackagesRuleSpec.cs" />
-    <Compile Include="ProjectGuidsMustBeUniqueRuleSpec.cs" />
-    <Compile Include="SolutionBuildConfigurationsRuleSpec.cs" />
+    <Compile Include="NuGetPackagesShouldHaveOneVersionAcrossSolutionRuleTests.cs" />
+    <Compile Include="ProjectBuildConfigurationDependentPropertyRuleTests.cs" />
+    <Compile Include="ProjectMustProvideXmlDocumentationRuleTests.cs" />
+    <Compile Include="ProjectPropertyRuleTests.cs" />
+    <Compile Include="RequiredCompilationSymbolsProjectRuleTests.cs" />
+    <Compile Include="RequiredNuGetPackagesRuleTests.cs" />
+    <Compile Include="ProjectGuidsMustBeUniqueRuleTests.cs" />
+    <Compile Include="SolutionBuildConfigurationsRuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj">

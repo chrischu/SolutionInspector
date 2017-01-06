@@ -116,7 +116,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    ///   Controls whether XML namespaces should be ignored or not during XPath evaluation
+    ///   Controls if XML namespaces should be ignored during XPath evaluation.
     /// </summary>
     [ConfigurationProperty ("ignoreNamespaces", DefaultValue = true, IsRequired = false)]
     [Description("Controls whether XML namespaces should be ignored or not during XPath evaluation.")]

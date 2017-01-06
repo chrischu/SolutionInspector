@@ -37,7 +37,7 @@ namespace SolutionInspector.DefaultRules
               new RuleViolation(
                   this,
                   target,
-                  $"Unexpected value for supported runtime version, was '{version}' but should be '{Configuration.ExpectedVersion}'.");
+                  $"Unexpected value for supported runtime version, was '{version ?? "<null>"}' but should be '{Configuration.ExpectedVersion}'.");
 
         var sku = supportedRuntimeElement.Attribute("sku")?.Value;
         if (sku != Configuration.ExpectedSKU)
@@ -45,7 +45,7 @@ namespace SolutionInspector.DefaultRules
               new RuleViolation(
                   this,
                   target,
-                  $"Unexpected value for supported runtime SKU, was '{sku}' but should be '{Configuration.ExpectedSKU}'.");
+                  $"Unexpected value for supported runtime SKU, was '{sku ?? "<null>"}' but should be '{Configuration.ExpectedSKU}'.");
       }
     }
   }

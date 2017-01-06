@@ -12,23 +12,26 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that all expected combinations of build configuration/platform are present in the solution.
   /// </summary>
-  [Description("Verifies that all expected combinations of build configuration/platform are present in the solution.")]
+  [Description ("Verifies that all expected combinations of build configuration/platform are present in the solution.")]
   public class SolutionBuildConfigurationsRule : ConfigurableSolutionRule<SolutionBuildConfigurationsRuleConfiguration>
   {
     private readonly ICollectionDifferenceFinder _collectionDifferenceFinder;
     private readonly Lazy<BuildConfiguration[]> _expectedConfigurations;
 
-    internal IReadOnlyCollection<BuildConfiguration> ExpectedConfigurations => _expectedConfigurations.Value;
+    /// <summary>
+    ///   All the expected configurations.
+    /// </summary>
+    public IReadOnlyCollection<BuildConfiguration> ExpectedConfigurations => _expectedConfigurations.Value;
 
     /// <inheritdoc />
     public SolutionBuildConfigurationsRule (SolutionBuildConfigurationsRuleConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
       _collectionDifferenceFinder = new CollectionDifferenceFinder();
       _expectedConfigurations = new Lazy<BuildConfiguration[]>(
-          () => (from config in Configuration.Configurations.OfType<string>()
-            from platform in Configuration.Platforms.OfType<string>()
-            select new BuildConfiguration(config, platform)).ToArray());
+                                  () => (from config in Configuration.Configurations.OfType<string>()
+                                    from platform in Configuration.Platforms.OfType<string>()
+                                    select new BuildConfiguration(config, platform)).ToArray());
     }
 
     /// <inheritdoc />
@@ -54,7 +57,7 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("expectedConfigurations", DefaultValue = "", IsRequired = true)]
-    [Description("A list of expected configurations (e.g. 'Build', 'Release').")]
+    [Description ("A list of expected configurations (e.g. 'Build', 'Release').")]
     public CommaDelimitedStringCollection Configurations
     {
       get { return (CommaDelimitedStringCollection) this["expectedConfigurations"]; }
@@ -66,7 +69,7 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("expectedPlatforms", DefaultValue = "", IsRequired = true)]
-    [Description("A list of expected platforms (e.g. 'Any CPU', 'x64).")]
+    [Description ("A list of expected platforms (e.g. 'Any CPU', 'x64).")]
     public CommaDelimitedStringCollection Platforms
     {
       get { return (CommaDelimitedStringCollection) this["expectedPlatforms"]; }
