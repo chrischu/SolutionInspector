@@ -56,6 +56,8 @@ $FxCopResultsDirectory = Join-Path $AnalysisResultsDirectory "FxCop"
 $DotCoverResultsDirectory = Join-Path $AnalysisResultsDirectory "dotCover"
 $NuGetPackagesDirectory = Join-Path $BuildOutputDirectory "NuGetPackages"
 
+$NUnitResultsFile = Join-Path $BuildOutputDirectory "NUnitResults.xml"
+
 $DotCoverCoverageSnapshotFile = Join-Path $DotCoverResultsDirectory "coverageSnapshot.dcvr"
 $DotCoverCoverageBadgeFile = Join-Path $DotCoverResultsDirectory "coverageBadge.svg"
 $DotCoverCoverageReportFile = Join-Path $DotCoverResultsDirectory "coverageReport.html"
@@ -132,13 +134,13 @@ BuildTask Run-ReSharperCodeInspection {
 
 BuildTask Run-Tests {
   if ($RunDotCoverCoverageAnalysis) {
-    Execute-MSpecTests -WithDotCover -TestAssemblies $TestAssemblies -DotSettingsFile $DotSettingsFile -DotCoverResultsFile $DotCoverCoverageSnapshotFile
+    Execute-NUnitTests -WithDotCover -TestAssemblies $TestAssemblies -ResultsFile $NUnitResultsFile -DotSettingsFile $DotSettingsFile -DotCoverResultsFile $DotCoverCoverageSnapshotFile
 
     Create-DotCoverCoverageBadge $DotCoverCoverageSnapshotFile $DotCoverCoverageBadgeFile
     Create-DotCoverCoverageReport $DotCoverCoverageSnapshotFile $DotCoverCoverageReportFile
   }
   else {
-    Execute-MSpecTests -TestAssemblies $TestAssemblies 
+    Execute-NUnitTests -TestAssemblies $TestAssemblies -ResultsFile $NUnitResultsFile 
   }
 }
 
