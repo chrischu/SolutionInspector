@@ -7,18 +7,19 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.ObjectModel
 {
-  internal sealed class ProjectLocation : IProjectLocation, IEquatable<ProjectLocation>
+  /// <inheritdoc cref="IProjectLocation"/>
+  public sealed class ProjectLocation : IProjectLocation, IEquatable<ProjectLocation>
   {
     public int Line { get; }
     public int Column { get; }
 
-    public ProjectLocation (int line, int column)
+    internal ProjectLocation (int line, int column)
     {
       Column = column;
       Line = line;
     }
 
-    public ProjectLocation (ProjectElement projectElement)
+    internal ProjectLocation (ProjectElement projectElement)
         : this(projectElement.Location.Line, projectElement.Location.Column)
     {
     }
@@ -47,11 +48,13 @@ namespace SolutionInspector.ObjectModel
       return HashCodeHelper.GetHashCode(Line, Column);
     }
 
+    /// <inheritdoc />
     public static bool operator == (ProjectLocation left, ProjectLocation right)
     {
       return Equals(left, right);
     }
 
+    /// <inheritdoc />
     public static bool operator != (ProjectLocation left, ProjectLocation right)
     {
       return !Equals(left, right);

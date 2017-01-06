@@ -6,12 +6,13 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.ObjectModel
 {
-  internal sealed class ProjectItemInclude : IProjectItemInclude, IEquatable<ProjectItemInclude>
+  /// <inheritdoc cref="IProjectItemInclude" />
+  public sealed class ProjectItemInclude : IProjectItemInclude, IEquatable<ProjectItemInclude>
   {
     public string Evaluated { get; }
     public string Unevaluated { get; }
 
-    public ProjectItemInclude (string evaluated, string unevaluated)
+    internal ProjectItemInclude (string evaluated, string unevaluated)
     {
       Evaluated = evaluated;
       Unevaluated = unevaluated;
@@ -41,11 +42,13 @@ namespace SolutionInspector.ObjectModel
       return HashCodeHelper.GetHashCode(Evaluated, Unevaluated);
     }
 
+    /// <inheritdoc />
     public static bool operator == (ProjectItemInclude left, ProjectItemInclude right)
     {
       return Equals(left, right);
     }
 
+    /// <inheritdoc />
     public static bool operator != (ProjectItemInclude left, ProjectItemInclude right)
     {
       return !Equals(left, right);

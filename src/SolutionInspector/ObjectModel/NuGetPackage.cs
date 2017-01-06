@@ -6,7 +6,8 @@ using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.ObjectModel
 {
-  internal sealed class NuGetPackage : INuGetPackage
+  /// <inheritdoc cref="INuGetPackage"/>
+  public sealed class NuGetPackage : INuGetPackage
   {
     public string Id { get; }
 
@@ -24,7 +25,7 @@ namespace SolutionInspector.ObjectModel
 
     public bool IsDevelopmentDependency { get; }
 
-    public NuGetPackage (
+    internal NuGetPackage (
         string id,
         Version version,
         bool isPreRelease,
@@ -40,7 +41,7 @@ namespace SolutionInspector.ObjectModel
       IsDevelopmentDependency = isDevelopmentDependency;
     }
 
-    public static NuGetPackage FromXmlElement (XmlElement packageElement)
+    internal static NuGetPackage FromXmlElement (XmlElement packageElement)
     {
       var id = packageElement.GetAttribute("id");
       bool isPreRelease = false;
@@ -89,11 +90,13 @@ namespace SolutionInspector.ObjectModel
       return PackageDirectoryName.GetHashCode();
     }
 
+    /// <inheritdoc />
     public static bool operator == ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
     {
       return Equals(left, right);
     }
 
+    /// <inheritdoc />
     public static bool operator != ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
     {
       return !Equals(left, right);

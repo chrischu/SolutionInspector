@@ -8,8 +8,9 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.ObjectModel
 {
-  [DebuggerDisplay ("{DebuggerDisplay,nq}")]
-  internal sealed class ProjectPropertyCondition : IProjectPropertyCondition, IEquatable<ProjectPropertyCondition>
+  /// <inheritdoc cref="IProjectPropertyCondition"/>
+  [DebuggerDisplay("{DebuggerDisplay,nq}")]
+  public sealed class ProjectPropertyCondition : IProjectPropertyCondition, IEquatable<ProjectPropertyCondition>
   {
     [CanBeNull]
     public string Self { get; }
@@ -17,13 +18,13 @@ namespace SolutionInspector.ObjectModel
     [CanBeNull]
     public string Parent { get; }
 
-    public ProjectPropertyCondition ([CanBeNull] string self, [CanBeNull] string parent)
+    internal ProjectPropertyCondition ([CanBeNull] string self, [CanBeNull] string parent)
     {
       Self = ConvertCondition(self);
       Parent = ConvertCondition(parent);
     }
 
-    public ProjectPropertyCondition (ProjectPropertyElement element)
+    internal ProjectPropertyCondition (ProjectPropertyElement element)
         : this(element.Condition, element.Parent?.Condition)
     {
     }
@@ -72,11 +73,13 @@ namespace SolutionInspector.ObjectModel
       return HashCodeHelper.GetHashCode(Self, Parent);
     }
 
+    /// <inheritdoc />
     public static bool operator == (ProjectPropertyCondition left, ProjectPropertyCondition right)
     {
       return Equals(left, right);
     }
 
+    /// <inheritdoc />
     public static bool operator != (ProjectPropertyCondition left, ProjectPropertyCondition right)
     {
       return !Equals(left, right);

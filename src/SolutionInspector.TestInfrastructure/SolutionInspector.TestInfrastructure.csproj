@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="AssertionExtensions\DictionaryAssertionExtensions.cs" />
     <Compile Include="AssertionExtensions\DiffFormatter.cs" />
+    <Compile Include="AssertionExtensions\AssertionExtensions.cs" />
     <Compile Include="AssertionExtensions\StringAssertionExtensions.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="AssertionExtensions\ExceptionTestingExtensions.cs" />
