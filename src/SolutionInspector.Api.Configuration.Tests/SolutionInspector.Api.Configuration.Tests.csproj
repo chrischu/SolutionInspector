@@ -38,6 +38,10 @@
     <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FakeItEasy, Version=2.2.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
+      <HintPath>..\packages\FakeItEasy.2.2.0\lib\net40\FakeItEasy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FluentAssertions, Version=4.16.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.16.0\lib\net45\FluentAssertions.dll</HintPath>
       <Private>True</Private>
@@ -62,6 +66,14 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Wrapperator.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wrapperator.Interfaces.1.0.0\lib\net452\Wrapperator.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Wrapperator.Wrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wrapperator.Wrappers.1.0.0\lib\net452\Wrapperator.Wrappers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyInfoShared.cs">
@@ -75,14 +87,19 @@
     <Compile Include="NameFilterConverterTests.cs" />
     <Compile Include="NameFilterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ruleset\ProjectRuleGroupConfigurationElementTests.cs" />
     <Compile Include="Ruleset\RuleConfigurationElementTests.cs" />
-    <Compile Include="Ruleset\RulesConfigurationSectionTests.cs" />
+    <Compile Include="Ruleset\RulesetConfigurationDocumentTests.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj">
       <Project>{023C6DC1-D26D-4034-AB57-9B24ACA4EE8C}</Project>
       <Name>SolutionInspector.Api.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj">
+      <Project>{61a5e798-3eb1-4362-b08a-cdda370d17b6}</Project>
+      <Name>SolutionInspector.Commons</Name>
     </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
       <Project>{25E030C5-78B1-4A5C-BB25-6ECCB892971C}</Project>

@@ -35,7 +35,7 @@ namespace SolutionInspector.Tests.Configuration
       _sut.LoadRulesConfig("configFile");
 
       // ASSERT
-      A.CallTo(() => _configurationManager.LoadSection<SolutionInspectorRulesetConfigurationDocument>("configFile")).MustHaveHappened();
+      A.CallTo(() => _configurationManager.LoadDocument<RulesetConfigurationDocument>("configFile")).MustHaveHappened();
     }
 
     [Test]

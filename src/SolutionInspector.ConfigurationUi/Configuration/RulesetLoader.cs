@@ -108,9 +108,9 @@ namespace SolutionInspector.ConfigurationUi.Configuration
 
   internal class RulesetViewModel : ViewModelBase
   {
-    private readonly SolutionInspectorRulesetConfigurationDocument _ruleset;
+    private readonly RulesetConfigurationDocument _ruleset;
 
-    public RulesetViewModel (SolutionInspectorRulesetConfigurationDocument ruleset, ImportsViewModel imports, RulesViewModel rules)
+    public RulesetViewModel (RulesetConfigurationDocument ruleset, ImportsViewModel imports, RulesViewModel rules)
     {
       _ruleset = ruleset;
       var element = _ruleset.Rules.SolutionRules.AddNew();

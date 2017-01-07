@@ -4,7 +4,7 @@ namespace SolutionInspector.Configuration
 {
   public interface IConfigurationManager
   {
-    T LoadSection<T>(string configurationFilePath)
+    T LoadDocument<T>(string configurationFilePath)
       where T : ConfigurationDocument, new();
   }
 
@@ -17,7 +17,7 @@ namespace SolutionInspector.Configuration
       _xDocumentStatic = xDocumentStatic;
     }
 
-    public T LoadSection<T>(string configurationFilePath)
+    public T LoadDocument<T>(string configurationFilePath)
       where T : ConfigurationDocument, new()
     {
       var xDocument = _xDocumentStatic.Load(configurationFilePath);

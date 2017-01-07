@@ -15,8 +15,8 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     [ConfigurationValue]
     public NameFilter AppliesTo
     {
-      get { return GetConfigurationProperty<NameFilter>(); }
-      set { SetConfigurationProperty(value); }
+      get { return GetConfigurationValue<NameFilter>(); }
+      set { SetConfigurationValue(value); }
     }
 
     [ConfigurationCollection (IsDefaultCollection = true, ElementName = "rule", IsOptional = true)]

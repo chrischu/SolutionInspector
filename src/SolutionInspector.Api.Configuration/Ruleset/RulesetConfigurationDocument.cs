@@ -5,25 +5,25 @@ using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
-  public interface ISolutionInspectorRulesetConfiguration
+  public interface IRulesetConfiguration
   {
     IReadOnlyCollection<string> RuleAssemblyImports { get; }
     IRulesConfiguration Rules { get; }
   }
 
-  public class SolutionInspectorRulesetConfigurationDocument : ConfigurationDocument, ISolutionInspectorRulesetConfiguration
+  public class RulesetConfigurationDocument : ConfigurationDocument, IRulesetConfiguration
   {
     [ConfigurationCollection (ElementName = "import")]
     public ConfigurationElementCollection<RuleAssemblyImportConfigurationElement> RuleAssemblyImports
         => GetConfigurationCollection<RuleAssemblyImportConfigurationElement>();
 
-    [ConfigurationValue]
-    public RulesConfigurationElement Rules => GetConfigurationProperty<RulesConfigurationElement>();
+    [ConfigurationSubelement]
+    public RulesConfigurationElement Rules => GetConfigurationSubelement<RulesConfigurationElement>();
 
     [ExcludeFromCodeCoverage]
-    IReadOnlyCollection<string> ISolutionInspectorRulesetConfiguration.RuleAssemblyImports => RuleAssemblyImports.Select(i => i.Path).ToArray();
+    IReadOnlyCollection<string> IRulesetConfiguration.RuleAssemblyImports => RuleAssemblyImports.Select(i => i.Path).ToArray();
 
     [ExcludeFromCodeCoverage]
-    IRulesConfiguration ISolutionInspectorRulesetConfiguration.Rules => Rules;
+    IRulesConfiguration IRulesetConfiguration.Rules => Rules;
   }
 }

@@ -76,8 +76,8 @@ namespace SolutionInspector.DefaultRules
     [ConfigurationValue]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
-      get { return GetConfigurationProperty<BuildConfigurationFilter>(); }
-      [UsedImplicitly] set { SetConfigurationProperty(value); }
+      get { return GetConfigurationValue<BuildConfigurationFilter>(); }
+      [UsedImplicitly] set { SetConfigurationValue(value); }
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ namespace SolutionInspector.DefaultRules
     [ConfigurationValue]
     public CommaSeparatedStringCollection RequiredCompilationSymbols
     {
-      get { return GetConfigurationProperty<CommaSeparatedStringCollection>(); }
+      get { return GetConfigurationValue<CommaSeparatedStringCollection>(); }
     }
   }
 }

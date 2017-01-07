@@ -39,7 +39,7 @@ namespace SolutionInspector.Tests.Commands
     private IRuleAssemblyLoader _ruleAssemblyLoader;
 
     private ISolutionInspectorConfiguration _solutionInspectorConfiguration;
-    private ISolutionInspectorRulesetConfiguration _solutionInspectorRuleset;
+    private IRulesetConfiguration _ruleset;
     private IRulesConfiguration _rulesConfiguration;
 
     private ISolutionRule _solutionRule;
@@ -72,13 +72,13 @@ namespace SolutionInspector.Tests.Commands
       _solutionInspectorConfiguration = A.Fake<ISolutionInspectorConfiguration>();
       A.CallTo(() => _solutionInspectorConfiguration.MsBuildParsing).Returns(A.Fake<IMsBuildParsingConfiguration>());
 
-      _solutionInspectorRuleset = A.Fake<ISolutionInspectorRulesetConfiguration>();
+      _ruleset = A.Fake<IRulesetConfiguration>();
 
       _rulesConfiguration = A.Fake<IRulesConfiguration>();
-      A.CallTo(() => _solutionInspectorRuleset.Rules).Returns(_rulesConfiguration);
+      A.CallTo(() => _ruleset.Rules).Returns(_rulesConfiguration);
 
       _configurationLoader = A.Fake<IConfigurationLoader>();
-      A.CallTo(() => _configurationLoader.LoadRulesConfig(A<string>._)).Returns(_solutionInspectorRuleset);
+      A.CallTo(() => _configurationLoader.LoadRulesConfig(A<string>._)).Returns(_ruleset);
 
       _ruleAssemblyLoader = A.Fake<IRuleAssemblyLoader>();
       _violationReporterFactory = A.Fake<IViolationReporterFactory>();
@@ -304,7 +304,7 @@ namespace SolutionInspector.Tests.Commands
 
     private void AssertCorrectCommandExecution ()
     {
-      A.CallTo(() => _ruleAssemblyLoader.LoadRuleAssemblies(_solutionInspectorRuleset.RuleAssemblyImports)).MustHaveHappened();
+      A.CallTo(() => _ruleAssemblyLoader.LoadRuleAssemblies(_ruleset.RuleAssemblyImports)).MustHaveHappened();
       A.CallTo(() => _solutionLoader.Load("solution", _solutionInspectorConfiguration.MsBuildParsing)).MustHaveHappened();
 
       A.CallTo(() => _ruleCollectionBuilder.Build(_rulesConfiguration)).MustHaveHappened();

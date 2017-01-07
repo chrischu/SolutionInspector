@@ -62,14 +62,12 @@
     <Compile Include="NameFilterConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\InternalsVisibleTo.cs" />
-    <Compile Include="RuleAssemblyImports\RuleAssemblyImportConfigurationElement.cs" />
-    <Compile Include="RuleAssemblyImports\RuleAssemblyImportsConfigurationElement.cs" />
     <Compile Include="Ruleset\ProjectItemRuleGroupConfigurationElement.cs" />
     <Compile Include="Ruleset\ProjectRuleGroupConfigurationElement.cs" />
     <Compile Include="Ruleset\RuleAssemblyImportConfigurationElement.cs" />
     <Compile Include="Ruleset\RuleConfigurationElement.cs" />
     <Compile Include="Ruleset\RulesConfigurationElement.cs" />
-    <Compile Include="Ruleset\SolutionInspectorRulesetConfigurationDocument.cs" />
+    <Compile Include="Ruleset\RulesetConfigurationDocument.cs" />
     <Compile Include="SolutionInspectorConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>

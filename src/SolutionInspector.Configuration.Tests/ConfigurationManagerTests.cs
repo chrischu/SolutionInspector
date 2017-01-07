@@ -38,7 +38,7 @@ namespace SolutionInspector.Configuration.Tests
       A.CallTo(() => _xDocumentStatic.Load(A<string>._)).Returns(xDocumentWrapper);
 
       // ACT
-      var result = _sut.LoadSection<DummyConfigurationDocument>("path");
+      var result = _sut.LoadDocument<DummyConfigurationDocument>("path");
 
       // ASSERT
       result.Element.Should().BeSameAs(xDocument.Root);

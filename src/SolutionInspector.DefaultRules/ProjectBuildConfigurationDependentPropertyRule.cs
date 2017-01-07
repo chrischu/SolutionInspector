@@ -57,8 +57,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("Controls in which build configurations the 'property' is checked against the 'expectedValue'.")]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
-      get { return GetConfigurationProperty<BuildConfigurationFilter>(); }
-      set { SetConfigurationProperty(value); }
+      get { return GetConfigurationValue<BuildConfigurationFilter>(); }
+      set { SetConfigurationValue(value); }
     }
 
     /// <summary>
@@ -68,8 +68,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("Name of the property to check.")]
     public string Property
     {
-      get { return GetConfigurationProperty<string>(); }
-      set { SetConfigurationProperty(value); }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
 
     /// <summary>
@@ -79,8 +79,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("The expected property value to check against.")]
     public string ExpectedValue
     {
-      get { return GetConfigurationProperty<string>(); }
-      set { SetConfigurationProperty(value); }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
   }
 }

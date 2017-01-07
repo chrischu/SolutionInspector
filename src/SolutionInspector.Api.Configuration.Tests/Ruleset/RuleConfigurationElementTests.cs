@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.Configuration.Ruleset;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration.Tests.Ruleset
@@ -29,17 +30,31 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
       specialRuleConfiguration.Sub.Indirect.Should().Be("Indirect");
     }
 
+    [Test]
+    public void RuleTypeSet ()
+    {
+      var element = XElement.Parse(@"<rule type=""Original"" />");
+      var ruleConfiguration = ConfigurationElement.Load<RuleConfigurationElement>(element);
+
+      // ACT
+      ruleConfiguration.RuleType = "Changed";
+
+      // ASSERT
+      ruleConfiguration.RuleType.Should().Be("Changed");
+      element.Attribute("type").AssertNotNull().Value.Should().Be("Changed");
+    }
+
     // ReSharper disable once ClassNeverInstantiated.Local
     private class SubConfiguration : ConfigurationElement
     {
       [ConfigurationValue]
-      public string Indirect => GetConfigurationProperty<string>();
+      public string Indirect => GetConfigurationValue<string>();
     }
 
     private class SpecialRuleConfigurationElement : ConfigurationElement
     {
       [ConfigurationValue]
-      public string Direct => GetConfigurationProperty<string>();
+      public string Direct => GetConfigurationValue<string>();
 
       [ConfigurationSubelement]
       public SubConfiguration Sub => GetConfigurationSubelement<SubConfiguration>();

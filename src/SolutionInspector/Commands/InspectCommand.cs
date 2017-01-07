@@ -78,7 +78,7 @@ namespace SolutionInspector.Commands
       return new ParsedArguments(solution, rules, arguments.ReportFormat, arguments.ReportOutputFile, configuration);
     }
 
-    private ISolutionInspectorRulesetConfiguration ValidateAndLoadRulesConfiguration (RawArguments arguments, Func<string, Exception> reportError)
+    private IRulesetConfiguration ValidateAndLoadRulesConfiguration (RawArguments arguments, Func<string, Exception> reportError)
     {
       try
       {
@@ -217,14 +217,14 @@ namespace SolutionInspector.Commands
       public IRuleCollection Rules { get; }
       public ViolationReportFormat ReportFormat { get; }
       public string ReportOutputFile { get; }
-      public ISolutionInspectorRulesetConfiguration Configuration { get; }
+      public IRulesetConfiguration Configuration { get; }
 
       public ParsedArguments (
           ISolution solution,
           IRuleCollection rules,
           ViolationReportFormat reportFormat,
           [CanBeNull] string reportOutputFile,
-          ISolutionInspectorRulesetConfiguration configuration)
+          IRulesetConfiguration configuration)
       {
         Solution = solution;
         Rules = rules;

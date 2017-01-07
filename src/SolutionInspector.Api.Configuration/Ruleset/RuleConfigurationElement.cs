@@ -14,8 +14,8 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     [ConfigurationValue (AttributeName = "type")]
     public string RuleType
     {
-      get { return GetConfigurationProperty<string>(); }
-      set { SetConfigurationProperty(value); }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
   }
 }

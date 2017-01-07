@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -87,6 +86,17 @@ namespace SolutionInspector.Configuration.Tests
         result.MoveNext().Should().BeTrue();
         result.MoveNext().Should().BeFalse();
       }
+    }
+
+    [Test]
+    public void Item ()
+    {
+      var a = _sut.AddNew();
+      var b = _sut.AddNew();
+
+      // ACT & ASSERT
+      _sut[0].Should().BeSameAs(a);
+      _sut[1].Should().BeSameAs(b);
     }
 
     private class DummyConfigurationElementCollection : ConfigurationElementCollection<DummyConfigurationElement>

@@ -40,7 +40,7 @@ namespace SolutionInspector.Internals.Tests
     class RuleConfiguration : ConfigurationElement
     {
       [ConfigurationValue]
-      public string Property => GetConfigurationProperty<string>();
+      public string Property => GetConfigurationValue<string>();
     }
   }
 }

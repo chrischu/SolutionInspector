@@ -48,45 +48,45 @@ namespace SolutionInspector.Configuration
       return (T) ConfigurationElement.Load(typeof(T), element);
     }
 
-    protected T GetConfigurationProperty<T> ([CallerMemberName] string clrPropertyName = null)
+    protected T GetConfigurationValue<T> ([CallerMemberName] string clrPropertyName = null)
     {
-      var configurationPropertyType = typeof(T);
-      var configurationPropertyAttribute = GetConfigurationPropertyAttribute<ConfigurationValueAttribute>(clrPropertyName);
+      var configurationValueType = typeof(T);
+      var configurationValueAttribute = GetConfigurationPropertyAttribute<ConfigurationValueAttribute>(clrPropertyName);
 
-      if (configurationPropertyAttribute == null)
+      if (configurationValueAttribute == null)
         throw new InvalidOperationException($"Property '{clrPropertyName}' is not properly marked as a configuration property.");
 
-      var attributeName = configurationPropertyAttribute.GetXmlName(clrPropertyName);
+      var attributeName = configurationValueAttribute.GetXmlName(clrPropertyName);
       var attribute = Element.Attribute(attributeName);
 
-      var configurationConverterAttribute = configurationPropertyType.GetCustomAttribute<ConfigurationConverterAttribute>();
-      if (configurationPropertyAttribute.ConfigurationConverter != null || configurationConverterAttribute != null)
+      var configurationConverterAttribute = configurationValueType.GetCustomAttribute<ConfigurationConverterAttribute>();
+      if (configurationValueAttribute.ConfigurationConverter != null || configurationConverterAttribute != null)
       {
-        if (attribute == null && configurationPropertyAttribute.DefaultValue != null)
-          Element.Add(attribute = new XAttribute(attributeName, configurationPropertyAttribute.DefaultValue));
+        if (attribute == null && configurationValueAttribute.DefaultValue != null)
+          Element.Add(attribute = new XAttribute(attributeName, configurationValueAttribute.DefaultValue));
 
-        var converterType = configurationPropertyAttribute.ConfigurationConverter ?? configurationConverterAttribute.ConfigurationConverterType;
+        var converterType = configurationValueAttribute.ConfigurationConverter ?? configurationConverterAttribute.ConfigurationConverterType;
         var converter = CreateConfigurationConverter<T>(converterType);
 
         return converter.ConvertFrom(attribute?.Value);
       }
 
-      if (typeof(IConfigurationValue).IsAssignableFrom(configurationPropertyType))
+      if (typeof(IConfigurationValue).IsAssignableFrom(configurationValueType))
       {
         if (attribute?.Value == null)
-          Element.Add(attribute = new XAttribute(attributeName, configurationPropertyAttribute.DefaultValue ?? ""));
+          Element.Add(attribute = new XAttribute(attributeName, configurationValueAttribute.DefaultValue ?? ""));
 
         var instance = (T) Activator.CreateInstance(
-          configurationPropertyType,
+          configurationValueType,
           (Action<string>) (s => Element.SetAttributeValue(attributeName, s)));
         instance.CallMethod("Deserialize", attribute.Value);
         return instance;
       }
 
-      if (attribute == null && configurationPropertyAttribute.DefaultValue != null)
-        Element.Add(attribute = new XAttribute(attributeName, configurationPropertyAttribute.DefaultValue));
+      if (attribute == null && configurationValueAttribute.DefaultValue != null)
+        Element.Add(attribute = new XAttribute(attributeName, configurationValueAttribute.DefaultValue));
 
-      return (T) Convert.ChangeType(attribute?.Value, configurationPropertyType);
+      return (T) Convert.ChangeType(attribute?.Value, configurationValueType);
     }
 
     private IConfigurationConverter<T> CreateConfigurationConverter<T> (Type configurationConverterType)
@@ -94,7 +94,7 @@ namespace SolutionInspector.Configuration
       return (IConfigurationConverter<T>) Activator.CreateInstance(configurationConverterType);
     }
 
-    protected void SetConfigurationProperty<T> (T value, [CallerMemberName] string clrPropertyName = null)
+    protected void SetConfigurationValue<T> (T value, [CallerMemberName] string clrPropertyName = null)
     {
       var configurationValue = value as IConfigurationValue;
       var configurationPropertyAttribute = GetConfigurationPropertyAttribute<ConfigurationValueAttribute>(clrPropertyName);

@@ -72,8 +72,8 @@ namespace SolutionInspector.Configuration.Tests
       [ConfigurationValue]
       public string Simple
       {
-        get { return GetConfigurationProperty<string>(); }
-        set { SetConfigurationProperty(value); }
+        get { return GetConfigurationValue<string>(); }
+        set { SetConfigurationValue(value); }
       }
     }
   }

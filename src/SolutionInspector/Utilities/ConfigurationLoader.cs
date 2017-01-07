@@ -7,7 +7,7 @@ namespace SolutionInspector.Utilities
 {
   internal interface IConfigurationLoader
   {
-    ISolutionInspectorRulesetConfiguration LoadRulesConfig (string configurationFile);
+    IRulesetConfiguration LoadRulesConfig (string configurationFile);
   }
 
   internal class ConfigurationLoader : IConfigurationLoader
@@ -21,12 +21,12 @@ namespace SolutionInspector.Utilities
       _configurationManager = configurationManager;
     }
 
-    public ISolutionInspectorRulesetConfiguration LoadRulesConfig (string configurationFile)
+    public IRulesetConfiguration LoadRulesConfig (string configurationFile)
     {
       if (!_file.Exists(configurationFile))
         throw new FileNotFoundException($"Could not find configuration file '{configurationFile}'.");
 
-      return _configurationManager.LoadSection<SolutionInspectorRulesetConfigurationDocument>(configurationFile);
+      return _configurationManager.LoadDocument<RulesetConfigurationDocument>(configurationFile);
     }
   }
 }
