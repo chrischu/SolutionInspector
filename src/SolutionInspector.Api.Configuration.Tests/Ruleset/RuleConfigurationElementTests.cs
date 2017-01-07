@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Configuration;
 
-namespace SolutionInspector.Api.Configuration.Tests.Rules
+namespace SolutionInspector.Api.Configuration.Tests.Ruleset
 {
   public class RuleConfigurationElementTests
   {
