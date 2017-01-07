@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
@@ -23,23 +23,27 @@ namespace SolutionInspector.DefaultRules.Tests
       _solutionConfigurations = new BuildConfiguration[0];
       A.CallTo(() => _solution.BuildConfigurations).Returns(_solutionConfigurations);
 
-      _sut = new SolutionBuildConfigurationsRule(
-        new SolutionBuildConfigurationsRuleConfiguration
+      var configuration = ConfigurationElement.Create<SolutionBuildConfigurationsRuleConfiguration>(
+        initialize: c =>
         {
-          Configurations = new CommaDelimitedStringCollection { "Configuration" },
-          Platforms = new CommaDelimitedStringCollection { "Platform" }
+          c.Configurations.Add("Configuration");
+          c.Platforms.Add("Platform");
         });
+
+      _sut = new SolutionBuildConfigurationsRule(configuration);
     }
 
     [Test]
     public void GetExpectedConfigurations_ReturnsCrossproductOfConfigurationsAndPlatforms ()
     {
-      _sut = new SolutionBuildConfigurationsRule(
-        new SolutionBuildConfigurationsRuleConfiguration
+      var configuration = ConfigurationElement.Create<SolutionBuildConfigurationsRuleConfiguration>(
+        initialize: c =>
         {
-          Configurations = new CommaDelimitedStringCollection { "C1", "C2" },
-          Platforms = new CommaDelimitedStringCollection { "P1", "P2" }
+          c.Configurations.Add("C1", "C2");
+          c.Platforms.Add("P1", "P2");
         });
+
+      _sut = new SolutionBuildConfigurationsRule(configuration);
 
       // ACT
       var result = _sut.ExpectedConfigurations;

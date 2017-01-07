@@ -1,5 +1,5 @@
-using System.Configuration;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Rules
 {

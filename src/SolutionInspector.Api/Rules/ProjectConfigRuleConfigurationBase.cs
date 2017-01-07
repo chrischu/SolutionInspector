@@ -1,4 +1,4 @@
-using System.Configuration;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Rules
 {
@@ -10,11 +10,11 @@ namespace SolutionInspector.Api.Rules
     /// <summary>
     ///   Controls whether to report a violation when no configuration file can be found for the project or if the rule should just be skipped in that case.
     /// </summary>
-    [ConfigurationProperty ("reportViolationOnMissingConfigurationFile")]
+    [ConfigurationValue]
     public bool ReportViolationOnMissingConfigurationFile
     {
-      get { return (bool) this["reportViolationOnMissingConfigurationFile"]; }
-      set { this["reportViolationOnMissingConfigurationFile"] = value; }
+      get { return GetConfigurationValue<bool>(); }
+      set { SetConfigurationValue(value); }
     }
   }
 }

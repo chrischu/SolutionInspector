@@ -2,12 +2,15 @@ using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Practices.ServiceLocation;
+using SolutionInspector.Configuration;
+using SolutionInspector.ConfigurationUi.Configuration;
 using SolutionInspector.ConfigurationUi.Controls;
 using SolutionInspector.ConfigurationUi.Infrastructure;
 using SolutionInspector.ConfigurationUi.Services;
 using SolutionInspector.Internals;
 using Wrapperator.Interfaces.Configuration;
 using Wrapperator.Interfaces.IO;
+using Wrapperator.Interfaces.Xml.Linq;
 using Wrapperator.Wrappers;
 
 namespace SolutionInspector.ConfigurationUi.ViewModel
@@ -47,11 +50,14 @@ namespace SolutionInspector.ConfigurationUi.ViewModel
       builder.RegisterType<Services.DialogManager>().As<IDialogManager>();
       builder.RegisterType<LoadManager>().As<ILoadManager>();
       builder.RegisterType<RuleTypeResolver>().As<IRuleTypeResolver>();
+      builder.RegisterType<RulesetLoader>().As<IRulesetLoader>();
+      builder.RegisterType<ConfigurationManager>().As<IConfigurationManager>();
       builder.RegisterType<RuleConfigurationInstantiator>().As<IRuleConfigurationInstantiator>();
       builder.RegisterInstance(new ConfigurationControlRetriever()).As<IConfigurationControlRetriever>().SingleInstance();
       builder.RegisterType<DocumentationRetriever>().As<IDocumentationRetriever>().SingleInstance();
       builder.Register(ctx => Wrapper.File).As<IFileStatic>();
       builder.Register(ctx => Wrapper.ConfigurationManager).As<IConfigurationManagerStatic>();
+      builder.Register(ctx => Wrapper.XDocument).As<IXDocumentStatic>();
 
       var container = builder.Build();
       ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(container));

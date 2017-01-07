@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -42,23 +42,23 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   The property to check.
     /// </summary>
-    [ConfigurationProperty ("property", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("The property to check.")]
     public string Property
     {
-      get { return (string) this["property"]; }
-      set { this["property"] = value; }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
 
     /// <summary>
     ///   The expected property value to check against.
     /// </summary>
-    [ConfigurationProperty ("expectedValue", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("The expected property value to check against.")]
     public string ExpectedValue
     {
-      get { return (string) this["expectedValue"]; }
-      set { this["expectedValue"] = value; }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
   }
 }

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -60,23 +60,23 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   The expected framework version (e.g. 'v4.0')
     /// </summary>
-    [ConfigurationProperty ("expectedVersion", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("The expected framework version (e.g. 'v4.0')")]
     public string ExpectedVersion
     {
-      get { return (string) this["expectedVersion"]; }
-      set { this["expectedVersion"] = value; }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
 
     /// <summary>
     ///   The expected SKU (e.g. '.NETFramework,Version=v4.6.1').
     /// </summary>
-    [ConfigurationProperty ("expectedSKU", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("The expected SKU (e.g. '.NETFramework,Version=v4.6.1').")]
     public string ExpectedSKU
     {
-      get { return (string) this["expectedSKU"]; }
-      set { this["expectedSKU"] = value; }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
   }
 }

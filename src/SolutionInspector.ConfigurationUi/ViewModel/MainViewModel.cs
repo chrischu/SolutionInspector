@@ -5,8 +5,12 @@ using GalaSoft.MvvmLight.Messaging;
 using JetBrains.Annotations;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using SolutionInspector.Api.Configuration.Ruleset;
+using SolutionInspector.Configuration;
 using SolutionInspector.ConfigurationUi.Configuration;
 using SolutionInspector.ConfigurationUi.Messages;
+using Wrapperator.Wrappers;
+using System.Threading.Tasks;
 
 namespace SolutionInspector.ConfigurationUi.ViewModel
 {
@@ -14,9 +18,11 @@ namespace SolutionInspector.ConfigurationUi.ViewModel
   internal class MainViewModel : ViewModelBase
   {
     private string _configurationFilePath;
+    private IRulesetLoader _rulesetLoader;
 
-    public MainViewModel ()
+    public MainViewModel (IRulesetLoader rulesetLoader)
     {
+      _rulesetLoader = rulesetLoader;
       ////if (IsInDesignMode)
       ////{
       ////    // Code runs in Blend --> create design time data.
@@ -44,7 +50,8 @@ namespace SolutionInspector.ConfigurationUi.ViewModel
       controller.SetIndeterminate();
 
       _configurationFilePath = loadConfigurationFileMessage.ConfigurationFilePath;
-      Ruleset = null; //TODO await Task.Run(() => _rulesetLoader.Load(loadConfigurationFileMessage.ConfigurationFilePath));
+
+      Ruleset = await Task.Run(() => _rulesetLoader.Load(loadConfigurationFileMessage.ConfigurationFilePath));
 
       await controller.CloseAsync();
     }

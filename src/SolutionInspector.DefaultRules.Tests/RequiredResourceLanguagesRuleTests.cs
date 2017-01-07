@@ -1,9 +1,10 @@
-﻿using System.Configuration;
+﻿using System.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
@@ -18,12 +19,14 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       _project = A.Fake<IProject>();
 
-      _sut = new RequiredResourceLanguagesRule(
-        new RequiredResourceLanguagesRuleConfiguration
+      var configuration = ConfigurationElement.Create<RequiredResourceLanguagesRuleConfiguration>(
+        initialize: c =>
         {
-          RequiredResources = new CommaDelimitedStringCollection { "Resources1", "Resources2" },
-          RequiredLanguages = new CommaDelimitedStringCollection { "de", "cs" }
+          c.RequiredResources.Add("Resources1", "Resources2");
+          c.RequiredLanguages.Add("de", "cs");
         });
+
+      _sut = new RequiredResourceLanguagesRule(configuration);
     }
 
     [Test]
@@ -41,7 +44,7 @@ namespace SolutionInspector.DefaultRules.Tests
         });
 
       // ACT
-      var result = _sut.Evaluate(_project);
+      var result = _sut.Evaluate(_project).ToArray();
 
       // ASSERT
       result.Should().BeEmpty();

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -37,13 +37,8 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   All the required NuGet package ids (e.g. 'Autofac').
     /// </summary>
-    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
-    [ConfigurationProperty ("requiredNuGetPackages", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("All the required NuGet package ids (e.g. 'Autofac').")]
-    public CommaDelimitedStringCollection RequiredNuGetPackages
-    {
-      get { return (CommaDelimitedStringCollection) this["requiredNuGetPackages"]; }
-      [UsedImplicitly] set { this["requiredNuGetPackages"] = value; }
-    }
+    public CommaSeparatedStringCollection RequiredNuGetPackages => GetConfigurationValue<CommaSeparatedStringCollection>();
   }
 }

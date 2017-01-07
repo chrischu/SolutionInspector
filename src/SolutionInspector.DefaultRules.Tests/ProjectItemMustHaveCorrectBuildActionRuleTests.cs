@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
@@ -17,11 +18,13 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       _projectItem = A.Fake<IProjectItem>();
 
-      _sut = new ProjectItemMustHaveCorrectBuildActionRule(
-        new ProjectItemMustHaveCorrectBuildActionRuleConfiguration
+      var configuration = ConfigurationElement.Create<ProjectItemMustHaveCorrectBuildActionRuleConfiguration>(
+        initialize: c =>
         {
-          ExpectedBuildAction = "Compile"
+          c.ExpectedBuildAction = "Compile";
         });
+
+      _sut = new ProjectItemMustHaveCorrectBuildActionRule(configuration);
     }
 
     [Test]

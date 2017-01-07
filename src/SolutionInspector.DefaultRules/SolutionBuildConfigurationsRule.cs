@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Utilities;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -24,8 +24,8 @@ namespace SolutionInspector.DefaultRules
     {
       _collectionDifferenceFinder = new CollectionDifferenceFinder();
       _expectedConfigurations = new Lazy<BuildConfiguration[]>(
-        () => (from config in Configuration.Configurations.OfType<string>()
-          from platform in Configuration.Platforms.OfType<string>()
+        () => (from config in Configuration.Configurations
+          from platform in Configuration.Platforms
           select new BuildConfiguration(config, platform)).ToArray());
     }
 
@@ -55,25 +55,15 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   "A list of expected configurations (e.g. 'Build', 'Release')."
     /// </summary>
-    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
-    [ConfigurationProperty ("expectedConfigurations", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue (AttributeName = "expectedConfigurations", DefaultValue = "", IsOptional = false)]
     [Description ("A list of expected configurations (e.g. 'Build', 'Release').")]
-    public CommaDelimitedStringCollection Configurations
-    {
-      get { return (CommaDelimitedStringCollection) this["expectedConfigurations"]; }
-      set { this["expectedConfigurations"] = value; }
-    }
+    public CommaSeparatedStringCollection Configurations => GetConfigurationValue<CommaSeparatedStringCollection>();
 
     /// <summary>
     ///   A list of expected platforms (e.g. 'Any CPU', 'x64).
     /// </summary>
-    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
-    [ConfigurationProperty ("expectedPlatforms", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue (AttributeName = "expectedPlatforms", DefaultValue = "", IsOptional = false)]
     [Description ("A list of expected platforms (e.g. 'Any CPU', 'x64).")]
-    public CommaDelimitedStringCollection Platforms
-    {
-      get { return (CommaDelimitedStringCollection) this["expectedPlatforms"]; }
-      set { this["expectedPlatforms"] = value; }
-    }
+    public CommaSeparatedStringCollection Platforms => GetConfigurationValue<CommaSeparatedStringCollection>();
   }
 }

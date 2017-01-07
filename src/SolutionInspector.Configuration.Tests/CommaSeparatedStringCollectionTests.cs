@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
@@ -113,6 +114,16 @@ namespace SolutionInspector.Configuration.Tests
         result.Current.Should().Be("B");
         result.MoveNext().Should().BeFalse();
       }
+
+      // ACT
+      var enumerator = ((IEnumerable) _sut).GetEnumerator();
+
+      // ASSERT
+      enumerator.MoveNext().Should().BeTrue();
+      enumerator.Current.Should().Be("A");
+      enumerator.MoveNext().Should().BeTrue();
+      enumerator.Current.Should().Be("B");
+      enumerator.MoveNext().Should().BeFalse();
     }
 
     [Test]

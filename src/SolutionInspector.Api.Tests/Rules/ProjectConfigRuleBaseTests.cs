@@ -6,6 +6,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
@@ -21,7 +22,7 @@ namespace SolutionInspector.Api.Tests.Rules
     [SetUp]
     public void SetUp ()
     {
-      _configuration = new DummyProjectConfigurationRuleConfiguration();
+      _configuration = ConfigurationElement.Create<DummyProjectConfigurationRuleConfiguration>();
       _ruleViolation = A.Fake<IRuleViolation>();
 
       _sut = new DummyProjectConfigRule(_configuration, _ruleViolation);
@@ -91,10 +92,6 @@ namespace SolutionInspector.Api.Tests.Rules
 
     private class DummyProjectConfigurationRuleConfiguration : ProjectConfigRuleConfigurationBase
     {
-      public DummyProjectConfigurationRuleConfiguration ()
-      {
-        ReportViolationOnMissingConfigurationFile = true;
-      }
     }
   }
 }

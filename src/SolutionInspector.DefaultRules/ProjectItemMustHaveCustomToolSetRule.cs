@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -48,23 +48,23 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   The expected custom tool.
     /// </summary>
-    [ConfigurationProperty ("expectedCustomTool", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("The expected custom tool.")]
     public string ExpectedCustomTool
     {
-      get { return (string) this["expectedCustomTool"]; }
-      set { this["expectedCustomTool"] = value; }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
 
     /// <summary>
     ///   The expected custom tool namespace.
     /// </summary>
-    [ConfigurationProperty ("expectedCustomToolNamespace")]
+    [ConfigurationValue]
     [Description ("The expected custom tool namespace.")]
     public string ExpectedCustomToolNamespace
     {
-      get { return (string) this["expectedCustomToolNamespace"]; }
-      set { this["expectedCustomToolNamespace"] = value; }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
   }
 }

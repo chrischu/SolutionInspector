@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
@@ -21,12 +22,14 @@ namespace SolutionInspector.DefaultRules.Tests
       _advancedProject = A.Fake<IAdvancedProject>();
       A.CallTo(() => _project.Advanced).Returns(_advancedProject);
 
-      _sut = new ProjectPropertyRule(
-        new ProjectPropertyRuleConfiguration
+      var configuration = ConfigurationElement.Create<ProjectPropertyRuleConfiguration>(
+        initialize: c =>
         {
-          Property = "Property",
-          ExpectedValue = "ExpectedValue"
+          c.Property = "Property";
+          c.ExpectedValue = "ExpectedValue";
         });
+
+      _sut = new ProjectPropertyRule(configuration);
     }
 
     [Test]

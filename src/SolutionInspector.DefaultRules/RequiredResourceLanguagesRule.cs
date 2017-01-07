@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -40,8 +40,7 @@ namespace SolutionInspector.DefaultRules
                   this,
                   target,
                   $"For the required resource '{resourceName}' no resource file for language '{languageName}' " +
-                  $"('{resourceLanguageFileName}') could be found.")
-                ;
+                  $"('{resourceLanguageFileName}') could be found.");
         }
       }
     }
@@ -55,25 +54,15 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Comma-separated list of required resources (e.g. "Resources,OtherResources").
     /// </summary>
-    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
-    [ConfigurationProperty ("requiredResources", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("List of required resources (e.g. 'Resources').")]
-    public CommaDelimitedStringCollection RequiredResources
-    {
-      get { return (CommaDelimitedStringCollection) this["requiredResources"]; }
-      set { this["requiredResources"] = value; }
-    }
+    public CommaSeparatedStringCollection RequiredResources => GetConfigurationValue<CommaSeparatedStringCollection>();
 
     /// <summary>
     ///   Comma-separated list of required languages (e.g. "de,pl,hr").
     /// </summary>
-    [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
-    [ConfigurationProperty ("requiredLanguages", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("List of required languages (e.g. 'de', 'pl').")]
-    public CommaDelimitedStringCollection RequiredLanguages
-    {
-      get { return (CommaDelimitedStringCollection) this["requiredLanguages"]; }
-      set { this["requiredLanguages"] = value; }
-    }
+    public CommaSeparatedStringCollection RequiredLanguages => GetConfigurationValue<CommaSeparatedStringCollection>();
   }
 }

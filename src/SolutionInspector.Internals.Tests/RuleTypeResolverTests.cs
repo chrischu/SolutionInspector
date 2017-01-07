@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration;
 using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Internals.Tests

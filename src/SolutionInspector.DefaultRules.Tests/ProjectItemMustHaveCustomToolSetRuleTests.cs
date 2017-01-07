@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
@@ -17,12 +18,14 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       _projectItem = A.Fake<IProjectItem>();
 
-      _sut = new ProjectItemMustHaveCustomToolSetRule(
-        new ProjectItemMustHaveCustomToolSetRuleConfiguration
+      var configuration = ConfigurationElement.Create<ProjectItemMustHaveCustomToolSetRuleConfiguration>(
+        initialize: c =>
         {
-          ExpectedCustomTool = "CustomTool",
-          ExpectedCustomToolNamespace = "CustomToolNamespace"
+          c.ExpectedCustomTool = "CustomTool";
+          c.ExpectedCustomToolNamespace = "CustomToolNamespace";
         });
+
+      _sut = new ProjectItemMustHaveCustomToolSetRule(configuration);
     }
 
     [Test]

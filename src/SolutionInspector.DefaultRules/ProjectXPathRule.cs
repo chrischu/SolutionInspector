@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -10,6 +9,7 @@ using System.Xml.XPath;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -108,23 +108,23 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   XPath expression that should evaluate to true.
     /// </summary>
-    [ConfigurationProperty ("xPath", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("XPath expression that should evaluate to true.")]
     public string XPath
     {
-      get { return (string) this["xPath"]; }
-      set { this["xPath"] = value; }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
 
     /// <summary>
     ///   Controls if XML namespaces should be ignored during XPath evaluation.
     /// </summary>
-    [ConfigurationProperty ("ignoreNamespaces", DefaultValue = true, IsRequired = false)]
+    [ConfigurationValue(DefaultValue = "true")]
     [Description ("Controls whether XML namespaces should be ignored or not during XPath evaluation.")]
     public bool IgnoreNamespaces
     {
-      get { return (bool) this["ignoreNamespaces"]; }
-      set { this["ignoreNamespaces"] = value; }
+      get { return GetConfigurationValue<bool>(); }
+      set { SetConfigurationValue(value); }
     }
   }
 }

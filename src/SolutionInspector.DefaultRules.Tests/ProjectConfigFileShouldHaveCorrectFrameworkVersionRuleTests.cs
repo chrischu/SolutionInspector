@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
@@ -22,12 +23,14 @@ namespace SolutionInspector.DefaultRules.Tests
       _configurationProjectItem = A.Fake<IConfigurationProjectItem>();
       A.CallTo(() => _project.ConfigurationProjectItem).Returns(_configurationProjectItem);
 
-      _sut = new ProjectConfigFileShouldHaveCorrectFrameworkVersionRule(
-        new ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration
+      var configuration = ConfigurationElement.Create<ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration>(
+        initialize: c =>
         {
-          ExpectedVersion = "Version",
-          ExpectedSKU = "SKU"
+          c.ExpectedVersion = "Version";
+          c.ExpectedSKU = "SKU";
         });
+
+      _sut = new ProjectConfigFileShouldHaveCorrectFrameworkVersionRule(configuration);
     }
 
     [Test]

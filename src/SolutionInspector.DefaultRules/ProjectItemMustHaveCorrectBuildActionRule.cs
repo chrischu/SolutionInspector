@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -37,12 +37,12 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   The expected build action.
     /// </summary>
-    [ConfigurationProperty ("expectedBuildAction", DefaultValue = "", IsRequired = true)]
+    [ConfigurationValue]
     [Description ("The expected build action.")]
     public string ExpectedBuildAction
     {
-      get { return (string) this["expectedBuildAction"]; }
-      set { this["expectedBuildAction"] = value; }
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
     }
   }
 }

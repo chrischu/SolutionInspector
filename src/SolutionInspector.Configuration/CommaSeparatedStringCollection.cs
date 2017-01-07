@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,7 +8,7 @@ namespace SolutionInspector.Configuration
   /// <summary>
   ///   A collection that can be used in configurations and that is serialized as a comma-separated string.
   /// </summary>
-  public class CommaSeparatedStringCollection : ConfigurationValue<CommaSeparatedStringCollection>
+  public class CommaSeparatedStringCollection : ConfigurationValue<CommaSeparatedStringCollection>, IEnumerable<string>
   {
     private List<string> _collection = new List<string>();
 
@@ -111,6 +112,11 @@ namespace SolutionInspector.Configuration
       if (removed)
         Update();
       return removed;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator ()
+    {
+      return GetEnumerator();
     }
   }
 }
