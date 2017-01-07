@@ -5,6 +5,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.Build.Exceptions;
 using NLog;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Reporting;

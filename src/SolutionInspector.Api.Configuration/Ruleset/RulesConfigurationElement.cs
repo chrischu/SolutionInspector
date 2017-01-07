@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
@@ -19,12 +20,17 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     public ConfigurationElementCollection<ProjectRuleGroupConfigurationElement> ProjectRuleGroups
         => GetConfigurationCollection<ProjectRuleGroupConfigurationElement>();
 
-    [ConfigurationCollection(CollectionName = "projectItemRules", ElementName = "projectItemRuleGroup", IsOptional = true)]
+    [ConfigurationCollection (CollectionName = "projectItemRules", ElementName = "projectItemRuleGroup", IsOptional = true)]
     public ConfigurationElementCollection<ProjectItemRuleGroupConfigurationElement> ProjectItemRuleGroups
         => GetConfigurationCollection<ProjectItemRuleGroupConfigurationElement>();
 
+    [ExcludeFromCodeCoverage]
     IReadOnlyCollection<IRuleConfiguration> IRulesConfiguration.SolutionRules => SolutionRules;
+
+    [ExcludeFromCodeCoverage]
     IReadOnlyCollection<IProjectRuleGroupConfiguration> IRulesConfiguration.ProjectRuleGroups => ProjectRuleGroups;
+
+    [ExcludeFromCodeCoverage]
     IReadOnlyCollection<IProjectItemRuleGroupConfiguration> IRulesConfiguration.ProjectItemRuleGroups => ProjectItemRuleGroups;
   }
 }

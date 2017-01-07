@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Xml;
 
@@ -58,17 +56,6 @@ namespace SolutionInspector.Commons.Extensions
 
       foreach (var attribute in toRemove)
         xmlNode.Attributes.Remove(attribute);
-    }
-
-    /// <summary>
-    ///   Creates an instance of <see cref="XmlReader" /> from the given <paramref name="xmlNode" />.
-    /// </summary>
-    [SuppressMessage ("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-    public static XmlReader Read (this XmlNode xmlNode)
-    {
-      var reader = new XmlTextReader(new StringReader(xmlNode.OuterXml));
-      reader.Read();
-      return reader;
     }
   }
 }

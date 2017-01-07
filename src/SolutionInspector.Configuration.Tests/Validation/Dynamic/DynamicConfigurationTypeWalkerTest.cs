@@ -99,12 +99,12 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
       AssertEndTypeVisit("Collection[0]", typeof(ConfigurationCollectionElement), collectionItemElement);
     }
 
-    private void AssertBeginTypeVisit(string propertyPath, Type type, XElement element)
+    private void AssertBeginTypeVisit (string propertyPath, Type type, XElement element)
     {
       A.CallTo(() => _dynamicConfigurationVisitor.BeginTypeVisit(propertyPath, type, element)).MustHaveHappened(Repeated.Exactly.Once);
     }
 
-    private void AssertEndTypeVisit(string propertyPath, Type type, XElement element)
+    private void AssertEndTypeVisit (string propertyPath, Type type, XElement element)
     {
       A.CallTo(() => _dynamicConfigurationVisitor.EndTypeVisit(propertyPath, type, element)).MustHaveHappened(Repeated.Exactly.Once);
     }
@@ -163,6 +163,36 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
           .MustHaveHappened(Repeated.Exactly.Once);
     }
 
+    [Test]
+    public void Walk_WithInvalidNames_SkipsInvalidNames ()
+    {
+      var element = XElement.Parse("<element><collectionWithInvalidElementName /></element>");
+
+      // ACT
+      _sut.Walk(typeof(ConfigurationElementWithInvalidNames), element, _dynamicConfigurationVisitor);
+
+      // ASSERT
+      AssertBeginTypeVisit("", typeof(ConfigurationElementWithInvalidNames), element);
+      AssertEndTypeVisit("", typeof(ConfigurationElementWithInvalidNames), element);
+
+      A.CallTo(() => _dynamicConfigurationVisitor.VisitValue(A<string>._, A<PropertyInfo>._, A<ConfigurationValueAttribute>._, A<XAttribute>._))
+          .MustNotHaveHappened();
+
+      A.CallTo(
+            () => _dynamicConfigurationVisitor.VisitSubelement(A<string>._, A<PropertyInfo>._, A<ConfigurationSubelementAttribute>._, A<XElement>._))
+          .MustNotHaveHappened();
+
+      A.CallTo(
+            () =>
+              _dynamicConfigurationVisitor.VisitCollection(
+                A<string>._,
+                A<PropertyInfo>._,
+                A<ConfigurationCollectionAttribute>._,
+                A<XElement>._,
+                A<IReadOnlyCollection<XElement>>._))
+          .MustNotHaveHappened();
+    }
+
     // ReSharper disable UnusedMember.Local
     private class ConfigurationTopElement : ConfigurationElement
     {
@@ -202,6 +232,21 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
 
     private class EmptyElement : ConfigurationElement
     {
+    }
+
+    private class ConfigurationElementWithInvalidNames : ConfigurationElement
+    {
+      [ConfigurationValue (AttributeName = "@")]
+      public string Value { get; set; }
+
+      [ConfigurationSubelement (ElementName = "@")]
+      public ConfigurationSubElement Subelement { get; set; }
+
+      [ConfigurationCollection (CollectionName = "@")]
+      public ConfigurationElementCollection<ConfigurationCollectionElement> Collection { get; set; }
+
+      [ConfigurationCollection(ElementName = "@")]
+      public ConfigurationElementCollection<ConfigurationCollectionElement> CollectionWithInvalidElementName { get; set; }
     }
 
     // ReSharper restore UnusedMember.Local

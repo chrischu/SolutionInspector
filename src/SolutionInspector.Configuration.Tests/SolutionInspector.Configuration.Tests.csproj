@@ -96,6 +96,11 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="CommaSeparatedStringCollectionTests.cs" />
+    <Compile Include="ConfigurationElementeCollectionTests.cs" />
+    <Compile Include="ConfigurationManagerTests.cs" />
+    <Compile Include="Validation\ConfigurationValidatorTests.cs" />
+    <Compile Include="ConfigurationValueTests.cs" />
     <Compile Include="ConfigurationConverterAttributeTests.cs" />
     <Compile Include="ConfigurationDocumentTests.cs" />
     <Compile Include="ConfigurationBaseTests.cs" />
@@ -113,6 +118,7 @@
     <Compile Include="Validation\Static\Validators\ConfigurationSubelementTypeValidatorTests.cs" />
     <Compile Include="Validation\Static\Validators\ConfigurationConverterValidatorTests.cs" />
     <Compile Include="Validation\Static\Validators\ConfigurationCollectionTypeValidatorTests.cs" />
+    <Compile Include="Validation\ValidatingConfigurationVisitorTests.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

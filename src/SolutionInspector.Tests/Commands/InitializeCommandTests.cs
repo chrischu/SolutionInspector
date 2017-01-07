@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using FakeItEasy;
 using FluentAssertions;
-using ManyConsole;
 using NUnit.Framework;
 using SolutionInspector.Commands;
 using Wrapperator.Interfaces;
@@ -10,7 +9,7 @@ using Wrapperator.Interfaces.Reflection;
 
 namespace SolutionInspector.Tests.Commands
 {
-  public class InitializeCommandTests
+  public class InitializeCommandTests : CommandTestsBase
   {
     private IAssembly _resourceAssembly;
     private IFileStatic _file;
@@ -19,18 +18,14 @@ namespace SolutionInspector.Tests.Commands
     private IStream _sourceStream;
     private IFileStream _destinationStream;
 
-    private TextWriter _textWriter;
-
     private InitializeCommand _sut;
 
     [SetUp]
-    public void SetUp ()
+    public new void SetUp ()
     {
       _resourceAssembly = A.Fake<IAssembly>();
       _file = A.Fake<IFileStatic>();
       _console = A.Fake<IConsoleStatic>();
-
-      _textWriter = new StringWriter();
 
       _sourceStream = A.Fake<IStream>();
       A.CallTo(() => _resourceAssembly.GetManifestResourceStream(A<string>._)).Returns(_sourceStream);
@@ -98,11 +93,6 @@ namespace SolutionInspector.Tests.Commands
       result.Should().Be(0);
 
       AssertConfigFileWrite();
-    }
-
-    private int RunCommand (ConsoleCommand command, params string[] arguments)
-    {
-      return ConsoleCommandDispatcher.DispatchCommand(command, arguments, _textWriter);
     }
 
     private void AssertConfigFileWrite ()

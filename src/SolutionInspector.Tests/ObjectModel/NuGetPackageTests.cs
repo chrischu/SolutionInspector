@@ -27,9 +27,14 @@ namespace SolutionInspector.Tests.ObjectModel
     public void CreateFromXmlElement_WithPreReleaseTagAndDevelopmentDependency ()
     {
       var developmentDependency = Some.Boolean;
+      var developmentDependencyString = developmentDependency ? "true" : "false";
       var packageElement =
           CreateXmlElement(
-            $@"<package id=""Id"" version=""1.2.3.4-pre"" targetFramework=""TargetFramework"" developmentDependency=""{developmentDependency}"" />");
+            $@"<package 
+id=""Id"" 
+version=""1.2.3.4-pre"" 
+targetFramework=""TargetFramework"" 
+developmentDependency=""{developmentDependencyString}"" />");
 
       // ACT
       var result = NuGetPackage.FromXmlElement(packageElement);
@@ -40,7 +45,7 @@ namespace SolutionInspector.Tests.ObjectModel
 
     [Test]
     [TestCaseSource (nameof(EqualsTestData))]
-    internal bool Equals (NuGetPackage a, [CanBeNull] NuGetPackage b)
+    public bool Equals (NuGetPackage a, [CanBeNull] NuGetPackage b)
     {
       // ACT & ASSERT
       return a.Equals(b);
@@ -57,6 +62,22 @@ namespace SolutionInspector.Tests.ObjectModel
       yield return new TestCaseData(a, differentFromA) { ExpectedResult = false };
 
       yield return new TestCaseData(a, null) { ExpectedResult = false };
+    }
+
+    [Test]
+    [TestCaseSource(nameof(EqualsWithObjectsTestData))]
+    public bool Equals_WithObjects (object a, [CanBeNull] object b)
+    {
+      // ACT & ASSERT
+      return a.Equals(b);
+    }
+
+    private static IEnumerable EqualsWithObjectsTestData()
+    {
+      var a = new NuGetPackage(Some.String(), Some.Version, Some.Boolean, Some.String(), Some.String(), Some.Boolean);
+
+      yield return new TestCaseData(a, default(object)) { ExpectedResult = false };
+      yield return new TestCaseData(a, a) { ExpectedResult = true };
     }
 
     [Test]

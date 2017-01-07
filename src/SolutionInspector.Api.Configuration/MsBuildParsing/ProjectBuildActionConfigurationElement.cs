@@ -1,14 +1,10 @@
-using SolutionInspector.Configuration;
-
 namespace SolutionInspector.Api.Configuration.MsBuildParsing
 {
-  internal class ProjectBuildActionConfigurationElement : ConfigurationElement
+  internal class ProjectBuildActionConfigurationElement : KeyedConfigurationElement<string>
   {
-    [ConfigurationValue]
-    public string Name
-    {
-      get { return GetConfigurationProperty<string>(); }
-      set { SetConfigurationProperty(value); }
-    }
+    [System.Configuration.ConfigurationProperty ("name")]
+    public string Name => Key;
+
+    public override string KeyName => "name";
   }
 }

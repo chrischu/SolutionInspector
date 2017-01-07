@@ -6,6 +6,7 @@ using Autofac;
 using JetBrains.Annotations;
 using ManyConsole;
 using NLog;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Commands;
 using SolutionInspector.Configuration;

@@ -30,11 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Fasterflect, Version=2.1.3.0, Culture=neutral, PublicKeyToken=38d18473284c1ca7, processorArchitecture=MSIL">
+      <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="JetBrains.Annotations, Version=10.1.5.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\packages\JetBrains.Annotations.10.1.5\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,20 +51,26 @@
   <ItemGroup>
     <Compile Include="BuildConfigurationFilter.cs" />
     <Compile Include="BuildConfigurationFilterConverter.cs" />
+    <Compile Include="ConfigurationElementCollectionBase.cs" />
+    <Compile Include="IConfigurationCollection.cs" />
+    <Compile Include="KeyedConfigurationElement.cs" />
+    <Compile Include="KeyedConfigurationElementCollectionBase.cs" />
     <Compile Include="MsBuildParsing\MsBuildParsingConfigurationSection.cs" />
     <Compile Include="MsBuildParsing\ProjectBuildActionConfigurationElement.cs" />
+    <Compile Include="MsBuildParsing\ProjectBuildActionsConfigurationElement.cs" />
     <Compile Include="NameFilter.cs" />
     <Compile Include="NameFilterConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\InternalsVisibleTo.cs" />
     <Compile Include="RuleAssemblyImports\RuleAssemblyImportConfigurationElement.cs" />
-    <Compile Include="RuleAssemblyImports\RuleAssemblyImportsConfigurationSection.cs" />
+    <Compile Include="RuleAssemblyImports\RuleAssemblyImportsConfigurationElement.cs" />
     <Compile Include="Ruleset\ProjectItemRuleGroupConfigurationElement.cs" />
     <Compile Include="Ruleset\ProjectRuleGroupConfigurationElement.cs" />
     <Compile Include="Ruleset\RuleAssemblyImportConfigurationElement.cs" />
     <Compile Include="Ruleset\RuleConfigurationElement.cs" />
     <Compile Include="Ruleset\RulesConfigurationElement.cs" />
     <Compile Include="Ruleset\SolutionInspectorRulesetConfigurationDocument.cs" />
+    <Compile Include="SolutionInspectorConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">

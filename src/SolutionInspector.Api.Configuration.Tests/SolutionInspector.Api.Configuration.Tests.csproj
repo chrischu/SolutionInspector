@@ -59,6 +59,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -68,6 +69,8 @@
     </Compile>
     <Compile Include="BuildConfigurationFilterConverterTests.cs" />
     <Compile Include="BuildConfigurationFilterTests.cs" />
+    <Compile Include="ConfigurationElementCollectionBaseTests.cs" />
+    <Compile Include="KeyedConfigurationElementCollectionBaseTests.cs" />
     <Compile Include="MsBuildParsing\MsBuildParsingConfigurationSectionTests.cs" />
     <Compile Include="NameFilterConverterTests.cs" />
     <Compile Include="NameFilterTests.cs" />
@@ -88,6 +91,10 @@
     <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
       <Project>{84eb4f29-70f0-462b-ba37-da6f9261c8c8}</Project>
       <Name>SolutionInspector.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj">
+      <Project>{D154C744-EAB0-479A-BA22-B822AAFD3774}</Project>
+      <Name>SolutionInspector.TestInfrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

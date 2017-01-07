@@ -19,7 +19,7 @@ namespace SolutionInspector.DefaultRules
   {
     /// <inheritdoc />
     public RequiredCompilationSymbolsProjectRule ([NotNull] RequiredCompilationSymbolsProjectRuleConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
     }
 
@@ -41,9 +41,9 @@ namespace SolutionInspector.DefaultRules
             if (!actualSymbols.Contains(requiredSymbol))
               yield return
                   new RuleViolation(
-                      this,
-                      target,
-                      $"In the build configuration '{matchingBuildConfig}' the required compilation symbol '{requiredSymbol}' was not found.");
+                    this,
+                    target,
+                    $"In the build configuration '{matchingBuildConfig}' the required compilation symbol '{requiredSymbol}' was not found.");
         }
       }
     }
@@ -55,11 +55,12 @@ namespace SolutionInspector.DefaultRules
   [UsedImplicitly /* by configuration */]
   public class RequiredCompilationSymbolsProjectRuleConfiguration : ConfigurationElement
   {
+    /// <summary>
+    ///   All the required compilation symbols.
+    /// </summary>
     [ConfigurationCollection]
     public ConfigurationElementCollection<RequiredCompilationSymbolsConfigurationElement> RequiredCompilationSymbols
-    {
-      get { return GetConfigurationCollection<RequiredCompilationSymbolsConfigurationElement>(); }
-    }
+        => GetConfigurationCollection<RequiredCompilationSymbolsConfigurationElement>();
   }
 
   /// <summary>
@@ -71,7 +72,6 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Filter that controlls which build configuration this <see cref="RequiredCompilationSymbolsConfigurationElement" /> applies to.
     /// </summary>
-    [System.Configuration.ConfigurationProperty ("buildConfigurationFilter", DefaultValue = "*|*", IsRequired = true)]
     [Description ("Filter that controlls which build configuration this rule applies to.")]
     [ConfigurationValue]
     public BuildConfigurationFilter BuildConfigurationFilter
@@ -83,14 +83,11 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   All the compilation symbols that are required and are therefore checked.
     /// </summary>
-    [System.Configuration.ConfigurationProperty ("requiredCompilationSymbols", DefaultValue = "", IsRequired = true)]
     [Description ("All the compilation symbols that are required and are therefore checked.")]
     [ConfigurationValue]
     public CommaSeparatedStringCollection RequiredCompilationSymbols
     {
       get { return GetConfigurationProperty<CommaSeparatedStringCollection>(); }
-      [UsedImplicitly]
-      set { SetConfigurationProperty(value); }
     }
   }
 }

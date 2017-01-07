@@ -104,7 +104,9 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="Commands\ConfigureCommandTests.cs" />
     <Compile Include="Commands\InitializeCommandTests.cs" />
+    <Compile Include="Commands\CommandTestsBase.cs" />
     <Compile Include="Commands\InspectCommandTests.cs" />
     <Compile Include="Configuration\ConfigurationLoaderTests.cs" />
     <Compile Include="ObjectModel\NuGetPackageTests.cs" />

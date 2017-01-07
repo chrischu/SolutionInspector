@@ -1,9 +1,9 @@
 ﻿using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
-using SolutionInspector.Configuration.MsBuildParsing;
+using SolutionInspector.Api.Configuration.MsBuildParsing;
 
-namespace SolutionInspector.Configuration
+namespace SolutionInspector.Api.Configuration
 {
   /// <summary>
   ///   Configuration for the SolutionInspector.

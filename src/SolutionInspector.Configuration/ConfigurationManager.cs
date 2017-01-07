@@ -1,29 +1,28 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using Wrapperator.Interfaces.Xml.Linq;
 
 namespace SolutionInspector.Configuration
 {
   public interface IConfigurationManager
   {
     T LoadSection<T>(string configurationFilePath)
-      where T : ConfigurationDocument;
-
-    T LoadSection<T>(XDocument xDocument)
-      where T : ConfigurationDocument;
+      where T : ConfigurationDocument, new();
   }
 
   public class ConfigurationManager : IConfigurationManager
   {
-    public T LoadSection<T>(string configurationFilePath)
-      where T : ConfigurationDocument
+    private readonly IXDocumentStatic _xDocumentStatic;
+
+    public ConfigurationManager (IXDocumentStatic xDocumentStatic)
     {
-      return LoadSection<T>(XDocument.Load(configurationFilePath));
+      _xDocumentStatic = xDocumentStatic;
     }
 
-    public T LoadSection<T>(XDocument xDocument)
-      where T : ConfigurationDocument
+    public T LoadSection<T>(string configurationFilePath)
+      where T : ConfigurationDocument, new()
     {
-      return (T)Activator.CreateInstance(typeof(T), xDocument);
+      var xDocument = _xDocumentStatic.Load(configurationFilePath);
+
+      return ConfigurationDocument.Load<T>(configurationFilePath, xDocument.Document);
     }
   }
 }

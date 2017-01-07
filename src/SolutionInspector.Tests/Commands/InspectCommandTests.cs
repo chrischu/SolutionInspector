@@ -6,6 +6,8 @@ using FluentAssertions;
 using ManyConsole;
 using Microsoft.Build.Exceptions;
 using NUnit.Framework;
+using SolutionInspector.Api.Configuration;
+using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Reporting;
@@ -13,7 +15,6 @@ using SolutionInspector.Api.Rules;
 using SolutionInspector.Api.Utilities;
 using SolutionInspector.Commands;
 using SolutionInspector.Configuration;
-using SolutionInspector.Configuration.MsBuildParsing;
 using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
@@ -22,7 +23,7 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.Tests.Commands
 {
-  public class InspectCommandTests
+  public class InspectCommandTests : CommandTestsBase
   {
     private ISolution _solution;
     private IProject _project;
@@ -45,12 +46,10 @@ namespace SolutionInspector.Tests.Commands
     private IProjectRule _projectRule;
     private IProjectItemRule _projectItemRule;
 
-    private TextWriter _textWriter;
-
     private InspectCommand _sut;
 
     [SetUp]
-    public void SetUp ()
+    public new void SetUp ()
     {
       _solution = A.Fake<ISolution>();
 
@@ -87,8 +86,6 @@ namespace SolutionInspector.Tests.Commands
       _violationReporter = A.Fake<IViolationReporter>();
       A.CallTo(() => _violationReporterFactory.CreateConsoleReporter(A<ViolationReportFormat>._)).Returns(_violationReporter);
       A.CallTo(() => _violationReporterFactory.CreateFileReporter(A<ViolationReportFormat>._, A<string>._)).Returns(_violationReporter);
-
-      _textWriter = new StringWriter();
 
       _sut = new InspectCommand(
                _configurationLoader,
@@ -140,7 +137,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      _textWriter.ToString().Should().Contain("NOTFOUND");
+      TextWriter.ToString().Should().Contain("NOTFOUND");
     }
 
     [Test]
@@ -155,7 +152,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      _textWriter.ToString().Should().Contain($"Unexpected error when loading configuration file: {thrownException.Message}.");
+      TextWriter.ToString().Should().Contain($"Unexpected error when loading configuration file: {thrownException.Message}.");
     }
 
     [Test]
@@ -222,7 +219,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      _textWriter.ToString().Should().Contain("Could not convert string `DOES_NOT_EXIST' to type ViolationReportFormat");
+      TextWriter.ToString().Should().Contain("Could not convert string `DOES_NOT_EXIST' to type ViolationReportFormat");
     }
 
     [Test]
@@ -238,7 +235,7 @@ namespace SolutionInspector.Tests.Commands
       result.Should().Be(-1);
 
       A.CallTo(() => _configurationLoader.LoadRulesConfig($"DOES_NOT_EXIST.{SolutionInspector.RulesetFileExtension}")).MustHaveHappened();
-      _textWriter.ToString().Should().Contain("Given solution file 'DOES_NOT_EXIST' could not be found.");
+      TextWriter.ToString().Should().Contain("Given solution file 'DOES_NOT_EXIST' could not be found.");
 
       AssertDoesNotCreateViolationReporter();
     }
@@ -255,7 +252,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      _textWriter.ToString()
+      TextWriter.ToString()
           .Should()
           .Contain($"Given solution file 'solution' contains an invalid project file '{Environment.CurrentDirectory}\\projectFile'");
 
@@ -275,7 +272,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      _textWriter.ToString().Should().Contain($"Unexpected error when loading solution file 'solution': {thrownException.Message}");
+      TextWriter.ToString().Should().Contain($"Unexpected error when loading solution file 'solution': {thrownException.Message}");
 
       AssertDoesNotCreateViolationReporter();
       AssertConfigurationLoadWithDefaultParameters();
@@ -297,7 +294,7 @@ namespace SolutionInspector.Tests.Commands
 
     private int RunCommand (ConsoleCommand command, params string[] arguments)
     {
-      return ConsoleCommandDispatcher.DispatchCommand(command, arguments, _textWriter);
+      return ConsoleCommandDispatcher.DispatchCommand(command, arguments, TextWriter);
     }
 
     private void AssertConfigurationLoadWithDefaultParameters ()

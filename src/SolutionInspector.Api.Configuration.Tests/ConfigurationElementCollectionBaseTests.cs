@@ -2,10 +2,9 @@
 using System.Configuration;
 using FluentAssertions;
 using NUnit.Framework;
-using SolutionInspector.Api.Configuration;
 using SolutionInspector.TestInfrastructure.Configuration;
 
-namespace SolutionInspector.Api.Tests.Configuration
+namespace SolutionInspector.Api.Configuration.Tests
 {
   public class ConfigurationElementCollectionBaseTests
   {
@@ -36,6 +35,59 @@ namespace SolutionInspector.Api.Tests.Configuration
 
       // ASSERT
       act.ShouldThrow<ConfigurationErrorsException>().WithMessage("Unrecognized element 'UNRECOGNIZED'.");
+    }
+
+    [Test]
+    public void Contains_WithNonAddedKey_ReturnsFalse()
+    {
+      var collection = new DummyConfigurationElementCollection();
+      var element = new DummyConfigurationElement();
+
+      // ACT
+      var result = collection.Contains(element);
+
+      // ASSERT
+      result.Should().BeFalse();
+    }
+
+    [Test]
+    public void Contains_WithAddedKey_ReturnsTrue()
+    {
+      var collection = new DummyConfigurationElementCollection();
+      var element = new DummyConfigurationElement();
+      collection.Add(element);
+
+      // ACT
+      var result = collection.Contains(element);
+
+      // ASSERT
+      result.Should().BeTrue();
+    }
+
+    [Test]
+    public void Remove()
+    {
+      var collection = new DummyConfigurationElementCollection();
+      var element = new DummyConfigurationElement();
+      collection.Add(element);
+
+      // ACT
+      collection.Remove(element);
+
+      // ASSERT
+      collection.Contains(element).Should().BeFalse();
+    }
+
+    [Test]
+    public void Clear ()
+    {
+      var collection = new DummyConfigurationElementCollection { new DummyConfigurationElement() };
+
+      // ACT
+      collection.Clear();
+
+      // ASSERT
+      collection.Count.Should().Be(0);
     }
 
     private class DummyConfigurationElementCollection : ConfigurationElementCollectionBase<DummyConfigurationElement>

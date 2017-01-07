@@ -31,6 +31,22 @@ namespace SolutionInspector.Tests.ObjectModel
     }
 
     [Test]
+    [TestCaseSource(nameof(EqualsWithObjectsTestData))]
+    public bool Equals_WithObjects(object a, [CanBeNull] object b)
+    {
+      // ACT & ASSERT
+      return a.Equals(b);
+    }
+
+    private static IEnumerable EqualsWithObjectsTestData()
+    {
+      var a = new ProjectLocation(Some.PositiveInteger, Some.PositiveInteger);
+
+      yield return new TestCaseData(a, default(object)) { ExpectedResult = false };
+      yield return new TestCaseData(a, a) { ExpectedResult = true };
+    }
+
+    [Test]
     public void EqualityOperators ()
     {
       var a = new ProjectLocation(Some.PositiveInteger, Some.PositiveInteger);

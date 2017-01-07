@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Xml.Linq;
 using JetBrains.Annotations;
@@ -7,6 +8,7 @@ using SolutionInspector.Configuration.Validation.Static;
 
 namespace SolutionInspector.Configuration.Validation.Dynamic
 {
+  [ExcludeFromCodeCoverage]
   internal abstract class DynamicConfigurationValidatorBase : IDynamicConfigurationValidator
   {
     public virtual void BeginTypeValidation (Type configurationElementType, XElement element, ReportValidationError reportValidationError)

@@ -1,8 +1,7 @@
-﻿using System.Xml.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
-using SolutionInspector.Configuration;
+using SolutionInspector.TestInfrastructure.Configuration;
 
 namespace SolutionInspector.Api.Configuration.Tests.MsBuildParsing
 {
@@ -11,10 +10,9 @@ namespace SolutionInspector.Api.Configuration.Tests.MsBuildParsing
     [Test]
     public void Loading ()
     {
-      var element = XDocument.Parse(MsBuildParsingConfigurationSection.ExampleConfiguration).Root;
-
       // ACT
-      var result = ConfigurationElement.Load<MsBuildParsingConfigurationSection>(element);
+      var result = new MsBuildParsingConfigurationSection();
+      ConfigurationHelper.DeserializeSection(result, MsBuildParsingConfigurationSection.ExampleConfiguration);
 
       // ASSERT
       result.IsValidProjectItemType("None").Should().BeTrue();

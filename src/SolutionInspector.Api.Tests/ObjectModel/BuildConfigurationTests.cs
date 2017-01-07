@@ -50,5 +50,21 @@ namespace SolutionInspector.Api.Tests.ObjectModel
       yield return new TestCaseData(buildConfiguration, new BuildConfiguration("X", buildConfiguration.PlatformName)) { ExpectedResult = false };
       yield return new TestCaseData(buildConfiguration, null) { ExpectedResult = false };
     }
+
+    [Test]
+    [TestCaseSource(nameof(EqualsWithObjectsTestData))]
+    public bool Equals_WithObjects(object a, [CanBeNull] object b)
+    {
+      // ACT & ASSERT
+      return a.Equals(b);
+    }
+
+    private static IEnumerable EqualsWithObjectsTestData()
+    {
+      var buildConfiguration = new BuildConfiguration("A", "B");
+
+      yield return new TestCaseData(buildConfiguration, default(object)) { ExpectedResult = false };
+      yield return new TestCaseData(buildConfiguration, buildConfiguration) { ExpectedResult = true };
+    }
   }
 }

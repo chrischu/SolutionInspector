@@ -10,10 +10,6 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   public class RuleAssemblyImportConfigurationElement : ConfigurationElement, IRuleAssemblyImportConfiguration
   {
     [ConfigurationValue]
-    public string Path
-    {
-      get { return GetConfigurationProperty<string>(); }
-      set { SetConfigurationProperty(value); }
-    }
+    public string Path => GetConfigurationProperty<string>();
   }
 }

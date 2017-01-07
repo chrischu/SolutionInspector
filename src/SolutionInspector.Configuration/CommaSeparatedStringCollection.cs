@@ -16,7 +16,7 @@ namespace SolutionInspector.Configuration
     public CommaSeparatedStringCollection (Action<string> updateAction, IEnumerable<string> elements)
       : base(updateAction)
     {
-      _collection.AddRange(elements);
+      AddRange(elements);
     }
 
     public override string Serialize ()
@@ -28,6 +28,7 @@ namespace SolutionInspector.Configuration
     {
       var collection = string.IsNullOrEmpty(serialized) ? Enumerable.Empty<string>() : serialized.Split(',');
       _collection = new List<string>(collection);
+      Update();
     }
 
     public IEnumerator<string> GetEnumerator ()
@@ -37,14 +38,12 @@ namespace SolutionInspector.Configuration
 
     public void Add (string item)
     {
-      _collection.Add(item);
-      Update();
+      AddRange(new[] { item });
     }
 
     public void Add(params string[] items)
     {
-      _collection.AddRange(items);
-      Update();
+      AddRange(items);
     }
 
     public void AddRange(IEnumerable<string> items)

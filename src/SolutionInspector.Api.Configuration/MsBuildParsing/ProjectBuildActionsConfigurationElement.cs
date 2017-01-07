@@ -1,7 +1,6 @@
 using JetBrains.Annotations;
-using SolutionInspector.Api.Configuration;
 
-namespace SolutionInspector.Configuration.MsBuildParsing
+namespace SolutionInspector.Api.Configuration.MsBuildParsing
 {
   [UsedImplicitly]
   internal class ProjectBuildActionsConfigurationElement : KeyedConfigurationElementCollectionBase<ProjectBuildActionConfigurationElement, string>

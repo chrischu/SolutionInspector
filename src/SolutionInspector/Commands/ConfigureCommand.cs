@@ -7,11 +7,13 @@ namespace SolutionInspector.Commands
   internal class ConfigureCommand : SolutionInspectorCommand<ConfigureCommand.RawArguments, ConfigureCommand.ParsedArguments>
   {
     private readonly IProcessStatic _process;
+    private readonly string _configurationUiPath;
 
-    public ConfigureCommand (IProcessStatic process)
+    public ConfigureCommand (string configurationUiPath, IProcessStatic process)
         : base("configure", "Starts SolutionInspector configuration UI for more convenient configuration.")
     {
       _process = process;
+      _configurationUiPath = configurationUiPath;
     }
 
     protected override void SetupArguments (IArgumentsBuilder<RawArguments> argumentsBuilder)
@@ -25,8 +27,7 @@ namespace SolutionInspector.Commands
 
     protected override int Run (ParsedArguments arguments)
     {
-      // TODO: 
-      var process = _process.Start(@"..\..\..\SolutionInspector.ConfigurationUi\bin\Debug\SolutionInspector.ConfigurationUi.exe").AssertNotNull();
+      var process = _process.Start(_configurationUiPath).AssertNotNull();
       process.WaitForExit();
       return process.ExitCode;
     }

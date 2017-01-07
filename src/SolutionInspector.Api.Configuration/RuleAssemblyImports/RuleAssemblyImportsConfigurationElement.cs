@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Configuration;
@@ -17,7 +18,7 @@ namespace SolutionInspector.Api.Configuration.RuleAssemblyImports
     IReadOnlyCollection<string> Imports { get; }
   }
 
-  internal class RuleAssemblyImportsConfigurationSection : ConfigurationElement, IRuleAssemblyImportsConfiguration
+  internal class RuleAssemblyImportsConfigurationElement : ConfigurationElement, IRuleAssemblyImportsConfiguration
   {
     public const string ExampleConfiguration = @"<ruleAssemblyImports>
   <import path=""C:\Path\To\Assembly.dll"" />
@@ -28,6 +29,7 @@ namespace SolutionInspector.Api.Configuration.RuleAssemblyImports
     public ConfigurationElementCollection<RuleAssemblyImportConfigurationElement> Imports
         => GetConfigurationCollection<RuleAssemblyImportConfigurationElement>();
 
+    [ExcludeFromCodeCoverage]
     IReadOnlyCollection<string> IRuleAssemblyImportsConfiguration.Imports => Imports.Select(i => i.Path).ToArray();
   }
 }

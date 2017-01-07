@@ -117,7 +117,7 @@ namespace SolutionInspector.Configuration.Validation
     public void BeginTypeVisit (string propertyPath, Type configurationElementType, XElement element)
     {
       foreach (var configurationValidator in _dynamicValidators)
-        configurationValidator.BeginTypeValidation(configurationElementType, element, (prop, msg) => ReportDynamicValidationError(propertyPath, msg));
+        configurationValidator.BeginTypeValidation(configurationElementType, element, (prop, msg) => ReportDynamicValidationError(BuildPropertyPath(propertyPath, prop), msg));
     }
 
     public void VisitValue (string propertyPath, PropertyInfo property, ConfigurationValueAttribute attribute, [CanBeNull] XAttribute xAttribute)

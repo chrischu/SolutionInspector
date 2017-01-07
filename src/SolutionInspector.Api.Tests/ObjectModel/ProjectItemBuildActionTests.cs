@@ -29,6 +29,22 @@ namespace SolutionInspector.Api.Tests.ObjectModel
     }
 
     [Test]
+    [TestCaseSource(nameof(EqualsWithObjectsTestData))]
+    public bool Equals_WithObjects(object a, [CanBeNull] object b)
+    {
+      // ACT & ASSERT
+      return a.Equals(b);
+    }
+
+    private static IEnumerable EqualsWithObjectsTestData()
+    {
+      var buildAction = ProjectItemBuildAction.Custom("A");
+
+      yield return new TestCaseData(buildAction, default(object)) { ExpectedResult = false };
+      yield return new TestCaseData(buildAction, buildAction) { ExpectedResult = true };
+    }
+
+    [Test]
     public void EqualityOperators()
     {
       var a = ProjectItemBuildAction.Custom("A");

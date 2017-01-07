@@ -155,15 +155,7 @@
     <Compile Include="Validation\Static\StaticConfigurationTypeWalker.cs" />
     <Compile Include="Validation\ConfigurationValidator.cs" />
     <Compile Include="ConfigurationValue.cs" />
-    <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
-    <Compile Include="Configuration\IConfigurationCollection.cs" />
-    <Compile Include="Configuration\KeyedConfigurationElement.cs" />
-    <Compile Include="Configuration\KeyedConfigurationElementCollectionBase.cs" />
-    <Compile Include="MsBuildParsing\MsBuildParsingConfigurationSection.cs" />
-    <Compile Include="MsBuildParsing\ProjectBuildActionConfigurationElement.cs" />
-    <Compile Include="MsBuildParsing\ProjectBuildActionsConfigurationElement.cs" />
     <Compile Include="ConfigurationManager.cs" />
-    <Compile Include="SolutionInspectorConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\Static\StaticConfigurationValidatorBase.cs" />
     <Compile Include="Validation\Static\Validators\ConfigurationCollectionTypeValidator.cs" />

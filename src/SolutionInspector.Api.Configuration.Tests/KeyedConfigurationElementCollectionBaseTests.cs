@@ -2,10 +2,9 @@
 using System.Configuration;
 using FluentAssertions;
 using NUnit.Framework;
-using SolutionInspector.Api.Configuration;
 using SolutionInspector.TestInfrastructure.Configuration;
 
-namespace SolutionInspector.Api.Tests.Configuration
+namespace SolutionInspector.Api.Configuration.Tests
 {
   public class KeyedConfigurationElementCollectionBaseTests
   {
@@ -22,7 +21,48 @@ namespace SolutionInspector.Api.Tests.Configuration
         "The value for the property 'key' is not valid. " +
         "The error is: The key 'a' was already added to the collection once.");
     }
-    
+
+    [Test]
+    public void Contains_WithNonAddedKey_ReturnsFalse ()
+    {
+      var collection = new DummyConfigurationElementCollection();
+      var element = new DummyConfigurationElement();
+
+      // ACT
+      var result = collection.Contains(element.Key);
+      
+      // ASSERT
+      result.Should().BeFalse();
+    }
+
+    [Test]
+    public void Contains_WithAddedKey_ReturnsTrue()
+    {
+      var collection = new DummyConfigurationElementCollection();
+      var element = new DummyConfigurationElement();
+      collection.Add(element);
+
+      // ACT
+      var result = collection.Contains(element.Key);
+
+      // ASSERT
+      result.Should().BeTrue();
+    }
+
+    [Test]
+    public void Remove()
+    {
+      var collection = new DummyConfigurationElementCollection();
+      var element = new DummyConfigurationElement();
+      collection.Add(element);
+
+      // ACT
+      collection.Remove(element.Key);
+
+      // ASSERT
+      collection.Contains(element.Key).Should().BeFalse();
+    }
+
     class DummyConfigurationElementCollection : KeyedConfigurationElementCollectionBase<DummyConfigurationElement, string>
     {
       protected override string ElementName => "add";

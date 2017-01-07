@@ -57,6 +57,8 @@ namespace SolutionInspector.TestInfrastructure
 
     public static XElement XElement => new XElement(String());
 
+    public static XAttribute XAttribute => new XAttribute(String(), String());
+
 
 
     public static Type Type => s_possibleTypes[Random.Next(s_possibleTypes.Length)];

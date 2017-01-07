@@ -51,6 +51,7 @@ namespace SolutionInspector.DefaultRules
       return ignoreNamespaces ? StripNamespaces(xdoc) : xdoc;
     }
 
+    [ExcludeFromCodeCoverage]
     private XDocument StripNamespaces (XDocument xdoc)
     {
       var copy = new XDocument(xdoc);
@@ -65,7 +66,7 @@ namespace SolutionInspector.DefaultRules
           var newAttributes =
               element.Attributes()
                   .Where(a => !a.IsNamespaceDeclaration)
-                  .Select(a => a.Name.Namespace != XNamespace.None ? new XAttribute(XNamespace.None.GetName(a.Name.LocalName), a.Value) : a);
+                  .Select(a => new XAttribute(XNamespace.None.GetName(a.Name.LocalName), a.Value));
 
           element.ReplaceAttributes(newAttributes);
         }

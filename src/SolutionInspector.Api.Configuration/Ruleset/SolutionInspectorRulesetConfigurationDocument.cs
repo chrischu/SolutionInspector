@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SolutionInspector.Configuration;
 
@@ -19,7 +20,10 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     [ConfigurationValue]
     public RulesConfigurationElement Rules => GetConfigurationProperty<RulesConfigurationElement>();
 
+    [ExcludeFromCodeCoverage]
     IReadOnlyCollection<string> ISolutionInspectorRulesetConfiguration.RuleAssemblyImports => RuleAssemblyImports.Select(i => i.Path).ToArray();
+
+    [ExcludeFromCodeCoverage]
     IRulesConfiguration ISolutionInspectorRulesetConfiguration.Rules => Rules;
   }
 }

@@ -2,14 +2,15 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Xml;
 using Fasterflect;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration
 {
   /// <summary>
-  ///   Base class for <see cref="ConfigurationElementCollection" />s with elements of type <typeparamref name="TElement" />.
+  ///   Base class for <see cref="ConfigurationElementCollection{T}" />s with elements of type <typeparamref name="TElement" />.
   /// </summary>
   public abstract class ConfigurationElementCollectionBase<TElement> : ConfigurationElementCollection, IConfigurationCollection<TElement>
-      where TElement : ConfigurationElement, new()
+      where TElement : System.Configuration.ConfigurationElement, new()
 
   {
     /// <summary>
@@ -39,7 +40,7 @@ namespace SolutionInspector.Api.Configuration
     }
 
     /// <inheritdoc />
-    protected sealed override ConfigurationElement CreateNewElement ()
+    protected sealed override System.Configuration.ConfigurationElement CreateNewElement ()
     {
       return new TElement();
     }
@@ -54,7 +55,7 @@ namespace SolutionInspector.Api.Configuration
     }
 
     /// <inheritdoc />
-    protected override object GetElementKey (ConfigurationElement element)
+    protected override object GetElementKey (System.Configuration.ConfigurationElement element)
     {
       return element;
     }

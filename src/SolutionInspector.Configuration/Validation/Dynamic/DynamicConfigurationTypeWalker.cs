@@ -99,7 +99,7 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
       }
       catch (XmlException)
       {
-        // Invalid name => no need to further validate
+        // Invalid name => no need to walk further
         attribute = null;
         return false;
       }
@@ -114,7 +114,7 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
       }
       catch (XmlException)
       {
-        // Invalid name => no need to further validate
+        // Invalid name => no need to walk further
         subelement = null;
         return false;
       }
@@ -132,7 +132,7 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
       }
       catch (XmlException)
       {
-        // Invalid name => no need to further validate
+        // Invalid name => no need to walk further
         subelements = null;
         return false;
       }
