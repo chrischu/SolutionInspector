@@ -10,8 +10,8 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
 {
   public class RulesetConfigurationDocumentTests
   {
-    private IXDocumentStatic _xDocumentStatic;
     private IConfigurationManager _configurationManager;
+    private IXDocumentStatic _xDocumentStatic;
 
     [SetUp]
     public void SetUp ()
@@ -80,7 +80,8 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
                       new { RuleType = "Namespace.ProjectRule, ProjectAssembly" }
                     }
           }
-        }, o => o.ExcludingMissingMembers());
+        },
+        o => o.ExcludingMissingMembers());
 
       result.Rules.ProjectItemRuleGroups.ShouldBeEquivalentTo(
         new[]
@@ -94,7 +95,8 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
                       new { RuleType = "Namespace.ProjectItemRule, ProjectItemAssembly" }
                     }
           }
-        }, o => o.ExcludingMissingMembers());
+        },
+        o => o.ExcludingMissingMembers());
     }
   }
 }

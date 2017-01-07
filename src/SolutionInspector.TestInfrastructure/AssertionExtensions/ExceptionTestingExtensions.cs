@@ -7,7 +7,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
   public static class ExceptionTestingExtensions
   {
-    public static void ShouldThrowArgumentException(this Action action, string message, string parameterName)
+    public static void ShouldThrowArgumentException (this Action action, string message, string parameterName)
     {
       var expectedMessage = new ArgumentException(message, parameterName).Message;
 
@@ -16,9 +16,9 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 
     [PublicAPI]
     public static ExceptionAssertions<TException> WithInnerException<TException> (
-        this ExceptionAssertions<TException> exceptionAssertions,
-        Exception innerException)
-        where TException : Exception
+      this ExceptionAssertions<TException> exceptionAssertions,
+      Exception innerException)
+      where TException : Exception
     {
       exceptionAssertions.And.InnerException.Should().BeSameAs(innerException);
       return exceptionAssertions;

@@ -8,9 +8,8 @@ namespace SolutionInspector.Configuration.Tests
 {
   public class ConfigurationManagerTests
   {
-    private IXDocumentStatic _xDocumentStatic;
-
     private IConfigurationManager _sut;
+    private IXDocumentStatic _xDocumentStatic;
 
     [SetUp]
     public void SetUp ()

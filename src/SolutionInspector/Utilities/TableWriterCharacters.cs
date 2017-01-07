@@ -9,17 +9,17 @@ namespace SolutionInspector.Utilities
   {
     public static readonly TableWriterCharacters AdvancedAscii = new TableWriterCharacters
                                                                  {
-                                                                     TopLeftCorner = '┌',
-                                                                     BottomLeftCorner = '└',
-                                                                     TopRightCorner = '┐',
-                                                                     BottomRightCorner = '┘',
-                                                                     Cross = '┼',
-                                                                     LeftMiddle = '├',
-                                                                     RightMiddle = '┤',
-                                                                     TopMiddle = '┬',
-                                                                     BottomMiddle = '┴',
-                                                                     Vertical = '│',
-                                                                     Horizontal = '─'
+                                                                   TopLeftCorner = '┌',
+                                                                   BottomLeftCorner = '└',
+                                                                   TopRightCorner = '┐',
+                                                                   BottomRightCorner = '┘',
+                                                                   Cross = '┼',
+                                                                   LeftMiddle = '├',
+                                                                   RightMiddle = '┤',
+                                                                   TopMiddle = '┬',
+                                                                   BottomMiddle = '┴',
+                                                                   Vertical = '│',
+                                                                   Horizontal = '─'
                                                                  };
 
     public char TopLeftCorner { get; set; } = '+';

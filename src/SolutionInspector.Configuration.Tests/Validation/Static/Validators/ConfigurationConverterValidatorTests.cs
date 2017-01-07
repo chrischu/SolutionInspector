@@ -9,10 +9,9 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
 {
   public class ConfigurationConverterValidatorTests
   {
-    private ConfigurationConverterValidator _sut;
-
     private PropertyInfo _propertyInfo;
     private ReportValidationError _reportValidationError;
+    private ConfigurationConverterValidator _sut;
 
     [SetUp]
     public void SetUp ()

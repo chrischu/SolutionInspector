@@ -16,9 +16,9 @@ namespace SolutionInspector.Tests.Utilities
   public class SolutionLoaderTests
   {
     private IFileStatic _file;
-    private SolutionLoader _sut;
 
     private IMsBuildParsingConfiguration _msBuildParsingConfiguration;
+    private SolutionLoader _sut;
 
     [SetUp]
     public void SetUp ()

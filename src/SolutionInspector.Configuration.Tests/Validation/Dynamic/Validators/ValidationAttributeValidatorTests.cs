@@ -12,10 +12,9 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic.Validators
 {
   public class ValidationAttributeValidatorTests
   {
-    private ValidationAttributeValidator _sut;
-
     private PropertyInfo _propertyInfo;
     private ReportValidationError _reportValidationError;
+    private ValidationAttributeValidator _sut;
 
     [SetUp]
     public void SetUp ()

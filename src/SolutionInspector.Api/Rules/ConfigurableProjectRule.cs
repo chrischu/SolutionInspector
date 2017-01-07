@@ -8,7 +8,7 @@ namespace SolutionInspector.Api.Rules
   {
     /// <inheritdoc />
     protected ConfigurableProjectRule (TConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
     }
   }

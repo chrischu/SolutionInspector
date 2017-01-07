@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using JetBrains.Annotations;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
@@ -21,9 +22,9 @@ namespace SolutionInspector.ConfigurationUi.Services
     {
       var openFileDialog = new OpenFileDialog
                            {
-                               Multiselect = false,
-                               Filter = string.Join("|", filters.Select(f => f.Filter)),
-                               InitialDirectory = Environment.CurrentDirectory
+                             Multiselect = false,
+                             Filter = string.Join("|", filters.Select(f => f.Filter)),
+                             InitialDirectory = Environment.CurrentDirectory
                            };
 
       return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
@@ -31,7 +32,10 @@ namespace SolutionInspector.ConfigurationUi.Services
 
     public async Task<string> RequestInput (string title, string message, string defaultValue = null)
     {
-      var result = await ((MetroWindow)App.Current.MainWindow).ShowInputAsync(title, message, new MetroDialogSettings {DefaultText = defaultValue});
+      var result = await ((MetroWindow) Application.Current.MainWindow).ShowInputAsync(
+        title,
+        message,
+        new MetroDialogSettings { DefaultText = defaultValue });
       return result ?? defaultValue;
     }
 

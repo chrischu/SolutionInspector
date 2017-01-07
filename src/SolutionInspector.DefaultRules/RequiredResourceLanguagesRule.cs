@@ -10,12 +10,12 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Checks that all given resource files are localized in all given languages in the project.
   /// </summary>
-  [Description("Checks that all given resource files are localized in all given languages in the project.")]
+  [Description ("Checks that all given resource files are localized in all given languages in the project.")]
   public class RequiredResourceLanguagesRule : ConfigurableProjectRule<RequiredResourceLanguagesRuleConfiguration>
   {
     /// <inheritdoc />
     public RequiredResourceLanguagesRule (RequiredResourceLanguagesRuleConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
     }
 
@@ -27,9 +27,9 @@ namespace SolutionInspector.DefaultRules
         if (target.ProjectItems.All(i => i.Name != resourceDefaultLanguageFileName))
           yield return
               new RuleViolation(
-                  this,
-                  target,
-                  $"For the required resource '{resourceName}' no default resource file ('{resourceDefaultLanguageFileName}') could be found.");
+                this,
+                target,
+                $"For the required resource '{resourceName}' no default resource file ('{resourceDefaultLanguageFileName}') could be found.");
 
         foreach (var languageName in Configuration.RequiredLanguages)
         {
@@ -37,10 +37,10 @@ namespace SolutionInspector.DefaultRules
           if (target.ProjectItems.All(i => i.Name != resourceLanguageFileName))
             yield return
                 new RuleViolation(
-                    this,
-                    target,
-                    $"For the required resource '{resourceName}' no resource file for language '{languageName}' " +
-                    $"('{resourceLanguageFileName}') could be found.")
+                  this,
+                  target,
+                  $"For the required resource '{resourceName}' no resource file for language '{languageName}' " +
+                  $"('{resourceLanguageFileName}') could be found.")
                 ;
         }
       }
@@ -57,7 +57,7 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("requiredResources", DefaultValue = "", IsRequired = true)]
-    [Description("List of required resources (e.g. 'Resources').")]
+    [Description ("List of required resources (e.g. 'Resources').")]
     public CommaDelimitedStringCollection RequiredResources
     {
       get { return (CommaDelimitedStringCollection) this["requiredResources"]; }
@@ -69,7 +69,7 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [TypeConverter (typeof(CommaDelimitedStringCollectionConverter))]
     [ConfigurationProperty ("requiredLanguages", DefaultValue = "", IsRequired = true)]
-    [Description("List of required languages (e.g. 'de', 'pl').")]
+    [Description ("List of required languages (e.g. 'de', 'pl').")]
     public CommaDelimitedStringCollection RequiredLanguages
     {
       get { return (CommaDelimitedStringCollection) this["requiredLanguages"]; }

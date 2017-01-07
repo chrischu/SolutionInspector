@@ -8,7 +8,7 @@ namespace SolutionInspector.Api.Rules
   /// </summary>
   [PublicAPI]
   public interface IRule<in TTarget> : IRule
-      where TTarget : IRuleTarget
+    where TTarget : IRuleTarget
   {
     /// <summary>
     ///   Evaluates the rule against the given <paramref name="target" /> and returns all <see cref="IRuleViolation" />s that were found.
@@ -18,7 +18,7 @@ namespace SolutionInspector.Api.Rules
 
   /// <inheritdoc />
   public abstract class Rule<TTarget> : IRule
-      where TTarget : IRuleTarget
+    where TTarget : IRuleTarget
   {
     /// <summary>
     ///   Evaluates the rule against the given <paramref name="target" /> and returns all <see cref="IRuleViolation" />s that were found.

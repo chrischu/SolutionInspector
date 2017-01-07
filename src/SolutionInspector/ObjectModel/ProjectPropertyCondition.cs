@@ -8,16 +8,10 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.ObjectModel
 {
-  /// <inheritdoc cref="IProjectPropertyCondition"/>
-  [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
+  /// <inheritdoc cref="IProjectPropertyCondition" />
+  [DebuggerDisplay ("{" + nameof(DebuggerDisplay) + ",nq}")]
   public sealed class ProjectPropertyCondition : IProjectPropertyCondition, IEquatable<ProjectPropertyCondition>
   {
-    [CanBeNull]
-    public string Self { get; }
-
-    [CanBeNull]
-    public string Parent { get; }
-
     internal ProjectPropertyCondition ([CanBeNull] string self, [CanBeNull] string parent)
     {
       Self = ConvertCondition(self);
@@ -25,13 +19,8 @@ namespace SolutionInspector.ObjectModel
     }
 
     internal ProjectPropertyCondition (ProjectPropertyElement element)
-        : this(element.Condition, element.Parent?.Condition)
+      : this(element.Condition, element.Parent?.Condition)
     {
-    }
-
-    private string ConvertCondition ([CanBeNull] string condition)
-    {
-      return string.IsNullOrWhiteSpace(condition) ? null : condition;
     }
 
     [ExcludeFromCodeCoverage]
@@ -56,6 +45,17 @@ namespace SolutionInspector.ObjectModel
       if (ReferenceEquals(this, other))
         return true;
       return string.Equals(Self, other.Self) && string.Equals(Parent, other.Parent);
+    }
+
+    [CanBeNull]
+    public string Self { get; }
+
+    [CanBeNull]
+    public string Parent { get; }
+
+    private string ConvertCondition ([CanBeNull] string condition)
+    {
+      return string.IsNullOrWhiteSpace(condition) ? null : condition;
     }
 
     public override bool Equals ([CanBeNull] object obj)

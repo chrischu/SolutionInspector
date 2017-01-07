@@ -14,7 +14,7 @@ namespace SolutionInspector.DefaultRules
   {
     /// <inheritdoc />
     public ProjectItemMustHaveCorrectBuildActionRule (ProjectItemMustHaveCorrectBuildActionRuleConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
     }
 
@@ -23,9 +23,9 @@ namespace SolutionInspector.DefaultRules
       if (target.BuildAction != Configuration.ExpectedBuildAction)
         yield return
             new RuleViolation(
-                this,
-                target,
-                $"Unexpected build action was '{target.BuildAction}', but should be '{Configuration.ExpectedBuildAction}'.");
+              this,
+              target,
+              $"Unexpected build action was '{target.BuildAction}', but should be '{Configuration.ExpectedBuildAction}'.");
     }
   }
 

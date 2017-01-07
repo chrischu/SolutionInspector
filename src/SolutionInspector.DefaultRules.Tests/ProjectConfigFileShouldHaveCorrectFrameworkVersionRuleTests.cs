@@ -9,8 +9,8 @@ namespace SolutionInspector.DefaultRules.Tests
 {
   public class ProjectConfigFileShouldHaveCorrectFrameworkVersionRuleTests
   {
-    private IProject _project;
     private IConfigurationProjectItem _configurationProjectItem;
+    private IProject _project;
 
     private ProjectConfigFileShouldHaveCorrectFrameworkVersionRule _sut;
 
@@ -23,11 +23,11 @@ namespace SolutionInspector.DefaultRules.Tests
       A.CallTo(() => _project.ConfigurationProjectItem).Returns(_configurationProjectItem);
 
       _sut = new ProjectConfigFileShouldHaveCorrectFrameworkVersionRule(
-               new ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration
-               {
-                 ExpectedVersion = "Version",
-                 ExpectedSKU = "SKU"
-               });
+        new ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration
+        {
+          ExpectedVersion = "Version",
+          ExpectedSKU = "SKU"
+        });
     }
 
     [Test]

@@ -88,11 +88,12 @@
                             <TextBlock x:Name="propertyTitle"
                                        Text="{Binding Name}"
                                        FontWeight="Bold" />
-                            <TextBlock MaxWidth="{Binding ActualWidth,
+                            <TextBlock
+                              MaxWidth="{Binding ActualWidth,
                                                           ElementName=propertyTitle}"
-                                       FontSize="12"
-                                       Text="{Binding Documentation}"
-                                       TextWrapping="Wrap" />
+                              FontSize="12"
+                              Text="{Binding Documentation}"
+                              TextWrapping="Wrap" />
                           </StackPanel>
                         </Border>
                         <Border Grid.Column="1"

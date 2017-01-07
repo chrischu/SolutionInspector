@@ -26,9 +26,9 @@ namespace SolutionInspector.Configuration.Validation
       var validationErrorCollector = new ConfigurationValidationErrorCollector();
 
       var compositeValidator = new ValidatingConfigurationVisitor(
-                                 validationErrorCollector,
-                                 StaticConfigurationValidators,
-                                 DynamicConfigurationValidators);
+        validationErrorCollector,
+        StaticConfigurationValidators,
+        DynamicConfigurationValidators);
 
       var staticWalker = new StaticConfigurationTypeWalker();
       staticWalker.Walk(configuration.GetType(), compositeValidator);
@@ -40,7 +40,7 @@ namespace SolutionInspector.Configuration.Validation
         throw new ConfigurationValidationException(validationErrorCollector.ValidationErrors);
     }
 
-    private static List<T> GetConfigurationValidators<T>()
+    private static List<T> GetConfigurationValidators<T> ()
     {
       var validatorType = typeof(T);
       var collection = typeof(ConfigurationValidator).Assembly.GetTypes()
@@ -56,7 +56,7 @@ namespace SolutionInspector.Configuration.Validation
       private readonly Dictionary<string, List<string>> _validationErrors = new Dictionary<string, List<string>>();
 
       public IReadOnlyDictionary<string, IReadOnlyCollection<string>> ValidationErrors
-          => _validationErrors.ToDictionary(kvp => kvp.Key, kvp => (IReadOnlyCollection<string>) kvp.Value);
+        => _validationErrors.ToDictionary(kvp => kvp.Key, kvp => (IReadOnlyCollection<string>) kvp.Value);
 
       public void AddError (string propertyPath, string message)
       {

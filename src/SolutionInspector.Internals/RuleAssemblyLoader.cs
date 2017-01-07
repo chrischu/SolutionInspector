@@ -21,9 +21,9 @@ namespace SolutionInspector.Internals
 
   internal class RuleAssemblyLoader : IRuleAssemblyLoader
   {
-    private readonly IFileStatic _file;
-    private readonly IDirectoryStatic _directory;
     private readonly IAssemblyStatic _assembly;
+    private readonly IDirectoryStatic _directory;
+    private readonly IFileStatic _file;
 
     public RuleAssemblyLoader (IFileStatic file, IDirectoryStatic directory, IAssemblyStatic assembly)
     {
@@ -35,24 +35,18 @@ namespace SolutionInspector.Internals
     public void LoadRuleAssemblies (IReadOnlyCollection<string> ruleAssemblyPaths)
     {
       foreach (var ruleAssemblyPath in ruleAssemblyPaths)
-      {
         try
         {
           if (IsDirectory(ruleAssemblyPath))
-          {
             foreach (var file in _directory.GetFiles(ruleAssemblyPath, "*.dll"))
               LoadAssemblyFromFile(file);
-          }
           else
-          {
             LoadAssemblyFromFile(ruleAssemblyPath);
-          }
         }
         catch (FileNotFoundException ex)
         {
           throw new RuleAssemblyNotFoundException(ruleAssemblyPath, ex);
         }
-      }
     }
 
     private void LoadAssemblyFromFile (string ruleAssemblyPath)

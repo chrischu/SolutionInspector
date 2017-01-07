@@ -9,9 +9,6 @@ namespace SolutionInspector.ObjectModel
   /// <inheritdoc cref="IProjectItemInclude" />
   public sealed class ProjectItemInclude : IProjectItemInclude, IEquatable<ProjectItemInclude>
   {
-    public string Evaluated { get; }
-    public string Unevaluated { get; }
-
     internal ProjectItemInclude (string evaluated, string unevaluated)
     {
       Evaluated = evaluated;
@@ -26,6 +23,9 @@ namespace SolutionInspector.ObjectModel
         return true;
       return string.Equals(Evaluated, other.Evaluated) && string.Equals(Unevaluated, other.Unevaluated);
     }
+
+    public string Evaluated { get; }
+    public string Unevaluated { get; }
 
     public override bool Equals ([CanBeNull] object obj)
     {

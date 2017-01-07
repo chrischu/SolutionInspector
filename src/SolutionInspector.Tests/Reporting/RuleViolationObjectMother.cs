@@ -18,7 +18,7 @@ namespace SolutionInspector.Tests.Reporting
       return ruleViolation;
     }
 
-    class SomeRule : IRule
+    private class SomeRule : IRule
     {
     }
   }

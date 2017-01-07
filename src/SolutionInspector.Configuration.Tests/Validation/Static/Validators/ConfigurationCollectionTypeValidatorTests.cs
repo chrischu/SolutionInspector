@@ -9,10 +9,9 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
 {
   public class ConfigurationCollectionTypeValidatorTests
   {
-    private ConfigurationCollectionTypeValidator _sut;
-
     private PropertyInfo _propertyInfo;
     private ReportValidationError _reportValidationError;
+    private ConfigurationCollectionTypeValidator _sut;
 
     [SetUp]
     public void SetUp ()

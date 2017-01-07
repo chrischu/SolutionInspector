@@ -10,7 +10,7 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that a project is configured so that XML documentation is generated.
   /// </summary>
-  [Description("Verifies that a project is configured so that XML documentation is generated.")]
+  [Description ("Verifies that a project is configured so that XML documentation is generated.")]
   public class ProjectMustProvideXmlDocumentationRule : ProjectRule
   {
     /// <inheritdoc />
@@ -23,8 +23,10 @@ namespace SolutionInspector.DefaultRules
         var documentationFile = properties.GetValueOrDefault("DocumentationFile")?.Value;
 
         if (documentationFile == null)
+        {
           yield return
               new RuleViolation(this, target, $"In the build configuration '{matchingBuildConfig}' the XML documentation configuration is missing.");
+        }
         else
         {
           var outputPath = properties.GetValueOrDefault("OutputPath")?.Value;
@@ -33,10 +35,10 @@ namespace SolutionInspector.DefaultRules
           if (!string.Equals(documentationFile, expectedDocumentationFile, StringComparison.OrdinalIgnoreCase))
             yield return
                 new RuleViolation(
-                    this,
-                    target,
-                    $"In the build configuration '{matchingBuildConfig}' the XML documentation " +
-                    $"configuration is invalid (was: '{documentationFile}', expected: '{expectedDocumentationFile}').");
+                  this,
+                  target,
+                  $"In the build configuration '{matchingBuildConfig}' the XML documentation " +
+                  $"configuration is invalid (was: '{documentationFile}', expected: '{expectedDocumentationFile}').");
         }
       }
     }

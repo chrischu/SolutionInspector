@@ -9,7 +9,7 @@ namespace SolutionInspector.Api.Configuration.Tests
   public class ConfigurationElementCollectionBaseTests
   {
     [Test]
-    public void Deserializing()
+    public void Deserializing ()
     {
       var collection = new DummyConfigurationElementCollection();
 
@@ -38,7 +38,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void Contains_WithNonAddedKey_ReturnsFalse()
+    public void Contains_WithNonAddedKey_ReturnsFalse ()
     {
       var collection = new DummyConfigurationElementCollection();
       var element = new DummyConfigurationElement();
@@ -51,7 +51,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void Contains_WithAddedKey_ReturnsTrue()
+    public void Contains_WithAddedKey_ReturnsTrue ()
     {
       var collection = new DummyConfigurationElementCollection();
       var element = new DummyConfigurationElement();
@@ -65,7 +65,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void Remove()
+    public void Remove ()
     {
       var collection = new DummyConfigurationElementCollection();
       var element = new DummyConfigurationElement();

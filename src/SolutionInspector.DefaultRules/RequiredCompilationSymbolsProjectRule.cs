@@ -60,7 +60,7 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [ConfigurationCollection]
     public ConfigurationElementCollection<RequiredCompilationSymbolsConfigurationElement> RequiredCompilationSymbols
-        => GetConfigurationCollection<RequiredCompilationSymbolsConfigurationElement>();
+      => GetConfigurationCollection<RequiredCompilationSymbolsConfigurationElement>();
   }
 
   /// <summary>

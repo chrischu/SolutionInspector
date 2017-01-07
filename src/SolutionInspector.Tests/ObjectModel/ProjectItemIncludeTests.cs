@@ -10,14 +10,14 @@ namespace SolutionInspector.Tests.ObjectModel
   public class ProjectItemIncludeTests
   {
     [Test]
-    [TestCaseSource(nameof(EqualsTestData))]
-    public bool Equals(ProjectItemInclude a, [CanBeNull] ProjectItemInclude b)
+    [TestCaseSource (nameof(EqualsTestData))]
+    public bool Equals (ProjectItemInclude a, [CanBeNull] ProjectItemInclude b)
     {
       // ACT & ASSERT
       return a.Equals(b);
     }
 
-    private static IEnumerable EqualsTestData()
+    private static IEnumerable EqualsTestData ()
     {
       var a = new ProjectItemInclude(Some.String(), Some.String());
       var equalToA = new ProjectItemInclude(a.Evaluated, a.Unevaluated);
@@ -31,14 +31,14 @@ namespace SolutionInspector.Tests.ObjectModel
     }
 
     [Test]
-    [TestCaseSource(nameof(EqualsWithObjectsTestData))]
-    public bool Equals_WithObjects(object a, [CanBeNull] object b)
+    [TestCaseSource (nameof(EqualsWithObjectsTestData))]
+    public bool Equals_WithObjects (object a, [CanBeNull] object b)
     {
       // ACT & ASSERT
       return a.Equals(b);
     }
 
-    private static IEnumerable EqualsWithObjectsTestData()
+    private static IEnumerable EqualsWithObjectsTestData ()
     {
       var a = new ProjectItemInclude(Some.String(), Some.String());
 
@@ -47,7 +47,7 @@ namespace SolutionInspector.Tests.ObjectModel
     }
 
     [Test]
-    public void EqualityOperators()
+    public void EqualityOperators ()
     {
       var a = new ProjectItemInclude(Some.String(), Some.String());
       var equalToA = new ProjectItemInclude(a.Evaluated, a.Unevaluated);

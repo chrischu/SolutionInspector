@@ -9,8 +9,8 @@ namespace SolutionInspector.DefaultRules.Tests
 {
   public class NuGetReferenceHintPathsMustBeValidRuleTests
   {
-    private IFileInfo _nuGetReferenceDllFile;
     private INuGetReference _nuGetReference;
+    private IFileInfo _nuGetReferenceDllFile;
     private IProject _project;
 
     private NuGetReferenceHintPathsMustBeValidRule _sut;

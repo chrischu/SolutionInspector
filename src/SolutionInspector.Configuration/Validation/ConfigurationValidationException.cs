@@ -14,12 +14,6 @@ namespace SolutionInspector.Configuration.Validation
   public class ConfigurationValidationException : Exception
   {
     /// <summary>
-    ///   All validation errors by property path.
-    /// </summary>
-    [PublicAPI]
-    public IReadOnlyDictionary<string, IReadOnlyCollection<string>> ValidationErrors { get; }
-
-    /// <summary>
     ///   Creates a new <see cref="ConfigurationValidationException" />
     /// </summary>
     public ConfigurationValidationException (IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors)
@@ -27,6 +21,21 @@ namespace SolutionInspector.Configuration.Validation
     {
       ValidationErrors = validationErrors;
     }
+
+    /// <summary>
+    ///   Serialization constructor.
+    /// </summary>
+    [ExcludeFromCodeCoverage /* Serialization ctor */]
+    protected ConfigurationValidationException (SerializationInfo info, StreamingContext context)
+      : base(info, context)
+    {
+    }
+
+    /// <summary>
+    ///   All validation errors by property path.
+    /// </summary>
+    [PublicAPI]
+    public IReadOnlyDictionary<string, IReadOnlyCollection<string>> ValidationErrors { get; }
 
     private static string FormatValidationErrorMessage (IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors)
     {
@@ -40,15 +49,6 @@ namespace SolutionInspector.Configuration.Validation
           }));
 
       return $"Validation failed because of the following errors:{Environment.NewLine}{properties}";
-    }
-
-    /// <summary>
-    ///   Serialization constructor.
-    /// </summary>
-    [ExcludeFromCodeCoverage /* Serialization ctor */]
-    protected ConfigurationValidationException (SerializationInfo info, StreamingContext context)
-      : base(info, context)
-    {
     }
   }
 }

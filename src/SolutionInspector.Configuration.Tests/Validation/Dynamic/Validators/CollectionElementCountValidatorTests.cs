@@ -10,10 +10,9 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic.Validators
 {
   public class CollectionElementCountValidatorTests
   {
-    private CollectionElementCountValidator _sut;
-
     private PropertyInfo _propertyInfo;
     private ReportValidationError _reportValidationError;
+    private CollectionElementCountValidator _sut;
 
     [SetUp]
     public void SetUp ()

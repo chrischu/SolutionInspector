@@ -12,8 +12,8 @@ namespace SolutionInspector.Tests.Configuration
 {
   public class ConfigurationLoaderTests
   {
-    private IFileStatic _file;
     private IConfigurationManager _configurationManager;
+    private IFileStatic _file;
 
     private ConfigurationLoader _sut;
 

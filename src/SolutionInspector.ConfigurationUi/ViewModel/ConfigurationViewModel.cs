@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
@@ -7,9 +8,9 @@ namespace SolutionInspector.ConfigurationUi.ViewModel
 {
   internal class ConfigurationViewModel : ViewModelBase
   {
-    public async Task LoadConfigurationFile(string configurationFilePath)
+    public async Task LoadConfigurationFile (string configurationFilePath)
     {
-      var controller = await ((MetroWindow)App.Current.MainWindow).ShowProgressAsync("A", "B");
+      var controller = await ((MetroWindow) Application.Current.MainWindow).ShowProgressAsync("A", "B");
       controller.SetIndeterminate();
 
       await Task.Delay(3000);

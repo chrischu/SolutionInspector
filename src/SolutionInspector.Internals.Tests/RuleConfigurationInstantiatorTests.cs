@@ -37,7 +37,7 @@ namespace SolutionInspector.Internals.Tests
       result.Should().BeNull();
     }
 
-    class RuleConfiguration : ConfigurationElement
+    private class RuleConfiguration : ConfigurationElement
     {
       [ConfigurationValue]
       public string Property => GetConfigurationValue<string>();

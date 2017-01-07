@@ -22,14 +22,14 @@ namespace SolutionInspector.ConfigurationUi.ViewModel
     public ICommand CreateNewConfigurationCommand => new RelayCommand(CreateNewConfiguration);
     public ICommand LoadExistingConfigurationCommand => new RelayCommand(LoadExistingConfiguration);
 
-    private void CreateNewConfiguration()
+    private void CreateNewConfiguration ()
     {
-
     }
 
     private void LoadExistingConfiguration ()
     {
-      var configurationFilePath = _dialogManager.OpenFile(new DialogManager.FileFilter(name: "SolutionInspector ruleset files", extensions: "SolutionInspectorRuleset"));
+      var configurationFilePath =
+          _dialogManager.OpenFile(new DialogManager.FileFilter(name: "SolutionInspector ruleset files", extensions: "SolutionInspectorRuleset"));
       if (configurationFilePath == null)
         return;
 

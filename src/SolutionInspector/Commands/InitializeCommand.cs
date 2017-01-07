@@ -9,12 +9,12 @@ namespace SolutionInspector.Commands
 {
   internal class InitializeCommand : SolutionInspectorCommand<InitializeCommand.RawArguments, InitializeCommand.ParsedArguments>
   {
-    private readonly IAssembly _resourceAssembly;
-    private readonly IFileStatic _file;
     private readonly IConsoleStatic _console;
+    private readonly IFileStatic _file;
+    private readonly IAssembly _resourceAssembly;
 
     public InitializeCommand (IAssembly resourceAssembly, IFileStatic file, IConsoleStatic console)
-        : base("initialize", "Creates a new SolutionInspector configuration file or overwrite an existing one.")
+      : base("initialize", "Creates a new SolutionInspector configuration file or overwrite an existing one.")
     {
       _resourceAssembly = resourceAssembly;
       _file = file;
@@ -48,7 +48,9 @@ namespace SolutionInspector.Commands
 
       using (var sourceStream = _resourceAssembly.GetManifestResourceStream("SolutionInspector.Template.SolutionInspectorConfig").AssertNotNull())
       using (var destinationStream = _file.Open(arguments.ConfigFilePath, FileMode.Create))
+      {
         sourceStream.CopyTo(destinationStream);
+      }
 
       return 0;
     }
@@ -61,14 +63,14 @@ namespace SolutionInspector.Commands
 
     public class ParsedArguments
     {
-      public string ConfigFilePath { get; }
-      public bool Force { get; }
-
       public ParsedArguments (string configFilePath, bool force)
       {
         ConfigFilePath = configFilePath;
         Force = force;
       }
+
+      public string ConfigFilePath { get; }
+      public bool Force { get; }
     }
   }
 }

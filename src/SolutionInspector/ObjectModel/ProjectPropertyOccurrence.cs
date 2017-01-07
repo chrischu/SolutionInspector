@@ -8,13 +8,6 @@ namespace SolutionInspector.ObjectModel
   [DebuggerDisplay ("{Value} at {Location} when ({Condition})")]
   internal class ProjectPropertyOccurrence : IProjectPropertyOccurrence
   {
-    public string Value { get; }
-
-    [CanBeNull]
-    public IProjectPropertyCondition Condition { get; }
-
-    public IProjectLocation Location { get; }
-
     public ProjectPropertyOccurrence (string value, [CanBeNull] IProjectPropertyCondition condition, IProjectLocation location)
     {
       Value = value;
@@ -23,9 +16,16 @@ namespace SolutionInspector.ObjectModel
     }
 
     public ProjectPropertyOccurrence (ProjectPropertyElement property)
-        : this(property.Value, CreateCondition(property), new ProjectLocation(property))
+      : this(property.Value, CreateCondition(property), new ProjectLocation(property))
     {
     }
+
+    public string Value { get; }
+
+    [CanBeNull]
+    public IProjectPropertyCondition Condition { get; }
+
+    public IProjectLocation Location { get; }
 
     private static ProjectPropertyCondition CreateCondition (ProjectPropertyElement property)
     {

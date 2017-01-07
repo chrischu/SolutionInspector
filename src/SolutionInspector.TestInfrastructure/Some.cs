@@ -24,6 +24,35 @@ namespace SolutionInspector.TestInfrastructure
 
     private static readonly Type[] s_possibleTypes = typeof(int).Assembly.GetExportedTypes();
 
+    private static Random Random => s_threadLocalRandomProvider.Value;
+
+    [SuppressMessage ("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
+      Justification = "We do not raise an exception in this property, it simply returns a do-not-care exception instance for specs.")]
+    public static Exception Exception => new SomeException(String());
+
+    private static int NextRandomBetweenInclusive (int minValue, int maxValue)
+    {
+      return Random.Next(minValue, checked(maxValue + 1));
+    }
+
+    /// <summary>
+    ///   Some exception.
+    /// </summary>
+    [Serializable]
+    private class SomeException : Exception
+    {
+      public SomeException (string message)
+        : base(message)
+      {
+      }
+
+      [ExcludeFromCodeCoverage /* Serialization ctor */]
+      protected SomeException (SerializationInfo info, StreamingContext context)
+        : base(info, context)
+      {
+      }
+    }
+
     // ReSharper disable UnusedMember.Global - maybe used in the future
     public static bool Boolean => Random.Next(2) == 1;
 
@@ -60,38 +89,8 @@ namespace SolutionInspector.TestInfrastructure
     public static XAttribute XAttribute => new XAttribute(String(), String());
 
 
-
     public static Type Type => s_possibleTypes[Random.Next(s_possibleTypes.Length)];
 
     // ReSharper restore UnusedMember.Global
-
-    private static int NextRandomBetweenInclusive (int minValue, int maxValue)
-    {
-      return Random.Next(minValue, checked(maxValue + 1));
-    }
-
-    private static Random Random => s_threadLocalRandomProvider.Value;
-
-    [SuppressMessage ("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
-        Justification = "We do not raise an exception in this property, it simply returns a do-not-care exception instance for specs.")]
-    public static Exception Exception => new SomeException(String());
-
-    /// <summary>
-    ///   Some exception.
-    /// </summary>
-    [Serializable]
-    private class SomeException : Exception
-    {
-      public SomeException (string message)
-          : base(message)
-      {
-      }
-
-      [ExcludeFromCodeCoverage /* Serialization ctor */]
-      protected SomeException (SerializationInfo info, StreamingContext context)
-          : base(info, context)
-      {
-      }
-    }
   }
 }

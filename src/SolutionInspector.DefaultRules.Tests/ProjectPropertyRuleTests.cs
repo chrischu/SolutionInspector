@@ -8,8 +8,8 @@ namespace SolutionInspector.DefaultRules.Tests
 {
   public class ProjectPropertyRuleTests
   {
-    private IProject _project;
     private IAdvancedProject _advancedProject;
+    private IProject _project;
 
     private ProjectPropertyRule _sut;
 
@@ -22,11 +22,11 @@ namespace SolutionInspector.DefaultRules.Tests
       A.CallTo(() => _project.Advanced).Returns(_advancedProject);
 
       _sut = new ProjectPropertyRule(
-               new ProjectPropertyRuleConfiguration
-               {
-                 Property = "Property",
-                 ExpectedValue = "ExpectedValue"
-               });
+        new ProjectPropertyRuleConfiguration
+        {
+          Property = "Property",
+          ExpectedValue = "ExpectedValue"
+        });
     }
 
     [Test]

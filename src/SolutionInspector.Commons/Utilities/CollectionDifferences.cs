@@ -16,6 +16,15 @@ namespace SolutionInspector.Commons.Utilities
     public static readonly CollectionDifferences<T> None = new CollectionDifferences<T>(Enumerable.Empty<T>(), Enumerable.Empty<T>());
 
     /// <summary>
+    ///   Creates an instance of <see cref="CollectionDifferences{T}" />.
+    /// </summary>
+    public CollectionDifferences (IEnumerable<T> adds, IEnumerable<T> removes)
+    {
+      Adds = adds.ToArray();
+      Removes = removes.ToArray();
+    }
+
+    /// <summary>
     ///   All the elements that were added.
     /// </summary>
     public IReadOnlyCollection<T> Adds { get; }
@@ -29,14 +38,5 @@ namespace SolutionInspector.Commons.Utilities
     ///   <c>True</c> if differences were found, <c>false</c> otherwise.
     /// </summary>
     public bool DifferencesFound => Adds.Any() || Removes.Any();
-
-    /// <summary>
-    ///   Creates an instance of <see cref="CollectionDifferences{T}" />.
-    /// </summary>
-    public CollectionDifferences (IEnumerable<T> adds, IEnumerable<T> removes)
-    {
-      Adds = adds.ToArray();
-      Removes = removes.ToArray();
-    }
   }
 }

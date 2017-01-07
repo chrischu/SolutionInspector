@@ -8,10 +8,10 @@ namespace SolutionInspector.Configuration.Tests
 {
   public class ConfigurationValueTests
   {
-    private Action<string> _updateValue;
     private Action<string> _onDeserialize;
 
     private IConfigurationValue _sut;
+    private Action<string> _updateValue;
 
     [SetUp]
     public void SetUp ()
@@ -36,7 +36,7 @@ namespace SolutionInspector.Configuration.Tests
     public void Deserialize ()
     {
       var serialized = Some.String();
-      
+
       // ACT
       _sut.Deserialize(serialized);
 

@@ -38,7 +38,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure
     }
 
     [CanBeNull]
-    private XDocument GetDocumentation(Assembly assembly)
+    private XDocument GetDocumentation (Assembly assembly)
     {
       XDocument xdoc;
       if (s_assemblyDocuments.TryGetValue(assembly, out xdoc))

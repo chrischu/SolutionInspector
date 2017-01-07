@@ -7,12 +7,11 @@ using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
 {
-  class ConfigurationSubelementTypeValidatorTests
+  internal class ConfigurationSubelementTypeValidatorTests
   {
-    private ConfigurationSubelementTypeValidator _sut;
-
     private PropertyInfo _propertyInfo;
     private ReportValidationError _reportValidationError;
+    private ConfigurationSubelementTypeValidator _sut;
 
     [SetUp]
     public void SetUp ()

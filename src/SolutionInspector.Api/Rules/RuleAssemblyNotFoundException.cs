@@ -14,7 +14,7 @@ namespace SolutionInspector.Api.Rules
     ///   Creates a new <see cref="RuleAssemblyNotFoundException" />
     /// </summary>
     public RuleAssemblyNotFoundException (string ruleAssemblyPath, Exception innerException = null)
-        : base($"Could not find rule assembly '{ruleAssemblyPath}'.", innerException)
+      : base($"Could not find rule assembly '{ruleAssemblyPath}'.", innerException)
     {
     }
 
@@ -23,7 +23,7 @@ namespace SolutionInspector.Api.Rules
     /// </summary>
     [ExcludeFromCodeCoverage /* Serialization ctor */]
     protected RuleAssemblyNotFoundException (SerializationInfo info, StreamingContext context)
-        : base(info, context)
+      : base(info, context)
     {
     }
   }

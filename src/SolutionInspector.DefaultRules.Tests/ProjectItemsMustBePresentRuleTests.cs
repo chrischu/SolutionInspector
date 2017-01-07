@@ -8,9 +8,9 @@ namespace SolutionInspector.DefaultRules.Tests
 {
   public class ProjectItemsMustBePresentRuleTests
   {
-    private IProjectItemInclude _projectItemInclude;
-    private IProjectItem _projectItem;
     private IProject _project;
+    private IProjectItem _projectItem;
+    private IProjectItemInclude _projectItemInclude;
 
     private ProjectItemsMustBePresentRule _sut;
 

@@ -17,11 +17,11 @@ namespace SolutionInspector.DefaultRules
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       return target.ProjectItems.GroupBy(i => i.Include.Evaluated).Where(g => g.ContainsMoreThanOne()).Select(
-          group => new RuleViolation(
-              this,
-              target,
-              $"There are multiple project items with include '{group.Key}' in the following locations: " +
-              $"{string.Join(", ", group.Select(i => i.Location))}."));
+        group => new RuleViolation(
+          this,
+          target,
+          $"There are multiple project items with include '{group.Key}' in the following locations: " +
+          $"{string.Join(", ", group.Select(i => i.Location))}."));
     }
   }
 }

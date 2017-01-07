@@ -21,13 +21,11 @@ namespace SolutionInspector.DefaultRules
         var groupedByCondition = property.Occurrences.GroupBy(o => o.Condition);
 
         foreach (var group in groupedByCondition.Where(g => g.ContainsMoreThanOne()))
-        {
           yield return new RuleViolation(
-              this,
-              target,
-              $"There are multiple project properties with name '{property.Name}' and the same conditions in the following locations: " +
-              $"{string.Join(", ", group.Select(i => i.Location))}.");
-        }
+            this,
+            target,
+            $"There are multiple project properties with name '{property.Name}' and the same conditions in the following locations: " +
+            $"{string.Join(", ", group.Select(i => i.Location))}.");
       }
     }
   }

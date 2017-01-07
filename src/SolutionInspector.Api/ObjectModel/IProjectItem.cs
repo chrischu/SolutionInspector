@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Microsoft.Build.Evaluation;
 using SolutionInspector.Api.Rules;
 using Wrapperator.Interfaces.IO;
 
@@ -14,7 +15,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The original MSBuild project item.
     /// </summary>
-    Microsoft.Build.Evaluation.ProjectItem OriginalProjectItem { get; set; }
+    ProjectItem OriginalProjectItem { get; set; }
 
 
     /// <summary>
@@ -51,17 +52,17 @@ namespace SolutionInspector.Api.ObjectModel
     bool IsLink { get; }
 
     /// <summary>
-    ///   True, if the file was referenced with wildcards (see <see cref="WildcardInclude"/>) as opposed to a direct file name reference.
+    ///   True, if the file was referenced with wildcards (see <see cref="WildcardInclude" />) as opposed to a direct file name reference.
     /// </summary>
     bool IsIncludedByWildcard { get; }
 
     /// <summary>
-    /// The include path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
+    ///   The include path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
     /// </summary>
     string WildcardInclude { get; }
 
     /// <summary>
-    /// The exclude path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
+    ///   The exclude path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
     /// </summary>
     string WildcardExclude { get; }
 

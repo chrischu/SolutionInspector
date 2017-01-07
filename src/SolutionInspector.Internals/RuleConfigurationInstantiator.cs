@@ -6,12 +6,12 @@ using SolutionInspector.Configuration;
 namespace SolutionInspector.Internals
 {
   /// <summary>
-  /// Utility to instantiate rule configurations.
+  ///   Utility to instantiate rule configurations.
   /// </summary>
   public interface IRuleConfigurationInstantiator
   {
     /// <summary>
-    /// Instantiates a rule configuration.
+    ///   Instantiates a rule configuration.
     /// </summary>
     /// <returns></returns>
     ConfigurationElement Instantiate ([CanBeNull] Type configurationType, XElement configurationElement);

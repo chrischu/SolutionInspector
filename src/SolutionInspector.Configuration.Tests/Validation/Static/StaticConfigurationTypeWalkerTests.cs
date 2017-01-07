@@ -10,9 +10,8 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
 {
   public class StaticConfigurationTypeWalkerTests
   {
-    private StaticConfigurationTypeWalker _sut;
-
     private IStaticConfigurationVisitor _staticConfigurationVisitor;
+    private StaticConfigurationTypeWalker _sut;
 
     [SetUp]
     public void SetUp ()
@@ -84,7 +83,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
         typeof(InbetweenRecursiveElement),
         AssertSubelementVisit("Subelement.Subelement", typeof(InbetweenRecursiveElement).GetProperty("Subelement")));
     }
-    
+
     private void AssertTypeVisit (string propertyPath, Type type, params UnorderedCallAssertion[] memberAssertions)
     {
       IOrderableCallAssertion assertion =
@@ -94,7 +93,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
 
       assertion.Then(A.CallTo(() => _staticConfigurationVisitor.EndTypeVisit(propertyPath, type)).MustHaveHappened(Repeated.Exactly.Once));
     }
-    
+
     private UnorderedCallAssertion AssertValueVisit (string propertyPath, PropertyInfo property)
     {
       return A.CallTo(
@@ -153,23 +152,23 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
       public ConfigurationElementCollection<EmptyElement> Collection { get; set; }
     }
 
-    class EmptyElement : ConfigurationElement
+    private class EmptyElement : ConfigurationElement
     {
     }
 
-    class RecursiveElement : ConfigurationElement
+    private class RecursiveElement : ConfigurationElement
     {
       [ConfigurationSubelement]
       public RecursiveElement Recursive { get; set; }
     }
 
-    class IndirectRecursiveElement : ConfigurationElement
+    private class IndirectRecursiveElement : ConfigurationElement
     {
       [ConfigurationSubelement]
       public InbetweenRecursiveElement Subelement { get; set; }
     }
 
-    class InbetweenRecursiveElement : ConfigurationElement
+    private class InbetweenRecursiveElement : ConfigurationElement
     {
       [ConfigurationSubelement]
       public IndirectRecursiveElement Subelement { get; set; }

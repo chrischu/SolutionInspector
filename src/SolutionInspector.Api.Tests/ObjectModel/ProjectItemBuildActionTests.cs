@@ -9,14 +9,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
   public class ProjectItemBuildActionTests
   {
     [Test]
-    [TestCaseSource(nameof(EqualsTestData))]
-    public bool Equals(ProjectItemBuildAction a, [CanBeNull] ProjectItemBuildAction b)
+    [TestCaseSource (nameof(EqualsTestData))]
+    public bool Equals (ProjectItemBuildAction a, [CanBeNull] ProjectItemBuildAction b)
     {
       // ACT & ASSERT
       return a.Equals(b);
     }
 
-    private static IEnumerable EqualsTestData()
+    private static IEnumerable EqualsTestData ()
     {
       var buildAction = ProjectItemBuildAction.Custom("A");
       var buildActionClone = ProjectItemBuildAction.Custom("A");
@@ -29,14 +29,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
     }
 
     [Test]
-    [TestCaseSource(nameof(EqualsWithObjectsTestData))]
-    public bool Equals_WithObjects(object a, [CanBeNull] object b)
+    [TestCaseSource (nameof(EqualsWithObjectsTestData))]
+    public bool Equals_WithObjects (object a, [CanBeNull] object b)
     {
       // ACT & ASSERT
       return a.Equals(b);
     }
 
-    private static IEnumerable EqualsWithObjectsTestData()
+    private static IEnumerable EqualsWithObjectsTestData ()
     {
       var buildAction = ProjectItemBuildAction.Custom("A");
 
@@ -45,7 +45,7 @@ namespace SolutionInspector.Api.Tests.ObjectModel
     }
 
     [Test]
-    public void EqualityOperators()
+    public void EqualityOperators ()
     {
       var a = ProjectItemBuildAction.Custom("A");
       var aClone = ProjectItemBuildAction.Custom("A");

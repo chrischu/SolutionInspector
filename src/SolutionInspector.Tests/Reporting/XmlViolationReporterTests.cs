@@ -11,10 +11,10 @@ namespace SolutionInspector.Tests.Reporting
 {
   public class XmlViolationReporterTests
   {
-    static TextWriter _textWriter;
-    static IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
+    private static TextWriter _textWriter;
+    private static IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
 
-    static XmlViolationReporter _sut;
+    private static XmlViolationReporter _sut;
 
     [SetUp]
     public void SetUp ()
@@ -28,7 +28,7 @@ namespace SolutionInspector.Tests.Reporting
     [TearDown]
     public void TearDown ()
     {
-       _sut.Dispose(); 
+      _sut.Dispose();
     }
 
     [Test]
@@ -36,10 +36,10 @@ namespace SolutionInspector.Tests.Reporting
     {
       var ruleViolations = A.Dummy<IEnumerable<IRuleViolation>>();
       var ruleViolationViewModels = new[]
-                                {
+                                    {
                                       new RuleViolationViewModel(1, "Rule1", "Target1", "Message1"),
                                       new RuleViolationViewModel(2, "Rule2", "Target2", "Message2")
-                                  };
+                                    };
 
       A.CallTo(() => _ruleViolationViewModelConverter.Convert(ruleViolations)).Returns(ruleViolationViewModels);
 

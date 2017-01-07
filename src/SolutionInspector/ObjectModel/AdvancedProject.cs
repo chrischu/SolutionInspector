@@ -20,31 +20,14 @@ namespace SolutionInspector.ObjectModel
       Properties = ProcessProperties(MsBuildProject.Xml.Properties);
     }
 
-    private IReadOnlyDictionary<string, IProjectProperty> ProcessProperties (IEnumerable<ProjectPropertyElement> propertyElements)
-    {
-      var result = new Dictionary<string, ProjectProperty>();
-
-      foreach (var propertyElement in propertyElements)
-      {
-        ProjectProperty property;
-
-        if (!result.TryGetValue(propertyElement.Name, out property))
-          property = result[propertyElement.Name] = new ProjectProperty(propertyElement.Name, MsBuildProject.GetPropertyValue(propertyElement.Name));
-
-        property.Add(new ProjectPropertyOccurrence(propertyElement));
-      }
-
-      return new ReadOnlyDictionary<string, IProjectProperty>(result.ToDictionary(x => x.Key, x => (IProjectProperty) x.Value));
-    }
-
     public ProjectInSolution MsBuildProjectInSolution { get; }
     public Microsoft.Build.Evaluation.Project MsBuildProject { get; }
 
     public IReadOnlyDictionary<string, IProjectProperty> Properties { get; }
 
     public IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (
-        BuildConfiguration configuration,
-        Dictionary<string, string> propertyValues = null)
+      BuildConfiguration configuration,
+      Dictionary<string, string> propertyValues = null)
     {
       propertyValues = propertyValues ?? new Dictionary<string, string>();
       propertyValues.Add("Configuration", configuration.ConfigurationName);
@@ -63,12 +46,29 @@ namespace SolutionInspector.ObjectModel
           var projectPropertyElement = MsBuildProject.GetProperty(property.Name)?.Xml;
           if (projectPropertyElement != null)
             result.Add(
-                property.Name,
-                new EvaluatedProjectPropertyValue(projectPropertyElement.Value, new ProjectPropertyOccurrence(projectPropertyElement)));
+              property.Name,
+              new EvaluatedProjectPropertyValue(projectPropertyElement.Value, new ProjectPropertyOccurrence(projectPropertyElement)));
         }
       }
 
       return result;
+    }
+
+    private IReadOnlyDictionary<string, IProjectProperty> ProcessProperties (IEnumerable<ProjectPropertyElement> propertyElements)
+    {
+      var result = new Dictionary<string, ProjectProperty>();
+
+      foreach (var propertyElement in propertyElements)
+      {
+        ProjectProperty property;
+
+        if (!result.TryGetValue(propertyElement.Name, out property))
+          property = result[propertyElement.Name] = new ProjectProperty(propertyElement.Name, MsBuildProject.GetPropertyValue(propertyElement.Name));
+
+        property.Add(new ProjectPropertyOccurrence(propertyElement));
+      }
+
+      return new ReadOnlyDictionary<string, IProjectProperty>(result.ToDictionary(x => x.Key, x => (IProjectProperty) x.Value));
     }
 
     private class MsBuildConditionContext : IDisposable

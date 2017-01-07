@@ -8,13 +8,13 @@ namespace SolutionInspector.Api.Exceptions
   ///   Represents errors that occurs when trying to load a solution file that does not exist.
   /// </summary>
   [Serializable]
-  public class SolutionNotFoundException : Exception 
+  public class SolutionNotFoundException : Exception
   {
     /// <summary>
     ///   Creates a new <see cref="SolutionNotFoundException" />
     /// </summary>
     public SolutionNotFoundException (string solutionPath, Exception innerException = null)
-        : base($"Could not find solution file at '{solutionPath}'.", innerException)
+      : base($"Could not find solution file at '{solutionPath}'.", innerException)
     {
     }
 
@@ -23,7 +23,7 @@ namespace SolutionInspector.Api.Exceptions
     /// </summary>
     [ExcludeFromCodeCoverage /* Serialization ctor */]
     protected SolutionNotFoundException (SerializationInfo info, StreamingContext context)
-        : base(info, context)
+      : base(info, context)
     {
     }
   }

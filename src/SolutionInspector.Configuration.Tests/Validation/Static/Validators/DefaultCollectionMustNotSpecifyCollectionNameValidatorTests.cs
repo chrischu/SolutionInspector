@@ -9,10 +9,9 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
 {
   public class DefaultCollectionMustNotSpecifyCollectionNameValidatorTests
   {
-    private DefaultCollectionMustNotSpecifyCollectionNameValidator _sut;
-
     private PropertyInfo _propertyInfo;
     private ReportValidationError _reportValidationError;
+    private DefaultCollectionMustNotSpecifyCollectionNameValidator _sut;
 
     [SetUp]
     public void SetUp ()

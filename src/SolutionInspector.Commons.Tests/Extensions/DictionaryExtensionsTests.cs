@@ -8,7 +8,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
   public class DictionaryExtensionsTests
   {
     [Test]
-    public void GetValueOrDefault_ValueExists_ReturnsValue()
+    public void GetValueOrDefault_ValueExists_ReturnsValue ()
     {
       var dictionary = new Dictionary<string, int> { { "key", 7 } };
 
@@ -20,7 +20,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
     }
 
     [Test]
-    public void GetValueOrDefault_ValueDoesNotExist_ReturnsValue()
+    public void GetValueOrDefault_ValueDoesNotExist_ReturnsValue ()
     {
       var dictionary = new Dictionary<string, int>();
 

@@ -11,9 +11,8 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
 {
   public class DynamicConfigurationTypeWalkerTest
   {
-    private DynamicConfigurationTypeWalker _sut;
-
     private IDynamicConfigurationVisitor _dynamicConfigurationVisitor;
+    private DynamicConfigurationTypeWalker _sut;
 
     [SetUp]
     public void SetUp ()
@@ -245,7 +244,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
       [ConfigurationCollection (CollectionName = "@")]
       public ConfigurationElementCollection<ConfigurationCollectionElement> Collection { get; set; }
 
-      [ConfigurationCollection(ElementName = "@")]
+      [ConfigurationCollection (ElementName = "@")]
       public ConfigurationElementCollection<ConfigurationCollectionElement> CollectionWithInvalidElementName { get; set; }
     }
 

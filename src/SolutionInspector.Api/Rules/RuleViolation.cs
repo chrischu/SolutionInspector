@@ -6,15 +6,6 @@ namespace SolutionInspector.Api.Rules
   [PublicAPI]
   public class RuleViolation : IRuleViolation
   {
-    /// <inheritdoc />
-    public IRule Rule { get; }
-
-    /// <inheritdoc />
-    public IRuleTarget Target { get; }
-
-    /// <inheritdoc />
-    public string Message { get; }
-
     /// <summary>
     ///   Creates a new <see cref="RuleViolation" />.
     /// </summary>
@@ -24,5 +15,14 @@ namespace SolutionInspector.Api.Rules
       Target = target;
       Message = message;
     }
+
+    /// <inheritdoc />
+    public IRule Rule { get; }
+
+    /// <inheritdoc />
+    public IRuleTarget Target { get; }
+
+    /// <inheritdoc />
+    public string Message { get; }
   }
 }

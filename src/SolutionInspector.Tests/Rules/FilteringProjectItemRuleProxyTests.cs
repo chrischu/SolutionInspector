@@ -12,16 +12,15 @@ namespace SolutionInspector.Tests.Rules
 {
   public class FilteringProjectItemRuleProxyTests
   {
-    private INameFilter _projectNameFilter;
-    private INameFilter _projectItemNameFilter;
-    private IRuleViolation _projectItemRuleViolation;
-    private IProjectItemRule _projectItemRule;
-
-    private FilteringProjectItemRuleProxy _sut;
-
     private IProjectItem _projectItem;
     private string _projectItemName;
+    private INameFilter _projectItemNameFilter;
+    private IProjectItemRule _projectItemRule;
+    private IRuleViolation _projectItemRuleViolation;
     private string _projectName;
+    private INameFilter _projectNameFilter;
+
+    private FilteringProjectItemRuleProxy _sut;
 
     [SetUp]
     public void SetUp ()

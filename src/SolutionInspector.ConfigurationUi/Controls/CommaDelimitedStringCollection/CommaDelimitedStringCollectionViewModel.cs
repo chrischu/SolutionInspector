@@ -17,7 +17,7 @@ namespace SolutionInspector.ConfigurationUi.Controls.CommaDelimitedStringCollect
     {
       Values =
           new AdvancedObservableCollection<CommaDelimitedStringValueViewModel>(
-              value.Cast<string>().Select((s, i) => new CommaDelimitedStringValueViewModel(this, s, i)));
+            value.Cast<string>().Select((s, i) => new CommaDelimitedStringValueViewModel(this, s, i)));
       Values.ElementAdded += s => value.Add(s.Value);
       Values.ElementRemoved += s => value.Remove(s.Value);
       Values.ElementChanged += e => value[e.Index] = e.Value;
@@ -82,11 +82,11 @@ namespace SolutionInspector.ConfigurationUi.Controls.CommaDelimitedStringCollect
 
   public class CommaDelimitedStringCollectionControl : ConfigurationControlBase
   {
+    public override Type ValueType => typeof(System.Configuration.CommaDelimitedStringCollection);
+
     public override ViewModelBase CreateViewModel (object value)
     {
       return new CommaDelimitedStringCollectionViewModel((System.Configuration.CommaDelimitedStringCollection) value);
     }
-
-    public override Type ValueType => typeof(System.Configuration.CommaDelimitedStringCollection);
   }
 }

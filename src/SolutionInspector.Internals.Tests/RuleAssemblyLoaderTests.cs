@@ -13,9 +13,9 @@ namespace SolutionInspector.Internals.Tests
 {
   public class RuleAssemblyLoaderTests
   {
-    private IFileStatic _file;
-    private IDirectoryStatic _directory;
     private IAssemblyStatic _assembly;
+    private IDirectoryStatic _directory;
+    private IFileStatic _file;
     private IAssembly _loadedAssembly;
 
     private RuleAssemblyLoader _sut;
@@ -107,7 +107,7 @@ namespace SolutionInspector.Internals.Tests
           .WithInnerException(thrownException);
     }
 
-    class DummyRule : IRule
+    private class DummyRule : IRule
     {
     }
   }

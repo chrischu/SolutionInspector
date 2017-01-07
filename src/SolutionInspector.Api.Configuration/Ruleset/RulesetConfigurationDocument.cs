@@ -6,7 +6,7 @@ using SolutionInspector.Configuration;
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
   /// <summary>
-  /// Configuration for a ruleset, containing <see cref="RuleAssemblyImports"/> and <see cref="Rules"/>.
+  ///   Configuration for a ruleset, containing <see cref="RuleAssemblyImports" /> and <see cref="Rules" />.
   /// </summary>
   public interface IRulesetConfiguration
   {
@@ -14,12 +14,13 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     IRulesConfiguration Rules { get; }
   }
 
-  /// <inheritdoc cref="IRulesetConfiguration"/>>
+  /// <inheritdoc cref="IRulesetConfiguration" />
+  /// >
   public class RulesetConfigurationDocument : ConfigurationDocument, IRulesetConfiguration
   {
     [ConfigurationCollection (ElementName = "import")]
     public ConfigurationElementCollection<RuleAssemblyImportConfigurationElement> RuleAssemblyImports
-        => GetConfigurationCollection<RuleAssemblyImportConfigurationElement>();
+      => GetConfigurationCollection<RuleAssemblyImportConfigurationElement>();
 
     [ConfigurationSubelement]
     public RulesConfigurationElement Rules => GetConfigurationSubelement<RulesConfigurationElement>();

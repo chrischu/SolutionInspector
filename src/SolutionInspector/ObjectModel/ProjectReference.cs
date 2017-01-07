@@ -8,13 +8,6 @@ namespace SolutionInspector.ObjectModel
 {
   internal class ProjectReference : IProjectReference
   {
-    public IProject Project { get; }
-    public Microsoft.Build.Evaluation.ProjectItem OriginalProjectItem { get; }
-    public string Include { get; }
-    public IFileInfo File { get; }
-    public Guid? ReferencedProjectGuid { get; }
-    public string ReferencedProjectName { get; }
-
     public ProjectReference (ISolution solution, Microsoft.Build.Evaluation.ProjectItem projectItem)
     {
       OriginalProjectItem = projectItem;
@@ -30,5 +23,12 @@ namespace SolutionInspector.ObjectModel
 
       ReferencedProjectName = projectItem.GetMetadataValue("Name");
     }
+
+    public IProject Project { get; }
+    public Microsoft.Build.Evaluation.ProjectItem OriginalProjectItem { get; }
+    public string Include { get; }
+    public IFileInfo File { get; }
+    public Guid? ReferencedProjectGuid { get; }
+    public string ReferencedProjectName { get; }
   }
 }

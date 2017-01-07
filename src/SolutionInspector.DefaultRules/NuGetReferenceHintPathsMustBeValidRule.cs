@@ -17,10 +17,10 @@ namespace SolutionInspector.DefaultRules
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       return target.NuGetReferences.Where(r => !r.DllFile.Exists).Select(
-          r => new RuleViolation(
-              this,
-              target,
-              $"The NuGet reference to package '{r.Package.Id}' has an invalid hint path ('{r.HintPath}')."));
+        r => new RuleViolation(
+          this,
+          target,
+          $"The NuGet reference to package '{r.Package.Id}' has an invalid hint path ('{r.HintPath}')."));
     }
   }
 }

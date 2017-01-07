@@ -17,9 +17,9 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
     }
 
     public static void ShouldAllBeEquivalentTo<T> (
-        this IEnumerable<T> subject,
-        Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> config,
-        params object[] expectation)
+      this IEnumerable<T> subject,
+      Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> config,
+      params object[] expectation)
     {
       subject.ShouldAllBeEquivalentTo(expectation, config);
     }
@@ -32,14 +32,14 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
     public static void BeLike (this ObjectAssertions objectAssertions, object expectation)
     {
       objectAssertions.Subject.ShouldBeEquivalentTo(
-          expectation,
-          options =>
-              options.ExcludingMissingMembers()
-                  .IgnoringCyclicReferences()
-                  .RespectingRuntimeTypes()
-                  .Using<FileInfoWrapper>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<FileInfoWrapper>()
-                  .Using<DirectoryInfoWrapper>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<DirectoryInfoWrapper>()
-          );
+        expectation,
+        options =>
+          options.ExcludingMissingMembers()
+              .IgnoringCyclicReferences()
+              .RespectingRuntimeTypes()
+              .Using<FileInfoWrapper>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<FileInfoWrapper>()
+              .Using<DirectoryInfoWrapper>(ctx => ctx.Subject.FullName.Should().Be(ctx.Expectation.FullName)).WhenTypeIs<DirectoryInfoWrapper>()
+      );
     }
   }
 }

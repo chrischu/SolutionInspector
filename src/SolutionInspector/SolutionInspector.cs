@@ -10,6 +10,7 @@ using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Commands;
 using SolutionInspector.Configuration;
+using SolutionInspector.DefaultRules;
 using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
@@ -76,31 +77,31 @@ namespace SolutionInspector
       builder.RegisterType<RuleViolationViewModelConverter>().As<IRuleViolationViewModelConverter>();
 
       builder.Register(
-          ctx =>
-              new TableWriter(new TableWriterOptions { PreferredTableWidth = 200, Characters = TableWriterCharacters.AdvancedAscii })
-          ).As<ITableWriter>();
+        ctx =>
+          new TableWriter(new TableWriterOptions { PreferredTableWidth = 200, Characters = TableWriterCharacters.AdvancedAscii })
+      ).As<ITableWriter>();
 
       builder.RegisterViolationReporter(
-          ViolationReportFormat.Table,
-          ctx => tw => new TableViolationReporter(tw, ctx.Resolve<IRuleViolationViewModelConverter>(), ctx.Resolve<ITableWriter>()));
+        ViolationReportFormat.Table,
+        ctx => tw => new TableViolationReporter(tw, ctx.Resolve<IRuleViolationViewModelConverter>(), ctx.Resolve<ITableWriter>()));
 
       builder.RegisterViolationReporter(
-          ViolationReportFormat.Xml,
-          ctx => tw => new XmlViolationReporter(tw, ctx.Resolve<IRuleViolationViewModelConverter>()));
+        ViolationReportFormat.Xml,
+        ctx => tw => new XmlViolationReporter(tw, ctx.Resolve<IRuleViolationViewModelConverter>()));
 
       builder.RegisterViolationReporter(
-          ViolationReportFormat.VisualStudio,
-          ctx => tw => new VisualStudioViolationReporter(tw));
+        ViolationReportFormat.VisualStudio,
+        ctx => tw => new VisualStudioViolationReporter(tw));
 
       builder.RegisterType<ViolationReporterFactory>().As<IViolationReporterFactory>();
 
       builder.RegisterType<InspectCommand>().As<ConsoleCommand>();
       builder.Register(
-          ctx => new InitializeCommand(
-              Wrapper.Wrap(Assembly.GetAssembly(typeof(DefaultRules.SolutionBuildConfigurationsRule))),
-              ctx.Resolve<IFileStatic>(),
-              ctx.Resolve<IConsoleStatic>())
-          ).As<ConsoleCommand>();
+        ctx => new InitializeCommand(
+          Wrapper.Wrap(Assembly.GetAssembly(typeof(SolutionBuildConfigurationsRule))),
+          ctx.Resolve<IFileStatic>(),
+          ctx.Resolve<IConsoleStatic>())
+      ).As<ConsoleCommand>();
       builder.RegisterType<ConfigureCommand>().As<ConsoleCommand>();
 
       builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();

@@ -63,8 +63,7 @@ namespace SolutionInspector.Configuration.Validation.Static
     {
       if (string.IsNullOrEmpty(previousPropertyPath))
         return property.Name;
-      else
-        return previousPropertyPath + "." + property.Name;
+      return previousPropertyPath + "." + property.Name;
     }
   }
 }

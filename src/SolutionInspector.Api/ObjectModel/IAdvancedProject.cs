@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
+using Microsoft.Build.Evaluation;
 
 namespace SolutionInspector.Api.ObjectModel
 {
@@ -18,7 +19,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The raw <see cref="Microsoft.Build.Evaluation.Project" />.
     /// </summary>
-    Microsoft.Build.Evaluation.Project MsBuildProject { get; }
+    Project MsBuildProject { get; }
 
     /// <summary>
     ///   A collection of all project properties as they appear in the project file.
@@ -30,8 +31,8 @@ namespace SolutionInspector.Api.ObjectModel
     ///   Only properties with a true <see cref="IProjectPropertyCondition" /> are included.
     /// </summary>
     IReadOnlyDictionary<string, IEvaluatedProjectPropertyValue> EvaluateProperties (
-        BuildConfiguration configuration,
-        Dictionary<string, string> propertyValues = null);
+      BuildConfiguration configuration,
+      Dictionary<string, string> propertyValues = null);
 
     /// <summary>
     ///   Evaluates all the properties with the given <paramref name="propertyValues" />.

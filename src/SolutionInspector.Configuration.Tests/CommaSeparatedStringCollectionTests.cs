@@ -7,9 +7,8 @@ namespace SolutionInspector.Configuration.Tests
 {
   public class CommaSeparatedStringCollectionTests
   {
-    private Action<string> _updateAction;
-
     private CommaSeparatedStringCollection _sut;
+    private Action<string> _updateAction;
 
     [SetUp]
     public void SetUp ()
@@ -127,7 +126,6 @@ namespace SolutionInspector.Configuration.Tests
       _sut.Serialize().Should().Be("A");
 
       A.CallTo(() => _updateAction("A")).MustHaveHappened(Repeated.Exactly.Once);
-
     }
 
     [Test]
@@ -141,7 +139,6 @@ namespace SolutionInspector.Configuration.Tests
       _sut.Serialize().Should().Be("A,B");
 
       A.CallTo(() => _updateAction("A,B")).MustHaveHappened(Repeated.Exactly.Once);
-
     }
 
     [Test]
@@ -173,8 +170,8 @@ namespace SolutionInspector.Configuration.Tests
     }
 
     [Test]
-    [TestCase("A", true)]
-    [TestCase("C", false)]
+    [TestCase ("A", true)]
+    [TestCase ("C", false)]
     public void Contains (string s, bool expectedResult)
     {
       _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });
@@ -187,8 +184,8 @@ namespace SolutionInspector.Configuration.Tests
     }
 
     [Test]
-    [TestCase("A", true, 1)]
-    [TestCase("C", false, 2)]
+    [TestCase ("A", true, 1)]
+    [TestCase ("C", false, 2)]
     public void Remove (string s, bool expectedResult, int expectedCount)
     {
       _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });

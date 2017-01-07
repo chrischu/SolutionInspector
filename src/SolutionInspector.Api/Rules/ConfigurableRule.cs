@@ -5,8 +5,8 @@ namespace SolutionInspector.Api.Rules
   ///   <typeparamref name="TConfiguration" />.
   /// </summary>
   public interface IConfigurableRule<in TTarget, out TConfiguration> : IRule<TTarget>, IConfigurableRule
-      where TTarget : IRuleTarget
-    //where TConfiguration : ConfigurationElement // TODO
+    where TTarget : IRuleTarget
+  //where TConfiguration : ConfigurationElement // TODO
   {
     /// <summary>
     ///   Configuration.
@@ -16,12 +16,9 @@ namespace SolutionInspector.Api.Rules
 
   /// <inheritdoc />
   public abstract class ConfigurableRule<TTarget, TConfiguration> : Rule<TTarget>, IConfigurableRule<TTarget, TConfiguration>
-      where TTarget : IRuleTarget
-      //where TConfiguration : ConfigurationElement // TODO
+    where TTarget : IRuleTarget
+  //where TConfiguration : ConfigurationElement // TODO
   {
-    /// <inheritdoc />
-    public TConfiguration Configuration { get; }
-
     /// <summary>
     ///   Creates an instance of the <see cref="ConfigurableRule{TTarget,TConfiguration}" /> with the given <paramref name="configuration" />.
     /// </summary>
@@ -30,5 +27,8 @@ namespace SolutionInspector.Api.Rules
     {
       Configuration = configuration;
     }
+
+    /// <inheritdoc />
+    public TConfiguration Configuration { get; }
   }
 }

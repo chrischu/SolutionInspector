@@ -12,11 +12,11 @@ namespace SolutionInspector.Commands
   internal interface IArgumentsBuilderWithSetValues<out TArguments>
   {
     IArgumentsBuilderWithSetValues<TArguments> Option<T> (
-        string longKey,
-        string shortKey,
-        string description,
-        Action<TArguments, T> setValue,
-        T defaultValue = default(T));
+      string longKey,
+      string shortKey,
+      string description,
+      Action<TArguments, T> setValue,
+      T defaultValue = default(T));
 
     IArgumentsBuilderWithSetValues<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
   }
@@ -25,11 +25,11 @@ namespace SolutionInspector.Commands
   internal interface IArgumentsBuilder<out TArguments>
   {
     IArgumentsBuilder<TArguments> Option<T> (
-        string longKey,
-        string shortKey,
-        string description,
-        Action<TArguments, T> setValue,
-        T defaultValue = default(T));
+      string longKey,
+      string shortKey,
+      string description,
+      Action<TArguments, T> setValue,
+      T defaultValue = default(T));
 
     IArgumentsBuilder<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
 
@@ -43,7 +43,7 @@ namespace SolutionInspector.Commands
   }
 
   internal abstract class SolutionInspectorCommand<TRawArguments, TParsedArguments> : ConsoleCommand
-      where TRawArguments : new()
+    where TRawArguments : new()
   {
     private readonly TRawArguments _rawArguments;
     private readonly ArgumentsBuilder<TRawArguments> _rawArgumentsBuilder;
@@ -80,10 +80,10 @@ namespace SolutionInspector.Commands
     protected abstract int Run (TParsedArguments arguments);
 
     private class ArgumentsBuilder<TArguments> : IArgumentsBuilder<TArguments>, IArgumentsBuilderWithSetValues<TArguments>
-        where TArguments : new()
+      where TArguments : new()
     {
-      private readonly ConsoleCommand _command;
       private readonly TArguments _arguments;
+      private readonly ConsoleCommand _command;
       private readonly ValueArgumentsBuilder _valueArgumentsBuilder = new ValueArgumentsBuilder();
 
       public ArgumentsBuilder (ConsoleCommand command, TArguments arguments)
@@ -93,11 +93,11 @@ namespace SolutionInspector.Commands
       }
 
       public IArgumentsBuilder<TArguments> Option<T> (
-          string longKey,
-          string shortKey,
-          string description,
-          Action<TArguments, T> setValue,
-          T defaultValue = default(T))
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, T> setValue,
+        T defaultValue = default(T))
       {
         setValue(_arguments, defaultValue);
         _command.HasOption<T>($"{shortKey}|{longKey}=", description, v => setValue(_arguments, v));
@@ -120,23 +120,28 @@ namespace SolutionInspector.Commands
 
       [ExcludeFromCodeCoverage]
       IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Option<T> (
-          string longKey,
-          string shortKey,
-          string description,
-          Action<TArguments, T> setValue,
-          T defaultValue)
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, T> setValue,
+        T defaultValue)
       {
         return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
       }
 
       [ExcludeFromCodeCoverage]
       IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Flag (
-          string longKey,
-          string shortKey,
-          string description,
-          Action<TArguments, bool> setValue)
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, bool> setValue)
       {
         return (IArgumentsBuilderWithSetValues<TArguments>) Flag(longKey, shortKey, description, setValue);
+      }
+
+      public void HandleRemainingArguments (string[] remainingArguments)
+      {
+        _valueArgumentsBuilder?.ParseAdditionalArguments(_arguments, remainingArguments);
       }
 
       private class ValueArgumentsBuilder : IValueArgumentsBuilder<TArguments>
@@ -151,18 +156,6 @@ namespace SolutionInspector.Commands
           return this;
         }
 
-        private class ValueArgument
-        {
-          public string Name { get; }
-          public Action<TArguments, string> SetValueAction { get; }
-
-          public ValueArgument (string name, Action<TArguments, string> setValueAction)
-          {
-            Name = name;
-            SetValueAction = setValueAction;
-          }
-        }
-
         public void SetupAdditionalArguments (ConsoleCommand command)
         {
           command.HasAdditionalArguments(_valueArguments.Count, AdditionalArgumentsString);
@@ -172,14 +165,21 @@ namespace SolutionInspector.Commands
         {
           Trace.Assert(remainingArguments.Length == _valueArguments.Count);
 
-          for (int i = 0; i < remainingArguments.Length; i++)
+          for (var i = 0; i < remainingArguments.Length; i++)
             _valueArguments[i].SetValueAction(arguments, remainingArguments[i]);
         }
-      }
 
-      public void HandleRemainingArguments (string[] remainingArguments)
-      {
-        _valueArgumentsBuilder?.ParseAdditionalArguments(_arguments, remainingArguments);
+        private class ValueArgument
+        {
+          public ValueArgument (string name, Action<TArguments, string> setValueAction)
+          {
+            Name = name;
+            SetValueAction = setValueAction;
+          }
+
+          public string Name { get; }
+          public Action<TArguments, string> SetValueAction { get; }
+        }
       }
     }
   }

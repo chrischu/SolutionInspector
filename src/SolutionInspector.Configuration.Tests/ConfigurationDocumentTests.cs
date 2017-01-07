@@ -7,8 +7,8 @@ namespace SolutionInspector.Configuration.Tests
 {
   public class ConfigurationDocumentTests
   {
-    private XDocument _xDocument;
     private TemporaryFile _temporaryFile;
+    private XDocument _xDocument;
 
     [SetUp]
     public void SetUp ()
@@ -67,7 +67,7 @@ namespace SolutionInspector.Configuration.Tests
       }
     }
 
-    class DummyConfigurationDocument : ConfigurationDocument
+    private class DummyConfigurationDocument : ConfigurationDocument
     {
       [ConfigurationValue]
       public string Simple

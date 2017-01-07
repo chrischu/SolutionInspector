@@ -19,11 +19,11 @@ namespace SolutionInspector.DefaultRules.Tests
       _project = A.Fake<IProject>();
 
       _sut = new RequiredResourceLanguagesRule(
-               new RequiredResourceLanguagesRuleConfiguration
-               {
-                 RequiredResources = new CommaDelimitedStringCollection { "Resources1", "Resources2" },
-                 RequiredLanguages = new CommaDelimitedStringCollection { "de", "cs" }
-               });
+        new RequiredResourceLanguagesRuleConfiguration
+        {
+          RequiredResources = new CommaDelimitedStringCollection { "Resources1", "Resources2" },
+          RequiredLanguages = new CommaDelimitedStringCollection { "de", "cs" }
+        });
     }
 
     [Test]

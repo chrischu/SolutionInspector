@@ -10,8 +10,6 @@ namespace SolutionInspector.Api.ObjectModel
   [PublicAPI]
   public sealed class ProjectItemBuildAction : IEquatable<ProjectItemBuildAction>
   {
-    private readonly string _value;
-
     /// <summary>
     ///   Represents the <c>None</c> build action.
     /// </summary>
@@ -32,13 +30,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// </summary>
     public static readonly ProjectItemBuildAction EmbeddedResource = new ProjectItemBuildAction("EmbeddedResource");
 
-    /// <summary>
-    ///   Allows the creation of a custom <see cref="ProjectItemBuildAction" />.
-    /// </summary>
-    public static ProjectItemBuildAction Custom (string value)
-    {
-      return new ProjectItemBuildAction(value);
-    }
+    private readonly string _value;
 
     private ProjectItemBuildAction (string value)
     {
@@ -53,6 +45,14 @@ namespace SolutionInspector.Api.ObjectModel
       if (ReferenceEquals(this, other))
         return true;
       return string.Equals(_value, other._value);
+    }
+
+    /// <summary>
+    ///   Allows the creation of a custom <see cref="ProjectItemBuildAction" />.
+    /// </summary>
+    public static ProjectItemBuildAction Custom (string value)
+    {
+      return new ProjectItemBuildAction(value);
     }
 
     /// <inheritdoc />

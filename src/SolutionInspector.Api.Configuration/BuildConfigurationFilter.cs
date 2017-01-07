@@ -10,7 +10,7 @@ namespace SolutionInspector.Api.Configuration
   /// <summary>
   ///   Filter for build configurations (e.g. Debug/AnyCPU).
   /// </summary>
-  [ConfigurationConverter(typeof(BuildConfigurationFilterConverter))]
+  [ConfigurationConverter (typeof(BuildConfigurationFilterConverter))]
   public class BuildConfigurationFilter
   {
     private readonly BuildConfiguration[] _filters;
@@ -19,7 +19,7 @@ namespace SolutionInspector.Api.Configuration
     ///   Creates a <see cref="BuildConfigurationFilter" /> from the given <see cref="BuildConfiguration" />s.
     /// </summary>
     public BuildConfigurationFilter (IEnumerable<BuildConfiguration> filters)
-        : this(filters.ToArray())
+      : this(filters.ToArray())
     {
     }
 
@@ -40,6 +40,13 @@ namespace SolutionInspector.Api.Configuration
       return _filters.Any(f => comparer.Equals(f, buildConfiguration));
     }
 
+    /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
+    public override string ToString ()
+    {
+      return string.Join(",", _filters.Select(f => f.ToString()));
+    }
+
     private class BuildConfigurationFilterEqualityComparer : IEqualityComparer<BuildConfiguration>
     {
       public bool Equals ([NotNull] BuildConfiguration x, [NotNull] BuildConfiguration y)
@@ -53,13 +60,6 @@ namespace SolutionInspector.Api.Configuration
       {
         return obj.GetHashCode();
       }
-    }
-
-    /// <inheritdoc />
-    [ExcludeFromCodeCoverage]
-    public override string ToString ()
-    {
-      return string.Join(",", _filters.Select(f => f.ToString()));
     }
   }
 }

@@ -11,10 +11,10 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure
     private readonly Func<bool> _canExecute;
 
     public AsyncCommand (
-        Action action,
-        Func<bool> canExecute = null,
-        Action<object> completed = null,
-        Action<Exception> error = null)
+      Action action,
+      Func<bool> canExecute = null,
+      Action<object> completed = null,
+      Action<Exception> error = null)
     {
       _backgroundWorker.DoWork += (s, e) =>
       {
@@ -36,17 +36,11 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure
       _canExecute = canExecute;
     }
 
-    public void Cancel ()
-    {
-      if (_backgroundWorker.IsBusy)
-        _backgroundWorker.CancelAsync();
-    }
-
     public bool CanExecute ([CanBeNull] object parameter = null)
     {
       return _canExecute == null
-          ? !_backgroundWorker.IsBusy
-          : !_backgroundWorker.IsBusy && _canExecute();
+        ? !_backgroundWorker.IsBusy
+        : !_backgroundWorker.IsBusy && _canExecute();
     }
 
     public void Execute ([CanBeNull] object parameter = null)
@@ -63,6 +57,12 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure
     public void Dispose ()
     {
       _backgroundWorker?.Dispose();
+    }
+
+    public void Cancel ()
+    {
+      if (_backgroundWorker.IsBusy)
+        _backgroundWorker.CancelAsync();
     }
   }
 }

@@ -14,7 +14,7 @@ namespace SolutionInspector.Api.Rules
     ///   Creates a new <see cref="InvalidRuleAssemblyException" />
     /// </summary>
     public InvalidRuleAssemblyException (string ruleAssemblyPath, Exception innerException = null)
-        : base($"The assembly loaded from '{ruleAssemblyPath}' is not a valid rule assembly.", innerException)
+      : base($"The assembly loaded from '{ruleAssemblyPath}' is not a valid rule assembly.", innerException)
     {
     }
 
@@ -23,7 +23,7 @@ namespace SolutionInspector.Api.Rules
     /// </summary>
     [ExcludeFromCodeCoverage /* Serialization ctor */]
     protected InvalidRuleAssemblyException (SerializationInfo info, StreamingContext context)
-        : base(info, context)
+      : base(info, context)
     {
     }
   }

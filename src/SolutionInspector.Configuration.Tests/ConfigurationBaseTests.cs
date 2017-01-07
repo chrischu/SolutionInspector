@@ -167,7 +167,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Get_NonExistingCollectionValue_ReturnsEmptyCollectionAndUpdatesXml()
+    public void Get_NonExistingCollectionValue_ReturnsEmptyCollectionAndUpdatesXml ()
     {
       // ACT
       var result = _sut.NonExistingCollection;
@@ -179,7 +179,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Get_NonExistingSubValue_ReturnsEmptySubelementAndUpdatesXml()
+    public void Get_NonExistingSubValue_ReturnsEmptySubelementAndUpdatesXml ()
     {
       // ACT
       var result = _sut.NonExistingSub;
@@ -202,7 +202,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Get_SubValueWithoutAttribute_Throws()
+    public void Get_SubValueWithoutAttribute_Throws ()
     {
       // ACT
       Action act = () => Dev.Null = _sut.SubWithoutAttribute;
@@ -223,7 +223,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Set_NonConfigurationValue_Throws()
+    public void Set_NonConfigurationValue_Throws ()
     {
       // ACT
       Action act = () => _sut.NotAConfigurationProperty = "newValue";
@@ -254,7 +254,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Set_ValueWithConverterFromAttribute_Works()
+    public void Set_ValueWithConverterFromAttribute_Works ()
     {
       // ACT
       _sut.WithConverterFromAttribute = new DummyConvertedValueWithAttribute("newValue");
@@ -274,7 +274,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Set_InnerValueFromIConfigurationValue_Works()
+    public void Set_InnerValueFromIConfigurationValue_Works ()
     {
       // ACT
       _sut.Configuration.Value = "newValue";
@@ -283,7 +283,7 @@ configuration=""configurationValue"">
       _element.Attribute("configurationValue")?.Value.Should().Be("newValue");
     }
 
-    class DummyConfigurationElement : ConfigurationElement
+    private class DummyConfigurationElement : ConfigurationElement
     {
       public object NotAConfigurationProperty
       {
@@ -370,7 +370,7 @@ configuration=""configurationValue"">
       public DummySubelement SubWithoutAttribute => GetConfigurationSubelement<DummySubelement>();
     }
 
-    class DummySubelement : ConfigurationElement
+    private class DummySubelement : ConfigurationElement
     {
       [ConfigurationValue (IsOptional = true)]
       public string String
@@ -381,18 +381,18 @@ configuration=""configurationValue"">
       }
     }
 
-    class DummyConvertedValue
+    private class DummyConvertedValue
     {
-      public string Value { get; }
-
       public DummyConvertedValue (string value)
       {
         Value = value;
       }
+
+      public string Value { get; }
     }
 
     [ConfigurationConverter (typeof(DummyConfigurationConverter2))]
-    class DummyConvertedValueWithAttribute : DummyConvertedValue
+    private class DummyConvertedValueWithAttribute : DummyConvertedValue
     {
       public DummyConvertedValueWithAttribute (string value)
         : base(value)
@@ -400,7 +400,7 @@ configuration=""configurationValue"">
       }
     }
 
-    class DummyConfigurationConverter : IConfigurationConverter<DummyConvertedValue>
+    private class DummyConfigurationConverter : IConfigurationConverter<DummyConvertedValue>
     {
       public string ConvertTo ([CanBeNull] DummyConvertedValue value)
       {
@@ -413,7 +413,7 @@ configuration=""configurationValue"">
       }
     }
 
-    class DummyConfigurationConverter2 : IConfigurationConverter<DummyConvertedValueWithAttribute>
+    private class DummyConfigurationConverter2 : IConfigurationConverter<DummyConvertedValueWithAttribute>
     {
       public string ConvertTo ([CanBeNull] DummyConvertedValueWithAttribute value)
       {
@@ -426,12 +426,13 @@ configuration=""configurationValue"">
       }
     }
 
-    class DummyConfigurationValue : ConfigurationValue<DummyConfigurationValue>
+    private class DummyConfigurationValue : ConfigurationValue<DummyConfigurationValue>
     {
       private string _value;
 
       // ReSharper disable once MemberCanBePrivate.Local
-      public DummyConfigurationValue (Action<string> updateValue) : base(updateValue)
+      public DummyConfigurationValue (Action<string> updateValue)
+        : base(updateValue)
       {
       }
 

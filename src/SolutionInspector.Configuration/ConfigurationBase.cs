@@ -121,7 +121,9 @@ namespace SolutionInspector.Configuration
       var attributeName = configurationPropertyAttribute.GetXmlName(clrPropertyName);
 
       if (configurationValue != null)
+      {
         Element.SetAttributeValue(attributeName, configurationValue.Serialize());
+      }
       else if (configurationPropertyAttribute.ConfigurationConverter != null || configurationConverterAttribute != null)
       {
         var converterType = configurationPropertyAttribute.ConfigurationConverter ?? configurationConverterAttribute.ConfigurationConverterType;
@@ -130,7 +132,9 @@ namespace SolutionInspector.Configuration
         Element.SetAttributeValue(attributeName, converter.ConvertTo(value));
       }
       else
+      {
         Element.SetAttributeValue(attributeName, value);
+      }
     }
 
     /// <summary>
@@ -146,7 +150,9 @@ namespace SolutionInspector.Configuration
 
       XElement collectionElement;
       if (configurationCollectionAttribute.IsDefaultCollection)
+      {
         collectionElement = Element;
+      }
       else
       {
         collectionElement = Element.Element(configurationCollectionAttribute.GetXmlName(clrPropertyName));

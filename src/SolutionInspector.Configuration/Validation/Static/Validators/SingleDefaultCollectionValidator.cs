@@ -26,7 +26,6 @@ namespace SolutionInspector.Configuration.Validation.Static.Validators
     public override void EndTypeValidation (Type configurationElementType, ReportValidationError reportValidationError)
     {
       if (_defaultCollectionProperties.Count > 1)
-      {
         foreach (var collectionProperty in _defaultCollectionProperties)
         {
           var otherDefaultCollectionProperties = string.Join(
@@ -38,7 +37,6 @@ namespace SolutionInspector.Configuration.Validation.Static.Validators
             "There can only be one default collection per configuration element and the following properties are already marked as " +
             $"default collection: {otherDefaultCollectionProperties}.");
         }
-      }
     }
   }
 }

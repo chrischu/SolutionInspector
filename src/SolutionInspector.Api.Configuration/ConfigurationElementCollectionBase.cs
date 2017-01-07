@@ -10,9 +10,13 @@ namespace SolutionInspector.Api.Configuration
   ///   Base class for <see cref="ConfigurationElementCollection{T}" />s with elements of type <typeparamref name="TElement" />.
   /// </summary>
   public abstract class ConfigurationElementCollectionBase<TElement> : ConfigurationElementCollection, IConfigurationCollection<TElement>
-      where TElement : System.Configuration.ConfigurationElement, new()
+    where TElement : System.Configuration.ConfigurationElement, new()
 
   {
+    protected abstract override string ElementName { get; }
+
+    public override ConfigurationElementCollectionType CollectionType => ConfigurationElementCollectionType.BasicMap;
+
     /// <summary>
     ///   Adds the given <paramref name="element" /> to the collection.
     /// </summary>
@@ -40,14 +44,19 @@ namespace SolutionInspector.Api.Configuration
     }
 
     /// <inheritdoc />
+    public new IEnumerator<TElement> GetEnumerator ()
+    {
+      var enumerator = base.GetEnumerator();
+
+      while (enumerator.MoveNext())
+        yield return (TElement) enumerator.Current;
+    }
+
+    /// <inheritdoc />
     protected sealed override System.Configuration.ConfigurationElement CreateNewElement ()
     {
       return new TElement();
     }
-
-    protected abstract override string ElementName { get; }
-
-    public override ConfigurationElementCollectionType CollectionType => ConfigurationElementCollectionType.BasicMap;
 
     protected override bool IsElementName (string elementName)
     {
@@ -58,15 +67,6 @@ namespace SolutionInspector.Api.Configuration
     protected override object GetElementKey (System.Configuration.ConfigurationElement element)
     {
       return element;
-    }
-
-    /// <inheritdoc />
-    public new IEnumerator<TElement> GetEnumerator ()
-    {
-      var enumerator = base.GetEnumerator();
-
-      while (enumerator.MoveNext())
-        yield return (TElement) enumerator.Current;
     }
 
     /// <inheritdoc />

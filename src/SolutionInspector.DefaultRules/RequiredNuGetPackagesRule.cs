@@ -16,7 +16,7 @@ namespace SolutionInspector.DefaultRules
   {
     /// <inheritdoc />
     public RequiredNuGetPackagesRule ([NotNull] RequiredNuGetPackagesRuleConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
     }
 

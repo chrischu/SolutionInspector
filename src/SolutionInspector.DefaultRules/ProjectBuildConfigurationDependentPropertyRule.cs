@@ -19,7 +19,7 @@ namespace SolutionInspector.DefaultRules
   {
     /// <inheritdoc />
     public ProjectBuildConfigurationDependentPropertyRule (ProjectBuildConfigurationDependentPropertyRuleConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
     }
 
@@ -37,10 +37,10 @@ namespace SolutionInspector.DefaultRules
         if (actualValue != Configuration.ExpectedValue)
           yield return
               new RuleViolation(
-                  this,
-                  target,
-                  $"Unexpected value for property '{Configuration.Property}' in build configuration '{matchingBuildConfig}', " +
-                  $"was '{actualValue ?? "<null>"}' but should be '{Configuration.ExpectedValue}'.");
+                this,
+                target,
+                $"Unexpected value for property '{Configuration.Property}' in build configuration '{matchingBuildConfig}', " +
+                $"was '{actualValue ?? "<null>"}' but should be '{Configuration.ExpectedValue}'.");
       }
     }
   }

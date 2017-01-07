@@ -37,6 +37,11 @@ namespace SolutionInspector.Configuration
       _updateValue = updateValue;
     }
 
+    public abstract string Serialize ();
+
+    [UsedImplicitly /* via Reflection */]
+    public abstract void Deserialize (string serialized);
+
     /// <summary>
     ///   Call this method when the configuration value has changed and the changes should get forwarded to the XML representation.
     /// </summary>
@@ -44,11 +49,6 @@ namespace SolutionInspector.Configuration
     {
       _updateValue(Serialize());
     }
-
-    public abstract string Serialize ();
-
-    [UsedImplicitly /* via Reflection */]
-    public abstract void Deserialize (string serialized);
 
     public sealed override string ToString ()
     {

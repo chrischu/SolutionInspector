@@ -2,7 +2,7 @@
 {
   public partial class StartWindow
   {
-    public StartWindow()
+    public StartWindow ()
     {
       InitializeComponent();
     }

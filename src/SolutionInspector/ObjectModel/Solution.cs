@@ -14,8 +14,8 @@ namespace SolutionInspector.ObjectModel
 {
   internal sealed class Solution : ISolution
   {
-    private readonly string _solutionPath;
     private readonly SolutionFile _solutionFile;
+    private readonly string _solutionPath;
 
     private Solution (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
@@ -49,16 +49,16 @@ namespace SolutionInspector.ObjectModel
     string IRuleTarget.Identifier => Path.GetFileName(_solutionPath);
     string IRuleTarget.FullPath => _solutionPath;
 
-    public static Solution Load (string solutionFilePath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
-    {
-      var fullPath = Path.GetFullPath(solutionFilePath);
-      return new Solution(fullPath, msBuildParsingConfiguration);
-    }
-
     public void Dispose ()
     {
       foreach (var project in Projects)
         project.Dispose();
+    }
+
+    public static Solution Load (string solutionFilePath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
+    {
+      var fullPath = Path.GetFullPath(solutionFilePath);
+      return new Solution(fullPath, msBuildParsingConfiguration);
     }
   }
 }

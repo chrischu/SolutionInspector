@@ -11,10 +11,10 @@ namespace SolutionInspector.DefaultRules.Tests
 {
   public class RequiredCompilationSymbolsProjectRuleTests
   {
-    private IProject _project;
-    private BuildConfiguration _includedBuildConfiguration;
-    private BuildConfiguration _filteredBuildConfiguration;
     private IAdvancedProject _advancedProject;
+    private BuildConfiguration _filteredBuildConfiguration;
+    private BuildConfiguration _includedBuildConfiguration;
+    private IProject _project;
 
     private RequiredCompilationSymbolsProjectRule _sut;
 

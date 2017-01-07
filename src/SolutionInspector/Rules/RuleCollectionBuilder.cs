@@ -13,12 +13,12 @@ namespace SolutionInspector.Rules
 
   internal class RuleCollectionBuilder : IRuleCollectionBuilder
   {
-    private readonly IRuleTypeResolver _ruleTypeResolver;
     private readonly IRuleConfigurationInstantiator _ruleConfigurationInstantiator;
+    private readonly IRuleTypeResolver _ruleTypeResolver;
 
     public RuleCollectionBuilder (
-        IRuleTypeResolver ruleTypeResolver,
-        IRuleConfigurationInstantiator ruleConfigurationInstantiator)
+      IRuleTypeResolver ruleTypeResolver,
+      IRuleConfigurationInstantiator ruleConfigurationInstantiator)
     {
       _ruleTypeResolver = ruleTypeResolver;
       _ruleConfigurationInstantiator = ruleConfigurationInstantiator;
@@ -41,25 +41,25 @@ namespace SolutionInspector.Rules
     private IEnumerable<IProjectRule> BuildProjectRules (IReadOnlyCollection<IProjectRuleGroupConfiguration> projectRuleGroups)
     {
       foreach (var projectRuleGroup in projectRuleGroups)
-        foreach (var projectRule in InstantiateRules<IProjectRule>(projectRuleGroup.Rules))
-          yield return new FilteringProjectRuleProxy(projectRuleGroup.AppliesTo, projectRule);
+      foreach (var projectRule in InstantiateRules<IProjectRule>(projectRuleGroup.Rules))
+        yield return new FilteringProjectRuleProxy(projectRuleGroup.AppliesTo, projectRule);
     }
 
     private IEnumerable<IProjectItemRule> BuildProjectItemRules (IReadOnlyCollection<IProjectItemRuleGroupConfiguration> projectItemRuleGrousp)
     {
       foreach (var projectItemRuleGroup in projectItemRuleGrousp)
-        foreach (var projectItemRule in InstantiateRules<IProjectItemRule>(projectItemRuleGroup.Rules))
-          yield return new FilteringProjectItemRuleProxy(projectItemRuleGroup.AppliesTo, projectItemRuleGroup.InProject, projectItemRule);
+      foreach (var projectItemRule in InstantiateRules<IProjectItemRule>(projectItemRuleGroup.Rules))
+        yield return new FilteringProjectItemRuleProxy(projectItemRuleGroup.AppliesTo, projectItemRuleGroup.InProject, projectItemRule);
     }
 
     private IEnumerable<TRule> InstantiateRules<TRule> (IReadOnlyCollection<IRuleConfiguration> ruleConfigurations)
-        where TRule : IRule
+      where TRule : IRule
     {
       return from ruleConfiguration in ruleConfigurations
-        let ruleTypeInfo = _ruleTypeResolver.Resolve(ruleConfiguration.RuleType)
-        let config = _ruleConfigurationInstantiator.Instantiate(ruleTypeInfo.ConfigurationType, ruleConfiguration.Element)
-        let constructorParameters = ruleTypeInfo.IsConfigurable ? new object[] { config } : new object[0]
-        select (TRule) ruleTypeInfo.Constructor.Invoke(constructorParameters);
+          let ruleTypeInfo = _ruleTypeResolver.Resolve(ruleConfiguration.RuleType)
+          let config = _ruleConfigurationInstantiator.Instantiate(ruleTypeInfo.ConfigurationType, ruleConfiguration.Element)
+          let constructorParameters = ruleTypeInfo.IsConfigurable ? new object[] { config } : new object[0]
+          select (TRule) ruleTypeInfo.Constructor.Invoke(constructorParameters);
     }
   }
 }

@@ -23,28 +23,27 @@ namespace SolutionInspector.Tests.Commands
 {
   public class InspectCommandTests : CommandTestsBase
   {
-    private ISolution _solution;
+    private IConfigurationLoader _configurationLoader;
     private IProject _project;
     private IProjectItem _projectItem;
-    private IRuleCollection _rules;
-
-    private ISolutionLoader _solutionLoader;
-    private IRuleCollectionBuilder _ruleCollectionBuilder;
-    private IViolationReporter _violationReporter;
-    private IViolationReporterFactory _violationReporterFactory;
-
-    private IConfigurationLoader _configurationLoader;
+    private IProjectItemRule _projectItemRule;
+    private IProjectRule _projectRule;
     private IRuleAssemblyLoader _ruleAssemblyLoader;
+    private IRuleCollectionBuilder _ruleCollectionBuilder;
+    private IRuleCollection _rules;
+    private IRulesConfiguration _rulesConfiguration;
+    private IRulesetConfiguration _ruleset;
+    private ISolution _solution;
 
     private ISolutionInspectorConfiguration _solutionInspectorConfiguration;
-    private IRulesetConfiguration _ruleset;
-    private IRulesConfiguration _rulesConfiguration;
+
+    private ISolutionLoader _solutionLoader;
 
     private ISolutionRule _solutionRule;
-    private IProjectRule _projectRule;
-    private IProjectItemRule _projectItemRule;
 
     private InspectCommand _sut;
+    private IViolationReporter _violationReporter;
+    private IViolationReporterFactory _violationReporterFactory;
 
     [SetUp]
     public new void SetUp ()
@@ -86,12 +85,12 @@ namespace SolutionInspector.Tests.Commands
       A.CallTo(() => _violationReporterFactory.CreateFileReporter(A<ViolationReportFormat>._, A<string>._)).Returns(_violationReporter);
 
       _sut = new InspectCommand(
-               _configurationLoader,
-               _ruleAssemblyLoader,
-               _solutionLoader,
-               _ruleCollectionBuilder,
-               _violationReporterFactory,
-               _solutionInspectorConfiguration);
+        _configurationLoader,
+        _ruleAssemblyLoader,
+        _solutionLoader,
+        _ruleCollectionBuilder,
+        _violationReporterFactory,
+        _solutionInspectorConfiguration);
     }
 
     [Test]

@@ -18,9 +18,9 @@ namespace SolutionInspector.Tests.ObjectModel
 {
   public class ProjectTests
   {
-    private string _solutionPath;
-    private IMsBuildParsingConfiguration _msBuildParsingConfiguration;
     private Guid _guidOfEmptyProject;
+    private IMsBuildParsingConfiguration _msBuildParsingConfiguration;
+    private string _solutionPath;
 
     [SetUp]
     public void SetUp ()
@@ -88,9 +88,9 @@ namespace SolutionInspector.Tests.ObjectModel
             const string propertyName = "DependentOnConfiguration";
 
             var occurrence = new ProjectPropertyOccurrence(
-                               "LOL",
-                               new ProjectPropertyCondition(" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ", null),
-                               new ProjectLocation(24, 5));
+              "LOL",
+              new ProjectPropertyCondition(" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ", null),
+              new ProjectLocation(24, 5));
             p.Advanced.Properties[propertyName].Should().BeLike(
               new ProjectProperty(propertyName, "LOL")
               {
@@ -111,9 +111,9 @@ namespace SolutionInspector.Tests.ObjectModel
             const string propertyName = "DependentOnProperty";
 
             var occurrence = new ProjectPropertyOccurrence(
-                               "ROFL",
-                               new ProjectPropertyCondition(" '$(Property)' == 'true' ", null),
-                               new ProjectLocation(25, 5));
+              "ROFL",
+              new ProjectPropertyCondition(" '$(Property)' == 'true' ", null),
+              new ProjectLocation(25, 5));
 
             p.Advanced.Properties[propertyName].Should().BeLike(new ProjectProperty(propertyName, "") { occurrence });
 
@@ -133,9 +133,9 @@ namespace SolutionInspector.Tests.ObjectModel
             const string propertyName = "ConditionFromParent";
 
             var occurrence = new ProjectPropertyOccurrence(
-                               "QWER",
-                               new ProjectPropertyCondition(null, " '$(Parent)' == 'true' "),
-                               new ProjectLocation(28, 5));
+              "QWER",
+              new ProjectPropertyCondition(null, " '$(Parent)' == 'true' "),
+              new ProjectLocation(28, 5));
 
             p.Advanced.Properties[propertyName].Should().BeLike(
               new ProjectProperty(propertyName, "") { occurrence });
@@ -156,9 +156,9 @@ namespace SolutionInspector.Tests.ObjectModel
             const string propertyName = "ConditionFromSelf";
 
             var occurrence = new ProjectPropertyOccurrence(
-                               "ASDF",
-                               new ProjectPropertyCondition(" '$(Self)' == 'true' ", " '$(Parent)' == 'true' "),
-                               new ProjectLocation(29, 5));
+              "ASDF",
+              new ProjectPropertyCondition(" '$(Self)' == 'true' ", " '$(Parent)' == 'true' "),
+              new ProjectLocation(29, 5));
 
             p.Advanced.Properties[propertyName].Should().BeLike(new ProjectProperty(propertyName, "") { occurrence });
 
@@ -182,14 +182,14 @@ namespace SolutionInspector.Tests.ObjectModel
             const string propertyName = "Multiple";
 
             var occurrenceWithThree = new ProjectPropertyOccurrence(
-                                        "Three",
-                                        new ProjectPropertyCondition(" '$(Value)' == '3'", null),
-                                        new ProjectLocation(32, 5));
+              "Three",
+              new ProjectPropertyCondition(" '$(Value)' == '3'", null),
+              new ProjectLocation(32, 5));
 
             var occurrenceWithFive = new ProjectPropertyOccurrence(
-                                       "Five",
-                                       new ProjectPropertyCondition(" '$(Value)' == '5'", null),
-                                       new ProjectLocation(33, 5));
+              "Five",
+              new ProjectPropertyCondition(" '$(Value)' == '5'", null),
+              new ProjectLocation(33, 5));
 
             p.Advanced.Properties[propertyName].Should().BeLike(
               new ProjectProperty(propertyName, "") { occurrenceWithThree, occurrenceWithFive });
@@ -244,8 +244,8 @@ namespace SolutionInspector.Tests.ObjectModel
       var projectName = "ProjectWithReferences";
       var projectPath = GetProjectPath(projectName);
 
-      var referencedNuGetPackage1 = new NuGetPackage("Newtonsoft.Json", new Version(8, 0, 3), false, null, "net452", isDevelopmentDependency: false);
-      var referencedNuGetPackage2 = new NuGetPackage("Dapper", new Version(1, 50, 0), true, "-beta9", "net452", isDevelopmentDependency: true);
+      var referencedNuGetPackage1 = new NuGetPackage("Newtonsoft.Json", new Version(8, 0, 3), false, null, "net452", false);
+      var referencedNuGetPackage2 = new NuGetPackage("Dapper", new Version(1, 50, 0), true, "-beta9", "net452", true);
 
       // ACT
       using (var result = LoadProject(projectName))
@@ -281,9 +281,9 @@ namespace SolutionInspector.Tests.ObjectModel
               new NuGetReference(
                 referencedNuGetPackage1,
                 new AssemblyName("Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"),
-                isPrivate: true,
-                hintPath: "..\\packages\\Newtonsoft.Json.8.0.3\\lib\\net45\\Newtonsoft.Json.dll",
-                projectDirectory: p.ProjectDirectory.FullName));
+                true,
+                "..\\packages\\Newtonsoft.Json.8.0.3\\lib\\net45\\Newtonsoft.Json.dll",
+                p.ProjectDirectory.FullName));
 
             var publicReference = p.NuGetReferences.Single(r => !r.IsPrivate);
             publicReference.Should().BeLike(new { IsPrivate = false });

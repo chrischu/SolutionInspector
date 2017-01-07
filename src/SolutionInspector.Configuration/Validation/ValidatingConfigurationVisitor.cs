@@ -11,12 +11,12 @@ namespace SolutionInspector.Configuration.Validation
 {
   internal class ValidatingConfigurationVisitor : IStaticConfigurationVisitor, IDynamicConfigurationVisitor
   {
-    private readonly IConfigurationValidationErrorCollector _errorCollector;
-    private readonly IReadOnlyCollection<IStaticConfigurationValidator> _staticValidators;
-    private readonly IReadOnlyCollection<IDynamicConfigurationValidator> _dynamicValidators;
-
     private readonly Dictionary<Type, Dictionary<PropertyInfo, List<string>>> _cachedStaticValidationErrorsByType =
         new Dictionary<Type, Dictionary<PropertyInfo, List<string>>>();
+
+    private readonly IReadOnlyCollection<IDynamicConfigurationValidator> _dynamicValidators;
+    private readonly IConfigurationValidationErrorCollector _errorCollector;
+    private readonly IReadOnlyCollection<IStaticConfigurationValidator> _staticValidators;
 
     private bool _disableValidation;
 
@@ -29,6 +29,13 @@ namespace SolutionInspector.Configuration.Validation
       _errorCollector = errorCollector;
       _staticValidators = staticValidators;
       _dynamicValidators = dynamicValidators;
+    }
+
+    private string BuildPropertyPath (string previousPropertyPath, PropertyInfo property)
+    {
+      if (string.IsNullOrEmpty(previousPropertyPath))
+        return property.Name;
+      return previousPropertyPath + "." + property.Name;
     }
 
     #region Static
@@ -52,49 +59,40 @@ namespace SolutionInspector.Configuration.Validation
       else
       {
         foreach (var configurationValidator in _staticValidators)
-        {
-          configurationValidator.BeginTypeValidation(configurationElementType,
+          configurationValidator.BeginTypeValidation(
+            configurationElementType,
             (prop, msg) => ReportStaticValidationError(BuildPropertyPath(propertyPath, prop), prop, msg));
-        }
       }
     }
 
     public void VisitValue (string propertyPath, PropertyInfo property, ConfigurationValueAttribute attribute)
     {
       if (!_disableValidation)
-      {
         foreach (var configurationValidator in _staticValidators)
           configurationValidator.ValidateValue(property, attribute, (prop, msg) => ReportStaticValidationError(propertyPath, prop, msg));
-      }
     }
 
     public void VisitSubelement (string propertyPath, PropertyInfo property, ConfigurationSubelementAttribute attribute)
     {
       if (!_disableValidation)
-      {
         foreach (var configurationValidator in _staticValidators)
           configurationValidator.ValidateSubelement(property, attribute, (prop, msg) => ReportStaticValidationError(propertyPath, prop, msg));
-      }
     }
 
     public void VisitCollection (string propertyPath, PropertyInfo property, ConfigurationCollectionAttribute attribute)
     {
       if (!_disableValidation)
-      {
         foreach (var configurationValidator in _staticValidators)
           configurationValidator.ValidateCollection(property, attribute, (prop, msg) => ReportStaticValidationError(propertyPath, prop, msg));
-      }
     }
 
     public void EndTypeVisit (string propertyPath, Type configurationElementType)
     {
       if (!_disableValidation)
-      {
         foreach (var configurationValidator in _staticValidators)
           configurationValidator.EndTypeValidation(
             configurationElementType,
             (prop, msg) => ReportStaticValidationError(BuildPropertyPath(propertyPath, prop), prop, msg));
-      }
 
       _disableValidation = false;
     }
@@ -117,7 +115,10 @@ namespace SolutionInspector.Configuration.Validation
     public void BeginTypeVisit (string propertyPath, Type configurationElementType, XElement element)
     {
       foreach (var configurationValidator in _dynamicValidators)
-        configurationValidator.BeginTypeValidation(configurationElementType, element, (prop, msg) => ReportDynamicValidationError(BuildPropertyPath(propertyPath, prop), msg));
+        configurationValidator.BeginTypeValidation(
+          configurationElementType,
+          element,
+          (prop, msg) => ReportDynamicValidationError(BuildPropertyPath(propertyPath, prop), msg));
     }
 
     public void VisitValue (string propertyPath, PropertyInfo property, ConfigurationValueAttribute attribute, [CanBeNull] XAttribute xAttribute)
@@ -144,14 +145,12 @@ namespace SolutionInspector.Configuration.Validation
       [CanBeNull] IReadOnlyCollection<XElement> collectionItems)
     {
       foreach (var configurationValidator in _dynamicValidators)
-      {
         configurationValidator.ValidateCollection(
           property,
           attribute,
           collectionElement,
           collectionItems,
           (prop, msg) => ReportDynamicValidationError(propertyPath, msg));
-      }
     }
 
     public void EndTypeVisit (string propertyPath, Type configurationElementType, XElement element)
@@ -169,13 +168,5 @@ namespace SolutionInspector.Configuration.Validation
     }
 
     #endregion
-
-    private string BuildPropertyPath (string previousPropertyPath, PropertyInfo property)
-    {
-      if (string.IsNullOrEmpty(previousPropertyPath))
-        return property.Name;
-      else
-        return previousPropertyPath + "." + property.Name;
-    }
   }
 }

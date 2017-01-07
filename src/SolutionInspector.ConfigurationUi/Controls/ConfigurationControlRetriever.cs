@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace SolutionInspector.ConfigurationUi.Controls
 {
@@ -11,11 +12,20 @@ namespace SolutionInspector.ConfigurationUi.Controls
 
   internal class ConfigurationControlRetriever : IConfigurationControlRetriever
   {
-    private Dictionary<Type, IConfigurationControl> _configurationControls;
+    private readonly Dictionary<Type, IConfigurationControl> _configurationControls;
 
     public ConfigurationControlRetriever ()
     {
       _configurationControls = LoadConfigurationControls();
+    }
+
+    public IConfigurationControl GetControlFor (object value)
+    {
+      IConfigurationControl control;
+      if (_configurationControls.TryGetValue(value.GetType(), out control))
+        return control;
+
+      return null;
     }
 
     private Dictionary<Type, IConfigurationControl> LoadConfigurationControls ()
@@ -30,18 +40,9 @@ namespace SolutionInspector.ConfigurationUi.Controls
           .ToDictionary(c => c.ValueType);
 
       foreach (var control in configurationControls.Values)
-        App.Current.Resources.MergedDictionaries.Add(control.Template);
+        Application.Current.Resources.MergedDictionaries.Add(control.Template);
 
       return configurationControls;
-    }
-
-    public IConfigurationControl GetControlFor (object value)
-    {
-      IConfigurationControl control;
-      if (_configurationControls.TryGetValue(value.GetType(), out control))
-        return control;
-
-      return null;
     }
   }
 }

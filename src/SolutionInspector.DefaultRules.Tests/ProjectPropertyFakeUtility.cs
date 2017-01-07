@@ -9,10 +9,10 @@ namespace SolutionInspector.DefaultRules.Tests
   public static class ProjectPropertyFakeUtility
   {
     public static void SetupFakeBuildConfigurationDependentProperty (
-        IAdvancedProject advancedProject,
-        BuildConfiguration buildConfiguration,
-        string property,
-        string value)
+      IAdvancedProject advancedProject,
+      BuildConfiguration buildConfiguration,
+      string property,
+      string value)
     {
       SetupFakeBuildConfigurationDependentProperties(advancedProject, buildConfiguration, new Dictionary<string, string> { { property, value } });
     }
@@ -23,21 +23,21 @@ namespace SolutionInspector.DefaultRules.Tests
     }
 
     public static void SetupFakeBuildConfigurationDependentProperties (
-        IAdvancedProject advancedProject,
-        BuildConfiguration buildConfiguration,
-        Dictionary<string, string> properties)
+      IAdvancedProject advancedProject,
+      BuildConfiguration buildConfiguration,
+      Dictionary<string, string> properties)
     {
       var projectProperties = properties.ToDictionary(
-          kvp => kvp.Key,
-          kvp =>
-          {
-            var evaluatedProjectPropertyValue = A.Fake<IEvaluatedProjectPropertyValue>();
+        kvp => kvp.Key,
+        kvp =>
+        {
+          var evaluatedProjectPropertyValue = A.Fake<IEvaluatedProjectPropertyValue>();
 
-            A.CallTo(() => evaluatedProjectPropertyValue.SourceOccurrence).Returns(A.Dummy<IProjectPropertyOccurrence>());
-            A.CallTo(() => evaluatedProjectPropertyValue.Value).Returns(kvp.Value);
+          A.CallTo(() => evaluatedProjectPropertyValue.SourceOccurrence).Returns(A.Dummy<IProjectPropertyOccurrence>());
+          A.CallTo(() => evaluatedProjectPropertyValue.Value).Returns(kvp.Value);
 
-            return evaluatedProjectPropertyValue;
-          });
+          return evaluatedProjectPropertyValue;
+        });
 
       A.CallTo(() => advancedProject.EvaluateProperties(buildConfiguration, null))
           .Returns(projectProperties);

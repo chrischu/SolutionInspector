@@ -9,9 +9,8 @@ namespace SolutionInspector.Tests.Reporting
 {
   public class VisualStudioViolationReporterTests
   {
-    private TextWriter _textWriter;
-
     private VisualStudioViolationReporter _sut;
+    private TextWriter _textWriter;
 
     [SetUp]
     public void SetUp ()

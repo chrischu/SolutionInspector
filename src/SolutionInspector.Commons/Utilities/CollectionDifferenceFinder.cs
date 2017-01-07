@@ -15,7 +15,7 @@ namespace SolutionInspector.Commons.Utilities
     /// <param name="c1"></param>
     /// <param name="c2"></param>
     /// <returns></returns>
-    CollectionDifferences<T> FindDifferences<T>(IEnumerable<T> c1, IEnumerable<T> c2);
+    CollectionDifferences<T> FindDifferences<T> (IEnumerable<T> c1, IEnumerable<T> c2);
   }
 
   /// <inheritdoc />

@@ -6,9 +6,25 @@ using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.ObjectModel
 {
-  /// <inheritdoc cref="INuGetPackage"/>
+  /// <inheritdoc cref="INuGetPackage" />
   public sealed class NuGetPackage : INuGetPackage
   {
+    internal NuGetPackage (
+      string id,
+      Version version,
+      bool isPreRelease,
+      [CanBeNull] string preReleaseTag,
+      string targetFramework,
+      bool isDevelopmentDependency)
+    {
+      Id = id;
+      Version = version;
+      IsPreRelease = isPreRelease;
+      PreReleaseTag = preReleaseTag;
+      TargetFramework = targetFramework;
+      IsDevelopmentDependency = isDevelopmentDependency;
+    }
+
     public string Id { get; }
 
     public Version Version { get; }
@@ -25,26 +41,19 @@ namespace SolutionInspector.ObjectModel
 
     public bool IsDevelopmentDependency { get; }
 
-    internal NuGetPackage (
-        string id,
-        Version version,
-        bool isPreRelease,
-        [CanBeNull] string preReleaseTag,
-        string targetFramework,
-        bool isDevelopmentDependency)
+    public bool Equals ([CanBeNull] INuGetPackage other)
     {
-      Id = id;
-      Version = version;
-      IsPreRelease = isPreRelease;
-      PreReleaseTag = preReleaseTag;
-      TargetFramework = targetFramework;
-      IsDevelopmentDependency = isDevelopmentDependency;
+      if (ReferenceEquals(null, other))
+        return false;
+      if (ReferenceEquals(this, other))
+        return true;
+      return string.Equals(PackageDirectoryName, other.PackageDirectoryName);
     }
 
     internal static NuGetPackage FromXmlElement (XmlElement packageElement)
     {
       var id = packageElement.GetAttribute("id");
-      bool isPreRelease = false;
+      var isPreRelease = false;
       string preReleaseTag = null;
 
       var versionString = packageElement.GetAttribute("version");
@@ -64,15 +73,6 @@ namespace SolutionInspector.ObjectModel
                                     && packageElement.GetAttribute("developmentDependency") == "true";
 
       return new NuGetPackage(id, version, isPreRelease, preReleaseTag, targetFramework, isDevelopmentDependency);
-    }
-
-    public bool Equals ([CanBeNull] INuGetPackage other)
-    {
-      if (ReferenceEquals(null, other))
-        return false;
-      if (ReferenceEquals(this, other))
-        return true;
-      return string.Equals(PackageDirectoryName, other.PackageDirectoryName);
     }
 
     public override bool Equals ([CanBeNull] object obj)

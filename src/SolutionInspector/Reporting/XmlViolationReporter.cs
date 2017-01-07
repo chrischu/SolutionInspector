@@ -11,7 +11,7 @@ namespace SolutionInspector.Reporting
     private readonly IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
 
     public XmlViolationReporter (TextWriter writer, IRuleViolationViewModelConverter ruleViolationViewModelConverter)
-        : base(writer)
+      : base(writer)
     {
       _ruleViolationViewModelConverter = ruleViolationViewModelConverter;
     }

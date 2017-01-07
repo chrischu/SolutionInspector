@@ -14,7 +14,8 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     IReadOnlyCollection<IProjectItemRuleGroupConfiguration> ProjectItemRuleGroups { get; }
   }
 
-  /// <inheritdoc cref="IRulesConfiguration"/>>
+  /// <inheritdoc cref="IRulesConfiguration" />
+  /// >
   public class RulesConfigurationElement : ConfigurationElement, IRulesConfiguration
   {
     [ConfigurationCollection (ElementName = "rule", IsOptional = true)]

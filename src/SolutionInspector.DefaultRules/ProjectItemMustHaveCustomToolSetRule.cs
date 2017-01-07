@@ -16,7 +16,7 @@ namespace SolutionInspector.DefaultRules
   {
     /// <inheritdoc />
     public ProjectItemMustHaveCustomToolSetRule (ProjectItemMustHaveCustomToolSetRuleConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
     }
 
@@ -26,17 +26,17 @@ namespace SolutionInspector.DefaultRules
       if ((target.CustomTool ?? "") != Configuration.ExpectedCustomTool)
         yield return
             new RuleViolation(
-                this,
-                target,
-                $"Unexpected value for custom tool, was '{target.CustomTool}' but should be '{Configuration.ExpectedCustomTool}'.");
+              this,
+              target,
+              $"Unexpected value for custom tool, was '{target.CustomTool}' but should be '{Configuration.ExpectedCustomTool}'.");
 
       if ((target.CustomToolNamespace ?? "") != Configuration.ExpectedCustomToolNamespace)
         yield return
             new RuleViolation(
-                this,
-                target,
-                $"Unexpected value for custom tool namespace, was '{target.CustomToolNamespace}' " +
-                $"but should be '{Configuration.ExpectedCustomToolNamespace}'.");
+              this,
+              target,
+              $"Unexpected value for custom tool namespace, was '{target.CustomToolNamespace}' " +
+              $"but should be '{Configuration.ExpectedCustomToolNamespace}'.");
     }
   }
 
@@ -49,7 +49,7 @@ namespace SolutionInspector.DefaultRules
     ///   The expected custom tool.
     /// </summary>
     [ConfigurationProperty ("expectedCustomTool", DefaultValue = "", IsRequired = true)]
-    [Description("The expected custom tool.")]
+    [Description ("The expected custom tool.")]
     public string ExpectedCustomTool
     {
       get { return (string) this["expectedCustomTool"]; }
@@ -60,7 +60,7 @@ namespace SolutionInspector.DefaultRules
     ///   The expected custom tool namespace.
     /// </summary>
     [ConfigurationProperty ("expectedCustomToolNamespace")]
-    [Description("The expected custom tool namespace.")]
+    [Description ("The expected custom tool namespace.")]
     public string ExpectedCustomToolNamespace
     {
       get { return (string) this["expectedCustomToolNamespace"]; }

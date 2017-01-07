@@ -9,13 +9,13 @@ namespace SolutionInspector.Commons.Tests.Utilities
     private CollectionDifferenceFinder _sut;
 
     [SetUp]
-    public void SetUp()
+    public void SetUp ()
     {
       _sut = new CollectionDifferenceFinder();
     }
 
     [Test]
-    public void FindDifferences_WhenCollectionsAreEquivalent_FindsNoDifferences()
+    public void FindDifferences_WhenCollectionsAreEquivalent_FindsNoDifferences ()
     {
       var collection1 = new[] { 7, 9 };
       var collection2 = new[] { 9, 7 };
@@ -28,7 +28,7 @@ namespace SolutionInspector.Commons.Tests.Utilities
     }
 
     [Test]
-    public void FindDifferences_WhenSecondCollectionHasMoreElements_FindsAdds()
+    public void FindDifferences_WhenSecondCollectionHasMoreElements_FindsAdds ()
     {
       var collection1 = new[] { 7 };
       var collection2 = new[] { 9, 7 };
@@ -42,7 +42,7 @@ namespace SolutionInspector.Commons.Tests.Utilities
     }
 
     [Test]
-    public void FindDifferences_WhenSecondCollectionHasFewerElements_FindsRemoves()
+    public void FindDifferences_WhenSecondCollectionHasFewerElements_FindsRemoves ()
     {
       var collection1 = new[] { 9, 7 };
       var collection2 = new[] { 7 };
@@ -56,7 +56,7 @@ namespace SolutionInspector.Commons.Tests.Utilities
     }
 
     [Test]
-    public void FindDifferences_WhenCollectionsDifferOnlyInAmountOfDuplicates_FindsNoDifferences()
+    public void FindDifferences_WhenCollectionsDifferOnlyInAmountOfDuplicates_FindsNoDifferences ()
     {
       var collection1 = new[] { 7 };
       var collection2 = new[] { 7, 7, 7 };

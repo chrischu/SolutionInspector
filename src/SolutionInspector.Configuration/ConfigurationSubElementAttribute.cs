@@ -17,7 +17,7 @@ namespace SolutionInspector.Configuration
 
     internal override string XmlName => ElementName;
 
-    internal Type GetSubelementType(PropertyInfo property)
+    internal Type GetSubelementType (PropertyInfo property)
     {
       return property.PropertyType;
     }

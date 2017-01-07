@@ -45,20 +45,16 @@ namespace SolutionInspector.Utilities
       var cells = new string[rows.Length + 1, columnSelectors.Length];
 
       // Fill headers
-      for (int colIndex = 0; colIndex < cells.GetLength(1); colIndex++)
-      {
+      for (var colIndex = 0; colIndex < cells.GetLength(1); colIndex++)
         cells[0, colIndex] = headers[colIndex];
-      }
 
       // Fill table rows
-      for (int rowIndex = 1; rowIndex < cells.GetLength(0); rowIndex++)
+      for (var rowIndex = 1; rowIndex < cells.GetLength(0); rowIndex++)
+      for (var colIndex = 0; colIndex < cells.GetLength(1); colIndex++)
       {
-        for (int colIndex = 0; colIndex < cells.GetLength(1); colIndex++)
-        {
-          object value = columnSelectors[colIndex].Invoke(rows[rowIndex - 1]);
+        var value = columnSelectors[colIndex].Invoke(rows[rowIndex - 1]);
 
-          cells[rowIndex, colIndex] = value?.ToString() ?? "null";
-        }
+        cells[rowIndex, colIndex] = value?.ToString() ?? "null";
       }
 
       Write(writer, cells);
@@ -75,7 +71,7 @@ namespace SolutionInspector.Utilities
       WriteHeaderRow(writer, cells, columnWidths);
       WriteRowSeparator(writer, columnWidths, 0);
 
-      for (int rowIndex = 1; rowIndex < cells.GetLength(0); rowIndex++)
+      for (var rowIndex = 1; rowIndex < cells.GetLength(0); rowIndex++)
       {
         WriteRow(writer, cells, rowIndex, columnWidths);
 
@@ -90,15 +86,15 @@ namespace SolutionInspector.Utilities
     {
       writer.Write(_options.Characters.Vertical);
 
-      for (int colIndex = 0; colIndex < columnWidths.Length; colIndex++)
+      for (var colIndex = 0; colIndex < columnWidths.Length; colIndex++)
       {
         writer.Write(' ');
 
         var header = cells[0, colIndex];
         var excessWidth = columnWidths[colIndex] - header.Length;
 
-        int left = 0;
-        int right = 0;
+        var left = 0;
+        var right = 0;
         if (excessWidth > 0)
         {
           left = excessWidth / 2 + (excessWidth % 2 == 0 ? 0 : 1);
@@ -120,22 +116,22 @@ namespace SolutionInspector.Utilities
     {
       var row = new string[cells.GetLength(1)][];
 
-      for (int colIndex = 0; colIndex < cells.GetLength(1); colIndex++)
+      for (var colIndex = 0; colIndex < cells.GetLength(1); colIndex++)
         row[colIndex] = SplitIntoLines(cells[rowIndex, colIndex], columnWidths[colIndex]).ToArray();
 
       var lineCount = row.Max(r => r.Length);
-      for (int lineIndex = 0; lineIndex < lineCount; lineIndex++)
+      for (var lineIndex = 0; lineIndex < lineCount; lineIndex++)
       {
         writer.Write(_options.Characters.Vertical);
 
-        for (int colIndex = 0; colIndex < row.Length; colIndex++)
+        for (var colIndex = 0; colIndex < row.Length; colIndex++)
         {
           writer.Write(' ');
 
           writer.Write(
-              lineIndex >= row[colIndex].Length
-                  ? new string(' ', columnWidths[colIndex])
-                  : row[colIndex][lineIndex].PadRight(columnWidths[colIndex]));
+            lineIndex >= row[colIndex].Length
+              ? new string(' ', columnWidths[colIndex])
+              : row[colIndex][lineIndex].PadRight(columnWidths[colIndex]));
 
           writer.Write(' ');
           writer.Write(_options.Characters.Vertical);
@@ -173,16 +169,16 @@ namespace SolutionInspector.Utilities
     private void WriteRowSeparator (TextWriter writer, int[] columnWidths, int indicator)
     {
       var start = indicator < 0
-          ? _options.Characters.TopLeftCorner
-          : indicator > 0 ? _options.Characters.BottomLeftCorner : _options.Characters.LeftMiddle;
+        ? _options.Characters.TopLeftCorner
+        : indicator > 0 ? _options.Characters.BottomLeftCorner : _options.Characters.LeftMiddle;
       var end = indicator < 0
-          ? _options.Characters.TopRightCorner
-          : indicator > 0 ? _options.Characters.BottomRightCorner : _options.Characters.RightMiddle;
+        ? _options.Characters.TopRightCorner
+        : indicator > 0 ? _options.Characters.BottomRightCorner : _options.Characters.RightMiddle;
       var cross = indicator < 0 ? _options.Characters.TopMiddle : indicator > 0 ? _options.Characters.BottomMiddle : _options.Characters.Cross;
 
       writer.Write(start);
 
-      for (int i = 0; i < columnWidths.Length; i++)
+      for (var i = 0; i < columnWidths.Length; i++)
       {
         writer.Write(new string(_options.Characters.Horizontal, columnWidths[i] + 2));
         if (i + 1 < columnWidths.Length)
@@ -196,13 +192,11 @@ namespace SolutionInspector.Utilities
     {
       var columnWidths = columnWidthRanges.Select(r => r.Min).ToArray();
 
-      int dividableWidth = availableWidth - columnWidths.Sum();
+      var dividableWidth = availableWidth - columnWidths.Sum();
 
-      for (int i = 0; i < columnWidths.Length; i++)
-      {
+      for (var i = 0; i < columnWidths.Length; i++)
         if (columnWidthRanges[i].Diff != 0)
           columnWidths[i] += (int) Math.Floor((decimal) dividableWidth / columnWidthRanges[i].Diff);
-      }
 
       dividableWidth = availableWidth - columnWidths.Sum();
       var index = 0;
@@ -210,7 +204,7 @@ namespace SolutionInspector.Utilities
       {
         if (columnWidths[index] < columnWidthRanges[index].Max)
         {
-          columnWidths[index] ++;
+          columnWidths[index]++;
           dividableWidth--;
         }
         index = (index + 1) % columnWidths.Length;
@@ -223,11 +217,11 @@ namespace SolutionInspector.Utilities
     {
       var widthRanges = new WidthRange[cells.GetLength(1)];
 
-      for (int colIndex = 0; colIndex < cells.GetLength(1); colIndex++)
+      for (var colIndex = 0; colIndex < cells.GetLength(1); colIndex++)
       {
         widthRanges[colIndex] = new WidthRange();
 
-        for (int rowIndex = 0; rowIndex < cells.GetLength(0); rowIndex++)
+        for (var rowIndex = 0; rowIndex < cells.GetLength(0); rowIndex++)
         {
           var cellValue = cells[rowIndex, colIndex];
           var cellMax = cellValue.Length;

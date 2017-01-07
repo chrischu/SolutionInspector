@@ -9,11 +9,6 @@ namespace SolutionInspector.Configuration
   public class ConfigurationConverterAttribute : Attribute
   {
     /// <summary>
-    ///   The CLR type of the <see cref="IConfigurationConverter" />.
-    /// </summary>
-    public Type ConfigurationConverterType { get; }
-
-    /// <summary>
     ///   Creates a new <see cref="ConfigurationConverterAttribute" />.
     /// </summary>
     public ConfigurationConverterAttribute (Type configurationConverterType)
@@ -26,5 +21,10 @@ namespace SolutionInspector.Configuration
 
       ConfigurationConverterType = configurationConverterType;
     }
+
+    /// <summary>
+    ///   The CLR type of the <see cref="IConfigurationConverter" />.
+    /// </summary>
+    public Type ConfigurationConverterType { get; }
   }
 }

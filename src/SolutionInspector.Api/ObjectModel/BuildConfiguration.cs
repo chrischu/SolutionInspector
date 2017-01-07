@@ -13,6 +13,15 @@ namespace SolutionInspector.Api.ObjectModel
     private static Regex s_regex = new Regex(@"[A-Za-z0-9 *]+\|[A-Za-z0-9 *]+", RegexOptions.Compiled);
 
     /// <summary>
+    ///   Creates a new <see cref="BuildConfiguration" />.
+    /// </summary>
+    public BuildConfiguration (string configurationName, string platform)
+    {
+      ConfigurationName = configurationName;
+      PlatformName = platform;
+    }
+
+    /// <summary>
     ///   The name of the configuration (e.g. Debug).
     /// </summary>
     public string ConfigurationName { get; }
@@ -27,21 +36,6 @@ namespace SolutionInspector.Api.ObjectModel
     /// </summary>
     public string Name => $"{ConfigurationName}|{PlatformName}";
 
-    /// <summary>
-    ///   Creates a new <see cref="BuildConfiguration" />.
-    /// </summary>
-    public BuildConfiguration (string configurationName, string platform)
-    {
-      ConfigurationName = configurationName;
-      PlatformName = platform;
-    }
-
-    /// <inheritdoc />
-    public override string ToString ()
-    {
-      return Name;
-    }
-
     /// <inheritdoc />
     public bool Equals ([CanBeNull] BuildConfiguration other)
     {
@@ -50,6 +44,12 @@ namespace SolutionInspector.Api.ObjectModel
       if (ReferenceEquals(this, other))
         return true;
       return string.Equals(ConfigurationName, other.ConfigurationName) && string.Equals(PlatformName, other.PlatformName);
+    }
+
+    /// <inheritdoc />
+    public override string ToString ()
+    {
+      return Name;
     }
 
     /// <inheritdoc />

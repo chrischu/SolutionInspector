@@ -10,10 +10,9 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
 {
   public class ConfigurationValueTypeValidatorTests
   {
-    private ConfigurationValueTypeValidator _sut;
-
     private PropertyInfo _propertyInfo;
     private ReportValidationError _reportValidationError;
+    private ConfigurationValueTypeValidator _sut;
 
     [SetUp]
     public void SetUp ()
@@ -25,9 +24,9 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
     }
 
     [Test]
-    [TestCase(typeof(int))]
-    [TestCase(typeof(string))]
-    [TestCase(typeof(IConfigurationValue))]
+    [TestCase (typeof(int))]
+    [TestCase (typeof(string))]
+    [TestCase (typeof(IConfigurationValue))]
     public void ValidateValue_WithValidType_DoesNotReportError (Type type)
     {
       A.CallTo(() => _propertyInfo.PropertyType).Returns(type);

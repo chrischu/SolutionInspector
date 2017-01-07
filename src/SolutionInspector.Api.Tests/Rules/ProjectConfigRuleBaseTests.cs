@@ -12,14 +12,14 @@ namespace SolutionInspector.Api.Tests.Rules
   public class ProjectConfigRuleBaseTests
   {
     private DummyProjectConfigurationRuleConfiguration _configuration;
-    private IRuleViolation _ruleViolation;
 
     private IProject _project;
+    private IRuleViolation _ruleViolation;
 
     private DummyProjectConfigRule _sut;
 
     [SetUp]
-    public void SetUp()
+    public void SetUp ()
     {
       _configuration = new DummyProjectConfigurationRuleConfiguration();
       _ruleViolation = A.Fake<IRuleViolation>();
@@ -31,7 +31,7 @@ namespace SolutionInspector.Api.Tests.Rules
     }
 
     [Test]
-    public void Evaluate()
+    public void Evaluate ()
     {
       // ACT
       var result = _sut.Evaluate(_project).ToArray();
@@ -42,7 +42,7 @@ namespace SolutionInspector.Api.Tests.Rules
     }
 
     [Test]
-    public void Evaluate_ProjectWithoutConfiguration_AndReportViolationOnMissingConfigurationFileSetToTrue_ReportsViolation()
+    public void Evaluate_ProjectWithoutConfiguration_AndReportViolationOnMissingConfigurationFileSetToTrue_ReportsViolation ()
     {
       _configuration.ReportViolationOnMissingConfigurationFile = true;
       A.CallTo(() => _project.ConfigurationProjectItem).Returns(null);
@@ -59,7 +59,7 @@ namespace SolutionInspector.Api.Tests.Rules
     }
 
     [Test]
-    public void Evaluate_ProjectWithoutConfiguration_AndReportViolationOnMissingConfigurationFileSetToFalse_ReportsNoViolation()
+    public void Evaluate_ProjectWithoutConfiguration_AndReportViolationOnMissingConfigurationFileSetToFalse_ReportsNoViolation ()
     {
       _configuration.ReportViolationOnMissingConfigurationFile = false;
       A.CallTo(() => _project.ConfigurationProjectItem).Returns(null);
@@ -71,25 +71,25 @@ namespace SolutionInspector.Api.Tests.Rules
       result.Should().BeEmpty();
     }
 
-    class DummyProjectConfigRule : ProjectConfigRuleBase<DummyProjectConfigurationRuleConfiguration>
+    private class DummyProjectConfigRule : ProjectConfigRuleBase<DummyProjectConfigurationRuleConfiguration>
     {
       private readonly IRuleViolation _violation;
 
       public DummyProjectConfigRule (DummyProjectConfigurationRuleConfiguration configuration, IRuleViolation violation)
-          : base(configuration)
+        : base(configuration)
       {
         _violation = violation;
       }
 
       protected override IEnumerable<IRuleViolation> Evaluate (
-          IConfigurationProjectItem target,
-          XDocument configurationXml)
+        IConfigurationProjectItem target,
+        XDocument configurationXml)
       {
         yield return _violation;
       }
     }
 
-    class DummyProjectConfigurationRuleConfiguration : ProjectConfigRuleConfigurationBase
+    private class DummyProjectConfigurationRuleConfiguration : ProjectConfigRuleConfigurationBase
     {
       public DummyProjectConfigurationRuleConfiguration ()
       {

@@ -39,7 +39,7 @@ namespace SolutionInspector.Api.ObjectModel
     IFileInfo ProjectFile { get; }
 
     /// <summary>
-    /// A <see cref="IDirectoryInfo"/> that represents the project directory.
+    ///   A <see cref="IDirectoryInfo" /> that represents the project directory.
     /// </summary>
     IDirectoryInfo ProjectDirectory { get; }
 

@@ -18,21 +18,21 @@ namespace SolutionInspector.DefaultRules
     private readonly ICollectionDifferenceFinder _collectionDifferenceFinder;
     private readonly Lazy<BuildConfiguration[]> _expectedConfigurations;
 
-    /// <summary>
-    ///   All the expected configurations.
-    /// </summary>
-    public IReadOnlyCollection<BuildConfiguration> ExpectedConfigurations => _expectedConfigurations.Value;
-
     /// <inheritdoc />
     public SolutionBuildConfigurationsRule (SolutionBuildConfigurationsRuleConfiguration configuration)
       : base(configuration)
     {
       _collectionDifferenceFinder = new CollectionDifferenceFinder();
       _expectedConfigurations = new Lazy<BuildConfiguration[]>(
-                                  () => (from config in Configuration.Configurations.OfType<string>()
-                                    from platform in Configuration.Platforms.OfType<string>()
-                                    select new BuildConfiguration(config, platform)).ToArray());
+        () => (from config in Configuration.Configurations.OfType<string>()
+          from platform in Configuration.Platforms.OfType<string>()
+          select new BuildConfiguration(config, platform)).ToArray());
     }
+
+    /// <summary>
+    ///   All the expected configurations.
+    /// </summary>
+    public IReadOnlyCollection<BuildConfiguration> ExpectedConfigurations => _expectedConfigurations.Value;
 
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (ISolution target)

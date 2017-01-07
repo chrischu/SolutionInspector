@@ -9,10 +9,10 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
 {
   public class XmlNameValidatorTests
   {
-    static XmlNameValidator _sut;
+    private static XmlNameValidator _sut;
 
-    static PropertyInfo _propertyInfo;
-    static ReportValidationError _reportValidationError;
+    private static PropertyInfo _propertyInfo;
+    private static ReportValidationError _reportValidationError;
 
     [SetUp]
     public void SetUp ()

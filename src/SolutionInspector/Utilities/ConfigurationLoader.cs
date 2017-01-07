@@ -12,8 +12,8 @@ namespace SolutionInspector.Utilities
 
   internal class ConfigurationLoader : IConfigurationLoader
   {
-    private readonly IFileStatic _file;
     private readonly IConfigurationManager _configurationManager;
+    private readonly IFileStatic _file;
 
     public ConfigurationLoader (IFileStatic file, IConfigurationManager configurationManager)
     {

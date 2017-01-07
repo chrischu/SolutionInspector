@@ -8,7 +8,7 @@ namespace SolutionInspector.Tests.Utilities
 {
   public class TableWriterTests
   {
-    static ITableWriter _sut;
+    private static ITableWriter _sut;
 
     [SetUp]
     public void SetUp ()

@@ -22,7 +22,7 @@ namespace SolutionInspector.Api.Tests.Rules
     }
 
     [Test]
-    public void GetConfigurationType_FromNonConfigurableRuleType_ReturnsNull()
+    public void GetConfigurationType_FromNonConfigurableRuleType_ReturnsNull ()
     {
       // ACT
       var result = RuleTypeUtility.GetConfigurationType(typeof(Rule));
@@ -32,7 +32,7 @@ namespace SolutionInspector.Api.Tests.Rules
     }
 
     [Test]
-    public void GetConfigurationType_FromConfigurableRuleType_ReturnsConfigurationType()
+    public void GetConfigurationType_FromConfigurableRuleType_ReturnsConfigurationType ()
     {
       // ACT
       var result = RuleTypeUtility.GetConfigurationType(typeof(ConfigurableRule));
@@ -42,7 +42,7 @@ namespace SolutionInspector.Api.Tests.Rules
     }
 
     [Test]
-    public void GetConfigurationType_FromIndirectlyConfigurableRuleType_ReturnsConfigurationType()
+    public void GetConfigurationType_FromIndirectlyConfigurableRuleType_ReturnsConfigurationType ()
     {
       // ACT
       var result = RuleTypeUtility.GetConfigurationType(typeof(IndirectlyConfigurableRule));

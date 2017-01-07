@@ -6,7 +6,7 @@ namespace SolutionInspector.ObjectModel
   internal class GacReference : ReferenceBase, IGacReference
   {
     public GacReference (AssemblyName assemblyName)
-        : base(assemblyName)
+      : base(assemblyName)
     {
     }
   }

@@ -24,22 +24,22 @@ namespace SolutionInspector.DefaultRules.Tests
       A.CallTo(() => _solution.BuildConfigurations).Returns(_solutionConfigurations);
 
       _sut = new SolutionBuildConfigurationsRule(
-               new SolutionBuildConfigurationsRuleConfiguration
-               {
-                 Configurations = new CommaDelimitedStringCollection { "Configuration" },
-                 Platforms = new CommaDelimitedStringCollection { "Platform" }
-               });
+        new SolutionBuildConfigurationsRuleConfiguration
+        {
+          Configurations = new CommaDelimitedStringCollection { "Configuration" },
+          Platforms = new CommaDelimitedStringCollection { "Platform" }
+        });
     }
 
     [Test]
     public void GetExpectedConfigurations_ReturnsCrossproductOfConfigurationsAndPlatforms ()
     {
       _sut = new SolutionBuildConfigurationsRule(
-               new SolutionBuildConfigurationsRuleConfiguration
-               {
-                 Configurations = new CommaDelimitedStringCollection { "C1", "C2" },
-                 Platforms = new CommaDelimitedStringCollection { "P1", "P2" }
-               });
+        new SolutionBuildConfigurationsRuleConfiguration
+        {
+          Configurations = new CommaDelimitedStringCollection { "C1", "C2" },
+          Platforms = new CommaDelimitedStringCollection { "P1", "P2" }
+        });
 
       // ACT
       var result = _sut.ExpectedConfigurations;

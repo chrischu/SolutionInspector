@@ -1,4 +1,4 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.Configuration.Ruleset;

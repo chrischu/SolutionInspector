@@ -10,10 +10,9 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic.Validators
 {
   public class RequiredValidatorTests
   {
-    private RequiredValidator _sut;
-
     private PropertyInfo _propertyInfo;
     private ReportValidationError _reportValidationError;
+    private RequiredValidator _sut;
 
     [SetUp]
     public void SetUp ()
@@ -66,7 +65,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic.Validators
     }
 
     [Test]
-    public void ValidateSubelement_OptionalWithMissingElement_ReportsNoError()
+    public void ValidateSubelement_OptionalWithMissingElement_ReportsNoError ()
     {
       var attribute = new ConfigurationSubelementAttribute { IsOptional = true };
 
@@ -78,7 +77,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic.Validators
     }
 
     [Test]
-    public void ValidateSubelement_RequiredWithExistingElement_ReportsNoError()
+    public void ValidateSubelement_RequiredWithExistingElement_ReportsNoError ()
     {
       var attribute = new ConfigurationSubelementAttribute { IsOptional = false };
 
@@ -90,7 +89,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic.Validators
     }
 
     [Test]
-    public void ValidateSubelement_RequiredWithMissingElement_ReportsError()
+    public void ValidateSubelement_RequiredWithMissingElement_ReportsError ()
     {
       var attribute = new ConfigurationSubelementAttribute { IsOptional = false };
 
@@ -105,7 +104,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic.Validators
     }
 
     [Test]
-    public void ValidateCollection_OptionalWithMissingElement_ReportsNoError()
+    public void ValidateCollection_OptionalWithMissingElement_ReportsNoError ()
     {
       var attribute = new ConfigurationCollectionAttribute { IsOptional = true };
 
@@ -117,7 +116,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic.Validators
     }
 
     [Test]
-    public void ValidateCollection_RequiredWithExistingElement_ReportsNoError()
+    public void ValidateCollection_RequiredWithExistingElement_ReportsNoError ()
     {
       var attribute = new ConfigurationCollectionAttribute { IsOptional = false };
 
@@ -129,7 +128,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic.Validators
     }
 
     [Test]
-    public void ValidateCollection_RequiredWithMissingElement_ReportsError()
+    public void ValidateCollection_RequiredWithMissingElement_ReportsError ()
     {
       var attribute = new ConfigurationCollectionAttribute { IsOptional = false };
 

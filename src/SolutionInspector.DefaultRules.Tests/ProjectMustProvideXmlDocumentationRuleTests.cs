@@ -9,10 +9,10 @@ namespace SolutionInspector.DefaultRules.Tests
 {
   public class ProjectMustProvideXmlDocumentationRuleTests
   {
-    private string _projectAssemblyName;
-    private IProject _project;
     private IAdvancedProject _advancedProject;
     private BuildConfiguration _buildConfiguration;
+    private IProject _project;
+    private string _projectAssemblyName;
 
     private ProjectMustProvideXmlDocumentationRule _sut;
 

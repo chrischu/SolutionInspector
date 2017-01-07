@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -17,22 +18,21 @@ namespace SolutionInspector.Api.Configuration.MsBuildParsing
     bool IsValidProjectItemType (string projectItemType);
   }
 
-  internal class MsBuildParsingConfigurationSection : System.Configuration.ConfigurationSection, IMsBuildParsingConfiguration
+  internal class MsBuildParsingConfigurationSection : ConfigurationSection, IMsBuildParsingConfiguration
   {
-    private Lazy<HashSet<string>> _projectBuildActionsHashSet;
-
     internal const string ExampleConfiguration = @"<solutionInspector>
   <projectBuildActions>
     <projectBuildAction name=""None"" />
   </projectBuildActions>
 </solutionInspector>";
+    private Lazy<HashSet<string>> _projectBuildActionsHashSet;
 
     public MsBuildParsingConfigurationSection ()
     {
       _projectBuildActionsHashSet = new Lazy<HashSet<string>>(() => new HashSet<string>(ProjectBuildActions.Select(a => a.Name)));
     }
 
-    [System.Configuration.ConfigurationProperty ("projectBuildActions")]
+    [ConfigurationProperty ("projectBuildActions")]
     public ProjectBuildActionsConfigurationElement ProjectBuildActions => (ProjectBuildActionsConfigurationElement) this["projectBuildActions"];
 
     public bool IsValidProjectItemType (string projectItemType)

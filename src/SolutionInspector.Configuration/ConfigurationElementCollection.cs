@@ -12,8 +12,8 @@ namespace SolutionInspector.Configuration
   public class ConfigurationElementCollection<T> : IReadOnlyCollection<T>
     where T : ConfigurationElement, new()
   {
-    private readonly XElement _collectionElement;
     private readonly List<T> _collection = new List<T>();
+    private readonly XElement _collectionElement;
     private readonly string _elementName;
 
     /// <summary>
@@ -30,6 +30,19 @@ namespace SolutionInspector.Configuration
     ///   Provides read access to the collection's items by <paramref name="index" />.
     /// </summary>
     public T this [int index] => _collection[index];
+
+    public int Count => _collection.Count;
+
+    public IEnumerator<T> GetEnumerator ()
+    {
+      return _collection.GetEnumerator();
+    }
+
+    [ExcludeFromCodeCoverage]
+    IEnumerator IEnumerable.GetEnumerator ()
+    {
+      return GetEnumerator();
+    }
 
     /// <summary>
     ///   Adds a new elements to the collection and returns it.
@@ -66,19 +79,6 @@ namespace SolutionInspector.Configuration
     {
       _collection.Clear();
       _collectionElement.RemoveNodes();
-    }
-
-    public int Count => _collection.Count;
-
-    public IEnumerator<T> GetEnumerator ()
-    {
-      return _collection.GetEnumerator();
-    }
-
-    [ExcludeFromCodeCoverage]
-    IEnumerator IEnumerable.GetEnumerator ()
-    {
-      return GetEnumerator();
     }
   }
 }

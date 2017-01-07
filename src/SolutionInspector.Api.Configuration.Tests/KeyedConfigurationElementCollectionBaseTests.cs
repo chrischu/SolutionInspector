@@ -30,13 +30,13 @@ namespace SolutionInspector.Api.Configuration.Tests
 
       // ACT
       var result = collection.Contains(element.Key);
-      
+
       // ASSERT
       result.Should().BeFalse();
     }
 
     [Test]
-    public void Contains_WithAddedKey_ReturnsTrue()
+    public void Contains_WithAddedKey_ReturnsTrue ()
     {
       var collection = new DummyConfigurationElementCollection();
       var element = new DummyConfigurationElement();
@@ -50,7 +50,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void Remove()
+    public void Remove ()
     {
       var collection = new DummyConfigurationElementCollection();
       var element = new DummyConfigurationElement();
@@ -63,12 +63,12 @@ namespace SolutionInspector.Api.Configuration.Tests
       collection.Contains(element.Key).Should().BeFalse();
     }
 
-    class DummyConfigurationElementCollection : KeyedConfigurationElementCollectionBase<DummyConfigurationElement, string>
+    private class DummyConfigurationElementCollection : KeyedConfigurationElementCollectionBase<DummyConfigurationElement, string>
     {
       protected override string ElementName => "add";
     }
 
-    class DummyConfigurationElement : KeyedConfigurationElement<string>
+    private class DummyConfigurationElement : KeyedConfigurationElement<string>
     {
       [ConfigurationProperty ("key")]
       public new string Key => base.Key;

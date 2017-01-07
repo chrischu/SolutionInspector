@@ -18,11 +18,11 @@ namespace SolutionInspector.DefaultRules.Tests
       _projectItem = A.Fake<IProjectItem>();
 
       _sut = new ProjectItemMustHaveCustomToolSetRule(
-               new ProjectItemMustHaveCustomToolSetRuleConfiguration
-               {
-                 ExpectedCustomTool = "CustomTool",
-                 ExpectedCustomToolNamespace = "CustomToolNamespace"
-               });
+        new ProjectItemMustHaveCustomToolSetRuleConfiguration
+        {
+          ExpectedCustomTool = "CustomTool",
+          ExpectedCustomToolNamespace = "CustomToolNamespace"
+        });
     }
 
     [Test]

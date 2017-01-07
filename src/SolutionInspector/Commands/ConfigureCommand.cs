@@ -6,11 +6,11 @@ namespace SolutionInspector.Commands
 {
   internal class ConfigureCommand : SolutionInspectorCommand<ConfigureCommand.RawArguments, ConfigureCommand.ParsedArguments>
   {
-    private readonly IProcessStatic _process;
     private readonly string _configurationUiPath;
+    private readonly IProcessStatic _process;
 
     public ConfigureCommand (string configurationUiPath, IProcessStatic process)
-        : base("configure", "Starts SolutionInspector configuration UI for more convenient configuration.")
+      : base("configure", "Starts SolutionInspector configuration UI for more convenient configuration.")
     {
       _process = process;
       _configurationUiPath = configurationUiPath;

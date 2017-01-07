@@ -9,10 +9,10 @@ namespace SolutionInspector.DefaultRules.Tests
 {
   public class ProjectGuidsMustBeUniqueRuleTests
   {
-    private ISolution _solution;
     private IProject _project1;
     private IProject _project2;
     private IProject _project3;
+    private ISolution _solution;
 
     private ProjectGuidsMustBeUniqueRule _sut;
 

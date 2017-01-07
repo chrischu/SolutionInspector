@@ -11,6 +11,16 @@ namespace SolutionInspector.Internals
   public class RuleTypeInfo
   {
     /// <summary>
+    ///   Constructor.
+    /// </summary>
+    public RuleTypeInfo (Type ruleType, [CanBeNull] Type configurationType, ConstructorInfo constructor)
+    {
+      RuleType = ruleType;
+      Constructor = constructor;
+      ConfigurationType = configurationType;
+    }
+
+    /// <summary>
     ///   The CLR type of the rule.
     /// </summary>
     public Type RuleType { get; }
@@ -30,15 +40,5 @@ namespace SolutionInspector.Internals
     ///   The constructor of the rule.
     /// </summary>
     public ConstructorInfo Constructor { get; }
-
-    /// <summary>
-    ///   Constructor.
-    /// </summary>
-    public RuleTypeInfo (Type ruleType, [CanBeNull] Type configurationType, ConstructorInfo constructor)
-    {
-      RuleType = ruleType;
-      Constructor = constructor;
-      ConfigurationType = configurationType;
-    }
   }
 }

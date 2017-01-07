@@ -6,7 +6,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
   public static class DictionaryAssertionExtensions
   {
-    public static GenericDictionaryAssertions<TKey, TValue> Should<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dictionary)
+    public static GenericDictionaryAssertions<TKey, TValue> Should<TKey, TValue> (this IReadOnlyDictionary<TKey, TValue> dictionary)
     {
       return (dictionary as IDictionary<TKey, TValue>).Should();
     }

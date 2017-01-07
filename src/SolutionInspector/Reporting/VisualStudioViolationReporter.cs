@@ -8,7 +8,7 @@ namespace SolutionInspector.Reporting
   internal class VisualStudioViolationReporter : ViolationReporterBase
   {
     public VisualStudioViolationReporter (TextWriter writer)
-        : base(writer)
+      : base(writer)
     {
     }
 
@@ -16,8 +16,8 @@ namespace SolutionInspector.Reporting
     {
       foreach (var violation in violations)
         writer.WriteLine(
-            $"{violation.Target.FullPath}: SolutionInspector warning SI0000: " +
-            $"{violation.Message} ({violation.Rule.GetType().Name.RemoveSuffix("Rule")})");
+          $"{violation.Target.FullPath}: SolutionInspector warning SI0000: " +
+          $"{violation.Message} ({violation.Rule.GetType().Name.RemoveSuffix("Rule")})");
     }
   }
 }

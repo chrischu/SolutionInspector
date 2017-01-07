@@ -99,7 +99,7 @@ namespace SolutionInspector.Tests.Utilities
       result1.Should().NotBe(result2);
     }
 
-    static object ObjectWithHashCode (int hashCode)
+    private static object ObjectWithHashCode (int hashCode)
     {
       return new DummyWithHashCode(hashCode);
     }

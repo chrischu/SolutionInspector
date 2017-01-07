@@ -8,8 +8,20 @@ namespace SolutionInspector.Api.Configuration
   /// </summary>
   public abstract class KeyedConfigurationElementCollectionBase<TElement, TKey>
       : ConfigurationElementCollectionBase<TElement>, IKeyedConfigurationCollection<TElement, TKey>
-      where TElement : ConfigurationElement, IKeyedConfigurationElement<TKey>, new()
+    where TElement : ConfigurationElement, IKeyedConfigurationElement<TKey>, new()
   {
+    /// <inheritdoc />
+    public bool Contains (TKey key)
+    {
+      return BaseGet(key) != null;
+    }
+
+    /// <inheritdoc />
+    public void Remove (TKey key)
+    {
+      BaseRemove(key);
+    }
+
     /// <inheritdoc />
     protected sealed override object GetElementKey (ConfigurationElement element)
     {
@@ -29,8 +41,8 @@ namespace SolutionInspector.Api.Configuration
       var key = GetElementKeyInternal(configurationElement);
       if (GetElement(key) != null)
         throw new ConfigurationErrorsException(
-            $"The value for the property '{configurationElement.KeyName}' is not valid. " +
-            $"The error is: The key '{configurationElement.Key}' was already added to the collection once.");
+          $"The value for the property '{configurationElement.KeyName}' is not valid. " +
+          $"The error is: The key '{configurationElement.Key}' was already added to the collection once.");
       base.BaseAdd(element);
     }
 
@@ -38,18 +50,6 @@ namespace SolutionInspector.Api.Configuration
     public TElement GetElement (TKey key)
     {
       return (TElement) BaseGet(key);
-    }
-
-    /// <inheritdoc />
-    public bool Contains (TKey key)
-    {
-      return BaseGet(key) != null;
-    }
-
-    /// <inheritdoc />
-    public void Remove (TKey key)
-    {
-      BaseRemove(key);
     }
   }
 }

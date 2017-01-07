@@ -21,8 +21,8 @@ namespace SolutionInspector.DefaultRules
               .Where(g => g.Distinct().Count() > 1);
 
       return from @group in nuGetPackagesWithMultipleVersions
-        let versions = @group.Select(v => $"'{v}'")
-        select new RuleViolation(
+          let versions = @group.Select(v => $"'{v}'")
+          select new RuleViolation(
             this,
             target,
             $"The NuGet package '{@group.Key}' is referenced " +

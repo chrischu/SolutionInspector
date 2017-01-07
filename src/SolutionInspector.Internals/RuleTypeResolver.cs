@@ -27,9 +27,9 @@ namespace SolutionInspector.Internals
       if (configurationType != null)
         constructorFilter = c => c.GetParameters().Length == 1 && c.GetParameters().Single().ParameterType == configurationType;
       var constructor = ResolveConstructor(
-          ruleType,
-          constructorFilter,
-          configurationType == null ? "" : $" only taking a parameter of type '{configurationType.Name}' as a parameter");
+        ruleType,
+        constructorFilter,
+        configurationType == null ? "" : $" only taking a parameter of type '{configurationType.Name}' as a parameter");
 
       return new RuleTypeInfo(ruleType, configurationType, constructor);
     }
@@ -40,7 +40,7 @@ namespace SolutionInspector.Internals
 
       if (validConstructors.Length == 0)
         throw new RuleTypeResolvingException(
-            $"The rule type '{ruleType.Name}' does not provide a public constructor{taking}.");
+          $"The rule type '{ruleType.Name}' does not provide a public constructor{taking}.");
 
       return validConstructors[0];
     }

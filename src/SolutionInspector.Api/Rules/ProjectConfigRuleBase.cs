@@ -9,11 +9,11 @@ namespace SolutionInspector.Api.Rules
   ///   Base class for rules that verify the contents of the project configuration file (App.config/Web.config).
   /// </summary>
   public abstract class ProjectConfigRuleBase<TConfiguration> : ConfigurableRule<IProject, TConfiguration>, IProjectRule
-      where TConfiguration : ProjectConfigRuleConfigurationBase
+    where TConfiguration : ProjectConfigRuleConfigurationBase
   {
     /// <inheritdoc />
     protected ProjectConfigRuleBase (TConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
     }
 
@@ -24,8 +24,8 @@ namespace SolutionInspector.Api.Rules
 
       if (configurationItem == null)
         return Configuration.ReportViolationOnMissingConfigurationFile
-            ? new[] { new RuleViolation(this, target, $"For the project '{target.Name}' no configuration file could be found.") }
-            : Enumerable.Empty<IRuleViolation>();
+          ? new[] { new RuleViolation(this, target, $"For the project '{target.Name}' no configuration file could be found.") }
+          : Enumerable.Empty<IRuleViolation>();
 
       return Evaluate(configurationItem, configurationItem.ConfigurationXml);
     }

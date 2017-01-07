@@ -73,10 +73,8 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
               var collectionElementType = configurationCollectionAttribute.GetCollectionElementType(property);
 
               if (collectionElementType != null && collectionElement != null)
-              {
-                for (int i = 0; i < collectionItems.Count; i++)
+                for (var i = 0; i < collectionItems.Count; i++)
                   subTypesToWalk.Add(Tuple.Create($"{newPropertyPath}[{i}]", collectionElementType, collectionItems[i]));
-              }
 
               visitor.VisitCollection(newPropertyPath, property, configurationCollectionAttribute, collectionElement, collectionItems);
             }
@@ -142,8 +140,7 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
     {
       if (string.IsNullOrEmpty(previousPropertyPath))
         return property.Name;
-      else
-        return previousPropertyPath + "." + property.Name;
+      return previousPropertyPath + "." + property.Name;
     }
   }
 }

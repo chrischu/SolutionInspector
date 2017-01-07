@@ -12,11 +12,11 @@ namespace SolutionInspector.Tests.Reporting
 {
   public class TableViolationReporterTests
   {
-    private TextWriter _textWriter;
     private IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
-    private ITableWriter _tableWriter;
 
     private TableViolationReporter _sut;
+    private ITableWriter _tableWriter;
+    private TextWriter _textWriter;
 
     [SetUp]
     public void SetUp ()

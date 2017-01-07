@@ -11,12 +11,12 @@ namespace SolutionInspector.Tests.Commands
 {
   public class InitializeCommandTests : CommandTestsBase
   {
-    private IAssembly _resourceAssembly;
-    private IFileStatic _file;
     private IConsoleStatic _console;
+    private IFileStream _destinationStream;
+    private IFileStatic _file;
+    private IAssembly _resourceAssembly;
 
     private IStream _sourceStream;
-    private IFileStream _destinationStream;
 
     private InitializeCommand _sut;
 

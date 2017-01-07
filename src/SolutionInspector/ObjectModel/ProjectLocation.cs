@@ -7,12 +7,9 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.ObjectModel
 {
-  /// <inheritdoc cref="IProjectLocation"/>
+  /// <inheritdoc cref="IProjectLocation" />
   public sealed class ProjectLocation : IProjectLocation, IEquatable<ProjectLocation>
   {
-    public int Line { get; }
-    public int Column { get; }
-
     internal ProjectLocation (int line, int column)
     {
       Column = column;
@@ -20,7 +17,7 @@ namespace SolutionInspector.ObjectModel
     }
 
     internal ProjectLocation (ProjectElement projectElement)
-        : this(projectElement.Location.Line, projectElement.Location.Column)
+      : this(projectElement.Location.Line, projectElement.Location.Column)
     {
     }
 
@@ -32,6 +29,9 @@ namespace SolutionInspector.ObjectModel
         return true;
       return Line == other.Line && Column == other.Column;
     }
+
+    public int Line { get; }
+    public int Column { get; }
 
     public override bool Equals ([CanBeNull] object obj)
     {

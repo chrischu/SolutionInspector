@@ -27,7 +27,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void ConvertTo_WithNull_ReturnsNull()
+    public void ConvertTo_WithNull_ReturnsNull ()
     {
       // ACT
       var result = _sut.ConvertTo(null);
@@ -37,7 +37,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void ConvertFrom()
+    public void ConvertFrom ()
     {
       var buildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("A", "B"), new BuildConfiguration("C", "D"));
       var buildConfigurationFilterString = _sut.ConvertTo(buildConfigurationFilter);
@@ -52,7 +52,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void ConvertFrom_WithNull_ReturnsNull()
+    public void ConvertFrom_WithNull_ReturnsNull ()
     {
       // ACT
       var result = _sut.ConvertFrom(null);
@@ -62,7 +62,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void ConvertFrom_WithInvalidFormat_Throws()
+    public void ConvertFrom_WithInvalidFormat_Throws ()
     {
       var filterString = "NOT A BUILD CONFIGURATION FILTER";
 

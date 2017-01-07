@@ -15,8 +15,8 @@ namespace SolutionInspector.Tests.ObjectModel
 {
   public class ProjectItemTests
   {
-    private string _solutionPath;
     private IMsBuildParsingConfiguration _msBuildParsingConfiguration;
+    private string _solutionPath;
 
     [SetUp]
     public void SetUp ()

@@ -28,6 +28,11 @@ namespace SolutionInspector.Configuration
       AddRange(elements);
     }
 
+    /// <summary>
+    ///   Gets the total count of elements in the collection.
+    /// </summary>
+    public int Count => _collection.Count;
+
 
     /// <summary>
     ///   Serializes the elements of the collection as comma-separated string.
@@ -107,10 +112,5 @@ namespace SolutionInspector.Configuration
         Update();
       return removed;
     }
-
-    /// <summary>
-    ///   Gets the total count of elements in the collection.
-    /// </summary>
-    public int Count => _collection.Count;
   }
 }

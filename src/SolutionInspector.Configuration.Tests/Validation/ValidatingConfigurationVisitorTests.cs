@@ -13,9 +13,9 @@ namespace SolutionInspector.Configuration.Tests.Validation
 {
   public class ValidatingConfigurationVisitorTests
   {
+    private IDynamicConfigurationValidator _dynamicConfigurationValidator;
     private IConfigurationValidationErrorCollector _errorCollector;
     private IStaticConfigurationValidator _staticConfigurationValidator;
-    private IDynamicConfigurationValidator _dynamicConfigurationValidator;
 
     private ValidatingConfigurationVisitor _sut;
 
@@ -36,7 +36,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       var configurationElementType = Some.Type;
 
       var propertyInfo = A.Fake<TestablePropertyInfo>();
-      ReturnValueConfigurationExtensions.Returns(A.CallTo(() => propertyInfo.Name), "Property");
+      A.CallTo(() => propertyInfo.Name).Returns("Property");
 
       A.CallTo(() => _staticConfigurationValidator.BeginTypeValidation(A<Type>._, A<ReportValidationError>._))
           .Invokes((Type t, ReportValidationError r) => r(propertyInfo, "Message"));
@@ -410,12 +410,12 @@ namespace SolutionInspector.Configuration.Tests.Validation
     }
 
     [Test]
-    public void BuildPropertyPath()
+    public void BuildPropertyPath ()
     {
       var configurationElementType = Some.Type;
 
       var propertyInfo = A.Fake<TestablePropertyInfo>();
-      ReturnValueConfigurationExtensions.Returns(A.CallTo(() => propertyInfo.Name), "Property");
+      A.CallTo(() => propertyInfo.Name).Returns("Property");
 
       A.CallTo(() => _staticConfigurationValidator.BeginTypeValidation(A<Type>._, A<ReportValidationError>._))
           .Invokes((Type t, ReportValidationError r) => r(propertyInfo, "Message"));

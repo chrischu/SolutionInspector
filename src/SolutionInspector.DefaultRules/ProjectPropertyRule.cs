@@ -15,7 +15,7 @@ namespace SolutionInspector.DefaultRules
   {
     /// <inheritdoc />
     public ProjectPropertyRule (ProjectPropertyRuleConfiguration configuration)
-        : base(configuration)
+      : base(configuration)
     {
     }
 
@@ -27,10 +27,10 @@ namespace SolutionInspector.DefaultRules
       if (actualValue != Configuration.ExpectedValue)
         yield return
             new RuleViolation(
-                this,
-                target,
-                $"Unexpected value for property '{Configuration.Property}', was '{actualValue ?? "<null>"}' " +
-                $"but should be '{Configuration.ExpectedValue}'.");
+              this,
+              target,
+              $"Unexpected value for property '{Configuration.Property}', was '{actualValue ?? "<null>"}' " +
+              $"but should be '{Configuration.ExpectedValue}'.");
     }
   }
 

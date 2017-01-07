@@ -15,6 +15,33 @@ namespace SolutionInspector.ObjectModel
     private readonly List<ProjectItem> _children = new List<ProjectItem>();
     private Lazy<string> _identifier;
 
+    protected ProjectItem (
+      IProject project,
+      Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
+    {
+      Project = project;
+      OriginalProjectItem = msBuildProjectItem;
+
+      Include = new ProjectItemInclude(msBuildProjectItem.EvaluatedInclude, msBuildProjectItem.UnevaluatedInclude);
+
+      BuildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
+      var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
+      File = Wrapper.Wrap(new FileInfo(fullPath));
+
+      Location = new ProjectLocation(msBuildProjectItem.Xml.Location.Line, msBuildProjectItem.Xml.Location.Column);
+      Metadata = msBuildProjectItem.Metadata.ToDictionary(m => m.Name, m => m.EvaluatedValue);
+      IsLink = Metadata.ContainsKey("Link");
+
+      if (msBuildProjectItem.UnevaluatedInclude.Contains("*"))
+      {
+        IsIncludedByWildcard = true;
+        WildcardInclude = msBuildProjectItem.UnevaluatedInclude;
+        WildcardExclude = msBuildProjectItem.Xml.Exclude;
+      }
+
+      _identifier = new Lazy<string>(CreateIdentifier);
+    }
+
     public Microsoft.Build.Evaluation.ProjectItem OriginalProjectItem { get; set; }
 
     public IProject Project { get; }
@@ -46,33 +73,6 @@ namespace SolutionInspector.ObjectModel
     public IProjectItem Parent { get; private set; }
 
     public IReadOnlyCollection<IProjectItem> Children => _children;
-
-    protected ProjectItem (
-        IProject project,
-        Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
-    {
-      Project = project;
-      OriginalProjectItem = msBuildProjectItem;
-
-      Include = new ProjectItemInclude(msBuildProjectItem.EvaluatedInclude, msBuildProjectItem.UnevaluatedInclude);
-
-      BuildAction = ProjectItemBuildAction.Custom(msBuildProjectItem.ItemType);
-      var fullPath = Path.GetFullPath(Path.Combine(project.ProjectFile.DirectoryName, msBuildProjectItem.EvaluatedInclude));
-      File = Wrapper.Wrap(new FileInfo(fullPath));
-
-      Location = new ProjectLocation(msBuildProjectItem.Xml.Location.Line, msBuildProjectItem.Xml.Location.Column);
-      Metadata = msBuildProjectItem.Metadata.ToDictionary(m => m.Name, m => m.EvaluatedValue);
-      IsLink = Metadata.ContainsKey("Link");
-
-      if (msBuildProjectItem.UnevaluatedInclude.Contains("*"))
-      {
-        IsIncludedByWildcard = true;
-        WildcardInclude = msBuildProjectItem.UnevaluatedInclude;
-        WildcardExclude = msBuildProjectItem.Xml.Exclude;
-      }
-
-      _identifier = new Lazy<string>(CreateIdentifier);
-    }
 
     private string CreateIdentifier ()
     {

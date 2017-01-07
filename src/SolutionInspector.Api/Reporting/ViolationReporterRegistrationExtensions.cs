@@ -15,16 +15,16 @@ namespace SolutionInspector.Api.Reporting
     ///   Registers a <see cref="IViolationReporter" /> for the <paramref name="reportFormat" /> with the Autofac container.
     /// </summary>
     public static void RegisterViolationReporter (
-        this ContainerBuilder builder,
-        ViolationReportFormat reportFormat,
-        Func<IComponentContext, Func<TextWriter, IViolationReporter>> reporterFactory)
+      this ContainerBuilder builder,
+      ViolationReportFormat reportFormat,
+      Func<IComponentContext, Func<TextWriter, IViolationReporter>> reporterFactory)
     {
       builder.Register(
-          ctx =>
-          {
-            var context = ctx.Resolve<IComponentContext>();
-            return reporterFactory(context);
-          }).Keyed<Func<TextWriter, IViolationReporter>>(reportFormat);
+        ctx =>
+        {
+          var context = ctx.Resolve<IComponentContext>();
+          return reporterFactory(context);
+        }).Keyed<Func<TextWriter, IViolationReporter>>(reportFormat);
     }
   }
 }

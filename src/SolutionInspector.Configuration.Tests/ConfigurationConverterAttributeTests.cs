@@ -18,7 +18,7 @@ namespace SolutionInspector.Configuration.Tests
     }
 
     [Test]
-    public void Ctor_WithTypeWithoutDefaultCtor_Throws()
+    public void Ctor_WithTypeWithoutDefaultCtor_Throws ()
     {
       // ACT
       Action act = () => Dev.Null = new ConfigurationConverterAttribute(typeof(DummyConverter));
@@ -27,12 +27,11 @@ namespace SolutionInspector.Configuration.Tests
       act.ShouldThrowArgumentException("The given type must provide a public default constructor.", "configurationConverterType");
     }
 
-    class DummyConverter : IConfigurationConverter
+    private class DummyConverter : IConfigurationConverter
     {
       // ReSharper disable once UnusedParameter.Local
       public DummyConverter (int x)
       {
-        
       }
     }
   }

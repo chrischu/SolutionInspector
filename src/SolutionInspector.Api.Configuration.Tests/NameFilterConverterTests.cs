@@ -8,13 +8,13 @@ namespace SolutionInspector.Api.Configuration.Tests
   {
     private readonly NameFilterConverter _sut;
 
-    public NameFilterConverterTests()
+    public NameFilterConverterTests ()
     {
       _sut = new NameFilterConverter();
     }
 
     [Test]
-    public void ConvertTo()
+    public void ConvertTo ()
     {
       var filter = new NameFilter(new[] { "A", "*B", "C*", "*D*" }, new[] { "E", "*F", "G*", "*H*" });
 
@@ -26,7 +26,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void ConvertTo_WithNull_ReturnsNull()
+    public void ConvertTo_WithNull_ReturnsNull ()
     {
       // ACT
       var result = _sut.ConvertTo(null);
@@ -36,7 +36,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void ConvertFrom()
+    public void ConvertFrom ()
     {
       var filter = new NameFilter(new[] { "A", "B" }, new[] { "B" });
       var filterString = _sut.ConvertTo(filter);
@@ -50,7 +50,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void ConvertFrom_WithNull_ReturnsNull()
+    public void ConvertFrom_WithNull_ReturnsNull ()
     {
       // ACT
       var result = _sut.ConvertFrom(null);
@@ -60,7 +60,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     }
 
     [Test]
-    public void ConvertFrom_WithInvalidFormat_Throws()
+    public void ConvertFrom_WithInvalidFormat_Throws ()
     {
       var filterString = "THIS IS NOT A NAMEFILTER";
 

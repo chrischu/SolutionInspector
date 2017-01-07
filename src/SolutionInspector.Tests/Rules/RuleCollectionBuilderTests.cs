@@ -16,8 +16,8 @@ namespace SolutionInspector.Tests.Rules
 {
   public class RuleCollectionBuilderTests
   {
-    private IRuleTypeResolver _ruleTypeResolver;
     private IRuleConfigurationInstantiator _ruleConfigurationInstantiator;
+    private IRuleTypeResolver _ruleTypeResolver;
 
     private IRuleCollectionBuilder _sut;
 
@@ -112,17 +112,17 @@ namespace SolutionInspector.Tests.Rules
 
     private class Rule : IProjectRule, ISolutionRule, IProjectItemRule
     {
+      public IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
+      {
+        return Enumerable.Empty<RuleViolation>();
+      }
+
       public IEnumerable<IRuleViolation> Evaluate (IProject target)
       {
         return Enumerable.Empty<RuleViolation>();
       }
 
       public IEnumerable<IRuleViolation> Evaluate (ISolution target)
-      {
-        return Enumerable.Empty<RuleViolation>();
-      }
-
-      public IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
       {
         return Enumerable.Empty<RuleViolation>();
       }

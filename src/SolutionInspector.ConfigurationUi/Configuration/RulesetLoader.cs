@@ -154,7 +154,7 @@ namespace SolutionInspector.ConfigurationUi.Configuration
   internal class SolutionRuleGroupViewModel : RuleGroupViewModel
   {
     public SolutionRuleGroupViewModel (IEnumerable<RuleViewModel> rules)
-        : base(rules)
+      : base(rules)
     {
     }
   }
@@ -181,7 +181,7 @@ namespace SolutionInspector.ConfigurationUi.Configuration
     {
       Properties =
           new ReadOnlyObservableCollection<RuleConfigurationPropertyViewModel>(
-              new AdvancedObservableCollection<RuleConfigurationPropertyViewModel>(properties));
+            new AdvancedObservableCollection<RuleConfigurationPropertyViewModel>(properties));
     }
 
     public ReadOnlyObservableCollection<RuleConfigurationPropertyViewModel> Properties { get; }

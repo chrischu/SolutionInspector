@@ -31,7 +31,7 @@ namespace SolutionInspector.Reporting
     }
 
     [SuppressMessage ("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
-        Justification = "The StreamWriter is disposed when the IViolationReporter is disposed")]
+      Justification = "The StreamWriter is disposed when the IViolationReporter is disposed")]
     public IViolationReporter CreateFileReporter (ViolationReportFormat reportFormat, string filePath)
     {
       var writer = new StreamWriter(File.OpenWrite(filePath));

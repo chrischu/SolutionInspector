@@ -8,8 +8,8 @@ namespace SolutionInspector.DefaultRules.Tests
 {
   public class ProjectItemMustBeIncludedByWildcardRuleTests
   {
-    private IProjectItem _projectItem;
     private IProject _project;
+    private IProjectItem _projectItem;
 
     private ProjectItemMustBeIncludedByWildcardRule _sut;
 

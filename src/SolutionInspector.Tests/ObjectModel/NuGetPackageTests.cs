@@ -65,14 +65,14 @@ developmentDependency=""{developmentDependencyString}"" />");
     }
 
     [Test]
-    [TestCaseSource(nameof(EqualsWithObjectsTestData))]
+    [TestCaseSource (nameof(EqualsWithObjectsTestData))]
     public bool Equals_WithObjects (object a, [CanBeNull] object b)
     {
       // ACT & ASSERT
       return a.Equals(b);
     }
 
-    private static IEnumerable EqualsWithObjectsTestData()
+    private static IEnumerable EqualsWithObjectsTestData ()
     {
       var a = new NuGetPackage(Some.String(), Some.Version, Some.Boolean, Some.String(), Some.String(), Some.Boolean);
 

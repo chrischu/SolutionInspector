@@ -13,7 +13,8 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     XElement Element { get; }
   }
 
-  /// <inheritdoc cref="IRuleConfiguration"/>>
+  /// <inheritdoc cref="IRuleConfiguration" />
+  /// >
   public class RuleConfigurationElement : ConfigurationElement, IRuleConfiguration
   {
     [ConfigurationValue (AttributeName = "type")]

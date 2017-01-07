@@ -10,9 +10,9 @@ namespace SolutionInspector.DefaultRules.Tests
 {
   public class NuGetPackagesShouldHaveOneVersionAcrossSolutionRuleTests
   {
-    private ISolution _solution;
     private IProject _project1;
     private IProject _project2;
+    private ISolution _solution;
 
     private NuGetPackagesShouldHaveOneVersionAcrossSolutionRule _sut;
 

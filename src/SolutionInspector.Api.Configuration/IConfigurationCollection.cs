@@ -9,12 +9,11 @@ namespace SolutionInspector.Api.Configuration
   [PublicAPI]
   public interface IConfigurationCollection<T> : IEnumerable<T>
   {
+    int Count { get; }
     void Add (T item);
     void Clear ();
     bool Contains (T item);
     void Remove (T item);
-
-    int Count { get; }
   }
 
   /// <summary>

@@ -14,7 +14,7 @@ namespace SolutionInspector.Api.Rules
     ///   Creates a new <see cref="RuleTypeResolvingException" />
     /// </summary>
     public RuleTypeResolvingException (string message, Exception innerException = null)
-        : base(message, innerException)
+      : base(message, innerException)
     {
     }
 
@@ -23,7 +23,7 @@ namespace SolutionInspector.Api.Rules
     /// </summary>
     [ExcludeFromCodeCoverage /* Serialization ctor */]
     protected RuleTypeResolvingException (SerializationInfo info, StreamingContext context)
-        : base(info, context)
+      : base(info, context)
     {
     }
   }

@@ -49,8 +49,8 @@ namespace SolutionInspector.ConfigurationUi
     private void ChangeTheme ()
     {
       ThemeManager.AddAccent(
-          "VisualStudioPurple",
-          new Uri("pack://application:,,,/SolutionInspector.ConfigurationUi;component/Resources/VisualStudioPurple.xaml"));
+        "VisualStudioPurple",
+        new Uri("pack://application:,,,/SolutionInspector.ConfigurationUi;component/Resources/VisualStudioPurple.xaml"));
 
       var theme = ThemeManager.DetectAppStyle(Current);
       ThemeManager.ChangeAppStyle(Current, ThemeManager.GetAccent("VisualStudioPurple"), theme.Item1);

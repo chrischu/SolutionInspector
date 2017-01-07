@@ -18,10 +18,10 @@ namespace SolutionInspector.DefaultRules.Tests
       _projectItem = A.Fake<IProjectItem>();
 
       _sut = new ProjectItemMustHaveCorrectBuildActionRule(
-               new ProjectItemMustHaveCorrectBuildActionRuleConfiguration
-               {
-                 ExpectedBuildAction = "Compile"
-               });
+        new ProjectItemMustHaveCorrectBuildActionRuleConfiguration
+        {
+          ExpectedBuildAction = "Compile"
+        });
     }
 
     [Test]

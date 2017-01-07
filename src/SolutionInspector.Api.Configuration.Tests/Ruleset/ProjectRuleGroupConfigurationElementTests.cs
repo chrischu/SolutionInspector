@@ -1,4 +1,3 @@
-﻿
 using System.Xml.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -28,7 +27,7 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
   public class ProjectItemRuleGroupConfigurationElementTests
   {
     [Test]
-    public void AppliesToSet()
+    public void AppliesToSet ()
     {
       var element = XElement.Parse(@"<projectItemRuleGroup appliesTo=""Item"" inProject=""Project"" />");
       var projectItemRuleGroup = ConfigurationElement.Load<ProjectItemRuleGroupConfigurationElement>(element);
@@ -42,7 +41,7 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
     }
 
     [Test]
-    public void InProjectSet()
+    public void InProjectSet ()
     {
       var element = XElement.Parse(@"<projectItemRuleGroup appliesTo=""Item"" inProject=""Project"" />");
       var projectItemRuleGroup = ConfigurationElement.Load<ProjectItemRuleGroupConfigurationElement>(element);

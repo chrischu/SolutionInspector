@@ -52,14 +52,14 @@ namespace SolutionInspector.Api.Tests.ObjectModel
     }
 
     [Test]
-    [TestCaseSource(nameof(EqualsWithObjectsTestData))]
-    public bool Equals_WithObjects(object a, [CanBeNull] object b)
+    [TestCaseSource (nameof(EqualsWithObjectsTestData))]
+    public bool Equals_WithObjects (object a, [CanBeNull] object b)
     {
       // ACT & ASSERT
       return a.Equals(b);
     }
 
-    private static IEnumerable EqualsWithObjectsTestData()
+    private static IEnumerable EqualsWithObjectsTestData ()
     {
       var buildConfiguration = new BuildConfiguration("A", "B");
 

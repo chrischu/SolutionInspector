@@ -6,7 +6,7 @@ using SolutionInspector.Configuration;
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
   /// <summary>
-  /// Configuration for a group of <see cref="ProjectItemRule"/>s.
+  ///   Configuration for a group of <see cref="ProjectItemRule" />s.
   /// </summary>
   public interface IProjectItemRuleGroupConfiguration
   {
@@ -15,7 +15,8 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     IReadOnlyCollection<IRuleConfiguration> Rules { get; }
   }
 
-  /// <inheritdoc cref="IProjectItemRuleGroupConfiguration"/>>
+  /// <inheritdoc cref="IProjectItemRuleGroupConfiguration" />
+  /// >
   public class ProjectItemRuleGroupConfigurationElement : ConfigurationElement, IProjectItemRuleGroupConfiguration
   {
     [ConfigurationValue]

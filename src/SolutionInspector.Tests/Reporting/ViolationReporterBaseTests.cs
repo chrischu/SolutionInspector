@@ -11,10 +11,10 @@ namespace SolutionInspector.Tests.Reporting
 {
   public class ViolationReporterBaseTests
   {
-    private TextWriter _textWriter;
     private Action<TextWriter, IEnumerable<IRuleViolation>> _reportAction;
 
     private ViolationReporterBase _sut;
+    private TextWriter _textWriter;
 
     [SetUp]
     public void SetUp ()
@@ -59,7 +59,7 @@ namespace SolutionInspector.Tests.Reporting
 
     private class DummyViolationReporter : ViolationReporterBase
     {
-      readonly Action<TextWriter, IEnumerable<IRuleViolation>> _report;
+      private readonly Action<TextWriter, IEnumerable<IRuleViolation>> _report;
 
       public DummyViolationReporter (TextWriter writer, Action<TextWriter, IEnumerable<IRuleViolation>> report)
         : base(writer)

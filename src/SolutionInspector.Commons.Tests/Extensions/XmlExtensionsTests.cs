@@ -88,7 +88,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
     }
 
     [Test]
-    public void RemoveAttributesWhere_WithMultipleAttributes_RemovesOnlyMatchingAttributes()
+    public void RemoveAttributesWhere_WithMultipleAttributes_RemovesOnlyMatchingAttributes ()
     {
       var element = CreateXmlElement("element");
       element.AddAttribute("attr1", "value");
@@ -103,7 +103,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
     }
 
     [Test]
-    public void RemoveAttributesWhere_WithoutAttributes_DoesNotThrow()
+    public void RemoveAttributesWhere_WithoutAttributes_DoesNotThrow ()
     {
       var element = CreateXmlElement("element");
 
