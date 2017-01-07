@@ -48,7 +48,7 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
 </ruleset>");
 
       A.CallTo(() => _xDocumentStatic.Load(A<string>._))
-          .Returns(A.Fake<IXDocument>(o => o.ConfigureFake(x => A.CallTo(() => x.Document).Returns(xDocument))));
+          .Returns(A.Fake<IXDocument>(o => o.ConfigureFake(x => A.CallTo(() => x._XDocument).Returns(xDocument))));
 
       // ACT
       var result = _configurationManager.LoadDocument<RulesetConfigurationDocument>("path");

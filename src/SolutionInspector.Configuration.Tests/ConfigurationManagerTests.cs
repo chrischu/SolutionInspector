@@ -33,7 +33,7 @@ namespace SolutionInspector.Configuration.Tests
       var xDocument = XDocument.Parse("<element />");
 
       var xDocumentWrapper = A.Fake<IXDocument>();
-      A.CallTo(() => xDocumentWrapper.Document).Returns(xDocument);
+      A.CallTo(() => xDocumentWrapper._XDocument).Returns(xDocument);
 
       A.CallTo(() => _xDocumentStatic.Load(A<string>._)).Returns(xDocumentWrapper);
 

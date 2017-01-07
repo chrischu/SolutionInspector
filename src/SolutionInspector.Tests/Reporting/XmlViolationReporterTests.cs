@@ -2,7 +2,6 @@
 using System.IO;
 using FakeItEasy;
 using FluentAssertions;
-using Machine.Specifications;
 using NUnit.Framework;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Reporting;

@@ -22,7 +22,7 @@ namespace SolutionInspector.Configuration
     {
       var xDocument = _xDocumentStatic.Load(configurationFilePath);
 
-      return ConfigurationDocument.Load<T>(configurationFilePath, xDocument.Document);
+      return ConfigurationDocument.Load<T>(configurationFilePath, xDocument._XDocument);
     }
   }
 }

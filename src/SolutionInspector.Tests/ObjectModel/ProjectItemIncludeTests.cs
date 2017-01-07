@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using FluentAssertions;
 using JetBrains.Annotations;
-using Machine.Specifications;
 using NUnit.Framework;
 using SolutionInspector.ObjectModel;
 using SolutionInspector.TestInfrastructure;

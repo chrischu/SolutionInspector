@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Primitives;
-using Machine.Specifications;
+using NUnit.Framework;
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
@@ -15,18 +15,18 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
       {
         actualTrimmed.Should().BeIgnoringDifferentLineEnds(expectedTrimmed);
       }
-      catch (SpecificationException ex)
+      catch (AssertionException ex)
       {
         var message = $@"Differences:
 ------------
 {DiffFormatter.FormatDiff(expectedTrimmed, actualTrimmed)}
 
 {ex.Message}";
-        throw new SpecificationException(message);
+        throw new AssertionException(message);
       }
     }
 
-    private static void BeIgnoringDifferentLineEnds(this StringAssertions stringAssertions, string expected)
+    private static void BeIgnoringDifferentLineEnds (this StringAssertions stringAssertions, string expected)
     {
       var actualWithReplacedLineEndings = stringAssertions.Subject.Replace("\r\n", "\n");
       var expectedWithReplacedLineEndings = expected.Replace("\r\n", "\n");
