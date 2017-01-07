@@ -4,6 +4,9 @@ using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
+  /// <summary>
+  ///   Configuration for all (solution, project and project item) rules of a ruleset.
+  /// </summary>
   public interface IRulesConfiguration
   {
     IReadOnlyCollection<IRuleConfiguration> SolutionRules { get; }
@@ -11,6 +14,7 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     IReadOnlyCollection<IProjectItemRuleGroupConfiguration> ProjectItemRuleGroups { get; }
   }
 
+  /// <inheritdoc cref="IRulesConfiguration"/>>
   public class RulesConfigurationElement : ConfigurationElement, IRulesConfiguration
   {
     [ConfigurationCollection (ElementName = "rule", IsOptional = true)]
@@ -18,11 +22,11 @@ namespace SolutionInspector.Api.Configuration.Ruleset
 
     [ConfigurationCollection (CollectionName = "projectRules", ElementName = "projectRuleGroup", IsOptional = true)]
     public ConfigurationElementCollection<ProjectRuleGroupConfigurationElement> ProjectRuleGroups
-        => GetConfigurationCollection<ProjectRuleGroupConfigurationElement>();
+      => GetConfigurationCollection<ProjectRuleGroupConfigurationElement>();
 
     [ConfigurationCollection (CollectionName = "projectItemRules", ElementName = "projectItemRuleGroup", IsOptional = true)]
     public ConfigurationElementCollection<ProjectItemRuleGroupConfigurationElement> ProjectItemRuleGroups
-        => GetConfigurationCollection<ProjectItemRuleGroupConfigurationElement>();
+      => GetConfigurationCollection<ProjectItemRuleGroupConfigurationElement>();
 
     [ExcludeFromCodeCoverage]
     IReadOnlyCollection<IRuleConfiguration> IRulesConfiguration.SolutionRules => SolutionRules;

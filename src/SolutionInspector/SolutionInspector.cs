@@ -62,7 +62,7 @@ namespace SolutionInspector
       builder.Register(ctx => Wrapper.ConfigurationManager).As<IConfigurationManagerStatic>();
       builder.Register(ctx => Wrapper.Process).As<IProcessStatic>();
 
-      builder.RegisterType<Configuration.ConfigurationManager>().As<IConfigurationManager>();
+      builder.RegisterType<ConfigurationManager>().As<IConfigurationManager>();
 
       builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
 

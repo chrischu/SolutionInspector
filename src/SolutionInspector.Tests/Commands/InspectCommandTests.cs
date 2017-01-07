@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using FakeItEasy;
 using FluentAssertions;
-using ManyConsole;
 using Microsoft.Build.Exceptions;
 using NUnit.Framework;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Configuration.Ruleset;
+using SolutionInspector.Api.Exceptions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Api.Utilities;
 using SolutionInspector.Commands;
-using SolutionInspector.Configuration;
 using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
@@ -290,11 +288,6 @@ namespace SolutionInspector.Tests.Commands
       A.CallTo(() => _projectItemRule.Evaluate(A<IProjectItem>._)).Returns(new[] { projectItemRuleViolation });
 
       return new[] { solutionRuleViolation, projectRuleViolation, projectItemRuleViolation };
-    }
-
-    private int RunCommand (ConsoleCommand command, params string[] arguments)
-    {
-      return ConsoleCommandDispatcher.DispatchCommand(command, arguments, TextWriter);
     }
 
     private void AssertConfigurationLoadWithDefaultParameters ()

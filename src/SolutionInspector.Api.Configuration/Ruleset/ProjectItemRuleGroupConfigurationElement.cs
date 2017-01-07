@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using SolutionInspector.Api.Rules;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
+  /// <summary>
+  /// Configuration for a group of <see cref="ProjectItemRule"/>s.
+  /// </summary>
   public interface IProjectItemRuleGroupConfiguration
   {
     INameFilter AppliesTo { get; }
@@ -11,6 +15,7 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     IReadOnlyCollection<IRuleConfiguration> Rules { get; }
   }
 
+  /// <inheritdoc cref="IProjectItemRuleGroupConfiguration"/>>
   public class ProjectItemRuleGroupConfigurationElement : ConfigurationElement, IProjectItemRuleGroupConfiguration
   {
     [ConfigurationValue]

@@ -1,4 +1,3 @@
-using System.Linq;
 using GalaSoft.MvvmLight;
 using SolutionInspector.ConfigurationUi.Infrastructure;
 

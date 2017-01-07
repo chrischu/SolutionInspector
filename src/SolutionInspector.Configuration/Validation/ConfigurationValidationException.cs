@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Configuration.Validation
 {
@@ -13,14 +14,16 @@ namespace SolutionInspector.Configuration.Validation
   public class ConfigurationValidationException : Exception
   {
     /// <summary>
-    /// All validation errors by property path.
+    ///   All validation errors by property path.
     /// </summary>
+    [PublicAPI]
     public IReadOnlyDictionary<string, IReadOnlyCollection<string>> ValidationErrors { get; }
 
     /// <summary>
     ///   Creates a new <see cref="ConfigurationValidationException" />
     /// </summary>
-    public ConfigurationValidationException(IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors) : base(FormatValidationErrorMessage(validationErrors))
+    public ConfigurationValidationException (IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors)
+      : base(FormatValidationErrorMessage(validationErrors))
     {
       ValidationErrors = validationErrors;
     }
@@ -43,7 +46,7 @@ namespace SolutionInspector.Configuration.Validation
     ///   Serialization constructor.
     /// </summary>
     [ExcludeFromCodeCoverage /* Serialization ctor */]
-    protected ConfigurationValidationException(SerializationInfo info, StreamingContext context)
+    protected ConfigurationValidationException (SerializationInfo info, StreamingContext context)
       : base(info, context)
     {
     }

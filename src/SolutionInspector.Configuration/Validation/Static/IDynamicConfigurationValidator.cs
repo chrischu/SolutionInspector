@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 
 namespace SolutionInspector.Configuration.Validation.Static
 {
+  [PublicAPI]
   internal interface IDynamicConfigurationValidator
   {
     void BeginTypeValidation (Type configurationElementType, XElement element, ReportValidationError reportValidationError);

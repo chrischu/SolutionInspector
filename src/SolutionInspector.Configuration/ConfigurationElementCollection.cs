@@ -6,13 +6,19 @@ using System.Xml.Linq;
 
 namespace SolutionInspector.Configuration
 {
+  /// <summary>
+  ///   Collection for use in configuration classes.
+  /// </summary>
   public class ConfigurationElementCollection<T> : IReadOnlyCollection<T>
-      where T : ConfigurationElement, new()
+    where T : ConfigurationElement, new()
   {
     private readonly XElement _collectionElement;
     private readonly List<T> _collection = new List<T>();
     private readonly string _elementName;
 
+    /// <summary>
+    ///   Creates a new <see cref="ConfigurationElementCollection{T}" />.
+    /// </summary>
     public ConfigurationElementCollection (XElement collectionElement, string elementName)
     {
       _collectionElement = collectionElement;
@@ -20,8 +26,14 @@ namespace SolutionInspector.Configuration
       _elementName = elementName;
     }
 
-    public T this [int index] =>  _collection[index];
+    /// <summary>
+    ///   Provides read access to the collection's items by <paramref name="index" />.
+    /// </summary>
+    public T this [int index] => _collection[index];
 
+    /// <summary>
+    ///   Adds a new elements to the collection and returns it.
+    /// </summary>
     public T AddNew ()
     {
       var configurationElement = ConfigurationElement.Create<T>(_elementName);
@@ -29,18 +41,27 @@ namespace SolutionInspector.Configuration
       return configurationElement;
     }
 
+    /// <summary>
+    ///   Adds the given <paramref name="element" /> to the collection.
+    /// </summary>
     public void Add (T element)
     {
       _collection.Add(element);
       _collectionElement.Add(element.Element);
     }
 
+    /// <summary>
+    ///   Removes the given <paramref name="element" /> from the collection.
+    /// </summary>
     public void Remove (T element)
     {
       _collection.Remove(element);
       element.Element.Remove();
     }
 
+    /// <summary>
+    ///   Completely clears the collection off all its elements.
+    /// </summary>
     public void Clear ()
     {
       _collection.Clear();

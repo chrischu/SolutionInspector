@@ -11,6 +11,7 @@ namespace SolutionInspector.TestInfrastructure
     }
     public string Path { get; }
 
+    // ReSharper disable once UnusedMember.Global
     public void Write(string content)
     {
       File.WriteAllText(Path, content);

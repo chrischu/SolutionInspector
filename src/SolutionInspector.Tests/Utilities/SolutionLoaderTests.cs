@@ -5,7 +5,7 @@ using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
-using SolutionInspector.Api.Utilities;
+using SolutionInspector.Api.Exceptions;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.TestInfrastructure;
 using SolutionInspector.Utilities;

@@ -11,7 +11,7 @@
     /// </summary>
     public static object Null
     {
-      get { return null; }
+      // ReSharper disable once ValueParameterNotUsed
       set { }
     }
   }

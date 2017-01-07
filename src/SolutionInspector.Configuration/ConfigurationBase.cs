@@ -8,30 +8,39 @@ using SolutionInspector.Configuration.Validation;
 
 namespace SolutionInspector.Configuration
 {
+  /// <summary>
+  ///   Base class for configuration classes.
+  /// </summary>
   public abstract class ConfigurationBase
   {
+    /// <summary>
+    ///   The underlying <see cref="XElement" />.
+    /// </summary>
     public XElement Element { get; private set; }
 
-    protected static T Load<T>(XElement element) where T : ConfigurationBase, new()
+    internal static T Load<T> (XElement element) where T : ConfigurationBase, new()
     {
       return (T) Load(typeof(T), element);
     }
 
-    protected static ConfigurationBase Create (string elementName, Type configurationType)
+    internal static ConfigurationBase Create (string elementName, Type configurationType)
     {
-      var instance = (ConfigurationBase)Activator.CreateInstance(configurationType);
+      var instance = (ConfigurationBase) Activator.CreateInstance(configurationType);
       instance.Element = new XElement(elementName);
       return instance;
     }
 
-    protected static ConfigurationBase Load(Type configurationType, XElement element)
+    internal static ConfigurationBase Load (Type configurationType, XElement element)
     {
-      var instance = (ConfigurationBase)Activator.CreateInstance(configurationType);
+      var instance = (ConfigurationBase) Activator.CreateInstance(configurationType);
       instance.Element = element;
       ConfigurationValidator.Validate(instance);
       return instance;
     }
 
+    /// <summary>
+    ///   Gets the configuration subelement represented by the CLR property this method is called from.
+    /// </summary>
     protected T GetConfigurationSubelement<T> ([CallerMemberName] string clrPropertyName = null) where T : ConfigurationElement
     {
       var configurationPropertyAttribute = GetConfigurationPropertyAttribute<ConfigurationSubelementAttribute>(clrPropertyName);
@@ -48,6 +57,9 @@ namespace SolutionInspector.Configuration
       return (T) ConfigurationElement.Load(typeof(T), element);
     }
 
+    /// <summary>
+    ///   Gets the configuration value represented by the CLR property this method is called from.
+    /// </summary>
     protected T GetConfigurationValue<T> ([CallerMemberName] string clrPropertyName = null)
     {
       var configurationValueType = typeof(T);
@@ -94,6 +106,9 @@ namespace SolutionInspector.Configuration
       return (IConfigurationConverter<T>) Activator.CreateInstance(configurationConverterType);
     }
 
+    /// <summary>
+    ///   Set the configuration value represented by the CLR property this method is called from.
+    /// </summary>
     protected void SetConfigurationValue<T> (T value, [CallerMemberName] string clrPropertyName = null)
     {
       var configurationValue = value as IConfigurationValue;
@@ -118,6 +133,9 @@ namespace SolutionInspector.Configuration
         Element.SetAttributeValue(attributeName, value);
     }
 
+    /// <summary>
+    ///   Gets the configuration collection represented by the CLR property this method is called from.
+    /// </summary>
     protected ConfigurationElementCollection<T> GetConfigurationCollection<T> ([CallerMemberName] string clrPropertyName = null)
       where T : ConfigurationElement, new()
     {

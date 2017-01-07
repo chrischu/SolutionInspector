@@ -9,12 +9,12 @@ namespace SolutionInspector.Configuration.Validation.Static.Validators
       ConfigurationSubelementAttribute attribute,
       ReportValidationError reportValidationError)
     {
-      if (!typeof(Configuration.ConfigurationElement).IsAssignableFrom(property.PropertyType))
+      if (!typeof(ConfigurationElement).IsAssignableFrom(property.PropertyType))
       {
         reportValidationError(
           property,
           $"'{property.PropertyType}' is not a valid type for a configuration sub element, only " +
-          $"types derived from '{typeof(Configuration.ConfigurationElement)}' are allowed.");
+          $"types derived from '{typeof(ConfigurationElement)}' are allowed.");
       }
     }
   }

@@ -13,7 +13,7 @@ namespace SolutionInspector.ConfigurationUi
       TestStuff();
 
       //BindingExceptionThrower.Attach();
-      //ChangeTheme();
+      ChangeTheme();
     }
 
     private void TestStuff ()

@@ -35,6 +35,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
     private class DummyConfigurationElement : ConfigurationElement
     {
       [ConfigurationValue (IsOptional = false)]
+      // ReSharper disable once UnusedMember.Local
       public string Value { get; set; }
     }
   }

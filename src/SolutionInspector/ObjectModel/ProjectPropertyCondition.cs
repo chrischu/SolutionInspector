@@ -9,7 +9,7 @@ using SolutionInspector.Utilities;
 namespace SolutionInspector.ObjectModel
 {
   /// <inheritdoc cref="IProjectPropertyCondition"/>
-  [DebuggerDisplay("{DebuggerDisplay,nq}")]
+  [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
   public sealed class ProjectPropertyCondition : IProjectPropertyCondition, IEquatable<ProjectPropertyCondition>
   {
     [CanBeNull]

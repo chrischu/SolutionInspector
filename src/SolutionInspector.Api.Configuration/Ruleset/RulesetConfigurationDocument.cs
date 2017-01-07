@@ -5,12 +5,16 @@ using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
+  /// <summary>
+  /// Configuration for a ruleset, containing <see cref="RuleAssemblyImports"/> and <see cref="Rules"/>.
+  /// </summary>
   public interface IRulesetConfiguration
   {
     IReadOnlyCollection<string> RuleAssemblyImports { get; }
     IRulesConfiguration Rules { get; }
   }
 
+  /// <inheritdoc cref="IRulesetConfiguration"/>>
   public class RulesetConfigurationDocument : ConfigurationDocument, IRulesetConfiguration
   {
     [ConfigurationCollection (ElementName = "import")]

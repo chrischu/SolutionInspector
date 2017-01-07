@@ -6,7 +6,7 @@ using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.ObjectModel
 {
-  [DebuggerDisplay ("{Name}")]
+  [DebuggerDisplay ("{" + nameof(Name) + "}")]
   internal class ProjectProperty : IProjectProperty, IEnumerable<IProjectPropertyOccurrence>
   {
     private readonly List<IProjectPropertyOccurrence> _occurrences = new List<IProjectPropertyOccurrence>();

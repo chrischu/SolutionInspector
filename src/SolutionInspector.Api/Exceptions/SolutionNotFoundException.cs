@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
-namespace SolutionInspector.Api.Utilities
+namespace SolutionInspector.Api.Exceptions
 {
   /// <summary>
   ///   Represents errors that occurs when trying to load a solution file that does not exist.

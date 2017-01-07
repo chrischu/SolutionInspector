@@ -139,7 +139,7 @@
     <Compile Include="ConfigurationElementCollection.cs" />
     <Compile Include="ConfigurationValueAttribute.cs" />
     <Compile Include="ConfigurationDocument.cs" />
-    <Compile Include="ConfigurationSubElementAttribute.cs" />
+    <Compile Include="ConfigurationSubelementAttribute.cs" />
     <Compile Include="Validation\Dynamic\DynamicConfigurationValidatorBase.cs" />
     <Compile Include="Validation\Dynamic\Validators\CollectionElementCountValidator.cs" />
     <Compile Include="Validation\Dynamic\Validators\RequiredValidator.cs" />
