@@ -60,7 +60,7 @@ namespace SolutionInspector.DefaultRules
     public CommaSeparatedStringCollection Configurations => GetConfigurationValue<CommaSeparatedStringCollection>();
 
     /// <summary>
-    ///   A list of expected platforms (e.g. 'Any CPU', 'x64).
+    ///   A list of expected platforms (e.g. 'Any CPU', 'x64').
     /// </summary>
     [ConfigurationValue (AttributeName = "expectedPlatforms", DefaultValue = "", IsOptional = false)]
     [Description ("A list of expected platforms (e.g. 'Any CPU', 'x64).")]
