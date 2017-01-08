@@ -34,6 +34,14 @@ namespace SolutionInspector.Configuration
     /// </summary>
     public int Count => _collection.Count;
 
+    /// <summary>
+    ///   Access an element in the collection by its <paramref name="index" />.
+    /// </summary>
+    public string this [int index]
+    {
+      get { return _collection[index]; }
+      set { _collection[index] = value; }
+    }
 
     /// <summary>
     ///   Serializes the elements of the collection as comma-separated string.

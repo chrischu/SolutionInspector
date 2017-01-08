@@ -208,5 +208,19 @@ namespace SolutionInspector.Configuration.Tests
       result.Should().Be(expectedResult);
       _sut.Count.Should().Be(expectedCount);
     }
+
+    [Test]
+    [TestCase(0, "A")]
+    [TestCase(1, "B")]
+    public void Indexer(int index, string expectedResult)
+    {
+      _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });
+
+      // ACT
+      var result = _sut[index];
+
+      // ASSERT
+      result.Should().Be(expectedResult);
+    }
   }
 }
