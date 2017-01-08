@@ -96,7 +96,6 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.4.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -136,7 +135,7 @@
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
     <Compile Include="Configuration\RulesetLoader.cs" />
-    <Compile Include="Controls\CommaDelimitedStringCollection\CommaDelimitedStringCollectionViewModel.cs" />
+    <Compile Include="Controls\CommaSeparatedStringCollection\CommaSeparatedStringCollectionViewModel.cs" />
     <Compile Include="Controls\IConfigurationControl.cs" />
     <Compile Include="Controls\ConfigurationControlRetriever.cs" />
     <Compile Include="Controls\ConfigurationControlBase.cs" />
@@ -156,7 +155,7 @@
     <Compile Include="ViewModel\StartViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Page Include="Controls\CommaDelimitedStringCollection\CommaDelimitedStringCollectionTemplate.xaml">
+    <Page Include="Controls\CommaSeparatedStringCollection\CommaSeparatedStringCollectionTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

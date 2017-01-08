@@ -4,26 +4,27 @@ using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using SolutionInspector.Configuration;
 using SolutionInspector.ConfigurationUi.Infrastructure;
 using SolutionInspector.ConfigurationUi.ViewModel;
 
-namespace SolutionInspector.ConfigurationUi.Controls.CommaDelimitedStringCollection
+namespace SolutionInspector.ConfigurationUi.Controls.CommaSeparatedStringCollection
 {
-  internal class CommaDelimitedStringCollectionViewModel : ViewModelBase
+  internal class CommaSeparatedStringCollectionViewModel : ViewModelBase
   {
-    private readonly Stack<CommaDelimitedStringValueViewModel> _removeStack = new Stack<CommaDelimitedStringValueViewModel>();
+    private readonly Stack<CommaSeparatedStringValueViewModel> _removeStack = new Stack<CommaSeparatedStringValueViewModel>();
 
-    public CommaDelimitedStringCollectionViewModel (System.Configuration.CommaDelimitedStringCollection value)
+    public CommaSeparatedStringCollectionViewModel (SolutionInspector.Configuration.CommaSeparatedStringCollection value)
     {
       Values =
-          new AdvancedObservableCollection<CommaDelimitedStringValueViewModel>(
-            value.Cast<string>().Select((s, i) => new CommaDelimitedStringValueViewModel(this, s, i)));
+          new AdvancedObservableCollection<CommaSeparatedStringValueViewModel>(
+            value.Select((s, i) => new CommaSeparatedStringValueViewModel(this, s, i)));
       Values.ElementAdded += s => value.Add(s.Value);
       Values.ElementRemoved += s => value.Remove(s.Value);
       Values.ElementChanged += e => value[e.Index] = e.Value;
     }
 
-    public AdvancedObservableCollection<CommaDelimitedStringValueViewModel> Values { get; }
+    public AdvancedObservableCollection<CommaSeparatedStringValueViewModel> Values { get; }
     public string LastRemovedValue => _removeStack.Count > 0 ? _removeStack.Peek().Value : null;
 
     public ICommand AddCommand => new RelayCommand(ExecuteAdd);
@@ -34,7 +35,7 @@ namespace SolutionInspector.ConfigurationUi.Controls.CommaDelimitedStringCollect
     {
       var value = await ViewModelLocator.DialogManager.RequestInput("Adding new value", "Enter the new value");
       if (value != null)
-        Values.Add(new CommaDelimitedStringValueViewModel(this, value, Values.Count));
+        Values.Add(new CommaSeparatedStringValueViewModel(this, value, Values.Count));
     }
 
     private void ExecuteRemove (int index)
@@ -59,16 +60,16 @@ namespace SolutionInspector.ConfigurationUi.Controls.CommaDelimitedStringCollect
     }
   }
 
-  internal class CommaDelimitedStringValueViewModel : ViewModelBase
+  internal class CommaSeparatedStringValueViewModel : ViewModelBase
   {
-    public CommaDelimitedStringValueViewModel (CommaDelimitedStringCollectionViewModel parent, string value, int index)
+    public CommaSeparatedStringValueViewModel (CommaSeparatedStringCollectionViewModel parent, string value, int index)
     {
       Parent = parent;
       Value = value;
       Index = index;
     }
 
-    public CommaDelimitedStringCollectionViewModel Parent { get; }
+    public CommaSeparatedStringCollectionViewModel Parent { get; }
     public string Value { get; set; }
     public int Index { get; set; }
 
@@ -82,11 +83,11 @@ namespace SolutionInspector.ConfigurationUi.Controls.CommaDelimitedStringCollect
 
   public class CommaDelimitedStringCollectionControl : ConfigurationControlBase
   {
-    public override Type ValueType => typeof(System.Configuration.CommaDelimitedStringCollection);
+    public override Type ValueType => typeof(SolutionInspector.Configuration.CommaSeparatedStringCollection);
 
     public override ViewModelBase CreateViewModel (object value)
     {
-      return new CommaDelimitedStringCollectionViewModel((System.Configuration.CommaDelimitedStringCollection) value);
+      return new CommaSeparatedStringCollectionViewModel((SolutionInspector.Configuration.CommaSeparatedStringCollection) value);
     }
   }
 }
