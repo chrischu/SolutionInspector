@@ -14,6 +14,11 @@ namespace SolutionInspector.Internals
     ///   Retrieves information about a rule type from its name.
     /// </summary>
     RuleTypeInfo Resolve (string ruleTypeName);
+
+    /// <summary>
+    ///   Retrieves information about a rule type from its type.
+    /// </summary>
+    RuleTypeInfo Resolve (Type ruleType);
   }
 
   internal class RuleTypeResolver : IRuleTypeResolver
@@ -21,6 +26,10 @@ namespace SolutionInspector.Internals
     public RuleTypeInfo Resolve (string ruleTypeName)
     {
       var ruleType = ResolveRuleType(ruleTypeName);
+      return Resolve(ruleType);
+    }
+    public RuleTypeInfo Resolve(Type ruleType)
+    {
       var configurationType = ResolveConfigurationType(ruleType);
 
       Func<ConstructorInfo, bool> constructorFilter = c => c.GetParameters().Length == 0;
@@ -31,7 +40,12 @@ namespace SolutionInspector.Internals
         constructorFilter,
         configurationType == null ? "" : $" only taking a parameter of type '{configurationType.Name}' as a parameter");
 
-      return new RuleTypeInfo(ruleType, configurationType, constructor);
+      return new RuleTypeInfo(GetRuleTypeName(ruleType), ruleType, configurationType, constructor);
+    }
+
+    private string GetRuleTypeName(Type ruleType)
+    {
+      return $"{ruleType.FullName}, {ruleType.Assembly.GetName().Name}";
     }
 
     private ConstructorInfo ResolveConstructor (Type ruleType, Func<ConstructorInfo, bool> constructorFilter, string taking)
@@ -67,5 +81,6 @@ namespace SolutionInspector.Internals
           .Single(i => i.IsConstructedGenericType && i.GetGenericTypeDefinition() == typeof(IConfigurableRule<,>))
           .GenericTypeArguments[1];
     }
+
   }
 }

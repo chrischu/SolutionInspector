@@ -1,0 +1,53 @@
+﻿using MaterialDesignThemes.Wpf
+using SolutionInspector.ConfigurationUi.Infrastructure.Behaviors
+using System.Windows.Interactivity
+using Microsoft.VisualStudio.Imaging
+using Microsoft.VisualStudio.PlatformUI
+
+alias SearchBox(text=none, hint="Search") {
+  ColorZone {
+    Mode: Standard
+    VerticalAlignment: Center
+          
+    DockPanel {
+      @ToolButton($hint, "Magnify") {
+        DockPanel.Dock: Left
+        Opacity: 0.56 
+        Interaction.Behaviors: [
+          SearchButtonBehavior { SearchBox: bind "Children[2]" from $ancestor<DockPanel> convert (UIElement e) => (TextBox)e }
+        ]
+      }
+      @ToolButton("Clear", "Close") {
+        DockPanel.Dock: Right
+        Visibility: bind "Children[2].Text.Length" from $ancestor<DockPanel>
+                    convert (int length) => length > 0 ? Visibility.Visible : Visibility.Hidden
+        Opacity: 0.56
+        Interaction.Behaviors: [
+          ClearTextBoxBehavior { TextBox: bind "Children[2]" from $ancestor<DockPanel> convert (UIElement e) => (TextBox)e }
+        ]
+      }
+      TextBox {
+        Width: 200
+        VerticalAlignment: Center
+        BorderThickness: 0
+        TextFieldAssist.DecorationVisibility: Hidden
+        HintAssist.Hint: $hint
+        Text: $text
+      }
+    }
+  }
+}
+
+alias CrispImage(moniker) {
+  StackPanel { 
+    //Background: White
+    VerticalAlignment: Center
+    //ImageThemingUtilities.ImageBackgroundColor: bind Background from $this set [ Converter: resource "BrushToColorConverter" ]
+    CrispImage "Image" { 
+      Width: 16, 
+      Height: 16,
+      Tag: $moniker
+      Moniker: "{Binding Path=Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource StringToMonikerConverter}}"
+     }
+  }
+}

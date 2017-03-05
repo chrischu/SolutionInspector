@@ -1,59 +1,30 @@
 ﻿using System;
-using System.Windows;
-using MahApps.Metro;
+using System.Reflection;
+using Microsoft.VisualStudio.Imaging;
+using SolutionInspector.Commons;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.ConfigurationUi
 {
-  public partial class App
+  internal partial class App
   {
-    protected override void OnStartup (StartupEventArgs e)
+    [STAThread]
+    public static void Main ()
     {
-      base.OnStartup(e);
+      // TODO: BindingExceptionThrower.Attach();
 
-      TestStuff();
+      using (var resource = Assembly.GetEntryAssembly().GetManifestResourceStream($"{typeof(App).Namespace}.ImageCatalog.imagemanifest"))
+      using (var tempFile = new TemporaryFile())
+      {
+        using (var tempFileStream = tempFile.GetStream())
+          resource.AssertNotNull().CopyTo(tempFileStream);
 
-      //BindingExceptionThrower.Attach();
-      ChangeTheme();
-    }
+        CrispImage.DefaultImageLibrary = ImageLibrary.Load(tempFile.Path, isDefault: true);
+      }
 
-    private void TestStuff ()
-    {
-      //var xdoc = XDocument.Load(@"D:\Development\SolutionInspector\src\SolutionInspector.DefaultRules\Template.SolutionInspectorRuleset");
-      //var element = xdoc.XPathSelectElement("//solutionInspectorRuleset");
-
-      //var ruleset = new SolutionInspectorRulesetConfigurationSection(element);
-
-      //var xdoc = new XDocument();
-      //xdoc.Add(new XElement("element"));
-
-      //var someConfiguration = new SomeConfigurationElement(xdoc.Root);
-      //someConfiguration.String = "ASDF";
-      //someConfiguration.Int = 1203928;
-      //someConfiguration.Commas.Add("A");
-      //someConfiguration.Commas.Add("B");
-
-      //someConfiguration.Other.String = "QWER";
-
-      //var added = someConfiguration.Others.AddNew();
-      //added.String = "YXCV";
-
-      //var someConfiguration2 = new SomeConfigurationElement(xdoc.Root);
-
-      //var xdocString = xdoc.ToString();
-
-      //someConfiguration2.Others.Remove(added);
-
-      //xdocString = xdoc.ToString();
-    }
-
-    private void ChangeTheme ()
-    {
-      ThemeManager.AddAccent(
-        "VisualStudioPurple",
-        new Uri("pack://application:,,,/SolutionInspector.ConfigurationUi;component/Resources/VisualStudioPurple.xaml"));
-
-      var theme = ThemeManager.DetectAppStyle(Current);
-      ThemeManager.ChangeAppStyle(Current, ThemeManager.GetAccent("VisualStudioPurple"), theme.Item1);
+      var app = new App();
+      app.InitializeComponent();
+      app.Run();
     }
   }
 }

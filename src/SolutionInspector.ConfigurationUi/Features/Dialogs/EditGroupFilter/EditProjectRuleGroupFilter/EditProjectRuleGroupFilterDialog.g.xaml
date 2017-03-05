@@ -1,0 +1,232 @@
+<UserControl x:Class="SolutionInspector.ConfigurationUi.Features.Dialogs.EditGroupFilter.EditProjectRuleGroupFilter.EditProjectRuleGroupFilterDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ns0="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging" xmlns:ns1="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf" xmlns:ns2="clr-namespace:SolutionInspector.ConfigurationUi.Features.Dialogs.EditGroupFilter" xmlns:ns3="clr-namespace:SolutionInspector.ConfigurationUi.Features.Controls" xmlns:ns4="clr-namespace:AmmySidekick;assembly=AmmySidekick" xmlns:bev="clr-namespace:SolutionInspector.ConfigurationUi.Infrastructure.Behaviors" ns4:Ammy.Register="/SolutionInspector.ConfigurationUi;component/Features/Dialogs/EditGroupFilter/EditProjectRuleGroupFilter/EditProjectRuleGroupFilterDialog.g.xaml">
+  <UserControl.Width>
+    <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;6&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;binary op=&quot;Mul&quot;&gt;&lt;parameter name=&quot;x&quot; type=&quot;System.Double&quot; /&gt;&lt;prim val=&quot;0.75&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Double&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;parameter name=&quot;x&quot; type=&quot;System.Double&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+  </UserControl.Width>
+  <UserControl.Height>
+    <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;6&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;binary op=&quot;Mul&quot;&gt;&lt;parameter name=&quot;x&quot; type=&quot;System.Double&quot; /&gt;&lt;prim val=&quot;0.75&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Double&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;parameter name=&quot;x&quot; type=&quot;System.Double&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+  </UserControl.Height>
+  <DockPanel Margin="18">
+    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0 0 0 12">
+      <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center">
+        <TextBlock.Text>
+          <Binding Path="Title"/>
+        </TextBlock.Text>
+      </TextBlock>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="0 24 0 0">
+      <Button Style="{StaticResource MaterialDesignFlatButton}" IsDefault="True" Command="{x:Static ns1:DialogHost.CloseDialogCommand}" CommandParameter="True" Content="SAVE"/>
+      <Button Style="{StaticResource MaterialDesignFlatButton}" IsCancel="True" Command="{x:Static ns1:DialogHost.CloseDialogCommand}" CommandParameter="False" Content="CANCEL"/>
+    </StackPanel>
+    <Grid x:Name="Root">
+      <Grid.DataContext>
+        <Binding Path="ProjectRuleGroupFilter"/>
+      </Grid.DataContext>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <DockPanel Grid.Row="0">
+        <Grid DockPanel.Dock="Bottom">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="6"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="6"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Grid.IsEnabled>
+            <Binding Path="IsInManualEditMode" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;10&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;unary op=&quot;LogicalNegate&quot;&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/unary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+          </Grid.IsEnabled>
+          <Button Style="{StaticResource MaterialDesignRaisedButton}" Grid.Column="0" Content="Check All">
+            <Button.Command>
+              <Binding Path="CheckAllCommand"/>
+            </Button.Command>
+          </Button>
+          <Button Style="{StaticResource MaterialDesignRaisedButton}" Grid.Column="2" Content="Uncheck All">
+            <Button.Command>
+              <Binding Path="UncheckAllCommand"/>
+            </Button.Command>
+          </Button>
+          <Button Style="{StaticResource MaterialDesignRaisedButton}" Grid.Column="4" Content="Invert Selection">
+            <Button.Command>
+              <Binding Path="InvertSelectionCommand"/>
+            </Button.Command>
+          </Button>
+        </Grid>
+        <TreeView>
+          <TreeView.ItemsSource>
+            <Binding Path="Projects"/>
+          </TreeView.ItemsSource>
+          <TreeView.ItemContainerStyle>
+            <Style BasedOn="{StaticResource MaterialDesignTreeViewItem}" TargetType="{x:Type TreeViewItem}">
+              <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True"/>
+              <Setter Property="bev:VirtualToggleButton.IsVirtualToggleButton" Value="True"/>
+              <Setter Property="bev:VirtualToggleButton.IsChecked">
+                <Setter.Value>
+                  <Binding Path="IsChecked"/>
+                </Setter.Value>
+              </Setter>
+              <Setter Property="IsSelected">
+                <Setter.Value>
+                  <Binding Path="IsSelected" Mode="TwoWay"/>
+                </Setter.Value>
+              </Setter>
+              <Setter Property="IsExpanded">
+                <Setter.Value>
+                  <Binding Path="IsExpanded" Mode="TwoWay"/>
+                </Setter.Value>
+              </Setter>
+              <Setter Property="Padding" Value="0"/>
+              <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            </Style>
+          </TreeView.ItemContainerStyle>
+          <TreeView.ItemTemplate>
+            <DataTemplate DataType="{x:Type ns2:ProjectTreeViewModel}">
+              <CheckBox Focusable="False" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <CheckBox.IsChecked>
+                  <Binding Path="IsChecked"/>
+                </CheckBox.IsChecked>
+                <CheckBox.IsEnabled>
+                  <Binding Path="DataContext.IsInManualEditMode" ElementName="Root" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;10&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;unary op=&quot;LogicalNegate&quot;&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/unary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                </CheckBox.IsEnabled>
+                <CheckBox.Content>
+                  <StackPanel Orientation="Horizontal" Margin="0 3">
+                    <StackPanel VerticalAlignment="Center">
+                      <ns0:CrispImage x:Name="Image" Width="16" Height="16" Moniker="{Binding Path=Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource StringToMonikerConverter}}">
+                        <ns0:CrispImage.Tag>
+                          <Binding Path="Extension" Converter="{StaticResource FileExtensionToIconMonikerConverter}" ConverterParameter="Project"/>
+                        </ns0:CrispImage.Tag>
+                      </ns0:CrispImage>
+                    </StackPanel>
+                    <ContentPresenter Margin="3 0">
+                      <ContentPresenter.Content>
+                        <Binding Path="Name"/>
+                      </ContentPresenter.Content>
+                    </ContentPresenter>
+                  </StackPanel>
+                </CheckBox.Content>
+              </CheckBox>
+            </DataTemplate>
+          </TreeView.ItemTemplate>
+        </TreeView>
+      </DockPanel>
+      <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Height="Auto" VerticalAlignment="Center" Grid.Column="1">
+        <Button.Content>
+          <TextBlock TextAlignment="Center">
+            <Run Text="Switch to"/>
+            <LineBreak/>
+            <Run>
+              <Run.Text>
+                <Binding Path="IsInManualEditMode" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;11&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;prim val=&quot;automatic&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.String&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;manual&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.String&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+              </Run.Text>
+            </Run>
+            <LineBreak/>
+            <Run Text="editing mode"/>
+          </TextBlock>
+        </Button.Content>
+        <Button.Command>
+          <Binding Path="SwitchEditModeCommand"/>
+        </Button.Command>
+      </Button>
+      <StackPanel Grid.Column="2">
+        <StackPanel.Resources>
+          <DataTemplate x:Key="Filter">
+            <Border>
+              <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                  <Style.Setters>
+                    <Setter Property="Background" Value="Transparent"/>
+                  </Style.Setters>
+                  <Style.Triggers>
+                    <Trigger Property="Border.IsMouseOver" Value="True">
+                      <Setter Property="Background" Value="#E6E6E6"/>
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </Border.Style>
+              <StackPanel Orientation="Horizontal">
+                <ns3:EditableTextBlock>
+                  <ns3:EditableTextBlock.Text>
+                    <Binding Mode="OneWay"/>
+                  </ns3:EditableTextBlock.Text>
+                  <ns3:EditableTextBlock.IsEditable>
+                    <Binding Path="DataContext.IsInManualEditMode" ElementName="Root"/>
+                  </ns3:EditableTextBlock.IsEditable>
+                  <ns3:EditableTextBlock.Command>
+                    <Binding Path="DataContext.EditCommand" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}"/>
+                  </ns3:EditableTextBlock.Command>
+                  <ns3:EditableTextBlock.CommandParameter>
+                    <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{x:Static RelativeSource.TemplatedParent}"/>
+                  </ns3:EditableTextBlock.CommandParameter>
+                </ns3:EditableTextBlock>
+                <Button ToolTip="Remove" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" Padding="3 0" Height="25" Foreground="{StaticResource PrimaryHueMidBrush}">
+                  <ns1:PackIcon Kind="Delete"/>
+                  <Button.Visibility>
+                    <Binding Path="DataContext.IsInManualEditMode" ElementName="Root" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;12&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Hidden&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                  </Button.Visibility>
+                  <Button.Command>
+                    <Binding Path="DataContext.RemoveCommand" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}"/>
+                  </Button.Command>
+                  <Button.CommandParameter>
+                    <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{x:Static RelativeSource.TemplatedParent}"/>
+                  </Button.CommandParameter>
+                </Button>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </StackPanel.Resources>
+        <StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Includes" FontWeight="Bold" VerticalAlignment="Center"/>
+            <Button ToolTip="Add include" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" Padding="3 0" Height="25" Foreground="{StaticResource PrimaryHueMidBrush}">
+              <ns1:PackIcon Kind="Plus"/>
+              <Button.Command>
+                <Binding Path="AppliesTo.Includes.AddCommand"/>
+              </Button.Command>
+              <Button.Visibility>
+                <Binding Path="IsInManualEditMode" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;12&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Hidden&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+              </Button.Visibility>
+            </Button>
+          </StackPanel>
+          <ItemsControl ItemTemplate="{StaticResource Filter}">
+            <ItemsControl.DataContext>
+              <Binding Path="AppliesTo.Includes"/>
+            </ItemsControl.DataContext>
+            <ItemsControl.ItemsSource>
+              <Binding/>
+            </ItemsControl.ItemsSource>
+            <ItemsControl.AlternationCount>
+              <Binding Path="Count"/>
+            </ItemsControl.AlternationCount>
+          </ItemsControl>
+        </StackPanel>
+        <StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Excludes" FontWeight="Bold" VerticalAlignment="Center"/>
+            <Button ToolTip="Add exclude" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" Padding="3 0" Height="25" Foreground="{StaticResource PrimaryHueMidBrush}">
+              <ns1:PackIcon Kind="Plus"/>
+              <Button.Command>
+                <Binding Path="AppliesTo.Excludes.AddCommand"/>
+              </Button.Command>
+              <Button.Visibility>
+                <Binding Path="IsInManualEditMode" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;12&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Hidden&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+              </Button.Visibility>
+            </Button>
+          </StackPanel>
+          <ItemsControl ItemTemplate="{StaticResource Filter}">
+            <ItemsControl.DataContext>
+              <Binding Path="AppliesTo.Excludes"/>
+            </ItemsControl.DataContext>
+            <ItemsControl.ItemsSource>
+              <Binding/>
+            </ItemsControl.ItemsSource>
+            <ItemsControl.AlternationCount>
+              <Binding Path="Count"/>
+            </ItemsControl.AlternationCount>
+          </ItemsControl>
+        </StackPanel>
+      </StackPanel>
+    </Grid>
+  </DockPanel>
+</UserControl>

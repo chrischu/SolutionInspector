@@ -13,12 +13,18 @@ namespace SolutionInspector.Internals
     /// <summary>
     ///   Constructor.
     /// </summary>
-    public RuleTypeInfo (Type ruleType, [CanBeNull] Type configurationType, ConstructorInfo constructor)
+    public RuleTypeInfo (string ruleTypeName, Type ruleType, [CanBeNull] Type configurationType, ConstructorInfo constructor)
     {
+      RuleTypeName = ruleTypeName;
       RuleType = ruleType;
       Constructor = constructor;
       ConfigurationType = configurationType;
     }
+
+    /// <summary>
+    ///   The rule type name in SolutionInspector notation.
+    /// </summary>
+    public string RuleTypeName { get; }
 
     /// <summary>
     ///   The CLR type of the rule.

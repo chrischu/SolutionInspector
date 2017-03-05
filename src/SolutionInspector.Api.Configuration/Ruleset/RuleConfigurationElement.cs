@@ -14,7 +14,6 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   }
 
   /// <inheritdoc cref="IRuleConfiguration" />
-  /// >
   public class RuleConfigurationElement : ConfigurationElement, IRuleConfiguration
   {
     [ConfigurationValue (AttributeName = "type")]

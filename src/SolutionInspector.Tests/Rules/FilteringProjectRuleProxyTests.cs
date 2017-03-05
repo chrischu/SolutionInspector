@@ -2,7 +2,7 @@
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
-using SolutionInspector.Api.Configuration;
+using SolutionInspector.Api;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Rules;

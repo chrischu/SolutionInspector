@@ -85,9 +85,6 @@ namespace SolutionInspector.DefaultRules
     /// </summary>
     [Description ("All the compilation symbols that are required and are therefore checked.")]
     [ConfigurationValue]
-    public CommaSeparatedStringCollection RequiredCompilationSymbols
-    {
-      get { return GetConfigurationValue<CommaSeparatedStringCollection>(); }
-    }
+    public CommaSeparatedStringCollection RequiredCompilationSymbols => GetConfigurationValue<CommaSeparatedStringCollection>();
   }
 }

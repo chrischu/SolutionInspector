@@ -4,31 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}</ProjectGuid>
+    <ProjectGuid>{149FED1E-48C6-4119-8B8F-9F01740DF2C3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SolutionInspector.ConfigurationUi</RootNamespace>
     <AssemblyName>SolutionInspector.ConfigurationUi</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -41,6 +26,7 @@
     <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -55,8 +41,12 @@
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.2.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.2.1\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="AmmySidekick, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7c1296d24569a67d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ammy.WPF.1.2.34\lib\net40\AmmySidekick.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac, Version=4.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.4.0\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Autofac.Extras.CommonServiceLocator, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -75,30 +65,41 @@
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JetBrains.Annotations, Version=10.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.4.0\lib\net\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=1.4.1.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.4.1\lib\net45\MahApps.Metro.dll</HintPath>
+    <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.3.0.823, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.2.3.0.823\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.ImageCatalog, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Imaging, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Aliases>global,imaging</Aliases>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Utilities, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="NullGuard, Version=1.4.6.0, Culture=neutral, PublicKeyToken=1958ac8092168428, processorArchitecture=MSIL">
       <HintPath>..\packages\NullGuard.Fody.1.4.6\Lib\dotnet\NullGuard.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="PropertyChanged, Version=1.52.1.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyChanged.Fody.1.52.1\lib\netstandard10\PropertyChanged.dll</HintPath>
+      <HintPath>..\packages\PropertyChanged.Fody.1.52.1\Lib\netstandard10\PropertyChanged.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.4.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
@@ -114,7 +115,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WpfBindingErrors, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WpfBindingErrors.1.0\lib\net46\WpfBindingErrors.dll</HintPath>
+      <HintPath>..\packages\WpfBindingErrors.1.0\lib\net452\WpfBindingErrors.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Wrapperator.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -127,70 +128,116 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
-    <Compile Include="Configuration\RulesetLoader.cs" />
-    <Compile Include="Controls\CommaSeparatedStringCollection\CommaSeparatedStringCollectionViewModel.cs" />
-    <Compile Include="Controls\IConfigurationControl.cs" />
-    <Compile Include="Controls\ConfigurationControlRetriever.cs" />
-    <Compile Include="Controls\ConfigurationControlBase.cs" />
-    <Compile Include="Converters\ExpectedValueToVisibilityConverter.cs" />
-    <Compile Include="Infrastructure\AsyncCommand.cs" />
-    <Compile Include="Infrastructure\DocumentationRetriever.cs" />
-    <Compile Include="Infrastructure\NotifyTaskCompletion.cs" />
-    <Compile Include="Services\DialogManager.cs" />
-    <Compile Include="Services\LoadManager.cs" />
-    <Compile Include="Services\WindowManager.cs" />
-    <Compile Include="Messages\LoadConfigurationFileMessage.cs" />
-    <Compile Include="Infrastructure\AdvancedObservableCollection.cs" />
-    <Compile Include="ViewModel\ConfigurationViewModel.cs" />
-    <Compile Include="ViewModel\ImportsViewModel.cs" />
-    <Compile Include="ViewModel\ImportViewModel.cs" />
-    <Compile Include="ViewModel\RulesetViewModel.cs" />
-    <Compile Include="ViewModel\StartViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Page Include="Controls\CommaSeparatedStringCollection\CommaSeparatedStringCollectionTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\GlobalStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Resource Include="Resources\VisualStudioPurple.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Resource>
-    <Page Include="Resources\Icons.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="StartWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converters\RatioConverter.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Features\Controls\EditableTextBlock\EditableTextBlock.cs" />
+    <Compile Include="Features\Dialogs\EditGroupFilter\EditProjectRuleGroupFilter\ProjectRuleGroupFilterViewModel.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\Add\AddItemAction.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\Add\ItemAddedAction.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\Clear\ClearItemsAction.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\Clear\ItemsClearedAction.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\CollectionActionBase.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\Remove\ItemRemovedAction.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\Replace\ItemReplacedAction.cs" />
+    <Compile Include="Features\Undo\Actions\IDoableAction.cs" />
+    <Compile Include="Infrastructure\AdvancedObservableCollections\AdvancedObservableCollection.cs" />
+    <Compile Include="Infrastructure\AdvancedObservableCollections\AdvancedObservableCollectionChangeHandlerBase.cs" />
+    <Compile Include="Infrastructure\AdvancedObservableCollections\IAdvancedObservableCollectionChangeHandler.cs" />
+    <Compile Include="Infrastructure\AdvancedObservableCollections\MirroringAdvancedObservableCollectionChangeHandler.cs" />
+    <Compile Include="Infrastructure\Behaviors\ClearTextBoxBehavior.cs" />
+    <Compile Include="Infrastructure\Behaviors\EventFocusAttachment.cs" />
+    <Compile Include="Infrastructure\Behaviors\IgnoreMousewheelBehavior.cs" />
+    <Compile Include="Infrastructure\Behaviors\PutCursorAtEndTextBoxBehavior.cs" />
+    <Compile Include="Infrastructure\Behaviors\SearchButtonBehavior.cs" />
+    <Compile Include="Infrastructure\Behaviors\VirtualToggleButton.cs" />
+    <Compile Include="Features\Controls\Configuration\CommaSeparatedStringCollection\CommaDelimitedStringCollectionControl.cs" />
+    <Compile Include="Features\Controls\Configuration\CommaSeparatedStringCollection\CommaSeparatedStringCollectionViewModel.cs" />
+    <Compile Include="Features\Controls\Configuration\ConfigurationControlBase.cs" />
+    <Compile Include="Features\Controls\Configuration\ConfigurationControlRetriever.cs" />
+    <Compile Include="Features\Controls\Configuration\IConfigurationControl.cs" />
+    <Compile Include="Infrastructure\Converters\ExpectedValueToVisibilityConverter.cs" />
+    <Compile Include="Infrastructure\Converters\ProjectFileExtensionToIconMonikerConverter.cs" />
+    <Compile Include="Infrastructure\Converters\NotNullToVisibilityConverter.cs" />
+    <Compile Include="Infrastructure\Converters\StringToMonikerConverter.cs" />
+    <Compile Include="Features\Edit\EditPage.ammy.cs">
+      <DependentUpon>EditPage.ammy</DependentUpon>
     </Compile>
-    <Compile Include="StartWindow.xaml.cs">
-      <DependentUpon>StartWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    <Compile Include="Infrastructure\BindingProxy.cs" />
+    <Compile Include="Infrastructure\DocumentationRetriever.cs" />
+    <Compile Include="Infrastructure\FilterEvaluator.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\Replace\ReplaceItemAction.cs" />
+    <Compile Include="Features\Undo\Actions\IUndoableAction.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\Remove\RemoveItemAction.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\IndexedCollectionActionBase.cs" />
+    <Compile Include="Features\Main\MainWindow.ammy.cs">
+      <DependentUpon>MainWindow.ammy</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\MarkupExtensions\FilterExtensions.cs" />
+    <Compile Include="Infrastructure\Messages\CreateNewConfigurationMessage.cs" />
+    <Compile Include="Infrastructure\Messages\LoadExistingConfigurationMessage.cs" />
+    <Compile Include="Infrastructure\Messages\SwitchPageMessage.cs" />
+    <Compile Include="Properties\InternalsVisibleTo.cs" />
+    <Compile Include="Features\Ruleset\IRulesetLoader.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\ProjectItemViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\ProjectViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\SolutionViewModel.cs" />
+    <Compile Include="Features\Dialogs\EditGroupFilter\EditProjectRuleGroupFilter\EditProjectRuleGroupFilterDialog.ammy.cs">
+      <DependentUpon>EditProjectRuleGroupFilterDialog.ammy</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Dialogs\AddRule\AvailableRuleAssemblyViewModel.cs" />
+    <Compile Include="Features\Dialogs\AddRule\AddRuleDialogViewModel.cs" />
+    <Compile Include="Features\Dialogs\DialogViewModelBase.cs" />
+    <Compile Include="Features\Dialogs\EditGroupFilter\EditProjectRuleGroupFilter\EditProjectRuleGroupFilterDialogViewModel.cs" />
+    <Compile Include="Features\Dialogs\Input\InputDialogViewModel.cs" />
+    <Compile Include="Features\Dialogs\Loading\LoadingDialogViewModel.cs" />
+    <Compile Include="Features\Dialogs\AddRule\AvailableRuleViewModel.cs" />
+    <Compile Include="Features\Dialogs\DialogManager.cs" />
+    <Compile Include="Features\Undo\UndoManager.cs" />
+    <Compile Include="Features\Dialogs\DialogResult.cs" />
+    <Compile Include="Features\Dialogs\AddRule\RuleRepository.cs" />
+    <Compile Include="Features\Dialogs\AddRule\AddRuleDialog.ammy.cs">
+      <DependentUpon>AddRuleDialog.ammy</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Dialogs\Input\InputDialog.ammy.cs">
+      <DependentUpon>InputDialog.ammy</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Dialogs\Loading\LoadingDialog.ammy.cs">
+      <DependentUpon>LoadingDialog.ammy</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\ValidationRules\CompoundValidationRule.cs" />
+    <Compile Include="Infrastructure\ValidationRules\NoDuplicatesValidationRule.cs" />
+    <Compile Include="Infrastructure\ValidationRules\NonEmptyValidationRule.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\ImportsViewModel.cs" />
+    <Compile Include="Infrastructure\MirroringObservableCollection.cs" />
+    <Compile Include="Features\Dialogs\EditGroupFilter\NameFilterEditViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\ProjectItemRuleGroupViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\ProjectItemRulesViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\ProjectRuleGroupViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\ProjectRulesViewModel.cs" />
+    <Compile Include="Features\Dialogs\EditGroupFilter\ProjectTreeViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\RuleConfigurationPropertyViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\RuleConfigurationViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\RuleGroupViewModel.cs" />
+    <Compile Include="Features\Ruleset\RulesetLoader.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\RulesetViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\RulesViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\RuleTypeViewModelBase.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\RuleViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\SolutionRuleGroupViewModel.cs" />
+    <Compile Include="Features\Start\StartPage.ammy.cs">
+      <DependentUpon>StartPage.ammy</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Edit\EditViewModel.cs" />
+    <Compile Include="Features\Main\MainViewModel.cs" />
+    <Compile Include="Features\Ruleset\ViewModels\SolutionRulesViewModel.cs" />
+    <Compile Include="Features\Start\StartViewModel.cs" />
+    <Compile Include="Features\Dialogs\EditGroupFilter\TreeViewModelBase.cs" />
+    <Compile Include="Features\Dialogs\EditGroupFilter\TreeViewModelType.cs" />
+    <Compile Include="Infrastructure\ViewModelFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -210,12 +257,28 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Colors.ammy" />
+    <None Include="Controls.ammy" />
+    <None Include="Features\Controls\EditableTextBlock\EditableTextBlock.ammy" />
+    <None Include="lib.ammy" />
+    <None Include="MaterialDesignTypography.ammy" />
+    <None Include="MaterialDesignControls.ammy" />
+    <None Include="MaterialDesignColors.ammy" />
+    <None Include="Features\Edit\EditPage.ammy" />
+    <None Include="Features\Main\MainWindow.ammy" />
+    <EmbeddedResource Include="ImageCatalog.imagemanifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Features\Start\StartPage.ammy" />
+    <None Include="Features\Ruleset\Templates.ammy" />
+    <None Include="Features\Dialogs\AddRule\AddRuleDialog.ammy" />
+    <None Include="Features\Dialogs\EditGroupFilter\EditProjectRuleGroupFilter\EditProjectRuleGroupFilterDialog.ammy" />
+    <None Include="Features\Dialogs\Input\InputDialog.ammy" />
+    <None Include="Features\Dialogs\Loading\LoadingDialog.ammy" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -224,21 +287,72 @@
     <Resource Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
+    <None Include="FodyWeavers.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="FodyWeavers.xml">
+    <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Resource>
+    </Page>
+    <Page Include="Features\Controls\Configuration\CommaSeparatedStringCollection\CommaSeparatedStringCollectionTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Features\Controls\EditableTextBlock\EditableTextBlock.g.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>EditableTextBlock.ammy</DependentUpon>
+    </Page>
+    <Page Include="Features\Edit\EditPage.g.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>EditPage.ammy</DependentUpon>
+    </Page>
+    <Page Include="Features\Main\MainWindow.g.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>MainWindow.ammy</DependentUpon>
+    </Page>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\MaterialDesignFixes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Features\Start\StartPage.g.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>StartPage.ammy</DependentUpon>
+    </Page>
+    <Page Include="Features\Ruleset\Templates.g.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Templates.ammy</DependentUpon>
+    </Page>
+    <Page Include="Features\Dialogs\AddRule\AddRuleDialog.g.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>AddRuleDialog.ammy</DependentUpon>
+    </Page>
+    <Page Include="Features\Dialogs\EditGroupFilter\EditProjectRuleGroupFilter\EditProjectRuleGroupFilterDialog.g.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>EditProjectRuleGroupFilterDialog.ammy</DependentUpon>
+    </Page>
+    <Page Include="Features\Dialogs\Input\InputDialog.g.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>InputDialog.ammy</DependentUpon>
+    </Page>
+    <Page Include="Features\Dialogs\Loading\LoadingDialog.g.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>LoadingDialog.ammy</DependentUpon>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj">
@@ -246,8 +360,12 @@
       <Name>SolutionInspector.Api.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
-      <Project>{84eb4f29-70f0-462b-ba37-da6f9261c8c8}</Project>
+      <Project>{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}</Project>
       <Name>SolutionInspector.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj">
+      <Project>{61A5E798-3EB1-4362-B08A-CDDA370D17B6}</Project>
+      <Name>SolutionInspector.Commons</Name>
     </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
       <Project>{25E030C5-78B1-4A5C-BB25-6ECCB892971C}</Project>
@@ -262,14 +380,17 @@
       <Name>SolutionInspector.Internals</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Ammy.1.2.34\build\Ammy.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Ammy.1.2.34\build\Ammy.targets'))" />
   </Target>
+  <Import Project="..\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
+  <Import Project="..\packages\Ammy.1.2.34\build\Ammy.targets" Condition="Exists('..\packages\Ammy.1.2.34\build\Ammy.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

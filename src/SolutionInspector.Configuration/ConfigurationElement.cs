@@ -22,18 +22,27 @@ namespace SolutionInspector.Configuration
     }
 
     /// <summary>
+    ///   Create a new <see cref="ConfigurationElement" /> of the given <paramref name="configurationElementType" /> with the given
+    ///   <paramref name="elementName" />.
+    /// </summary>
+    public new static ConfigurationElement Create (string elementName, Type configurationElementType)
+    {
+      return (ConfigurationElement) ConfigurationBase.Create(elementName, configurationElementType);
+    }
+
+    /// <summary>
     ///   Loads the <see cref="ConfigurationElement" /> of type <typeparamref name="T" /> with the given <see cref="XElement" /> as input.
     /// </summary>
-    public new static T Load<T> (XElement element) where T : ConfigurationElement, new()
+    public new static T Load<T> (XElement element, Action<T> modifyBeforeValidation = null) where T : ConfigurationElement, new()
     {
-      return ConfigurationBase.Load<T>(element);
+      return ConfigurationBase.Load(element, modifyBeforeValidation);
     }
 
     /// <summary>
     ///   Loads the <see cref="ConfigurationElement" /> of type <paramref name="configurationElementType" /> with the given <see cref="XElement" />
     ///   as input.
     /// </summary>
-    public new static ConfigurationElement Load (Type configurationElementType, XElement element)
+    public static ConfigurationElement Load (Type configurationElementType, XElement element)
     {
       return (ConfigurationElement) ConfigurationBase.Load(configurationElementType, element);
     }

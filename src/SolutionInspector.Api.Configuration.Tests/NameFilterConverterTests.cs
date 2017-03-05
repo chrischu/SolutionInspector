@@ -38,15 +38,14 @@ namespace SolutionInspector.Api.Configuration.Tests
     [Test]
     public void ConvertFrom ()
     {
-      var filter = new NameFilter(new[] { "A", "B" }, new[] { "B" });
+      var filter = new NameFilter(new[] { "A", "B" }, new[] { "C" });
       var filterString = _sut.ConvertTo(filter);
 
       // ACT
       var result = _sut.ConvertFrom(filterString);
 
-      result.IsMatch("A").Should().BeTrue();
-      result.IsMatch("B").Should().BeFalse();
-      result.IsMatch("X").Should().BeFalse();
+      result.Includes.Should().BeEquivalentTo("A", "B");
+      result.Excludes.Should().BeEquivalentTo("C");
     }
 
     [Test]

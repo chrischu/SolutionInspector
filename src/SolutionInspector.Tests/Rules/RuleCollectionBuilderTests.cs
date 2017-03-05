@@ -4,7 +4,7 @@ using FakeItEasy;
 using Fasterflect;
 using FluentAssertions;
 using NUnit.Framework;
-using SolutionInspector.Api.Configuration;
+using SolutionInspector.Api;
 using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
@@ -28,7 +28,7 @@ namespace SolutionInspector.Tests.Rules
       _ruleConfigurationInstantiator = A.Fake<IRuleConfigurationInstantiator>();
 
       A.CallTo(() => _ruleTypeResolver.Resolve(A<string>._))
-          .Returns(new RuleTypeInfo(typeof(Rule), null, typeof(Rule).GetConstructors().Single()));
+          .Returns(new RuleTypeInfo("Rule", typeof(Rule), null, typeof(Rule).GetConstructors().Single()));
 
       _sut = new RuleCollectionBuilder(_ruleTypeResolver, _ruleConfigurationInstantiator);
     }

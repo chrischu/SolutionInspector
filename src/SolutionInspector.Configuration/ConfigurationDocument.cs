@@ -18,7 +18,11 @@ namespace SolutionInspector.Configuration
       return configurationDocument;
     }
 
-    internal void Save (string path = null)
+    /// <summary>
+    ///   Save the <see cref="ConfigurationDocument" /> at the given <paramref name="path" /> or if no path is given, at the last path the document was saved
+    ///   at.
+    /// </summary>
+    public void Save (string path = null)
     {
       _document.Save(path ?? _path);
     }

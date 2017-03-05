@@ -20,5 +20,33 @@ namespace SolutionInspector.Commons.Tests.Extensions
       // ASSERT
       result.Should().Be(expected);
     }
+
+    [Test]
+    [TestCase(null, 1, null)]
+    [TestCase("A", 0, "")]
+    [TestCase("ABC", 2, "AB")]
+    [TestCase("ABC", 5, "ABC")]
+    public void Prefix ([CanBeNull] string input, int length, [CanBeNull] string expected)
+    {
+      // ACT
+      var result = input.Prefix(length);
+
+      // ASSERT
+      result.Should().Be(expected);
+    }
+
+    [Test]
+    [TestCase(null, 1, null)]
+    [TestCase("A", 0, "")]
+    [TestCase("ABC", 2, "BC")]
+    [TestCase("ABC", 5, "ABC")]
+    public void Suffix([CanBeNull] string input, int length, [CanBeNull] string expected)
+    {
+      // ACT
+      var result = input.Suffix(length);
+
+      // ASSERT
+      result.Should().Be(expected);
+    }
   }
 }

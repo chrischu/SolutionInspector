@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,6 +23,21 @@ namespace SolutionInspector.Commons.Extensions
     private static bool ContainsMoreThan<T> (this IEnumerable<T> enumerable, int count)
     {
       return enumerable.Skip(count).Any();
+    }
+
+    public static IEnumerable<TSource> DistinctBy<TSource, TKey> (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+    {
+      var knownKeys = new HashSet<TKey>();
+
+      foreach (var element in source)
+        if (knownKeys.Add(keySelector(element)))
+          yield return element;
+    }
+
+    public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+    {
+      foreach (var item in source)
+        action(item);
     }
   }
 }

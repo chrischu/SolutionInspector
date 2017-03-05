@@ -1,0 +1,10 @@
+<UserControl x:Class="SolutionInspector.ConfigurationUi.Features.Dialogs.Loading.LoadingDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ns0="clr-namespace:AmmySidekick;assembly=AmmySidekick" ns0:Ammy.Register="/SolutionInspector.ConfigurationUi;component/Features/Dialogs/Loading/LoadingDialog.g.xaml">
+  <StackPanel Orientation="Horizontal" Margin="24">
+    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" Margin="0 0 12 0" IsIndeterminate="True" Value="0" Height="24" Width="24"/>
+    <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center">
+      <TextBlock.Text>
+        <Binding Path="Message"/>
+      </TextBlock.Text>
+    </TextBlock>
+  </StackPanel>
+</UserControl>

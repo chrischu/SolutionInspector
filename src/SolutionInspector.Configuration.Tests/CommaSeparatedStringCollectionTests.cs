@@ -59,7 +59,7 @@ namespace SolutionInspector.Configuration.Tests
     [Test]
     public void Serialize ()
     {
-      _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });
+      _sut.AddRange(new[] { "A", "B" });
 
       // ACT
       var result = _sut.Serialize();
@@ -71,7 +71,7 @@ namespace SolutionInspector.Configuration.Tests
     [Test]
     public void Deserialize ()
     {
-      _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });
+      _sut.AddRange(new[] { "A", "B" });
 
       var input = "C,D";
 
@@ -102,7 +102,7 @@ namespace SolutionInspector.Configuration.Tests
     [Test]
     public void GetEnumerator ()
     {
-      _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });
+      _sut.AddRange(new[] { "A", "B" });
 
       // ACT
       using (var result = _sut.GetEnumerator())
@@ -166,9 +166,21 @@ namespace SolutionInspector.Configuration.Tests
     }
 
     [Test]
+    public void Insert ()
+    {
+      _sut.AddRange(new[] { "A", "B" });
+
+      // ACT
+      _sut.Insert(1, "C");
+
+      // ASSERT
+      _sut.Serialize().Should().Be("A,C,B");
+    }
+
+    [Test]
     public void Clear ()
     {
-      _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });
+      _sut.AddRange(new[] { "A", "B" });
 
       // ACT
       _sut.Clear();
@@ -185,7 +197,7 @@ namespace SolutionInspector.Configuration.Tests
     [TestCase ("C", false)]
     public void Contains (string s, bool expectedResult)
     {
-      _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });
+      _sut.AddRange(new[] { "A", "B" });
 
       // ACT
       var result = _sut.Contains(s);
@@ -199,7 +211,7 @@ namespace SolutionInspector.Configuration.Tests
     [TestCase ("C", false, 2)]
     public void Remove (string s, bool expectedResult, int expectedCount)
     {
-      _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });
+      _sut.AddRange(new[] { "A", "B" });
 
       // ACT
       var result = _sut.Remove(s);
@@ -210,17 +222,41 @@ namespace SolutionInspector.Configuration.Tests
     }
 
     [Test]
+    public void RemoveAt ()
+    {
+      _sut.AddRange(new[] { "A", "A" });
+
+      // ACT
+      _sut.RemoveAt(0);
+
+      // ASSERT
+      _sut.Serialize().Should().Be("A");
+    }
+
+    [Test]
     [TestCase(0, "A")]
     [TestCase(1, "B")]
-    public void Indexer(int index, string expectedResult)
+    public void IndexerGet(int index, string expectedResult)
     {
-      _sut = new CommaSeparatedStringCollection(_updateAction, new[] { "A", "B" });
+      _sut.AddRange(new[] { "A", "B" });
 
       // ACT
       var result = _sut[index];
 
       // ASSERT
       result.Should().Be(expectedResult);
+    }
+
+    [Test]
+    public void IndexerSet ()
+    {
+      _sut.Add("A");
+
+      // ACT
+      _sut[0] = "B";
+
+      // ASSERT
+      _sut[0].Should().Be("B");
     }
   }
 }

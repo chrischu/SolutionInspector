@@ -9,7 +9,7 @@ namespace SolutionInspector.Configuration
   /// <summary>
   ///   Collection for use in configuration classes.
   /// </summary>
-  public class ConfigurationElementCollection<T> : IReadOnlyCollection<T>
+  public class ConfigurationElementCollection<T> : IReadOnlyCollection<T>, IList<T>
     where T : ConfigurationElement, new()
   {
     private readonly List<T> _collection = new List<T>();
@@ -22,14 +22,18 @@ namespace SolutionInspector.Configuration
     public ConfigurationElementCollection (XElement collectionElement, string elementName)
     {
       _collectionElement = collectionElement;
-      _collection.AddRange(_collectionElement.Elements().Select(ConfigurationElement.Load<T>));
+      _collection.AddRange(_collectionElement.Elements().Select(element => ConfigurationBase.Load<T>(element)));
       _elementName = elementName;
     }
 
     /// <summary>
-    ///   Provides read access to the collection's items by <paramref name="index" />.
+    ///   Provides access to the collection's items by <paramref name="index" />.
     /// </summary>
-    public T this [int index] => _collection[index];
+    public T this [int index]
+    {
+      get { return _collection[index]; }
+      set { _collection[index] = value; }
+    }
 
     public int Count => _collection.Count;
 
@@ -64,11 +68,33 @@ namespace SolutionInspector.Configuration
     }
 
     /// <summary>
+    ///   Adds the given <paramref name="element" /> to the collection at the given <paramref name="index" />.
+    /// </summary>
+    public void Insert (int index, T element)
+    {
+      _collection.Insert(index, element);
+      _collectionElement.Add(element.Element);
+    }
+
+    /// <summary>
     ///   Removes the given <paramref name="element" /> from the collection.
     /// </summary>
-    public void Remove (T element)
+    public bool Remove (T element)
     {
-      _collection.Remove(element);
+      var removed = _collection.Remove(element);
+      if (removed)
+        element.Element.Remove();
+
+      return removed;
+    }
+
+    /// <summary>
+    ///   Removes the element at the given <paramref name="index" /> from the collection.
+    /// </summary>
+    public void RemoveAt (int index)
+    {
+      var element = _collection[index];
+      _collection.RemoveAt(index);
       element.Element.Remove();
     }
 
@@ -79,6 +105,27 @@ namespace SolutionInspector.Configuration
     {
       _collection.Clear();
       _collectionElement.RemoveNodes();
+    }
+
+    [ExcludeFromCodeCoverage]
+    public bool Contains(T item)
+    {
+      return _collection.Contains(item);
+    }
+
+    [ExcludeFromCodeCoverage]
+    public void CopyTo (T[] array, int arrayIndex)
+    {
+      _collection.CopyTo(array, arrayIndex);
+    }
+
+    [ExcludeFromCodeCoverage]
+    public bool IsReadOnly => false;
+
+    [ExcludeFromCodeCoverage]
+    public int IndexOf(T item)
+    {
+      return _collection.IndexOf(item);
     }
   }
 }

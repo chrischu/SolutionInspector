@@ -1,0 +1,65 @@
+﻿using MaterialDesignThemes.Wpf
+using Microsoft.VisualStudio.Imaging
+using Microsoft.VisualStudio.PlatformUI
+
+alias StartCard(text, description, iconKind, commandText, command) {
+  Card {
+    Padding: 18
+    Margin: 12
+    Focusable: false
+
+    Grid {
+      #FiveRows("140", "auto", "*", "auto")
+
+      PackIcon { 
+        Grid.Row: 0
+        Kind: $iconKind
+        Height: 140
+        Width:  140
+        HorizontalAlignment: Center
+      }
+
+      StackPanel { 
+        Grid.Row: 1
+        Orientation: Horizontal
+
+        @Title($text) {
+          VerticalAlignment: Center
+          TextWrapping: Wrap
+        }
+      }
+
+      StackPanel {
+        Grid.Row: 2
+
+        @Body1Text($description) {}
+      }
+
+      StackPanel {
+        Grid.Row: 3
+
+        @FlatButton() {
+          Content: $commandText
+          Command: $command
+          #SecondaryAccent
+          Margin: "0 12 0 0"
+        }
+      }
+    }
+  }
+}
+
+UserControl "SolutionInspector.ConfigurationUi.Features.Start.StartPage" {
+  WrapPanel "LayoutRoot" {
+    Margin: 12
+    Orientation: Vertical
+
+    @StartCard("Create New", "Creates a new SolutionInspector configuration file.", "FileOutline", "CREATE NEW", bind CreateNewConfigurationCommand) {
+      #PrimaryHueMid
+    }
+
+    @StartCard("Open Existing", "Opens a existing SolutionInspector configuration file.", "FileDocument", "OPEN EXISTING", bind LoadExistingConfigurationCommand) {
+      #PrimaryHueDark
+    }
+  }
+}

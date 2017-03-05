@@ -18,9 +18,9 @@ namespace SolutionInspector.Configuration
     /// </summary>
     public XElement Element { get; private set; }
 
-    internal static T Load<T> (XElement element) where T : ConfigurationBase, new()
+    internal static T Load<T> (XElement element, Action<T> modifyBeforeValidation = null) where T : ConfigurationBase, new()
     {
-      return (T) Load(typeof(T), element);
+      return (T) Load(typeof(T), element, c => modifyBeforeValidation?.Invoke((T) c));
     }
 
     internal static ConfigurationBase Create (string elementName, Type configurationType)
@@ -30,10 +30,11 @@ namespace SolutionInspector.Configuration
       return instance;
     }
 
-    internal static ConfigurationBase Load (Type configurationType, XElement element)
+    internal static ConfigurationBase Load (Type configurationType, XElement element, Action<ConfigurationBase> modifyBeforeValidation = null)
     {
       var instance = (ConfigurationBase) Activator.CreateInstance(configurationType);
       instance.Element = element;
+      modifyBeforeValidation?.Invoke(instance);
       ConfigurationValidator.Validate(instance);
       return instance;
     }

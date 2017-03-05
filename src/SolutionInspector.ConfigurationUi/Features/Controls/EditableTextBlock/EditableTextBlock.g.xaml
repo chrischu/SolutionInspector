@@ -1,0 +1,55 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ns0="clr-namespace:SolutionInspector.ConfigurationUi.Features.Controls" xmlns:ns1="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf">
+  <Style TargetType="{x:Type ns0:EditableTextBlock}">
+    <Style.Setters>
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="{x:Type ns0:EditableTextBlock}">
+            <Grid Height="25">
+              <StackPanel Orientation="Horizontal" x:Name="DisplayMode">
+                <TextBlock Margin="2 0" VerticalAlignment="Center">
+                  <TextBlock.Text>
+                    <Binding Path="Text" RelativeSource="{x:Static RelativeSource.TemplatedParent}" UpdateSourceTrigger="PropertyChanged"/>
+                  </TextBlock.Text>
+                </TextBlock>
+                <Button ToolTip="Edit" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" Padding="3 0" Height="25" Foreground="{StaticResource PrimaryHueMidBrush}" x:Name="PART_EditButton">
+                  <ns1:PackIcon Kind="Pencil"/>
+                </Button>
+              </StackPanel>
+              <DockPanel x:Name="EditMode">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                  <Button ToolTip="Submit" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" Padding="3 0" Height="25" Foreground="{StaticResource PrimaryHueMidBrush}" x:Name="PART_SubmitButton">
+                    <ns1:PackIcon Kind="Check"/>
+                  </Button>
+                  <Button ToolTip="Cancel" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" Padding="3 0" Height="25" Foreground="{StaticResource PrimaryHueMidBrush}" x:Name="PART_CancelButton">
+                    <ns1:PackIcon Kind="Close"/>
+                  </Button>
+                </StackPanel>
+                <TextBox x:Name="PART_TextBox" VerticalAlignment="Center">
+                  <TextBox.Text>
+                    <Binding Path="Text" RelativeSource="{x:Static RelativeSource.TemplatedParent}" UpdateSourceTrigger="PropertyChanged"/>
+                  </TextBox.Text>
+                </TextBox>
+              </DockPanel>
+              <Grid/>
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsInEditMode" Value="True">
+                <Setter TargetName="DisplayMode" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="EditMode" Property="Visibility" Value="Visible"/>
+              </Trigger>
+              <Trigger Property="IsInEditMode" Value="False">
+                <Setter TargetName="DisplayMode" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="EditMode" Property="Visibility" Value="Collapsed"/>
+              </Trigger>
+              <Trigger Property="IsEditable" Value="False">
+                <Setter TargetName="PART_EditButton" Property="Visibility" Value="Collapsed"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style.Setters>
+  </Style>
+</ResourceDictionary>

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using SolutionInspector.Configuration;
 
@@ -27,24 +24,7 @@ namespace SolutionInspector.Api.Configuration
       if (value == null)
         return null;
 
-      var partRegex = @"((\+?|-)[\w.*]+)";
-      var regex = new Regex($"^{partRegex}(;{partRegex})*$");
-
-      if (!regex.IsMatch(value))
-        throw new FormatException($"The filter string '{value}' is not in the correct format.");
-
-      var parts = value.Split(';');
-
-      var includes = new List<string>();
-      var excludes = new List<string>();
-
-      foreach (var part in parts)
-        if (part[0] == '-')
-          excludes.Add(part.TrimStart('-'));
-        else
-          includes.Add(part.TrimStart('+'));
-
-      return new NameFilter(includes, excludes);
+      return NameFilter.Parse(value);
     }
   }
 }

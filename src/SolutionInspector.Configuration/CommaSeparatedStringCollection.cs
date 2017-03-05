@@ -8,7 +8,7 @@ namespace SolutionInspector.Configuration
   /// <summary>
   ///   A collection that can be used in configurations and that is serialized as a comma-separated string.
   /// </summary>
-  public class CommaSeparatedStringCollection : ConfigurationValue<CommaSeparatedStringCollection>, IEnumerable<string>
+  public class CommaSeparatedStringCollection : ConfigurationValue<CommaSeparatedStringCollection>, IList<string>
   {
     private List<string> _collection = new List<string>();
 
@@ -29,18 +29,18 @@ namespace SolutionInspector.Configuration
       AddRange(elements);
     }
 
-    /// <summary>
-    ///   Gets the total count of elements in the collection.
-    /// </summary>
+    /// <inheritdoc />
     public int Count => _collection.Count;
 
-    /// <summary>
-    ///   Access an element in the collection by its <paramref name="index" />.
-    /// </summary>
+    /// <inheritdoc />
     public string this [int index]
     {
       get { return _collection[index]; }
-      set { _collection[index] = value; }
+      set
+      {
+        _collection[index] = value;
+        Update();
+      }
     }
 
     /// <summary>
@@ -67,12 +67,16 @@ namespace SolutionInspector.Configuration
       return _collection.GetEnumerator();
     }
 
-    /// <summary>
-    ///   Adds a new <paramref name="item" /> to the collection.
-    /// </summary>
+    /// <inheritdoc />
     public void Add (string item)
     {
       AddRange(new[] { item });
+    }
+
+    /// <inheritdoc />
+    public void Insert (int index, string item)
+    {
+      _collection.Insert(index, item);
     }
 
     /// <summary>
@@ -92,28 +96,20 @@ namespace SolutionInspector.Configuration
       Update();
     }
 
-    /// <summary>
-    ///   Clears the collection of all its items.
-    /// </summary>
+    /// <inheritdoc />
     public void Clear ()
     {
       _collection.Clear();
       Update();
     }
 
-    /// <summary>
-    ///   Checks whether the collection contains the given <paramref name="item" /> and returns <see langword="true" /> if so, or <see langword="false" />
-    ///   otherwise.
-    /// </summary>
+    /// <inheritdoc />
     public bool Contains (string item)
     {
       return _collection.Contains(item);
     }
 
-    /// <summary>
-    ///   Removes the given <paramref name="item" /> from the collection if it exists.
-    /// </summary>
-    /// <returns><see langword="True" /> if the item was contained in the collection, <see langword="false" /> otherwise.</returns>
+    /// <inheritdoc />
     public bool Remove (string item)
     {
       var removed = _collection.Remove(item);
@@ -122,9 +118,31 @@ namespace SolutionInspector.Configuration
       return removed;
     }
 
+    /// <inheritdoc />
+    public void RemoveAt (int index)
+    {
+      _collection.RemoveAt(index);
+    }
+
+    /// <inheritdoc />
     IEnumerator IEnumerable.GetEnumerator ()
     {
       return GetEnumerator();
+    }
+
+    /// <inheritdoc />
+    public void CopyTo (string[] array, int arrayIndex)
+    {
+      _collection.CopyTo(array, arrayIndex);
+    }
+
+    /// <inheritdoc />
+    public bool IsReadOnly => false;
+
+    /// <inheritdoc />
+    public int IndexOf (string item)
+    {
+      return _collection.IndexOf(item);
     }
   }
 }

@@ -1,0 +1,82 @@
+﻿using SolutionInspector.ConfigurationUi.Features.Dialogs.AddRule
+
+UserControl "SolutionInspector.ConfigurationUi.Features.Dialogs.AddRule.AddRuleDialog" {
+  Width: bind ActualWidth from $ancestor<Window> convert (double x) => x * 0.75
+  Height: bind ActualHeight from $ancestor<Window> convert (double x) => x * 0.75
+
+  DockPanel { 
+    Margin: 18
+
+    @StackPanelHorizontal() {
+      DockPanel.Dock: Top
+      Margin: "0 0 0 12"
+
+      @Title(bind Title) {}
+      @SearchBox(bind Filter set [ UpdateSourceTrigger: "PropertyChanged" ], "Filter Rules") { Margin: "12 0" }
+    }
+
+    @StackPanelHorizontal() {
+      DockPanel.Dock: Bottom
+      HorizontalAlignment: Right
+      Margin: "0 24 0 0"
+      Button "AcceptButton" { 
+        IsEnabled: bind SelectedIndex from "Rules" convert (int index) => index >= 0
+
+        Style: resource "MaterialDesignFlatButton"
+        IsDefault: true
+        Command: MaterialDesignThemes.Wpf.DialogHost.CloseDialogCommand
+        CommandParameter: bind SelectedRule
+        Content: "ADD"
+      }
+      Button { 
+        Style: resource "MaterialDesignFlatButton"
+        IsCancel: true
+        Command: MaterialDesignThemes.Wpf.DialogHost.CloseDialogCommand
+        CommandParameter: null
+        Content: "CANCEL"
+      }
+    }
+
+    Grid { 
+      TextBlock { 
+        Visibility: bind AvailableRules.IsEmpty convert (bool isEmpty) => isEmpty ? Visibility.Visible : Visibility.Collapsed
+        Text: bind Filter convert (string filter) => "No Rules match the filter '" + filter + "'."
+      }
+      
+      ListBox "Rules" { 
+        ItemsSource: bind AvailableRules
+        SelectedItem: bind SelectedRule
+
+        ListBox.GroupStyle: GroupStyle {
+          GroupStyle.ContainerStyle: Style {
+            TargetType: GroupItem
+            Setter { 
+              Property: "Template"
+              Value: ControlTemplate {
+                Expander {
+                  IsExpanded: true
+                  Header: TextBlock {
+                      Style: resource "MaterialDesignSubheadingTextBlock"
+                      Run { Text: bind Name set [ Mode: OneWay ] }
+                      Run { Text: "{Binding ItemCount, Mode=OneWay, StringFormat=({0} Rule(s))}" }
+                  }
+                
+                  ItemsPresenter { }
+                }
+              }
+            }
+          }
+        }
+
+        ItemTemplate: DataTemplate {
+          DataType: AvailableRuleAssemblyViewModel
+
+          StackPanel { 
+            @Body2Text(bind Name) {}
+            @CaptionText(bind Documentation) {}
+          }
+        }
+      }
+    }
+  }
+}

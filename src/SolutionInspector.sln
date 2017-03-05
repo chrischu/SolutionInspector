@@ -53,9 +53,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CF675B
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector", "SolutionInspector\SolutionInspector.csproj", "{9E33C5B1-89AD-4A24-82FA-6C9489159A54}"
-	ProjectSection(ProjectDependencies) = postProject
-		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B} = {33E14DD0-F0B5-4624-89EA-28C5F7630E5B}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.DefaultRules", "SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj", "{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}"
 EndProject
@@ -67,8 +64,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Docs", ".Docs", "{D8707020
 		..\README.md = ..\README.md
 		..\ROADMAP.md = ..\ROADMAP.md
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.ConfigurationUi", "SolutionInspector.ConfigurationUi\SolutionInspector.ConfigurationUi.csproj", "{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.Tests", "SolutionInspector.Tests\SolutionInspector.Tests.csproj", "{D51E8B18-E2EB-4EBF-AC7B-E07555F9CC2F}"
 EndProject
@@ -89,6 +84,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.Api.Configuration.Tests", "SolutionInspector.Api.Configuration.Tests\SolutionInspector.Api.Configuration.Tests.csproj", "{8220F2A6-E934-4C86-A318-9BD773F47A5E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A24F32D9-7A3E-4EE3-8084-AB40F0265E25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.ConfigurationUi", "SolutionInspector.ConfigurationUi\SolutionInspector.ConfigurationUi.csproj", "{149FED1E-48C6-4119-8B8F-9F01740DF2C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionInspector.ConfigurationUi.Tests", "SolutionInspector.ConfigurationUi.Tests\SolutionInspector.ConfigurationUi.Tests.csproj", "{20E7F4AD-E104-4312-821F-8736C329FD94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -124,10 +123,6 @@ Global
 		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{995A6BB7-034B-46EB-AB5C-5CC187CCE1A8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33E14DD0-F0B5-4624-89EA-28C5F7630E5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D51E8B18-E2EB-4EBF-AC7B-E07555F9CC2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D51E8B18-E2EB-4EBF-AC7B-E07555F9CC2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D51E8B18-E2EB-4EBF-AC7B-E07555F9CC2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -164,6 +159,14 @@ Global
 		{8220F2A6-E934-4C86-A318-9BD773F47A5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8220F2A6-E934-4C86-A318-9BD773F47A5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8220F2A6-E934-4C86-A318-9BD773F47A5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{149FED1E-48C6-4119-8B8F-9F01740DF2C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{149FED1E-48C6-4119-8B8F-9F01740DF2C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{149FED1E-48C6-4119-8B8F-9F01740DF2C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{149FED1E-48C6-4119-8B8F-9F01740DF2C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20E7F4AD-E104-4312-821F-8736C329FD94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20E7F4AD-E104-4312-821F-8736C329FD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20E7F4AD-E104-4312-821F-8736C329FD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20E7F4AD-E104-4312-821F-8736C329FD94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -179,5 +182,6 @@ Global
 		{2E5BDE8D-46EB-4D4B-A458-E185C0BAE3AB} = {A24F32D9-7A3E-4EE3-8084-AB40F0265E25}
 		{141F0A74-C8E0-4FAC-9CD8-35609CDFEAAB} = {A24F32D9-7A3E-4EE3-8084-AB40F0265E25}
 		{8220F2A6-E934-4C86-A318-9BD773F47A5E} = {A24F32D9-7A3E-4EE3-8084-AB40F0265E25}
+		{20E7F4AD-E104-4312-821F-8736C329FD94} = {A24F32D9-7A3E-4EE3-8084-AB40F0265E25}
 	EndGlobalSection
 EndGlobal

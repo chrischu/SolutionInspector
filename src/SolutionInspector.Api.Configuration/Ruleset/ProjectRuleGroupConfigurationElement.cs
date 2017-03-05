@@ -10,6 +10,7 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   /// </summary>
   public interface IProjectRuleGroupConfiguration
   {
+    string Name { get; }
     INameFilter AppliesTo { get; }
     IReadOnlyCollection<IRuleConfiguration> Rules { get; }
   }
@@ -18,6 +19,13 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   /// >
   public class ProjectRuleGroupConfigurationElement : ConfigurationElement, IProjectRuleGroupConfiguration
   {
+    [ConfigurationValue (IsOptional = true)]
+    public string Name
+    {
+      get { return GetConfigurationValue<string>(); }
+      set { SetConfigurationValue(value); }
+    }
+
     [ConfigurationValue]
     public NameFilter AppliesTo
     {

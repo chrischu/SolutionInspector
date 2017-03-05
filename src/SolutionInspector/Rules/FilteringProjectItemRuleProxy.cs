@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using SolutionInspector.Api.Configuration;
+using SolutionInspector.Api;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 
