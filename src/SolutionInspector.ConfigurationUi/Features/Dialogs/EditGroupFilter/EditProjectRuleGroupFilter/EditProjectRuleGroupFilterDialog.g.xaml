@@ -36,7 +36,7 @@
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
           <Grid.IsEnabled>
-            <Binding Path="IsInManualEditMode" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;10&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;unary op=&quot;LogicalNegate&quot;&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/unary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+            <Binding Path="IsInManualEditMode" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;10&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;unary op=&quot;LogicalNegation&quot;&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/unary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
           </Grid.IsEnabled>
           <Button Style="{StaticResource MaterialDesignRaisedButton}" Grid.Column="0" Content="Check All">
             <Button.Command>
@@ -88,7 +88,7 @@
                   <Binding Path="IsChecked"/>
                 </CheckBox.IsChecked>
                 <CheckBox.IsEnabled>
-                  <Binding Path="DataContext.IsInManualEditMode" ElementName="Root" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;10&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;unary op=&quot;LogicalNegate&quot;&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/unary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                  <Binding Path="DataContext.IsInManualEditMode" ElementName="Root" Converter="{x:Static ns4:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;10&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;unary op=&quot;LogicalNegation&quot;&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/unary&gt;&lt;parameter name=&quot;b&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
                 </CheckBox.IsEnabled>
                 <CheckBox.Content>
                   <StackPanel Orientation="Horizontal" Margin="0 3">
