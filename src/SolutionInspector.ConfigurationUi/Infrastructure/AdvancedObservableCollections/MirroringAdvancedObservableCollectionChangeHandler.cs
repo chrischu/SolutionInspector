@@ -43,7 +43,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.AdvancedObservableCol
       _mirrorCollection[index] = _convertObservableToMirrorElement(newElement);
     }
 
-    public override void ElementsCleared (IReadOnlyCollection<TObservableElement> removedElements)
+    public override void ElementsCleared (IReadOnlyCollection<TObservableElement> clearedElements)
     {
       _mirrorCollection.Clear();
     }

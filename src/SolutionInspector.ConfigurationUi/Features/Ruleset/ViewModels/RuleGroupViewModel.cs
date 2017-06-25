@@ -6,24 +6,23 @@ using GalaSoft.MvvmLight.CommandWpf;
 using JetBrains.Annotations;
 using SolutionInspector.ConfigurationUi.Features.Dialogs;
 using SolutionInspector.ConfigurationUi.Features.Undo;
-using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection.Add;
-using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection.Remove;
+using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection;
 using SolutionInspector.ConfigurationUi.Infrastructure.AdvancedObservableCollections;
 
 namespace SolutionInspector.ConfigurationUi.Features.Ruleset.ViewModels
 {
   internal abstract class RuleGroupViewModel : ViewModelBase
   {
-    private readonly IUndoManager _undoManager;
+    private readonly IUndoContext _undoContext;
     private string _globalFilter;
     private string _localFilter;
 
     protected RuleGroupViewModel (
-      IUndoManager undoManager,
+      IUndoContext undoContext,
       IDialogManager dialogManager,
       AdvancedObservableCollection<RuleViewModel> rules)
     {
-      _undoManager = undoManager;
+      _undoContext = undoContext;
       DialogManager = dialogManager;
       Rules = rules;
     }
@@ -77,15 +76,14 @@ namespace SolutionInspector.ConfigurationUi.Features.Ruleset.ViewModels
         return;
 
       var ruleViewModel = dialogResult.Value;
-      _undoManager.Do(new AddItemAction<RuleViewModel>(Rules, ruleViewModel));
+      _undoContext.Do(f => f.Collection(Rules).Add(ruleViewModel));
     }
 
     protected abstract Task<DialogResult<RuleViewModel>> AddRule (IDialogManager dialogManager);
 
     private void ExecuteRemoveRule (int index)
     {
-      var action = new RemoveItemAction<RuleViewModel>(Rules, index);
-      _undoManager.Do(action);
+      _undoContext.Do(f => f.Collection(Rules).Remove(index));
     }
   }
 }

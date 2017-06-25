@@ -21,7 +21,7 @@ namespace SolutionInspector.ConfigurationUi.Features.Controls.Configuration.Comm
       return new CommaSeparatedStringCollectionViewModel(
         (SolutionInspector.Configuration.CommaSeparatedStringCollection) value,
         serviceLocator.GetInstance<IDialogManager>(),
-        serviceLocator.GetInstance<IUndoManager>());
+        serviceLocator.GetInstance<IUndoContext>());
     }
   }
 }

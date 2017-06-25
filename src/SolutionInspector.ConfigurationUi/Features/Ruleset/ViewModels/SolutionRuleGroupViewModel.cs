@@ -7,8 +7,8 @@ namespace SolutionInspector.ConfigurationUi.Features.Ruleset.ViewModels
 {
   internal class SolutionRuleGroupViewModel : RuleGroupViewModel
   {
-    public SolutionRuleGroupViewModel (IUndoManager undoManager, IDialogManager dialogManager, AdvancedObservableCollection<RuleViewModel> rules)
-      : base(undoManager, dialogManager, rules)
+    public SolutionRuleGroupViewModel (IUndoContext undoContext, IDialogManager dialogManager, AdvancedObservableCollection<RuleViewModel> rules)
+      : base(undoContext, dialogManager, rules)
     {
     }
 

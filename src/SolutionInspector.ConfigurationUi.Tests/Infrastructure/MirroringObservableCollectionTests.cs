@@ -28,7 +28,7 @@ namespace SolutionInspector.ConfigurationUi.Tests.Infrastructure
       var result = new MirroringObservableCollection<int, string>(mirroredCollection, i => i.ToString(), int.Parse);
 
       // ASSERT
-      result.Should().BeEquivalentTo(new[] { 1, 2 });
+      result.Should().Equal(1, 2);
     }
 
     [Test]
@@ -38,7 +38,7 @@ namespace SolutionInspector.ConfigurationUi.Tests.Infrastructure
       _sut.Add(1);
 
       // ASSERT
-      _mirroredCollection.Should().BeEquivalentTo("1");
+      _mirroredCollection.Should().Equal("1");
     }
 
     [Test]
@@ -51,7 +51,7 @@ namespace SolutionInspector.ConfigurationUi.Tests.Infrastructure
       _sut.Insert(index: 1, item: 3);
 
       // ASSERT
-      _mirroredCollection.Should().BeEquivalentTo("1", "3", "2");
+      _mirroredCollection.Should().Equal("1", "3", "2");
     }
 
     [Test]
@@ -64,7 +64,7 @@ namespace SolutionInspector.ConfigurationUi.Tests.Infrastructure
       _sut.Remove(2);
 
       // ASSERT
-      _mirroredCollection.Should().BeEquivalentTo("1");
+      _mirroredCollection.Should().Equal("1");
     }
 
     [Test]
@@ -77,7 +77,7 @@ namespace SolutionInspector.ConfigurationUi.Tests.Infrastructure
       _sut.RemoveAt(1);
 
       // ASSERT
-      _mirroredCollection.Should().BeEquivalentTo("1");
+      _mirroredCollection.Should().Equal("1");
     }
 
     [Test]
@@ -90,7 +90,7 @@ namespace SolutionInspector.ConfigurationUi.Tests.Infrastructure
       _sut[1] = 3;
 
       // ASSERT
-      _mirroredCollection.Should().BeEquivalentTo("1", "3");
+      _mirroredCollection.Should().Equal("1", "3");
     }
 
     [Test]
@@ -117,7 +117,7 @@ namespace SolutionInspector.ConfigurationUi.Tests.Infrastructure
       _sut.Move(1, 2);
 
       // ASSERT
-      _mirroredCollection.Should().BeEquivalentTo("1", "3", "2");
+      _mirroredCollection.Should().Equal("1", "3", "2");
     }
   }
 }

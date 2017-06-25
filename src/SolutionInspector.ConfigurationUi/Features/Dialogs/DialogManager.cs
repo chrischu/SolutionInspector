@@ -41,13 +41,13 @@ namespace SolutionInspector.ConfigurationUi.Features.Dialogs
   {
     private readonly IRuleRepository _ruleRepository;
     private readonly IFilterEvaluator _filterEvaluator;
-    private readonly IUndoManager _undoManager;
+    private readonly IUndoContext _undoContext;
 
-    public DialogManager (IRuleRepository ruleRepository, IFilterEvaluator filterEvaluator, IUndoManager undoManager)
+    public DialogManager (IRuleRepository ruleRepository, IFilterEvaluator filterEvaluator, IUndoContext undoContext)
     {
       _ruleRepository = ruleRepository;
       _filterEvaluator = filterEvaluator;
-      _undoManager = undoManager;
+      _undoContext = undoContext;
     }
 
     [CanBeNull]
@@ -129,7 +129,7 @@ namespace SolutionInspector.ConfigurationUi.Features.Dialogs
 
     public async Task<DialogResult<NameFilter>> EditProjectRuleGroupFilter (SolutionViewModel solution, NameFilter appliesTo)
     {
-      var projectRuleGroupFilterViewModel = new ProjectRuleGroupFilterViewModel(solution, appliesTo, _undoManager);
+      var projectRuleGroupFilterViewModel = new ProjectRuleGroupFilterViewModel(solution, appliesTo, _undoContext);
       var dialog = new EditProjectRuleGroupFilterDialog
                    {
                      DataContext =

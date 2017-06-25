@@ -7,18 +7,16 @@ using GalaSoft.MvvmLight.CommandWpf;
 using SolutionInspector.Api;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.ConfigurationUi.Features.Undo;
-using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection.Add;
-using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection.Remove;
-using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection.Replace;
+using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection;
 
 namespace SolutionInspector.ConfigurationUi.Features.Dialogs.EditGroupFilter
 {
   internal class NameFilterEditViewModel : ViewModelBase
   {
-    public NameFilterEditViewModel (INameFilter nameFilter, IUndoManager undoManager)
+    public NameFilterEditViewModel (INameFilter nameFilter, IUndoContext undoContext)
     {
-      Includes = new FilterCollection(undoManager, nameFilter.Includes);
-      Excludes = new FilterCollection(undoManager, nameFilter.Excludes);
+      Includes = new FilterCollection(undoContext, nameFilter.Includes);
+      Excludes = new FilterCollection(undoContext, nameFilter.Excludes);
     }
 
     public FilterCollection Includes { get; }
@@ -32,21 +30,21 @@ namespace SolutionInspector.ConfigurationUi.Features.Dialogs.EditGroupFilter
 
   internal class FilterCollection : ObservableCollection<string>
   {
-    private readonly IUndoManager _undoManager;
+    private readonly IUndoContext _undoContext;
 
-    public FilterCollection (IUndoManager undoManager, IEnumerable<string> collection) : base(collection)
+    public FilterCollection (IUndoContext undoContext, IEnumerable<string> collection) : base(collection)
     {
-      _undoManager = undoManager;
+      _undoContext = undoContext;
     }
 
-    public ICommand AddCommand => new RelayCommand(() => _undoManager.Do(new AddItemAction<string>(this, "")));
-    public ICommand RemoveCommand => new RelayCommand<int>(i => _undoManager.Do(new RemoveItemAction<string>(this, i)));
+    public ICommand AddCommand => new RelayCommand(() => _undoContext.Do(f => f.Collection(this).Add("")));
+    public ICommand RemoveCommand => new RelayCommand<int>(i => _undoContext.Do(f => f.Collection(this).Remove(i)));
 
     public ICommand EditCommand => new RelayCommand<Tuple<string, object>>(
       t =>
       {
         var index = (int)t.Item2;
-        _undoManager.Do(new ReplaceItemAction<string>(this, t.Item1, index));
+        _undoContext.Do(f => f.Collection(this).Replace(index, t.Item1));
       });
   }
 }

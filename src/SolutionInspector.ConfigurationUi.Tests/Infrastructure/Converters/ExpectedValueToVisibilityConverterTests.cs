@@ -1,11 +1,12 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Windows;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NUnit.Framework;
 using SolutionInspector.ConfigurationUi.Infrastructure.Converters;
 
-namespace SolutionInspector.ConfigurationUi.Tests.Converters
+namespace SolutionInspector.ConfigurationUi.Tests.Infrastructure.Converters
 {
   public class ExpectedValueToVisibilityConverterTests
   {

@@ -105,7 +105,7 @@ configuration=""configurationValue"">
           new { String = "item1" },
           new { String = "item2" }
         },
-        o => o.ExcludingMissingMembers());
+        o => o.ExcludingMissingMembers().WithStrictOrdering());
     }
 
     [Test]

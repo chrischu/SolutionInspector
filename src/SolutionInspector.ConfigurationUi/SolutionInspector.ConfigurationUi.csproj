@@ -134,14 +134,18 @@
     </Compile>
     <Compile Include="Features\Controls\EditableTextBlock\EditableTextBlock.cs" />
     <Compile Include="Features\Dialogs\EditGroupFilter\EditProjectRuleGroupFilter\ProjectRuleGroupFilterViewModel.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\Add\AddItemAction.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\Add\ItemAddedAction.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\Clear\ClearItemsAction.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\Clear\ItemsClearedAction.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\CollectionActionBase.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\Remove\ItemRemovedAction.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\Replace\ItemReplacedAction.cs" />
-    <Compile Include="Features\Undo\Actions\IDoableAction.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\ClearExtensions.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\RemoveExtensions.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\ReplaceExtensions.cs" />
+    <Compile Include="Features\Undo\Actions\Object\ChangePropertyExtensions.cs" />
+    <Compile Include="Features\Undo\CompoundUndoableAction.cs" />
+    <Compile Include="Features\Undo\IChildUndoContext.cs" />
+    <Compile Include="Features\Undo\IUndoableAction.cs" />
+    <Compile Include="Features\Undo\IUndoableActionFactory.cs" />
+    <Compile Include="Features\Undo\Actions\Collection\AddExtensions.cs" />
+    <Compile Include="Features\Undo\IUndoContext.cs" />
+    <Compile Include="Features\Undo\UndoContextBase.cs" />
+    <Compile Include="Infrastructure\AdvancedObservableCollections\UndoAdvancedObservableCollectionChangeHandler.cs" />
     <Compile Include="Infrastructure\AdvancedObservableCollections\AdvancedObservableCollection.cs" />
     <Compile Include="Infrastructure\AdvancedObservableCollections\AdvancedObservableCollectionChangeHandlerBase.cs" />
     <Compile Include="Infrastructure\AdvancedObservableCollections\IAdvancedObservableCollectionChangeHandler.cs" />
@@ -167,10 +171,6 @@
     <Compile Include="Infrastructure\BindingProxy.cs" />
     <Compile Include="Infrastructure\DocumentationRetriever.cs" />
     <Compile Include="Infrastructure\FilterEvaluator.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\Replace\ReplaceItemAction.cs" />
-    <Compile Include="Features\Undo\Actions\IUndoableAction.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\Remove\RemoveItemAction.cs" />
-    <Compile Include="Features\Undo\Actions\Collection\IndexedCollectionActionBase.cs" />
     <Compile Include="Features\Main\MainWindow.ammy.cs">
       <DependentUpon>MainWindow.ammy</DependentUpon>
     </Compile>
@@ -194,7 +194,7 @@
     <Compile Include="Features\Dialogs\Loading\LoadingDialogViewModel.cs" />
     <Compile Include="Features\Dialogs\AddRule\AvailableRuleViewModel.cs" />
     <Compile Include="Features\Dialogs\DialogManager.cs" />
-    <Compile Include="Features\Undo\UndoManager.cs" />
+    <Compile Include="Features\Undo\TopLevelUndoContext.cs" />
     <Compile Include="Features\Dialogs\DialogResult.cs" />
     <Compile Include="Features\Dialogs\AddRule\RuleRepository.cs" />
     <Compile Include="Features\Dialogs\AddRule\AddRuleDialog.ammy.cs">

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using FluentAssertions;
@@ -6,7 +7,7 @@ using NUnit.Framework;
 using SolutionInspector.ConfigurationUi.Infrastructure.Behaviors;
 using SolutionInspector.TestInfrastructure;
 
-namespace SolutionInspector.ConfigurationUi.Tests.Behaviors
+namespace SolutionInspector.ConfigurationUi.Tests.Infrastructure.Behaviors
 {
   [Apartment (ApartmentState.STA)]
   public class PutCursorAtEndTextBoxBehaviorTests

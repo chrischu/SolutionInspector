@@ -55,6 +55,7 @@
     <Compile Include="Utilities\CollectionDifferenceFinder.cs" />
     <Compile Include="Utilities\CollectionDifferences.cs" />
     <Compile Include="Utilities\CollectionEqualityComparer.cs" />
+    <Compile Include="Utilities\ExpressionUtility.cs" />
     <Compile Include="Utilities\HashCodeHelper.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -21,7 +21,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.AdvancedObservableCol
     {
     }
 
-    public virtual void ElementsCleared (IReadOnlyCollection<T> removedElements)
+    public virtual void ElementsCleared (IReadOnlyCollection<T> clearedElements)
     {
     }
   }

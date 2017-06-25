@@ -63,7 +63,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure
       builder.RegisterType<StartViewModel>().AsSelf().SingleInstance();
       builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
       builder.RegisterType<EditViewModel>().AsSelf().SingleInstance();
-      builder.RegisterType<UndoManager>().As<IUndoManager>().SingleInstance();
+      builder.RegisterType<TopLevelUndoContext>().As<IUndoContext>().SingleInstance();
       builder.RegisterType<DialogManager>().As<IDialogManager>();
       builder.RegisterType<RuleTypeResolver>().As<IRuleTypeResolver>();
       builder.RegisterType<RulesetLoader>().As<IRulesetLoader>();
@@ -120,7 +120,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure
       ProjectRuleGroupConfigurationElement ruleGroupElement,
       AdvancedObservableCollection<RuleViewModel> rules)
     {
-      return new ProjectRuleGroupViewModel(s_container.Resolve<IUndoManager>(), s_container.Resolve<IDialogManager>(), ruleGroupElement, rules);
+      return new ProjectRuleGroupViewModel(s_container.Resolve<IUndoContext>(), s_container.Resolve<IDialogManager>(), ruleGroupElement, rules);
     }
 
     public static ProjectItemRulesViewModel CreateProjectItemRulesViewModel (IEnumerable<ProjectItemRuleGroupViewModel> ruleGroups)
@@ -132,7 +132,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure
       ProjectItemRuleGroupConfigurationElement ruleGroup,
       AdvancedObservableCollection<RuleViewModel> rules)
     {
-      return new ProjectItemRuleGroupViewModel(s_container.Resolve<IUndoManager>(), s_container.Resolve<IDialogManager>(), ruleGroup, rules);
+      return new ProjectItemRuleGroupViewModel(s_container.Resolve<IUndoContext>(), s_container.Resolve<IDialogManager>(), ruleGroup, rules);
     }
 
     public static RuleConfigurationPropertyViewModel CreateRuleConfigurationPropertyViewModel (
@@ -184,7 +184,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure
     public static SolutionRuleGroupViewModel CreateSolutionRuleGroupViewModel (AdvancedObservableCollection<RuleViewModel> rules)
     {
       return new SolutionRuleGroupViewModel(
-        s_container.Resolve<IUndoManager>(),
+        s_container.Resolve<IUndoContext>(),
         s_container.Resolve<IDialogManager>(),
         rules);
     }

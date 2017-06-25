@@ -16,14 +16,14 @@ namespace SolutionInspector.ConfigurationUi.Features.Edit
   internal class EditViewModel : ViewModelBase
   {
     private readonly IDialogManager _dialogManager;
-    private readonly IUndoManager _undoManager;
+    private readonly IUndoContext _undoContext;
     private readonly IRulesetLoader _rulesetLoader;
     private string _configurationFilePath;
 
-    public EditViewModel (IDialogManager dialogManager, IUndoManager undoManager, IRulesetLoader rulesetLoader)
+    public EditViewModel (IDialogManager dialogManager, IUndoContext undoContext, IRulesetLoader rulesetLoader)
     {
       _dialogManager = dialogManager;
-      _undoManager = undoManager;
+      _undoContext = undoContext;
       _rulesetLoader = rulesetLoader;
 
       MessengerInstance.Register<CreateNewConfigurationMessage>(this, msg => CreateNewConfiguration());
@@ -45,10 +45,10 @@ namespace SolutionInspector.ConfigurationUi.Features.Edit
     public ICommand SaveCommand => new RelayCommand(() => Ruleset.Save(_configurationFilePath));
 
     [UsedImplicitly /* by Binding */]
-    public ICommand UndoCommand => new RelayCommand(() => _undoManager.Undo(), () => _undoManager.CanUndo);
+    public ICommand UndoCommand => new RelayCommand(() => _undoContext.Undo(), () => _undoContext.CanUndo);
 
     [UsedImplicitly /* by Binding */]
-    public ICommand RedoCommand => new RelayCommand(() => _undoManager.Redo(), () => _undoManager.CanRedo);
+    public ICommand RedoCommand => new RelayCommand(() => _undoContext.Redo(), () => _undoContext.CanRedo);
 
     private void CreateNewConfiguration ()
     {
@@ -69,7 +69,7 @@ namespace SolutionInspector.ConfigurationUi.Features.Edit
       _configurationFilePath = configurationFilePath;
 
       Ruleset = await _dialogManager.Load("Loading configuration file...", Task.Run(() => _rulesetLoader.Load(configurationFilePath)));
-      _undoManager.Reset();
+      _undoContext.Reset();
       MessengerInstance.Send(new SwitchPageMessage(MainViewModel.Page.Edit));
     }
   }

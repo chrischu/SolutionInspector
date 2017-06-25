@@ -14,8 +14,8 @@ namespace SolutionInspector.Internals.Tests
       var result = NameFilterGenerator.Generate(new[] { Tuple.Create(Some.String(), true) });
 
       // ASSERT
-      result.Includes.ShouldBeEquivalentTo(new[] { "*" });
-      result.Excludes.ShouldBeEquivalentTo(new string[0]);
+      result.Includes.Should().Equal("*");
+      result.Excludes.Should().Equal();
     }
 
     [Test]
@@ -25,8 +25,8 @@ namespace SolutionInspector.Internals.Tests
       var result = NameFilterGenerator.Generate(new[] { Tuple.Create(Some.String(), false) });
 
       // ASSERT
-      result.Includes.ShouldBeEquivalentTo(new[] { "*" });
-      result.Excludes.ShouldBeEquivalentTo(new[] { "*" });
+      result.Includes.Should().Equal("*");
+      result.Excludes.Should().Equal("*");
     }
 
     [Test]
@@ -42,8 +42,8 @@ namespace SolutionInspector.Internals.Tests
         });
 
       // ASSERT
-      result.Includes.ShouldBeEquivalentTo(new[] { "Project.*" });
-      result.Excludes.ShouldBeEquivalentTo(new string[0]);
+      result.Includes.Should().Equal("Project.*");
+      result.Excludes.Should().Equal();
     }
 
     [Test]
@@ -59,8 +59,8 @@ namespace SolutionInspector.Internals.Tests
         });
 
       // ASSERT
-      result.Includes.ShouldBeEquivalentTo(new[] { "*.Tests" });
-      result.Excludes.ShouldBeEquivalentTo(new string[0]);
+      result.Includes.Should().Equal("*.Tests");
+      result.Excludes.Should().Equal();
     }
 
     [Test]
@@ -70,15 +70,15 @@ namespace SolutionInspector.Internals.Tests
       var result = NameFilterGenerator.Generate(
         new[]
         {
-          Tuple.Create(Some.String(), false),
+          Tuple.Create("B" + Some.String(), false),
           Tuple.Create("AAAX", true),
           Tuple.Create("AAY", true),
           Tuple.Create("AZ", true)
         });
 
       // ASSERT
-      result.Includes.ShouldBeEquivalentTo(new[] { "A*" });
-      result.Excludes.ShouldBeEquivalentTo(new string[0]);
+      result.Includes.Should().Equal("A*");
+      result.Excludes.Should().Equal();
     }
 
     [Test]
@@ -93,8 +93,8 @@ namespace SolutionInspector.Internals.Tests
         });
 
       // ASSERT
-      result.Includes.ShouldBeEquivalentTo(new[] { "AB" });
-      result.Excludes.ShouldBeEquivalentTo(new string[0]);
+      result.Includes.Should().Equal("AB");
+      result.Excludes.Should().Equal();
     }
 
     [Test]
@@ -125,8 +125,8 @@ namespace SolutionInspector.Internals.Tests
         });
 
       // ASSERT
-      result.Includes.ShouldBeEquivalentTo(new[] { "SolutionInspector.Internals*" });
-      result.Excludes.ShouldBeEquivalentTo(new string[0]);
+      result.Includes.Should().Equal("SolutionInspector.Internals*");
+      result.Excludes.Should().Equal();
     }
   }
 }

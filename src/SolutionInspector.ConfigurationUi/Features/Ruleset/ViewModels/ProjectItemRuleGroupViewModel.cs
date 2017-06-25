@@ -10,11 +10,11 @@ namespace SolutionInspector.ConfigurationUi.Features.Ruleset.ViewModels
   internal class ProjectItemRuleGroupViewModel : RuleGroupViewModel
   {
     public ProjectItemRuleGroupViewModel (
-      IUndoManager undoManager,
+      IUndoContext undoContext,
       IDialogManager dialogManager,
       ProjectItemRuleGroupConfigurationElement ruleGroup,
       AdvancedObservableCollection<RuleViewModel> rules)
-      : base(undoManager, dialogManager, rules)
+      : base(undoContext, dialogManager, rules)
     {
       RuleGroup = ruleGroup;
       AppliesTo = ruleGroup.AppliesTo;

@@ -12,11 +12,11 @@ namespace SolutionInspector.ConfigurationUi.Features.Ruleset.ViewModels
   internal class ProjectRuleGroupViewModel : RuleGroupViewModel
   {
     public ProjectRuleGroupViewModel (
-      IUndoManager undoManager,
+      IUndoContext undoContext,
       IDialogManager dialogManager,
       ProjectRuleGroupConfigurationElement ruleGroup,
       AdvancedObservableCollection<RuleViewModel> rules)
-      : base(undoManager, dialogManager, rules)
+      : base(undoContext, dialogManager, rules)
     {
       RuleGroup = ruleGroup;
     }

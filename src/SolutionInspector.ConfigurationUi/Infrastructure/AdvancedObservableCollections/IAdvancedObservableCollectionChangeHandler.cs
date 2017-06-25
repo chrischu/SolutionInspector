@@ -10,6 +10,6 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.AdvancedObservableCol
     void ElementAdded (T element, int index);
     void ElementRemoved (T element, int index);
     void ElementReplaced (T newElement, T oldElement, int index);
-    void ElementsCleared (IReadOnlyCollection<T> removedElements);
+    void ElementsCleared (IReadOnlyCollection<T> clearedElements);
   }
 }

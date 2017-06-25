@@ -141,7 +141,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
     {
       try
       {
-        collection.ShouldBeEquivalentTo(expectedCollection);
+        collection.Should().Equal(expectedCollection);
         return true;
       }
       catch (Exception)

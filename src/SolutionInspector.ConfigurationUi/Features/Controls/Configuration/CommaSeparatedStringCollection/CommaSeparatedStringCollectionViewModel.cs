@@ -7,9 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using SolutionInspector.ConfigurationUi.Features.Dialogs;
 using SolutionInspector.ConfigurationUi.Features.Undo;
-using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection.Add;
-using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection.Remove;
-using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection.Replace;
+using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Collection;
 using SolutionInspector.ConfigurationUi.Infrastructure;
 using SolutionInspector.ConfigurationUi.Infrastructure.AdvancedObservableCollections;
 using SolutionInspector.ConfigurationUi.Infrastructure.ValidationRules;
@@ -19,15 +17,15 @@ namespace SolutionInspector.ConfigurationUi.Features.Controls.Configuration.Comm
   internal class CommaSeparatedStringCollectionViewModel : ViewModelBase
   {
     private readonly IDialogManager _dialogManager;
-    private readonly IUndoManager _undoManager;
+    private readonly IUndoContext _undoContext;
 
     public CommaSeparatedStringCollectionViewModel (
       SolutionInspector.Configuration.CommaSeparatedStringCollection value,
       IDialogManager dialogManager,
-      IUndoManager undoManager)
+      IUndoContext undoContext)
     {
       _dialogManager = dialogManager;
-      _undoManager = undoManager;
+      _undoContext = undoContext;
 
       Values = MirroringObservableCollection.Create(value);
     }
@@ -44,13 +42,7 @@ namespace SolutionInspector.ConfigurationUi.Features.Controls.Configuration.Comm
       var result = await ShowAddNewItemDialog();
 
       if (!result.WasCancelled)
-      {
-        Values.Add(result.Value);
-        _undoManager.Do(new AddItemAction<string>(Values, result.Value, Values.Count - 1));
-
-        var action = new AddItemAction<string>(Values, result.Value);
-        _undoManager.Do(action);
-      }
+        _undoContext.Do(f => f.Collection(Values).Add(result.Value));
     }
 
     private async void ExecuteEdit (int index)
@@ -58,16 +50,12 @@ namespace SolutionInspector.ConfigurationUi.Features.Controls.Configuration.Comm
       var result = await ShowEditItemDialog(Values[index]);
 
       if (!result.WasCancelled)
-      {
-        var action = new ReplaceItemAction<string>(Values, result.Value, index);
-        _undoManager.Do(action);
-      }
+        _undoContext.Do(f => f.Collection(Values).Replace(index, result.Value));
     }
 
     private void ExecuteRemove (int index)
     {
-      var action = new RemoveItemAction<string>(Values, index);
-      _undoManager.Do(action);
+      _undoContext.Do(f => f.Collection(Values).Remove(index));
 
       if (Values.Count > 0)
         SelectedIndex = Math.Max(Values.Count - 1, Math.Min(0, index));

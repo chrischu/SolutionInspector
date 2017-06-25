@@ -7,7 +7,7 @@ namespace SolutionInspector.ConfigurationUi.Features.Dialogs.EditGroupFilter
 {
   internal class TreeViewModelBase : ViewModelBase
   {
-    public event Action<bool> IsCheckedChanged;
+    public event Action<TreeViewModelBase, bool> IsCheckedChanged;
 
     private bool _isChecked;
 
@@ -32,7 +32,7 @@ namespace SolutionInspector.ConfigurationUi.Features.Dialogs.EditGroupFilter
         if (_isChecked != value)
         {
           _isChecked = value;
-          IsCheckedChanged?.Invoke(_isChecked);
+          IsCheckedChanged?.Invoke(this, _isChecked);
         }
       }
     }

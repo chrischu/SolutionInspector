@@ -9,18 +9,19 @@ using SolutionInspector.Api;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.ConfigurationUi.Features.Ruleset.ViewModels;
 using SolutionInspector.ConfigurationUi.Features.Undo;
+using SolutionInspector.ConfigurationUi.Features.Undo.Actions.Object;
 using SolutionInspector.Internals;
 
 namespace SolutionInspector.ConfigurationUi.Features.Dialogs.EditGroupFilter.EditProjectRuleGroupFilter
 {
   internal class ProjectRuleGroupFilterViewModel : ViewModelBase
   {
-    private readonly IUndoManager _undoManager;
+    private readonly IUndoContext _undoContext;
     private bool _isCheckedUpdateSuspended;
 
-    public ProjectRuleGroupFilterViewModel (SolutionViewModel solutionViewModel, INameFilter appliesTo, IUndoManager undoManager)
+    public ProjectRuleGroupFilterViewModel (SolutionViewModel solutionViewModel, INameFilter appliesTo, IUndoContext undoContext)
     {
-      _undoManager = undoManager;
+      _undoContext = undoContext;
 
       Projects = new ObservableCollection<ProjectTreeViewModel>(
         solutionViewModel.Projects
@@ -28,18 +29,25 @@ namespace SolutionInspector.ConfigurationUi.Features.Dialogs.EditGroupFilter.Edi
             .OrderBy(p => p.Name));
 
       foreach (var project in Projects)
-        project.IsCheckedChanged += x => ProjectOnIsCheckedChanged();
+        project.IsCheckedChanged += (proj, isChecked) => ProjectOnIsCheckedChanged(proj);
 
-      AppliesTo = new NameFilterEditViewModel(appliesTo, _undoManager);
+      AppliesTo = new NameFilterEditViewModel(appliesTo, _undoContext);
     }
 
-    private async void ProjectOnIsCheckedChanged()
+    private void ProjectOnIsCheckedChanged(TreeViewModelBase proj)
     {
+      _undoContext.Done(f => f.Object(proj).PropertyChanged(p => p.IsChecked, !proj.IsChecked));
+
       if (_isCheckedUpdateSuspended)
         return;
 
+      UpdateAppliesTo();
+    }
+
+    private async void UpdateAppliesTo ()
+    {
       var task = Task.Run(() => NameFilterGenerator.Generate(Projects.Select(p => Tuple.Create(p.Name, p.IsChecked)).ToList()));
-      AppliesTo = new NameFilterEditViewModel(await task, _undoManager);
+      AppliesTo = new NameFilterEditViewModel(await task, _undoContext);
     }
 
     public ICommand CheckAllCommand => new RelayCommand(() => ChangeCheckState(x => true));
@@ -49,9 +57,11 @@ namespace SolutionInspector.ConfigurationUi.Features.Dialogs.EditGroupFilter.Edi
     private void ChangeCheckState(Func<bool, bool> convertPreviousStateToNewState)
     {
       _isCheckedUpdateSuspended = true;
-      Projects.ForEach(p => p.IsChecked = convertPreviousStateToNewState(p.IsChecked));
+      using (_undoContext.CombineActions())
+        Projects.ForEach(p => p.IsChecked = convertPreviousStateToNewState(p.IsChecked));
       _isCheckedUpdateSuspended = false;
-      ProjectOnIsCheckedChanged();
+
+      UpdateAppliesTo();
     }
 
     public bool IsInManualEditMode { get; set; }
