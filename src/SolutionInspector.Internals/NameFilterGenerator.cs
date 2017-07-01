@@ -71,7 +71,6 @@ namespace SolutionInspector.Internals
       var possibleGroupings =
           new HashSet<IEnumerable<IEnumerable<string>>>(new CollectionEqualityComparer<IEnumerable<string>>(new CollectionEqualityComparer<string>()));
 
-      // ReSharper disable AccessToModifiedClosure
       for (var prefixLength = 0; prefixLength <= maxLength; prefixLength++)
         for (var suffixLength = 0; suffixLength + prefixLength <= maxLength; suffixLength++)
         {
@@ -79,7 +78,6 @@ namespace SolutionInspector.Internals
           if (group.Count != elements.Count)
             possibleGroupings.Add(group);
         }
-      // ReSharper restore AccessToModifiedClosure
 
       return possibleGroupings;
     }

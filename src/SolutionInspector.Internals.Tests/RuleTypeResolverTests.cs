@@ -170,7 +170,6 @@ namespace SolutionInspector.Internals.Tests
       {
       }
 
-      // ReSharper disable once UnusedParameter.Local
       public ConfigurableRuleWithMultipleCtors (ConfigurableRuleConfiguration configuration, object dummyParameter)
         : base(configuration)
       {
@@ -185,7 +184,5 @@ namespace SolutionInspector.Internals.Tests
     private class ConfigurableRuleConfiguration : ConfigurationElement
     {
     }
-
-    // ReSharper restore UnusedMember.Local
   }
 }
