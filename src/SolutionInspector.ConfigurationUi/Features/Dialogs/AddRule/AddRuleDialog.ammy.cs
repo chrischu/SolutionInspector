@@ -1,8 +1,10 @@
-﻿namespace SolutionInspector.ConfigurationUi.Features.Dialogs.AddRule
+﻿using System;
+
+namespace SolutionInspector.ConfigurationUi.Features.Dialogs.AddRule
 {
   public partial class AddRuleDialog
   {
-    public AddRuleDialog()
+    public AddRuleDialog ()
     {
       InitializeComponent();
     }
