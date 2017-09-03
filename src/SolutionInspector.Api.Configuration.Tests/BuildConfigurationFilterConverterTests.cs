@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Api.Configuration.Tests
 {
@@ -46,7 +47,8 @@ namespace SolutionInspector.Api.Configuration.Tests
       var result = _sut.ConvertFrom(buildConfigurationFilterString);
 
       // ASSERT
-      result.IsMatch(new BuildConfiguration("A", "B")).Should().BeTrue();
+      result.Should().NotBeNull();
+      result.AssertNotNull().IsMatch(new BuildConfiguration("A", "B")).Should().BeTrue();
       result.IsMatch(new BuildConfiguration("C", "D")).Should().BeTrue();
       result.IsMatch(new BuildConfiguration("X", "Y")).Should().BeFalse();
     }

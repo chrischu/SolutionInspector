@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.Practices.ServiceLocation;
 using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
 using SolutionInspector.ConfigurationUi.Features.Controls.Configuration;
 using SolutionInspector.ConfigurationUi.Features.Ruleset.ViewModels;
@@ -68,7 +69,7 @@ namespace SolutionInspector.ConfigurationUi.Features.Dialogs.AddRule
 
       if (availableRule.RuleTypeInfo.IsConfigurable)
       {
-        var configurationElement = ConfigurationElement.Create("rule", availableRule.RuleTypeInfo.ConfigurationType);
+        var configurationElement = ConfigurationElement.Create("rule", availableRule.RuleTypeInfo.ConfigurationType.AssertNotNull());
         ruleConfigurationElement = ConfigurationElement.Load<RuleConfigurationElement>(
           configurationElement.Element,
           e => e.RuleType = availableRule.RuleTypeInfo.RuleTypeName);

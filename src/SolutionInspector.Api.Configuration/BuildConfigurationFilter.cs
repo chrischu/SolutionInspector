@@ -49,10 +49,10 @@ namespace SolutionInspector.Api.Configuration
 
     private class BuildConfigurationFilterEqualityComparer : IEqualityComparer<BuildConfiguration>
     {
-      public bool Equals ([NotNull] BuildConfiguration x, [NotNull] BuildConfiguration y)
+      public bool Equals ([CanBeNull] BuildConfiguration x, [CanBeNull] BuildConfiguration y)
       {
-        return (x.ConfigurationName == y.ConfigurationName || x.ConfigurationName == "*" || y.ConfigurationName == "*") &&
-               (x.PlatformName == y.PlatformName || x.PlatformName == "*" || y.PlatformName == "*");
+        return (x?.ConfigurationName == y?.ConfigurationName || x?.ConfigurationName == "*" || y?.ConfigurationName == "*") &&
+               (x?.PlatformName == y?.PlatformName || x?.PlatformName == "*" || y?.PlatformName == "*");
       }
 
       [ExcludeFromCodeCoverage]

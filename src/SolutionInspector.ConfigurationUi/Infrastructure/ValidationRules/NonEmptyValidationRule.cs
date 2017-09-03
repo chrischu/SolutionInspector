@@ -6,7 +6,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.ValidationRules
 {
   internal class NonEmptyValidationRule : ValidationRule
   {
-    public override ValidationResult Validate ([CanBeNull] object value, CultureInfo cultureInfo)
+    public override ValidationResult Validate ([CanBeNull] object value, [NotNull] CultureInfo cultureInfo)
     {
       var stringValue = (string) value;
       return string.IsNullOrEmpty(stringValue) ? new ValidationResult(false, "Value is required.") : ValidationResult.ValidResult;

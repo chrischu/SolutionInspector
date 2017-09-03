@@ -14,7 +14,13 @@ namespace SolutionInspector.TestInfrastructure
   {
     public override MemberTypes MemberType => MemberTypes.Property;
 
-    public override void SetValue (object obj, object value, BindingFlags invokeAttr, Binder binder, object[] index, CultureInfo culture)
+    public override void SetValue (
+      [CanBeNull] object obj,
+      [CanBeNull] object value,
+      BindingFlags invokeAttr,
+      [CanBeNull] Binder binder,
+      [CanBeNull] object[] index,
+      CultureInfo culture)
     {
       throw new NotImplementedException();
     }
@@ -39,7 +45,12 @@ namespace SolutionInspector.TestInfrastructure
       throw new NotImplementedException();
     }
 
-    public override object GetValue (object obj, BindingFlags invokeAttr, Binder binder, object[] index, CultureInfo culture)
+    public override object GetValue (
+      [CanBeNull] object obj,
+      BindingFlags invokeAttr,
+      [CanBeNull] Binder binder,
+      [CanBeNull] object[] index,
+      [CanBeNull] CultureInfo culture)
     {
       throw new NotImplementedException();
     }
@@ -61,6 +72,7 @@ namespace SolutionInspector.TestInfrastructure
 
     // ReSharper disable UnassignedGetOnlyAutoProperty
     public override Type PropertyType { get; }
+
     public override PropertyAttributes Attributes { get; }
     public override bool CanRead { get; }
     public override bool CanWrite { get; }
@@ -71,6 +83,7 @@ namespace SolutionInspector.TestInfrastructure
     public override Type ReflectedType { get; }
     public override IEnumerable<CustomAttributeData> CustomAttributes { get; }
     public override int MetadataToken { get; }
+
     public override Module Module { get; }
     // ReSharper restore UnassignedGetOnlyAutoProperty
   }

@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Api.Configuration.Tests
 {
@@ -44,7 +45,9 @@ namespace SolutionInspector.Api.Configuration.Tests
       // ACT
       var result = _sut.ConvertFrom(filterString);
 
-      result.Includes.Should().BeEquivalentTo("A", "B");
+      // ASSERT
+      result.Should().NotBeNull();
+      result.AssertNotNull().Includes.Should().BeEquivalentTo("A", "B");
       result.Excludes.Should().BeEquivalentTo("C");
     }
 

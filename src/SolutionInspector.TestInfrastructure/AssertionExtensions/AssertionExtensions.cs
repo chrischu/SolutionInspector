@@ -2,6 +2,9 @@
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
+  /// <summary>
+  ///   Extensions to make assertions easier.
+  /// </summary>
   public static class AssertionExtensions
   {
     // ReSharper disable once UnusedParameter.Global

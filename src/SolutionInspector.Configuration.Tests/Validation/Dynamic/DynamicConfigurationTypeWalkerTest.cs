@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration.Validation.Dynamic;
 
 namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
@@ -65,35 +66,35 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
 
       // ASSERT
       AssertBeginTypeVisit("", typeof(ConfigurationTopElement), element);
-      AssertValueVisit("Value", typeof(ConfigurationTopElement).GetProperty("Value"), elementValue);
+      AssertValueVisit("Value", typeof(ConfigurationTopElement).GetProperty("Value").AssertNotNull(), elementValue);
       AssertCollectionVisit(
         "Collection",
-        typeof(ConfigurationTopElement).GetProperty("Collection"),
+        typeof(ConfigurationTopElement).GetProperty("Collection").AssertNotNull(),
         collectionElement,
         new[] { collectionItemElement });
-      AssertSubelementVisit("Subelement", typeof(ConfigurationTopElement).GetProperty("Subelement"), subelement);
+      AssertSubelementVisit("Subelement", typeof(ConfigurationTopElement).GetProperty("Subelement").AssertNotNull(), subelement);
       AssertEndTypeVisit("", typeof(ConfigurationTopElement), element);
 
       AssertBeginTypeVisit("Subelement", typeof(ConfigurationSubElement), subelement);
-      AssertValueVisit("Subelement.Value", typeof(ConfigurationSubElement).GetProperty("Value"), subelementValue);
+      AssertValueVisit("Subelement.Value", typeof(ConfigurationSubElement).GetProperty("Value").AssertNotNull(), subelementValue);
       AssertCollectionVisit(
         "Subelement.Collection",
-        typeof(ConfigurationSubElement).GetProperty("Collection"),
+        typeof(ConfigurationSubElement).GetProperty("Collection").AssertNotNull(),
         subelementCollectionElement,
         new XElement[0]);
-      AssertSubelementVisit("Subelement.Subelement", typeof(ConfigurationSubElement).GetProperty("Subelement"), subelementSubelement);
+      AssertSubelementVisit("Subelement.Subelement", typeof(ConfigurationSubElement).GetProperty("Subelement").AssertNotNull(), subelementSubelement);
       AssertEndTypeVisit("Subelement", typeof(ConfigurationSubElement), subelement);
 
       AssertBeginTypeVisit("Collection[0]", typeof(ConfigurationCollectionElement), collectionItemElement);
-      AssertValueVisit("Collection[0].Value", typeof(ConfigurationCollectionElement).GetProperty("Value"), collectionItemElementValue);
+      AssertValueVisit("Collection[0].Value", typeof(ConfigurationCollectionElement).GetProperty("Value").AssertNotNull(), collectionItemElementValue);
       AssertCollectionVisit(
         "Collection[0].Collection",
-        typeof(ConfigurationCollectionElement).GetProperty("Collection"),
+        typeof(ConfigurationCollectionElement).GetProperty("Collection").AssertNotNull(),
         collectionItemElementCollectionElement,
         new XElement[0]);
       AssertSubelementVisit(
         "Collection[0].Subelement",
-        typeof(ConfigurationCollectionElement).GetProperty("Subelement"),
+        typeof(ConfigurationCollectionElement).GetProperty("Subelement").AssertNotNull(),
         collectionItemElementSubelement);
       AssertEndTypeVisit("Collection[0]", typeof(ConfigurationCollectionElement), collectionItemElement);
     }

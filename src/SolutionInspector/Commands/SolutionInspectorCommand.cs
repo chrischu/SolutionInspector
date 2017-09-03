@@ -124,7 +124,7 @@ namespace SolutionInspector.Commands
         string shortKey,
         string description,
         Action<TArguments, T> setValue,
-        T defaultValue)
+        [CanBeNull] T defaultValue)
       {
         return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
       }

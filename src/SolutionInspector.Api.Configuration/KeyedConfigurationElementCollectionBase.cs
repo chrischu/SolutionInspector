@@ -1,4 +1,5 @@
 using System.Configuration;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Api.Configuration
 {
@@ -47,6 +48,7 @@ namespace SolutionInspector.Api.Configuration
     }
 
     /// <inheritdoc />
+    [CanBeNull]
     public TElement GetElement (TKey key)
     {
       return (TElement) BaseGet(key);

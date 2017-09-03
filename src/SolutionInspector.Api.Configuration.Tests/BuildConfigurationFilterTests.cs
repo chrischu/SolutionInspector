@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Api.Configuration.Tests
 {
@@ -16,7 +17,7 @@ namespace SolutionInspector.Api.Configuration.Tests
     [TestCase ("*|*", "X|Y", true)]
     public void IsMatch (string filterString, string configurationString, bool expectedResult)
     {
-      var filter = new BuildConfigurationFilterConverter().ConvertFrom(filterString);
+      var filter = new BuildConfigurationFilterConverter().ConvertFrom(filterString).AssertNotNull();
       var configuration = BuildConfiguration.Parse(configurationString);
 
       // ACT

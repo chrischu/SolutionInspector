@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
-using JetBrains.Annotations;
 using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.ConfigurationUi.Infrastructure.AdvancedObservableCollections
@@ -13,7 +12,6 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.AdvancedObservableCol
   {
     private readonly IReadOnlyCollection<IAdvancedObservableCollectionChangeHandler<T>> _changeHandlers;
 
-    [PublicAPI]
     public AdvancedObservableCollection(params IAdvancedObservableCollectionChangeHandler<T>[] changeHandlers)
       : this(Enumerable.Empty<T>(), changeHandlers)
     {

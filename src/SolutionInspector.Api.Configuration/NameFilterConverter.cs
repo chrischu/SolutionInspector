@@ -11,6 +11,7 @@ namespace SolutionInspector.Api.Configuration
     /// <summary>
     ///   Converts a <see cref="NameFilter" /> to a <see cref="string" />.
     /// </summary>
+    [CanBeNull]
     public string ConvertTo ([CanBeNull] NameFilter value)
     {
       return value?.ToString();
@@ -19,6 +20,7 @@ namespace SolutionInspector.Api.Configuration
     /// <summary>
     ///   Converts a <see cref="string" /> to a <see cref="NameFilter" />.
     /// </summary>
+    [CanBeNull]
     public NameFilter ConvertFrom ([CanBeNull] string value)
     {
       if (value == null)

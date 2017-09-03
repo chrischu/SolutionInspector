@@ -1,10 +1,14 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
+  /// <summary>
+  ///   Formats diffs to make them more readable.
+  /// </summary>
   public static class DiffFormatter
   {
     public static string FormatDiff (string old, string @new)

@@ -54,7 +54,7 @@ namespace SolutionInspector.ConfigurationUi.Features.Controls
 
     public bool IsEditable
     {
-      get { return (bool) GetValue(IsEditableProperty); }
+      get => (bool) GetValue(IsEditableProperty).AssertNotNull();
       set
       {
         SetValue(IsEditableProperty, value);
@@ -66,7 +66,7 @@ namespace SolutionInspector.ConfigurationUi.Features.Controls
 
     public bool IsInEditMode
     {
-      get { return IsEditable && (bool) GetValue(IsInEditModeProperty); }
+      get => IsEditable && (bool) GetValue(IsInEditModeProperty).AssertNotNull();
       set
       {
         if (IsEditable)
@@ -76,14 +76,14 @@ namespace SolutionInspector.ConfigurationUi.Features.Controls
 
     public ICommand Command
     {
-      get { return (ICommand) GetValue(CommandProperty); }
-      set { SetValue(CommandProperty, value); }
+      get => (ICommand) GetValue(CommandProperty);
+      set => SetValue(CommandProperty, value);
     }
 
     public object CommandParameter
     {
-      get { return GetValue(CommandParameterProperty); }
-      set { SetValue(CommandParameterProperty, value); }
+      get => GetValue(CommandParameterProperty);
+      set => SetValue(CommandParameterProperty, value);
     }
 
     public override void OnApplyTemplate ()

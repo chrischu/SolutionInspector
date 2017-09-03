@@ -10,11 +10,13 @@ namespace SolutionInspector.Api.Configuration
   /// </summary>
   public class BuildConfigurationFilterConverter : IConfigurationConverter<BuildConfigurationFilter>
   {
+    [CanBeNull]
     public string ConvertTo ([CanBeNull] BuildConfigurationFilter value)
     {
       return value?.ToString();
     }
 
+    [CanBeNull]
     public BuildConfigurationFilter ConvertFrom ([CanBeNull] string value)
     {
       return value == null

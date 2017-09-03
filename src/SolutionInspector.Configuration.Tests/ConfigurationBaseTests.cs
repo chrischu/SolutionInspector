@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NUnit.Framework;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Configuration.Tests
@@ -27,7 +28,7 @@ configuration=""configurationValue"">
     <item string=""item1"" />
     <item string=""item2"" />
   </collection>
-</element>").Root;
+</element>").Root.AssertNotNull();
       _sut = ConfigurationElement.Load<DummyConfigurationElement>(_element);
     }
 
@@ -383,7 +384,7 @@ configuration=""configurationValue"">
 
     private class DummyConvertedValue
     {
-      public DummyConvertedValue (string value)
+      public DummyConvertedValue ([CanBeNull] string value)
       {
         Value = value;
       }
@@ -394,7 +395,7 @@ configuration=""configurationValue"">
     [ConfigurationConverter (typeof(DummyConfigurationConverter2))]
     private class DummyConvertedValueWithAttribute : DummyConvertedValue
     {
-      public DummyConvertedValueWithAttribute (string value)
+      public DummyConvertedValueWithAttribute ([CanBeNull] string value)
         : base(value)
       {
       }

@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using Fasterflect;
 using JetBrains.Annotations;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration.Validation;
 
 namespace SolutionInspector.Configuration
@@ -44,7 +45,7 @@ namespace SolutionInspector.Configuration
     /// </summary>
     protected T GetConfigurationSubelement<T> ([CallerMemberName] string clrPropertyName = null) where T : ConfigurationElement
     {
-      var configurationPropertyAttribute = GetConfigurationPropertyAttribute<ConfigurationSubelementAttribute>(clrPropertyName);
+      var configurationPropertyAttribute = GetConfigurationPropertyAttribute<ConfigurationSubelementAttribute>(clrPropertyName.AssertNotNull());
 
       if (configurationPropertyAttribute == null)
         throw new InvalidOperationException($"Property '{clrPropertyName}' is not properly marked as a configuration Subelement.");
@@ -64,7 +65,7 @@ namespace SolutionInspector.Configuration
     protected T GetConfigurationValue<T> ([CallerMemberName] string clrPropertyName = null)
     {
       var configurationValueType = typeof(T);
-      var configurationValueAttribute = GetConfigurationPropertyAttribute<ConfigurationValueAttribute>(clrPropertyName);
+      var configurationValueAttribute = GetConfigurationPropertyAttribute<ConfigurationValueAttribute>(clrPropertyName.AssertNotNull());
 
       if (configurationValueAttribute == null)
         throw new InvalidOperationException($"Property '{clrPropertyName}' is not properly marked as a configuration property.");
@@ -113,7 +114,7 @@ namespace SolutionInspector.Configuration
     protected void SetConfigurationValue<T> (T value, [CallerMemberName] string clrPropertyName = null)
     {
       var configurationValue = value as IConfigurationValue;
-      var configurationPropertyAttribute = GetConfigurationPropertyAttribute<ConfigurationValueAttribute>(clrPropertyName);
+      var configurationPropertyAttribute = GetConfigurationPropertyAttribute<ConfigurationValueAttribute>(clrPropertyName.AssertNotNull());
       var configurationConverterAttribute = typeof(T).GetCustomAttribute<ConfigurationConverterAttribute>();
 
       if (configurationPropertyAttribute == null)
@@ -144,7 +145,7 @@ namespace SolutionInspector.Configuration
     protected ConfigurationElementCollection<T> GetConfigurationCollection<T> ([CallerMemberName] string clrPropertyName = null)
       where T : ConfigurationElement, new()
     {
-      var configurationCollectionAttribute = GetConfigurationPropertyAttribute<ConfigurationCollectionAttribute>(clrPropertyName);
+      var configurationCollectionAttribute = GetConfigurationPropertyAttribute<ConfigurationCollectionAttribute>(clrPropertyName.AssertNotNull());
 
       if (configurationCollectionAttribute == null)
         throw new InvalidOperationException($"Property '{clrPropertyName}' is not properly marked as a configuration collection.");
@@ -169,7 +170,7 @@ namespace SolutionInspector.Configuration
     private T GetConfigurationPropertyAttribute<T> (string clrPropertyName) where T : Attribute
     {
       var type = GetType();
-      var property = type.GetProperty(clrPropertyName);
+      var property = type.GetProperty(clrPropertyName).AssertNotNull();
       return property.GetCustomAttribute<T>();
     }
   }

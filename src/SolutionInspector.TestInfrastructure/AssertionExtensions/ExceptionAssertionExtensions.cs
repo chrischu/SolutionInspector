@@ -5,7 +5,10 @@ using JetBrains.Annotations;
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
-  public static class ExceptionTestingExtensions
+  /// <summary>
+  ///   Extensions to make exception assertions easier.
+  /// </summary>
+  public static class ExceptionAssertionExtensions
   {
     public static void ShouldThrowArgumentException (this Action action, string message, string parameterName)
     {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Configuration
 {
@@ -68,13 +69,13 @@ namespace SolutionInspector.Configuration
     }
 
     /// <inheritdoc />
-    public void Add (string item)
+    public void Add ([CanBeNull] string item)
     {
       AddRange(new[] { item });
     }
 
     /// <inheritdoc />
-    public void Insert (int index, string item)
+    public void Insert (int index, [CanBeNull] string item)
     {
       _collection.Insert(index, item);
     }
@@ -104,13 +105,13 @@ namespace SolutionInspector.Configuration
     }
 
     /// <inheritdoc />
-    public bool Contains (string item)
+    public bool Contains ([CanBeNull] string item)
     {
       return _collection.Contains(item);
     }
 
     /// <inheritdoc />
-    public bool Remove (string item)
+    public bool Remove ([CanBeNull] string item)
     {
       var removed = _collection.Remove(item);
       if (removed)
@@ -140,7 +141,7 @@ namespace SolutionInspector.Configuration
     public bool IsReadOnly => false;
 
     /// <inheritdoc />
-    public int IndexOf (string item)
+    public int IndexOf ([CanBeNull] string item)
     {
       return _collection.IndexOf(item);
     }

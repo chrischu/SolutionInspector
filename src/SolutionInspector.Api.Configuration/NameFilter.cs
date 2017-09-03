@@ -102,14 +102,11 @@ namespace SolutionInspector.Api.Configuration
             (current, wildCardFilter) => current.Where(f => f == wildCardFilter.Filter || !wildCardFilter.Regex.IsMatch(f)).ToList());
     }
 
-    public override bool Equals (object obj)
+    public override bool Equals ([CanBeNull] object obj)
     {
       var other = obj as NameFilter;
 
-      if (other == null)
-        return false;
-
-      return ToString().Equals(other.ToString());
+      return other != null && ToString().Equals(other.ToString());
     }
 
     public override int GetHashCode ()

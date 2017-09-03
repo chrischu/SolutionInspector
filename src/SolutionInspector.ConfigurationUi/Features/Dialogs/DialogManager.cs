@@ -129,18 +129,23 @@ namespace SolutionInspector.ConfigurationUi.Features.Dialogs
 
     public async Task<DialogResult<NameFilter>> EditProjectRuleGroupFilter (SolutionViewModel solution, NameFilter appliesTo)
     {
-      var projectRuleGroupFilterViewModel = new ProjectRuleGroupFilterViewModel(solution, appliesTo, _undoContext);
-      var dialog = new EditProjectRuleGroupFilterDialog
-                   {
-                     DataContext =
-                         new EditProjectRuleGroupFilterDialogViewModel(
-                           "Edit Project Rule Group Filter",
-                           projectRuleGroupFilterViewModel)
-                   };
+      using (var childUndoContext = _undoContext.OpenChildContext())
+      {
+        var projectRuleGroupFilterViewModel = new ProjectRuleGroupFilterViewModel(solution, appliesTo, childUndoContext);
+        var dialog = new EditProjectRuleGroupFilterDialog
+                     {
+                       DataContext =
+                           new EditProjectRuleGroupFilterDialogViewModel(
+                             "Edit Project Rule Group Filter",
+                             projectRuleGroupFilterViewModel)
+                     };
 
-      var result = Convert.ToBoolean(await DialogHost.Show(dialog, dialogIdentifier: "Edit"));
+        var result = Convert.ToBoolean(await DialogHost.Show(dialog, dialogIdentifier: "Edit"));
 
-      return result ? DialogResult<NameFilter>.Accept(projectRuleGroupFilterViewModel.AppliesTo.GetNameFilter()) : DialogResult<NameFilter>.Cancel();
+        return result
+          ? DialogResult<NameFilter>.Accept(projectRuleGroupFilterViewModel.AppliesTo.GetNameFilter())
+          : DialogResult<NameFilter>.Cancel();
+      }
     }
 
     public class FileFilter

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Commons.Utilities
 {
@@ -15,22 +16,30 @@ namespace SolutionInspector.Commons.Utilities
       _comparer = comparer ?? EqualityComparer<T>.Default;
     }
 
-    public bool Equals (IEnumerable<T> x, IEnumerable<T> y)
+    public bool Equals ([CanBeNull] IEnumerable<T> x, [CanBeNull] IEnumerable<T> y)
     {
       var cnt = new Dictionary<T, int>(_comparer);
-      foreach (var s in x)
+
+      if (x != null)
       {
-        if (cnt.ContainsKey(s))
-          cnt[s]++;
-        else
-          cnt.Add(s, 1);
+        foreach (var s in x)
+        {
+          if (cnt.ContainsKey(s))
+            cnt[s]++;
+          else
+            cnt.Add(s, 1);
+        }
       }
-      foreach (var s in y)
+
+      if (y != null)
       {
-        if (cnt.ContainsKey(s))
-          cnt[s]--;
-        else
-          return false;
+        foreach (var s in y)
+        {
+          if (cnt.ContainsKey(s))
+            cnt[s]--;
+          else
+            return false;
+        }
       }
       return cnt.Values.All(c => c == 0);
     }

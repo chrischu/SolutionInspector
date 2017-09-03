@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Configuration
 {
@@ -12,7 +13,7 @@ namespace SolutionInspector.Configuration
 
     internal static T Load<T> (string path, XDocument xDocument) where T : ConfigurationDocument, new()
     {
-      var configurationDocument = Load<T>(xDocument.Root);
+      var configurationDocument = Load<T>(xDocument.Root.AssertNotNull());
       configurationDocument._document = xDocument;
       configurationDocument._path = path;
       return configurationDocument;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using SolutionInspector.Api.ObjectModel;
 
@@ -76,13 +77,16 @@ namespace SolutionInspector.Internals.ObjectModel
       private readonly Microsoft.Build.Evaluation.Project _msBuildProject;
       private readonly List<string> _setPropertyNames = new List<string>();
 
-      public MsBuildConditionContext (Microsoft.Build.Evaluation.Project msBuildProject, Dictionary<string, string> propertyValues)
+      public MsBuildConditionContext (Microsoft.Build.Evaluation.Project msBuildProject, [CanBeNull] Dictionary<string, string> propertyValues)
       {
         _msBuildProject = msBuildProject;
-        foreach (var propertyValue in propertyValues)
+        if (propertyValues != null)
         {
-          _setPropertyNames.Add(propertyValue.Key);
-          _msBuildProject.SetGlobalProperty(propertyValue.Key, propertyValue.Value);
+          foreach (var propertyValue in propertyValues)
+          {
+            _setPropertyNames.Add(propertyValue.Key);
+            _msBuildProject.SetGlobalProperty(propertyValue.Key, propertyValue.Value);
+          }
         }
 
         _msBuildProject.ReevaluateIfNecessary();

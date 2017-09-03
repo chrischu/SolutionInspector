@@ -1,9 +1,13 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using FluentAssertions.Primitives;
 using NUnit.Framework;
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
+  /// <summary>
+  ///   Extensions for easier string assertions.
+  /// </summary>
   public static class StringAssertionExtensions
   {
     public static void BeWithDiff (this StringAssertions stringAssertions, string expected)

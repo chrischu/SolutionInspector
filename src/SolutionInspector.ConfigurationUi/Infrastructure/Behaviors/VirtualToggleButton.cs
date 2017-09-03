@@ -1,6 +1,8 @@
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using JetBrains.Annotations;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.ConfigurationUi.Infrastructure.Behaviors
 {
@@ -22,7 +24,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.Behaviors
 
     public static bool GetIsChecked (DependencyObject d)
     {
-      return (bool) d.GetValue(IsCheckedProperty);
+      return (bool) d.GetValue(IsCheckedProperty).AssertNotNull();
     }
 
     public static void SetIsChecked (DependencyObject d, bool value)
@@ -58,7 +60,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.Behaviors
 
     public static bool GetIsVirtualToggleButton (DependencyObject d)
     {
-      return (bool) d.GetValue(IsVirtualToggleButtonProperty);
+      return (bool) d.GetValue(IsVirtualToggleButtonProperty).AssertNotNull();
     }
 
     public static void SetIsVirtualToggleButton (DependencyObject d, bool value)
@@ -92,7 +94,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.Behaviors
 
     #region Checked
 
-    private static void RaiseCheckedEvent (DependencyObject target)
+    private static void RaiseCheckedEvent ([CanBeNull] DependencyObject target)
     {
       if (target == null)
         return;
@@ -104,7 +106,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.Behaviors
 
     #region Unchecked
 
-    private static void RaiseUncheckedEvent (DependencyObject target)
+    private static void RaiseUncheckedEvent ([CanBeNull] DependencyObject target)
     {
       if (target == null)
         return;
@@ -141,7 +143,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.Behaviors
         }
         else
         {
-          var acceptsReturn = (bool) dependencyObject.GetValue(KeyboardNavigation.AcceptsReturnProperty);
+          var acceptsReturn = (bool) dependencyObject.GetValue(KeyboardNavigation.AcceptsReturnProperty).AssertNotNull();
           if (e.Key == Key.Enter && acceptsReturn)
           {
             UpdateIsChecked(dependencyObject);

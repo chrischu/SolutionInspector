@@ -8,6 +8,9 @@ using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
 {
+  /// <summary>
+  ///   Extension for easier assertion of objects.
+  /// </summary>
   [PublicAPI]
   public static class ObjectStructuralEqualityExtensions
   {

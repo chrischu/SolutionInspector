@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using FakeItEasy;
+using JetBrains.Annotations;
 using NUnit.Framework;
 using SolutionInspector.Configuration.Validation;
 using SolutionInspector.Configuration.Validation.Static.Validators;
@@ -71,13 +72,13 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
     private class IntConverter : IConfigurationConverter<int>
     {
       public string ConvertTo (int value) => "";
-      public int ConvertFrom (string value) => 0;
+      public int ConvertFrom ([CanBeNull] string value) => 0;
     }
 
     private class StringConverter : IConfigurationConverter<string>
     {
-      public string ConvertTo (string value) => "";
-      public string ConvertFrom (string value) => "";
+      public string ConvertTo ([CanBeNull] string value) => "";
+      public string ConvertFrom ([CanBeNull] string value) => "";
     }
   }
 }

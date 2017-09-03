@@ -4,6 +4,7 @@ using System.Reflection;
 using FakeItEasy;
 using FakeItEasy.Configuration;
 using NUnit.Framework;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration.Validation.Static;
 
 namespace SolutionInspector.Configuration.Tests.Validation.Static
@@ -31,25 +32,25 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
       AssertTypeVisit(
         "",
         typeof(Element),
-        AssertValueVisit("Value", typeof(Element).GetProperty("Value")),
-        AssertSubelementVisit("Subelement", typeof(Element).GetProperty("Subelement")),
-        AssertCollectionVisit("Collection", typeof(Element).GetProperty("Collection"))
+        AssertValueVisit("Value", typeof(Element).GetProperty("Value").AssertNotNull()),
+        AssertSubelementVisit("Subelement", typeof(Element).GetProperty("Subelement").AssertNotNull()),
+        AssertCollectionVisit("Collection", typeof(Element).GetProperty("Collection").AssertNotNull())
       );
 
       AssertTypeVisit(
         "Subelement",
         typeof(SubElement),
-        AssertValueVisit("Subelement.Value", typeof(SubElement).GetProperty("Value")),
-        AssertSubelementVisit("Subelement.Subelement", typeof(SubElement).GetProperty("Subelement")),
-        AssertCollectionVisit("Subelement.Collection", typeof(SubElement).GetProperty("Collection"))
+        AssertValueVisit("Subelement.Value", typeof(SubElement).GetProperty("Value").AssertNotNull()),
+        AssertSubelementVisit("Subelement.Subelement", typeof(SubElement).GetProperty("Subelement").AssertNotNull()),
+        AssertCollectionVisit("Subelement.Collection", typeof(SubElement).GetProperty("Collection").AssertNotNull())
       );
 
       AssertTypeVisit(
         "Collection",
         typeof(CollectionElement),
-        AssertValueVisit("Collection.Value", typeof(CollectionElement).GetProperty("Value")),
-        AssertSubelementVisit("Collection.Subelement", typeof(CollectionElement).GetProperty("Subelement")),
-        AssertCollectionVisit("Collection.Collection", typeof(CollectionElement).GetProperty("Collection"))
+        AssertValueVisit("Collection.Value", typeof(CollectionElement).GetProperty("Value").AssertNotNull()),
+        AssertSubelementVisit("Collection.Subelement", typeof(CollectionElement).GetProperty("Subelement").AssertNotNull()),
+        AssertCollectionVisit("Collection.Collection", typeof(CollectionElement).GetProperty("Collection").AssertNotNull())
       );
     }
 
@@ -63,7 +64,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
       AssertTypeVisit(
         "",
         typeof(RecursiveElement),
-        AssertSubelementVisit("Recursive", typeof(RecursiveElement).GetProperty("Recursive")));
+        AssertSubelementVisit("Recursive", typeof(RecursiveElement).GetProperty("Recursive").AssertNotNull()));
     }
 
     [Test]
@@ -76,12 +77,12 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
       AssertTypeVisit(
         "",
         typeof(IndirectRecursiveElement),
-        AssertSubelementVisit("Subelement", typeof(IndirectRecursiveElement).GetProperty("Subelement")));
+        AssertSubelementVisit("Subelement", typeof(IndirectRecursiveElement).GetProperty("Subelement").AssertNotNull()));
 
       AssertTypeVisit(
         "Subelement",
         typeof(InbetweenRecursiveElement),
-        AssertSubelementVisit("Subelement.Subelement", typeof(InbetweenRecursiveElement).GetProperty("Subelement")));
+        AssertSubelementVisit("Subelement.Subelement", typeof(InbetweenRecursiveElement).GetProperty("Subelement").AssertNotNull()));
     }
 
     private void AssertTypeVisit (string propertyPath, Type type, params UnorderedCallAssertion[] memberAssertions)

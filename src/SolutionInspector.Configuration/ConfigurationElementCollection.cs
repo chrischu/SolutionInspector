@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Xml.Linq;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Configuration
 {
@@ -61,8 +63,11 @@ namespace SolutionInspector.Configuration
     /// <summary>
     ///   Adds the given <paramref name="element" /> to the collection.
     /// </summary>
-    public void Add (T element)
+    public void Add ([CanBeNull] T element)
     {
+      if (element == null)
+        throw new ArgumentNullException(nameof(element));
+
       _collection.Add(element);
       _collectionElement.Add(element.Element);
     }
@@ -70,8 +75,11 @@ namespace SolutionInspector.Configuration
     /// <summary>
     ///   Adds the given <paramref name="element" /> to the collection at the given <paramref name="index" />.
     /// </summary>
-    public void Insert (int index, T element)
+    public void Insert (int index, [CanBeNull] T element)
     {
+      if (element == null)
+        throw new ArgumentNullException(nameof(element));
+
       _collection.Insert(index, element);
       _collectionElement.Add(element.Element);
     }
@@ -79,8 +87,11 @@ namespace SolutionInspector.Configuration
     /// <summary>
     ///   Removes the given <paramref name="element" /> from the collection.
     /// </summary>
-    public bool Remove (T element)
+    public bool Remove ([CanBeNull] T element)
     {
+      if (element == null)
+        throw new ArgumentNullException(nameof(element));
+
       var removed = _collection.Remove(element);
       if (removed)
         element.Element.Remove();
@@ -108,7 +119,7 @@ namespace SolutionInspector.Configuration
     }
 
     [ExcludeFromCodeCoverage]
-    public bool Contains(T item)
+    public bool Contains([CanBeNull] T item)
     {
       return _collection.Contains(item);
     }
@@ -123,7 +134,7 @@ namespace SolutionInspector.Configuration
     public bool IsReadOnly => false;
 
     [ExcludeFromCodeCoverage]
-    public int IndexOf(T item)
+    public int IndexOf([CanBeNull] T item)
     {
       return _collection.IndexOf(item);
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Commons.Extensions
 {
@@ -12,6 +13,7 @@ namespace SolutionInspector.Commons.Extensions
     ///   Tries to get the value with the given <paramref name="key" /> from the <paramref name="dictionary" />. Returns <paramref name="default" />
     ///   if no value can be found under the <paramref name="key" />.
     /// </summary>
+    [CanBeNull]
     public static TValue GetValueOrDefault<TKey, TValue> (
       this IReadOnlyDictionary<TKey, TValue> dictionary,
       TKey key,

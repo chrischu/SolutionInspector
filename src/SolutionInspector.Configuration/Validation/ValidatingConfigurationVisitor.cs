@@ -100,7 +100,7 @@ namespace SolutionInspector.Configuration.Validation
     private void ReportStaticValidationError (string propertyPath, PropertyInfo property, string message)
     {
       var validationErrorsForType = _cachedStaticValidationErrorsByType.GetOrAdd(
-        property.DeclaringType,
+        property.DeclaringType.AssertNotNull(),
         key => new Dictionary<PropertyInfo, List<string>>());
       var validationErrorsForProperty = validationErrorsForType.GetOrAdd(property, key => new List<string>());
       validationErrorsForProperty.Add(message);

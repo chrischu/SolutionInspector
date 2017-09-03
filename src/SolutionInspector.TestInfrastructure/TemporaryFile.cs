@@ -3,6 +3,9 @@ using System.IO;
 
 namespace SolutionInspector.TestInfrastructure
 {
+  /// <summary>
+  ///   Represents a temporary file that will be deleted on <see cref="Dispose" />.
+  /// </summary>
   public class TemporaryFile : IDisposable
   {
     public TemporaryFile ()

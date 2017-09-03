@@ -10,7 +10,7 @@ namespace SolutionInspector.ConfigurationUi.Infrastructure.ValidationRules
     [CanBeNull]
     public IEnumerable<ValidationRule> ValidationRules { get; set; }
 
-    public override ValidationResult Validate ([CanBeNull] object value, CultureInfo cultureInfo)
+    public override ValidationResult Validate ([CanBeNull] object value, [NotNull] CultureInfo cultureInfo)
     {
       if (ValidationRules != null)
       {
