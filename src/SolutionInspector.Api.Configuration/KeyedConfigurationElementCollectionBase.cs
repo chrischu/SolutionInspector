@@ -47,7 +47,7 @@ namespace SolutionInspector.Api.Configuration
       base.BaseAdd(element);
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="GetElement(TKey)" />
     [CanBeNull]
     public TElement GetElement (TKey key)
     {

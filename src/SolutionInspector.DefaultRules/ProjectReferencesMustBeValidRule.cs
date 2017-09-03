@@ -13,6 +13,7 @@ namespace SolutionInspector.DefaultRules
                 "and have the correct project GUID).")]
   public class ProjectReferencesMustBeValidRule : ProjectRule
   {
+    /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       foreach (var projectReference in target.ProjectReferences)

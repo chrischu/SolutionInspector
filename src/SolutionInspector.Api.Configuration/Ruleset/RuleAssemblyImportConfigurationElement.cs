@@ -12,8 +12,7 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     string Path { get; }
   }
 
-  /// <inheritdoc cref="IProjectItemRuleGroupConfiguration" />
-  /// >
+  /// <inheritdoc cref="IRuleAssemblyImportConfiguration" />
   public class RuleAssemblyImportConfigurationElement : ConfigurationElement, IRuleAssemblyImportConfiguration
   {
     [ConfigurationValue]

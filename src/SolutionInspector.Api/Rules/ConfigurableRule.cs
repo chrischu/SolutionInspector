@@ -16,7 +16,7 @@ namespace SolutionInspector.Api.Rules
     TConfiguration Configuration { get; }
   }
 
-  /// <inheritdoc />
+  /// <inheritdoc cref="IConfigurableRule{TTarget,TConfiguration}" />
   public abstract class ConfigurableRule<TTarget, TConfiguration> : Rule<TTarget>, IConfigurableRule<TTarget, TConfiguration>
     where TTarget : IRuleTarget
     where TConfiguration : ConfigurationElement

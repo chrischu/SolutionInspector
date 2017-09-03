@@ -35,7 +35,8 @@ namespace SolutionInspector.Internals
       _file = file;
     }
 
-    public ISolution Load (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
+    /// <inheritdoc />
+    public ISolution Load(string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
     {
       if (!_file.Exists(solutionPath))
         throw new SolutionNotFoundException(solutionPath);

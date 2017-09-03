@@ -37,8 +37,12 @@ namespace SolutionInspector.Configuration
       set { _collection[index] = value; }
     }
 
+    /// <summary>
+    ///   Gets the number of elements contained in the <see cref="ConfigurationElementCollection{T}" />.
+    /// </summary>
     public int Count => _collection.Count;
 
+    /// <inheritdoc />
     public IEnumerator<T> GetEnumerator ()
     {
       return _collection.GetEnumerator();
@@ -118,23 +122,27 @@ namespace SolutionInspector.Configuration
       _collectionElement.RemoveNodes();
     }
 
+    /// <inheritdoc />
     [ExcludeFromCodeCoverage]
-    public bool Contains([CanBeNull] T item)
+    public bool Contains ([CanBeNull] T item)
     {
       return _collection.Contains(item);
     }
 
+    /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public void CopyTo (T[] array, int arrayIndex)
     {
       _collection.CopyTo(array, arrayIndex);
     }
 
+    /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public bool IsReadOnly => false;
 
+    /// <inheritdoc />
     [ExcludeFromCodeCoverage]
-    public int IndexOf([CanBeNull] T item)
+    public int IndexOf ([CanBeNull] T item)
     {
       return _collection.IndexOf(item);
     }

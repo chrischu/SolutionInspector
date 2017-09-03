@@ -25,23 +25,32 @@ namespace SolutionInspector.Internals.ObjectModel
       IsDevelopmentDependency = isDevelopmentDependency;
     }
 
+    /// <inheritdoc />
     public string Id { get; }
 
+    /// <inheritdoc />
     public Version Version { get; }
 
+    /// <inheritdoc />
     public bool IsPreRelease { get; }
 
+    /// <inheritdoc />
     public string PreReleaseTag { get; }
 
+    /// <inheritdoc />
     public string FullVersionString => $"{Version}{PreReleaseTag}";
 
+    /// <inheritdoc />
     public string PackageDirectoryName => $"{Id}.{FullVersionString}";
 
+    /// <inheritdoc />
     public string TargetFramework { get; }
 
+    /// <inheritdoc />
     public bool IsDevelopmentDependency { get; }
 
-    public bool Equals ([CanBeNull] INuGetPackage other)
+    /// <inheritdoc />
+    public bool Equals([CanBeNull] INuGetPackage other)
     {
       if (ReferenceEquals(null, other))
         return false;
@@ -75,7 +84,8 @@ namespace SolutionInspector.Internals.ObjectModel
       return new NuGetPackage(id, version, isPreRelease, preReleaseTag, targetFramework, isDevelopmentDependency);
     }
 
-    public override bool Equals ([CanBeNull] object obj)
+    /// <inheritdoc />
+    public override bool Equals([CanBeNull] object obj)
     {
       if (ReferenceEquals(null, obj))
         return false;
@@ -84,19 +94,26 @@ namespace SolutionInspector.Internals.ObjectModel
       return obj is INuGetPackage && Equals((INuGetPackage) obj);
     }
 
+    /// <inheritdoc />
     [ExcludeFromCodeCoverage]
-    public override int GetHashCode ()
+    public override int GetHashCode()
     {
       return PackageDirectoryName.GetHashCode();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares two <see cref="NuGetPackage" />s by using <see cref="Equals(object)" /> and returns <see langword="true" /> if
+    ///   they are equal, <see langword="false" /> otherwise.
+    /// </summary>
     public static bool operator == ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
     {
       return Equals(left, right);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares two <see cref="NuGetPackage" />s by using <see cref="Equals(object)" /> and returns <see langword="false" /> if
+    ///   they are equal, <see langword="true" /> otherwise.
+    /// </summary>
     public static bool operator != ([CanBeNull] NuGetPackage left, [CanBeNull] NuGetPackage right)
     {
       return !Equals(left, right);

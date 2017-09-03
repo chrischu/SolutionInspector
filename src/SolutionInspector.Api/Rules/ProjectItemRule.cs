@@ -3,7 +3,7 @@ using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.Api.Rules
 {
-  /// <inheritdoc />
+  /// <inheritdoc cref="IProjectItemRule" />
   [PublicAPI]
   public abstract class ProjectItemRule : Rule<IProjectItem>, IProjectItemRule
   {

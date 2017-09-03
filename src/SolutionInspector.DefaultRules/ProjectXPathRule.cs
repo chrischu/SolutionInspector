@@ -32,6 +32,7 @@ namespace SolutionInspector.DefaultRules
     {
     }
 
+    /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       var xdoc = GetXDocumentForXPathEvaluation(target.ProjectXml, Configuration.IgnoreNamespaces);

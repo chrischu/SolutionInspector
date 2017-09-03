@@ -19,6 +19,7 @@ namespace SolutionInspector.DefaultRules
     {
     }
 
+    /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       foreach (var resourceName in Configuration.RequiredResources)

@@ -3,7 +3,9 @@ using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Rules
 {
-  /// <inheritdoc />
+  /// <summary>
+  ///   A configurable <see cref="ISolutionRule" />.
+  /// </summary>
   public abstract class ConfigurableSolutionRule<TConfiguration> : ConfigurableRule<ISolution, TConfiguration>, ISolutionRule
     where TConfiguration : ConfigurationElement
   {

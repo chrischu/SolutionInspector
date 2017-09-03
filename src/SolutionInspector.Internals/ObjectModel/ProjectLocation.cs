@@ -21,6 +21,9 @@ namespace SolutionInspector.Internals.ObjectModel
     {
     }
 
+    /// <summary>
+    ///   Compares two <see cref="ProjectLocation" />s.
+    /// </summary>
     public bool Equals ([CanBeNull] ProjectLocation other)
     {
       if (ReferenceEquals(null, other))
@@ -30,9 +33,13 @@ namespace SolutionInspector.Internals.ObjectModel
       return Line == other.Line && Column == other.Column;
     }
 
+    /// <inheritdoc />
     public int Line { get; }
+
+    /// <inheritdoc />
     public int Column { get; }
 
+    /// <inheritdoc />
     public override bool Equals ([CanBeNull] object obj)
     {
       if (ReferenceEquals(null, obj))
@@ -42,24 +49,32 @@ namespace SolutionInspector.Internals.ObjectModel
       return obj is ProjectLocation && Equals((ProjectLocation) obj);
     }
 
+    /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public override int GetHashCode ()
     {
       return HashCodeHelper.GetHashCode(Line, Column);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares two <see cref="ProjectLocation" />s by using <see cref="Equals(ProjectLocation)" /> and returns <see langword="true" /> if
+    ///   they are equal, <see langword="false" /> otherwise.
+    /// </summary>
     public static bool operator == (ProjectLocation left, ProjectLocation right)
     {
       return Equals(left, right);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares two <see cref="ProjectLocation" />s by using <see cref="Equals(ProjectLocation)" /> and returns <see langword="false" /> if
+    ///   they are equal, <see langword="true" /> otherwise.
+    /// </summary>
     public static bool operator != (ProjectLocation left, ProjectLocation right)
     {
       return !Equals(left, right);
     }
 
+    /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public override string ToString ()
     {

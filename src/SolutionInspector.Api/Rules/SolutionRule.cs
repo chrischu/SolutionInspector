@@ -3,7 +3,7 @@ using SolutionInspector.Api.ObjectModel;
 
 namespace SolutionInspector.Api.Rules
 {
-  /// <inheritdoc />
+  /// <inheritdoc cref="ISolutionRule" />
   [PublicAPI]
   public abstract class SolutionRule : Rule<ISolution>, ISolutionRule
   {

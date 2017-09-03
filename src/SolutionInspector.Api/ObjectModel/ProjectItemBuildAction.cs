@@ -65,36 +65,50 @@ namespace SolutionInspector.Api.ObjectModel
       return obj is ProjectItemBuildAction && Equals((ProjectItemBuildAction) obj);
     }
 
+    /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public override int GetHashCode ()
     {
       return _value.GetHashCode();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares two <see cref="ProjectItemBuildAction" />s by using <see cref="Equals(ProjectItemBuildAction)" /> and returns <see langword="true" /> if
+    ///   they are equal, <see langword="false" /> otherwise.
+    /// </summary>
     public static bool operator == ([CanBeNull] ProjectItemBuildAction left, [CanBeNull] ProjectItemBuildAction right)
     {
       return Equals(left, right);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares two <see cref="ProjectItemBuildAction" />s by using <see cref="Equals(ProjectItemBuildAction)" />and returns <see langword="false" /> if
+    ///   they are equal, <see langword="true" /> otherwise.
+    /// </summary>
     public static bool operator != ([CanBeNull] ProjectItemBuildAction left, [CanBeNull] ProjectItemBuildAction right)
     {
       return !(left == right);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares a <see cref="ProjectItemBuildAction" /> with a string-representation of a <see cref="ProjectItemBuildAction" /> and returns
+    ///   <see langword="true" /> if they are equal, <see langword="false" /> otherwise.
+    /// </summary>
     public static bool operator == ([CanBeNull] ProjectItemBuildAction left, [CanBeNull] string right)
     {
       return Equals(left?._value, right);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares a <see cref="ProjectItemBuildAction" /> with a string-representation of a <see cref="ProjectItemBuildAction" /> and returns
+    ///   <see langword="false" /> if they are equal, <see langword="true" /> otherwise.
+    /// </summary>
     public static bool operator != ([CanBeNull] ProjectItemBuildAction left, [CanBeNull] string right)
     {
       return !(left == right);
     }
 
+    /// <inheritdoc />
     public override string ToString ()
     {
       return _value;

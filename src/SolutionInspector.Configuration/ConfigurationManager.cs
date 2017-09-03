@@ -30,6 +30,7 @@ namespace SolutionInspector.Configuration
       _xDocumentStatic = xDocumentStatic;
     }
 
+    /// <inheritdoc />
     public T LoadDocument<T> (string configurationFilePath)
       where T : ConfigurationDocument, new()
     {

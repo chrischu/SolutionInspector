@@ -17,7 +17,7 @@ namespace SolutionInspector.Api.Rules
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="Evaluate(IProject)" />
     public override IEnumerable<IRuleViolation> Evaluate (IProject target)
     {
       var configurationItem = target.ConfigurationProjectItem;

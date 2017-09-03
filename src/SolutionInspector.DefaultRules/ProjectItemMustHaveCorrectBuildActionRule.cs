@@ -18,6 +18,7 @@ namespace SolutionInspector.DefaultRules
     {
     }
 
+    /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
     {
       if (target.BuildAction != Configuration.ExpectedBuildAction)

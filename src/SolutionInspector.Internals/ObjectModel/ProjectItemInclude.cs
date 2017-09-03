@@ -15,6 +15,9 @@ namespace SolutionInspector.Internals.ObjectModel
       Unevaluated = unevaluated;
     }
 
+    /// <summary>
+    ///   Compares two <see cref="ProjectItemInclude" />s.
+    /// </summary>
     public bool Equals ([CanBeNull] ProjectItemInclude other)
     {
       if (ReferenceEquals(null, other))
@@ -24,10 +27,13 @@ namespace SolutionInspector.Internals.ObjectModel
       return string.Equals(Evaluated, other.Evaluated) && string.Equals(Unevaluated, other.Unevaluated);
     }
 
+    /// <inheritdoc />
     public string Evaluated { get; }
+    /// <inheritdoc />
     public string Unevaluated { get; }
 
-    public override bool Equals ([CanBeNull] object obj)
+    /// <inheritdoc />
+    public override bool Equals([CanBeNull] object obj)
     {
       if (ReferenceEquals(null, obj))
         return false;
@@ -36,19 +42,26 @@ namespace SolutionInspector.Internals.ObjectModel
       return obj is ProjectItemInclude && Equals((ProjectItemInclude) obj);
     }
 
+    /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public override int GetHashCode ()
     {
       return HashCodeHelper.GetHashCode(Evaluated, Unevaluated);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares two <see cref="ProjectItemInclude" />s by using <see cref="Equals(ProjectItemInclude)" /> and returns <see langword="true" /> if
+    ///   they are equal, <see langword="false" /> otherwise.
+    /// </summary>
     public static bool operator == (ProjectItemInclude left, ProjectItemInclude right)
     {
       return Equals(left, right);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///   Compares two <see cref="ProjectItemInclude" />s by using <see cref="Equals(ProjectItemInclude)" /> and returns <see langword="false" /> if
+    ///   they are equal, <see langword="true" /> otherwise.
+    /// </summary>
     public static bool operator != (ProjectItemInclude left, ProjectItemInclude right)
     {
       return !Equals(left, right);

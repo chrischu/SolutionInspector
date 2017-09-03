@@ -18,7 +18,7 @@ namespace SolutionInspector.Api.Configuration
     TKey Key { get; }
   }
 
-  /// <inheritdoc />
+  /// <inheritdoc cref="ConfigurationElement" />
   public abstract class KeyedConfigurationElement<TKey> : ConfigurationElement, IKeyedConfigurationElement<TKey>
   {
     /// <inheritdoc />

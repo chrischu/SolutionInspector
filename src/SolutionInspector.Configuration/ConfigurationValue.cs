@@ -37,8 +37,10 @@ namespace SolutionInspector.Configuration
       _updateValue = updateValue;
     }
 
+    /// <inheritdoc />
     public abstract string Serialize ();
 
+    /// <inheritdoc />
     [UsedImplicitly /* via Reflection */]
     public abstract void Deserialize (string serialized);
 
@@ -50,6 +52,7 @@ namespace SolutionInspector.Configuration
       _updateValue(Serialize());
     }
 
+    /// <inheritdoc />
     public sealed override string ToString ()
     {
       return Serialize();
