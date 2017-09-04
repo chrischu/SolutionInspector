@@ -1,0 +1,65 @@
+﻿using SolutionInspector.ConfigurationUi.Features.Controls
+
+ResourceDictionary {
+  Style { 
+    TargetType: EditableTextBlock
+
+    Setters: [
+      Setter { Property: "Focusable", Value: false }
+      Setter { Property: "FocusVisualStyle", Value: null }
+      Setter {
+        Property: "Template"
+
+        Value: ControlTemplate {
+          TargetType: EditableTextBlock
+
+          Grid { 
+            Height: 25
+            @StackPanelHorizontal() "DisplayMode" { 
+              TextBlock { 
+                Text: bind Text from $template set [ UpdateSourceTrigger: PropertyChanged ]
+                Margin: "2 0"
+                VerticalAlignment: Center
+              }
+              @InlineToolButton("Edit", "Pencil") "PART_EditButton" {}
+            }
+
+            DockPanel "EditMode" { 
+              @StackPanelHorizontal() {
+                DockPanel.Dock: Right
+
+                @InlineToolButton("Submit", "Check") "PART_SubmitButton" {}
+                @InlineToolButton("Cancel", "Close") "PART_CancelButton" {}
+              }
+
+              TextBox "PART_TextBox" { 
+                Text: bind Text from $template set [ UpdateSourceTrigger: PropertyChanged ]
+                VerticalAlignment: Center
+              }
+            }
+
+            Grid  { 
+              
+            }
+          }
+
+          Triggers: [
+            @Trigger("IsInEditMode", true) {
+              Setter { TargetName: "DisplayMode", Property: "Visibility", Value: "Collapsed" }
+              Setter { TargetName: "EditMode", Property: "Visibility", Value: "Visible" }
+            }
+
+            @Trigger("IsInEditMode", false) {
+              Setter { TargetName: "DisplayMode", Property: "Visibility", Value: "Visible" }
+              Setter { TargetName: "EditMode", Property: "Visibility", Value: "Collapsed" }
+            }
+
+            @Trigger("IsEditable", false) {
+              Setter { TargetName: "PART_EditButton", Property: "Visibility", Value: "Collapsed" }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

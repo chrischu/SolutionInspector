@@ -1,0 +1,674 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ns0="clr-namespace:SolutionInspector.ConfigurationUi.Features.Ruleset.ViewModels" xmlns:ns1="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf" xmlns:ns2="clr-namespace:AmmySidekick;assembly=AmmySidekick" xmlns:ns3="clr-namespace:SolutionInspector.ConfigurationUi.Infrastructure.Behaviors" xmlns:ns4="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity">
+  <DataTemplate DataType="{x:Type ns0:SolutionRulesViewModel}">
+    <Expander BorderBrush="Black" IsExpanded="True" BorderThickness="0 0 0 1" Padding="6" TextElement.Foreground="#000000" Background="#b2ff59" x:Name="Expander">
+      <Expander.Header>
+        <StackPanel Orientation="Horizontal" Margin="0">
+          <TextBlock Style="{StaticResource MaterialDesignHeadlineTextBlock}" Text="Solution Rules" VerticalAlignment="Center"/>
+          <Button ToolTip="Add Rule" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="12 0 0 0">
+            <ns1:PackIcon Kind="Plus"/>
+            <Button.Command>
+              <Binding Path="RuleGroups[0].AddRuleCommand"/>
+            </Button.Command>
+          </Button>
+          <ns1:ColorZone Mode="Standard" VerticalAlignment="Center" Margin="12 0 0 0">
+            <DockPanel>
+              <Button ToolTip="Filter Rules" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Left" Opacity="0.56">
+                <ns1:PackIcon Kind="Magnify"/>
+                <ns4:Interaction.Behaviors>
+                  <ns3:SearchButtonBehavior>
+                    <ns3:SearchButtonBehavior.SearchBox>
+                      <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                    </ns3:SearchButtonBehavior.SearchBox>
+                  </ns3:SearchButtonBehavior>
+                </ns4:Interaction.Behaviors>
+              </Button>
+              <Button ToolTip="Clear" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Right" Opacity="0.56">
+                <ns1:PackIcon Kind="Close"/>
+                <Button.Visibility>
+                  <Binding Path="Children[2].Text.Length" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;1&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;binary op=&quot;Greater&quot;&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;prim val=&quot;0&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Int32&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Hidden&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                </Button.Visibility>
+                <ns4:Interaction.Behaviors>
+                  <ns3:ClearTextBoxBehavior>
+                    <ns3:ClearTextBoxBehavior.TextBox>
+                      <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                    </ns3:ClearTextBoxBehavior.TextBox>
+                  </ns3:ClearTextBoxBehavior>
+                </ns4:Interaction.Behaviors>
+              </Button>
+              <TextBox Width="200" VerticalAlignment="Center" BorderThickness="0" ns1:TextFieldAssist.DecorationVisibility="Hidden" ns1:HintAssist.Hint="Filter Rules">
+                <TextBox.Text>
+                  <Binding Path="LocalFilter" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+              </TextBox>
+            </DockPanel>
+          </ns1:ColorZone>
+        </StackPanel>
+      </Expander.Header>
+      <ItemsControl>
+        <ItemsControl.ItemsSource>
+          <Binding Path="RuleGroups"/>
+        </ItemsControl.ItemsSource>
+        <ItemsControl.AlternationCount>
+          <Binding Path="RuleGroups.Count"/>
+        </ItemsControl.AlternationCount>
+      </ItemsControl>
+    </Expander>
+    <DataTemplate.Triggers>
+      <DataTrigger Value="0">
+        <DataTrigger.Binding>
+          <Binding Path="RuleGroups.Count"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+      <DataTrigger Value="False">
+        <DataTrigger.Binding>
+          <Binding Path="IsExpanded" ElementName="Expander"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+    </DataTemplate.Triggers>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type ns0:ProjectRulesViewModel}">
+    <Expander BorderBrush="Black" IsExpanded="True" BorderThickness="0 0 0 1" Padding="6" TextElement.Foreground="#000000" Background="#40c4ff" x:Name="Expander">
+      <Expander.Header>
+        <StackPanel Orientation="Horizontal" Margin="0">
+          <TextBlock Style="{StaticResource MaterialDesignHeadlineTextBlock}" Text="Project Rules" VerticalAlignment="Center"/>
+          <Button ToolTip="Add Rule Group" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="12 0 0 0">
+            <ns1:PackIcon Kind="Plus"/>
+            <Button.Command>
+              <Binding Path="AddRuleGroupCommand"/>
+            </Button.Command>
+          </Button>
+          <ns1:ColorZone Mode="Standard" VerticalAlignment="Center" Margin="12 0 0 0">
+            <DockPanel>
+              <Button ToolTip="Filter Rules" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Left" Opacity="0.56">
+                <ns1:PackIcon Kind="Magnify"/>
+                <ns4:Interaction.Behaviors>
+                  <ns3:SearchButtonBehavior>
+                    <ns3:SearchButtonBehavior.SearchBox>
+                      <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                    </ns3:SearchButtonBehavior.SearchBox>
+                  </ns3:SearchButtonBehavior>
+                </ns4:Interaction.Behaviors>
+              </Button>
+              <Button ToolTip="Clear" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Right" Opacity="0.56">
+                <ns1:PackIcon Kind="Close"/>
+                <Button.Visibility>
+                  <Binding Path="Children[2].Text.Length" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;1&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;binary op=&quot;Greater&quot;&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;prim val=&quot;0&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Int32&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Hidden&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                </Button.Visibility>
+                <ns4:Interaction.Behaviors>
+                  <ns3:ClearTextBoxBehavior>
+                    <ns3:ClearTextBoxBehavior.TextBox>
+                      <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                    </ns3:ClearTextBoxBehavior.TextBox>
+                  </ns3:ClearTextBoxBehavior>
+                </ns4:Interaction.Behaviors>
+              </Button>
+              <TextBox Width="200" VerticalAlignment="Center" BorderThickness="0" ns1:TextFieldAssist.DecorationVisibility="Hidden" ns1:HintAssist.Hint="Filter Rules">
+                <TextBox.Text>
+                  <Binding Path="LocalFilter" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+              </TextBox>
+            </DockPanel>
+          </ns1:ColorZone>
+        </StackPanel>
+      </Expander.Header>
+      <ItemsControl>
+        <ItemsControl.ItemsSource>
+          <Binding Path="RuleGroups"/>
+        </ItemsControl.ItemsSource>
+        <ItemsControl.AlternationCount>
+          <Binding Path="RuleGroups.Count"/>
+        </ItemsControl.AlternationCount>
+      </ItemsControl>
+    </Expander>
+    <DataTemplate.Triggers>
+      <DataTrigger Value="0">
+        <DataTrigger.Binding>
+          <Binding Path="RuleGroups.Count"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+      <DataTrigger Value="False">
+        <DataTrigger.Binding>
+          <Binding Path="IsExpanded" ElementName="Expander"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+    </DataTemplate.Triggers>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type ns0:ProjectItemRulesViewModel}">
+    <Expander BorderBrush="Black" IsExpanded="True" BorderThickness="0 0 0 1" Padding="6" TextElement.Foreground="#000000" Background="#ffab40" x:Name="Expander">
+      <Expander.Header>
+        <StackPanel Orientation="Horizontal" Margin="0">
+          <TextBlock Style="{StaticResource MaterialDesignHeadlineTextBlock}" Text="Project Item Rules" VerticalAlignment="Center"/>
+          <Button ToolTip="Add Rule Group" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="12 0 0 0">
+            <ns1:PackIcon Kind="Plus"/>
+            <Button.Command>
+              <Binding Path="AddRuleGroupCommand"/>
+            </Button.Command>
+          </Button>
+          <ns1:ColorZone Mode="Standard" VerticalAlignment="Center" Margin="12 0 0 0">
+            <DockPanel>
+              <Button ToolTip="Filter Rules" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Left" Opacity="0.56">
+                <ns1:PackIcon Kind="Magnify"/>
+                <ns4:Interaction.Behaviors>
+                  <ns3:SearchButtonBehavior>
+                    <ns3:SearchButtonBehavior.SearchBox>
+                      <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                    </ns3:SearchButtonBehavior.SearchBox>
+                  </ns3:SearchButtonBehavior>
+                </ns4:Interaction.Behaviors>
+              </Button>
+              <Button ToolTip="Clear" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Right" Opacity="0.56">
+                <ns1:PackIcon Kind="Close"/>
+                <Button.Visibility>
+                  <Binding Path="Children[2].Text.Length" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;1&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;binary op=&quot;Greater&quot;&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;prim val=&quot;0&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Int32&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Hidden&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                </Button.Visibility>
+                <ns4:Interaction.Behaviors>
+                  <ns3:ClearTextBoxBehavior>
+                    <ns3:ClearTextBoxBehavior.TextBox>
+                      <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                    </ns3:ClearTextBoxBehavior.TextBox>
+                  </ns3:ClearTextBoxBehavior>
+                </ns4:Interaction.Behaviors>
+              </Button>
+              <TextBox Width="200" VerticalAlignment="Center" BorderThickness="0" ns1:TextFieldAssist.DecorationVisibility="Hidden" ns1:HintAssist.Hint="Filter Rules">
+                <TextBox.Text>
+                  <Binding Path="LocalFilter" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+              </TextBox>
+            </DockPanel>
+          </ns1:ColorZone>
+        </StackPanel>
+      </Expander.Header>
+      <ItemsControl>
+        <ItemsControl.ItemsSource>
+          <Binding Path="RuleGroups"/>
+        </ItemsControl.ItemsSource>
+        <ItemsControl.AlternationCount>
+          <Binding Path="RuleGroups.Count"/>
+        </ItemsControl.AlternationCount>
+      </ItemsControl>
+    </Expander>
+    <DataTemplate.Triggers>
+      <DataTrigger Value="0">
+        <DataTrigger.Binding>
+          <Binding Path="RuleGroups.Count"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+      <DataTrigger Value="False">
+        <DataTrigger.Binding>
+          <Binding Path="IsExpanded" ElementName="Expander"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+    </DataTemplate.Triggers>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type ns0:SolutionRuleGroupViewModel}">
+    <ItemsControl>
+      <ItemsControl.ItemsSource>
+        <Binding Path="Rules"/>
+      </ItemsControl.ItemsSource>
+      <ItemsControl.AlternationCount>
+        <Binding Path="Rules.Count"/>
+      </ItemsControl.AlternationCount>
+    </ItemsControl>
+  </DataTemplate>
+  <DataTemplate x:Key="BulletItemTemplate">
+    <BulletDecorator Width="Auto" Margin="6 0">
+      <BulletDecorator.Bullet>
+        <Ellipse Width="4" Height="4">
+          <Ellipse.Fill>
+            <Binding Path="Foreground" ElementName="TextBlock"/>
+          </Ellipse.Fill>
+        </Ellipse>
+      </BulletDecorator.Bullet>
+      <TextBlock x:Name="TextBlock" Margin="3 0">
+        <TextBlock.Text>
+          <Binding/>
+        </TextBlock.Text>
+      </TextBlock>
+    </BulletDecorator>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type ns0:ProjectRuleGroupViewModel}">
+    <Border BorderThickness="1" BorderBrush="Black" Background="#80FFFFFF">
+      <Expander x:Name="Expander" Background="Transparent" BorderBrush="Black" IsExpanded="True" Padding="6">
+        <Expander.Header>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center">
+              <TextBlock.Text>
+                <Binding Path="Name" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;2&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;binary op=&quot;Or&quot;&gt;&lt;binary op=&quot;Equal&quot;&gt;&lt;parameter name=&quot;name&quot; type=&quot;System.String&quot; /&gt;&lt;null&gt;&lt;typeinfo typename=&quot;System.Object&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/null&gt;&lt;/binary&gt;&lt;binary op=&quot;Equal&quot;&gt;&lt;parameter name=&quot;name&quot; type=&quot;System.String&quot; /&gt;&lt;prim val=&quot;&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.String&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;/binary&gt;&lt;prim val=&quot;&amp;lt;unnamed&amp;gt;&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.String&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;parameter name=&quot;name&quot; type=&quot;System.String&quot; /&gt;&lt;/ternary&gt;&lt;parameter name=&quot;name&quot; type=&quot;System.String&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+              </TextBlock.Text>
+              <TextBlock.ToolTip>
+                <StackPanel x:Name="ToolTip">
+                  <StackPanel x:Name="ToolTip_Includes">
+                    <TextBlock Text="Includes projects named like: "/>
+                    <ItemsControl ItemTemplate="{StaticResource BulletItemTemplate}">
+                      <ItemsControl.ItemsSource>
+                        <Binding Path="AppliesTo.Includes"/>
+                      </ItemsControl.ItemsSource>
+                    </ItemsControl>
+                  </StackPanel>
+                  <TextBlock x:Name="ToolTip_IncludesAll" Visibility="Collapsed" Text="Includes all projects"/>
+                  <StackPanel x:Name="ToolTip_Excludes">
+                    <TextBlock Text="excluding projects named like: "/>
+                    <ItemsControl ItemTemplate="{StaticResource BulletItemTemplate}">
+                      <ItemsControl.ItemsSource>
+                        <Binding Path="AppliesTo.Excludes"/>
+                      </ItemsControl.ItemsSource>
+                    </ItemsControl>
+                  </StackPanel>
+                </StackPanel>
+              </TextBlock.ToolTip>
+            </TextBlock>
+            <Button ToolTip="Edit Rule Group" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="12 0 0 0">
+              <ns1:PackIcon Kind="Pencil"/>
+              <Button.Command>
+                <Binding Path="EditCommand"/>
+              </Button.Command>
+              <Button.CommandParameter>
+                <Binding Path="DataContext.Ruleset.Solution" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"/>
+              </Button.CommandParameter>
+            </Button>
+            <Button ToolTip="Add Rule" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="12 0 0 0">
+              <ns1:PackIcon Kind="Plus"/>
+              <Button.Command>
+                <Binding Path="AddRuleCommand"/>
+              </Button.Command>
+            </Button>
+            <ns1:ColorZone Mode="Standard" VerticalAlignment="Center" Margin="12 0 0 0">
+              <DockPanel>
+                <Button ToolTip="Filter Rules" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Left" Opacity="0.56">
+                  <ns1:PackIcon Kind="Magnify"/>
+                  <ns4:Interaction.Behaviors>
+                    <ns3:SearchButtonBehavior>
+                      <ns3:SearchButtonBehavior.SearchBox>
+                        <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                      </ns3:SearchButtonBehavior.SearchBox>
+                    </ns3:SearchButtonBehavior>
+                  </ns4:Interaction.Behaviors>
+                </Button>
+                <Button ToolTip="Clear" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Right" Opacity="0.56">
+                  <ns1:PackIcon Kind="Close"/>
+                  <Button.Visibility>
+                    <Binding Path="Children[2].Text.Length" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;1&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;binary op=&quot;Greater&quot;&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;prim val=&quot;0&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Int32&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Hidden&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                  </Button.Visibility>
+                  <ns4:Interaction.Behaviors>
+                    <ns3:ClearTextBoxBehavior>
+                      <ns3:ClearTextBoxBehavior.TextBox>
+                        <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                      </ns3:ClearTextBoxBehavior.TextBox>
+                    </ns3:ClearTextBoxBehavior>
+                  </ns4:Interaction.Behaviors>
+                </Button>
+                <TextBox Width="200" VerticalAlignment="Center" BorderThickness="0" ns1:TextFieldAssist.DecorationVisibility="Hidden" ns1:HintAssist.Hint="Filter Rules">
+                  <TextBox.Text>
+                    <Binding Path="LocalFilter" UpdateSourceTrigger="PropertyChanged"/>
+                  </TextBox.Text>
+                </TextBox>
+              </DockPanel>
+            </ns1:ColorZone>
+          </StackPanel>
+        </Expander.Header>
+        <ItemsControl>
+          <ItemsControl.ItemsSource>
+            <Binding Path="Rules"/>
+          </ItemsControl.ItemsSource>
+          <ItemsControl.AlternationCount>
+            <Binding Path="Rules.Count"/>
+          </ItemsControl.AlternationCount>
+        </ItemsControl>
+      </Expander>
+    </Border>
+    <DataTemplate.Triggers>
+      <DataTrigger Value="0">
+        <DataTrigger.Binding>
+          <Binding Path="Rules.Count"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+      <DataTrigger Value="False">
+        <DataTrigger.Binding>
+          <Binding Path="IsExpanded" ElementName="Expander"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+      <DataTrigger Value="0">
+        <DataTrigger.Binding>
+          <Binding Path="AppliesTo.Excludes.Count"/>
+        </DataTrigger.Binding>
+        <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTip_Excludes"/>
+      </DataTrigger>
+      <DataTrigger Value="True">
+        <DataTrigger.Binding>
+          <Binding Path="AppliesTo.IncludesAll"/>
+        </DataTrigger.Binding>
+        <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTip_Includes"/>
+        <Setter Property="Visibility" Value="Visible" TargetName="ToolTip_IncludesAll"/>
+      </DataTrigger>
+    </DataTemplate.Triggers>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type ns0:ProjectItemRuleGroupViewModel}">
+    <Border BorderThickness="1" BorderBrush="Black" Background="#80FFFFFF">
+      <Expander x:Name="Expander" Background="Transparent" BorderBrush="Black" IsExpanded="True" Padding="6">
+        <Expander.Header>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center">
+              <TextBlock.Text>
+                <Binding Path="Name" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;2&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;binary op=&quot;Or&quot;&gt;&lt;binary op=&quot;Equal&quot;&gt;&lt;parameter name=&quot;name&quot; type=&quot;System.String&quot; /&gt;&lt;null&gt;&lt;typeinfo typename=&quot;System.Object&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/null&gt;&lt;/binary&gt;&lt;binary op=&quot;Equal&quot;&gt;&lt;parameter name=&quot;name&quot; type=&quot;System.String&quot; /&gt;&lt;prim val=&quot;&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.String&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;/binary&gt;&lt;prim val=&quot;&amp;lt;unnamed&amp;gt;&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.String&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;parameter name=&quot;name&quot; type=&quot;System.String&quot; /&gt;&lt;/ternary&gt;&lt;parameter name=&quot;name&quot; type=&quot;System.String&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+              </TextBlock.Text>
+              <TextBlock.ToolTip>
+                <StackPanel x:Name="ToolTip">
+                  <StackPanel x:Name="ToolTip_AppliesToIncludes">
+                    <TextBlock Text="Includes project items named like: "/>
+                    <ItemsControl ItemTemplate="{StaticResource BulletItemTemplate}">
+                      <ItemsControl.ItemsSource>
+                        <Binding Path="AppliesTo.Includes"/>
+                      </ItemsControl.ItemsSource>
+                    </ItemsControl>
+                  </StackPanel>
+                  <TextBlock x:Name="ToolTip_AppliesToIncludesAll" Visibility="Collapsed" Text="Includes all project items,"/>
+                  <StackPanel x:Name="ToolTip_AppliesToExcludes">
+                    <TextBlock Text="excluding project items named like: "/>
+                    <ItemsControl ItemTemplate="{StaticResource BulletItemTemplate}">
+                      <ItemsControl.ItemsSource>
+                        <Binding Path="AppliesTo.Excludes"/>
+                      </ItemsControl.ItemsSource>
+                    </ItemsControl>
+                  </StackPanel>
+                  <StackPanel x:Name="ToolTip_ProjectIncludes">
+                    <TextBlock Text="in projects named like: "/>
+                    <ItemsControl ItemTemplate="{StaticResource BulletItemTemplate}">
+                      <ItemsControl.ItemsSource>
+                        <Binding Path="InProject.Includes"/>
+                      </ItemsControl.ItemsSource>
+                    </ItemsControl>
+                  </StackPanel>
+                  <TextBlock x:Name="ToolTip_ProjectIncludesAll" Visibility="Collapsed" Text="in all projects"/>
+                  <StackPanel x:Name="ToolTip_ProjectExcludes">
+                    <TextBlock Text="excluding projects named like: "/>
+                    <ItemsControl ItemTemplate="{StaticResource BulletItemTemplate}">
+                      <ItemsControl.ItemsSource>
+                        <Binding Path="InProject.Excludes"/>
+                      </ItemsControl.ItemsSource>
+                    </ItemsControl>
+                  </StackPanel>
+                </StackPanel>
+              </TextBlock.ToolTip>
+            </TextBlock>
+            <Button ToolTip="Edit Rule Group" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="12 0 0 0">
+              <ns1:PackIcon Kind="Pencil"/>
+              <Button.Command>
+                <Binding Path="EditCommand"/>
+              </Button.Command>
+            </Button>
+            <Button ToolTip="Add Rule" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="12 0 0 0">
+              <ns1:PackIcon Kind="Plus"/>
+              <Button.Command>
+                <Binding Path="AddRuleCommand"/>
+              </Button.Command>
+            </Button>
+            <ns1:ColorZone Mode="Standard" VerticalAlignment="Center" Margin="12 0 0 0">
+              <DockPanel>
+                <Button ToolTip="Filter Rules" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Left" Opacity="0.56">
+                  <ns1:PackIcon Kind="Magnify"/>
+                  <ns4:Interaction.Behaviors>
+                    <ns3:SearchButtonBehavior>
+                      <ns3:SearchButtonBehavior.SearchBox>
+                        <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                      </ns3:SearchButtonBehavior.SearchBox>
+                    </ns3:SearchButtonBehavior>
+                  </ns4:Interaction.Behaviors>
+                </Button>
+                <Button ToolTip="Clear" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Right" Opacity="0.56">
+                  <ns1:PackIcon Kind="Close"/>
+                  <Button.Visibility>
+                    <Binding Path="Children[2].Text.Length" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;1&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;binary op=&quot;Greater&quot;&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;prim val=&quot;0&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Int32&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Hidden&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                  </Button.Visibility>
+                  <ns4:Interaction.Behaviors>
+                    <ns3:ClearTextBoxBehavior>
+                      <ns3:ClearTextBoxBehavior.TextBox>
+                        <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                      </ns3:ClearTextBoxBehavior.TextBox>
+                    </ns3:ClearTextBoxBehavior>
+                  </ns4:Interaction.Behaviors>
+                </Button>
+                <TextBox Width="200" VerticalAlignment="Center" BorderThickness="0" ns1:TextFieldAssist.DecorationVisibility="Hidden" ns1:HintAssist.Hint="Filter Rules">
+                  <TextBox.Text>
+                    <Binding Path="LocalFilter" UpdateSourceTrigger="PropertyChanged"/>
+                  </TextBox.Text>
+                </TextBox>
+              </DockPanel>
+            </ns1:ColorZone>
+          </StackPanel>
+        </Expander.Header>
+        <ItemsControl>
+          <ItemsControl.ItemsSource>
+            <Binding Path="Rules"/>
+          </ItemsControl.ItemsSource>
+          <ItemsControl.AlternationCount>
+            <Binding Path="Rules.Count"/>
+          </ItemsControl.AlternationCount>
+        </ItemsControl>
+      </Expander>
+    </Border>
+    <DataTemplate.Triggers>
+      <DataTrigger Value="0">
+        <DataTrigger.Binding>
+          <Binding Path="Rules.Count"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+      <DataTrigger Value="False">
+        <DataTrigger.Binding>
+          <Binding Path="IsExpanded" ElementName="Expander"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+      <DataTrigger Value="0">
+        <DataTrigger.Binding>
+          <Binding Path="AppliesTo.Excludes.Count"/>
+        </DataTrigger.Binding>
+        <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTip_AppliesToExcludes"/>
+      </DataTrigger>
+      <DataTrigger Value="True">
+        <DataTrigger.Binding>
+          <Binding Path="AppliesTo.IncludesAll"/>
+        </DataTrigger.Binding>
+        <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTip_AppliesToIncludes"/>
+        <Setter Property="Visibility" Value="Visible" TargetName="ToolTip_AppliesToIncludesAll"/>
+      </DataTrigger>
+      <DataTrigger Value="0">
+        <DataTrigger.Binding>
+          <Binding Path="InProject.Excludes.Count"/>
+        </DataTrigger.Binding>
+        <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTip_ProjectExcludes"/>
+      </DataTrigger>
+      <DataTrigger Value="True">
+        <DataTrigger.Binding>
+          <Binding Path="InProject.IncludesAll"/>
+        </DataTrigger.Binding>
+        <Setter Property="Visibility" Value="Collapsed" TargetName="ToolTip_ProjectIncludes"/>
+        <Setter Property="Visibility" Value="Visible" TargetName="ToolTip_ProjectIncludesAll"/>
+      </DataTrigger>
+    </DataTemplate.Triggers>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type ns0:RuleGroupViewModel}">
+    <Expander x:Name="Expander" BorderBrush="Black" IsExpanded="True" BorderThickness="0 0 0 1" Padding="6" Background="#80FFFFFF">
+      <Expander.Header>
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}" VerticalAlignment="Center">
+            <TextBlock.Text>
+              <Binding Path="Title"/>
+            </TextBlock.Text>
+          </TextBlock>
+          <Button ToolTip="Add Rule" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="12 0 0 0">
+            <ns1:PackIcon Kind="Plus"/>
+            <Button.Command>
+              <Binding Path="AddRuleCommand"/>
+            </Button.Command>
+          </Button>
+          <ns1:ColorZone Mode="Standard" VerticalAlignment="Center" Margin="12 0 0 0">
+            <DockPanel>
+              <Button ToolTip="Filter Rules" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Left" Opacity="0.56">
+                <ns1:PackIcon Kind="Magnify"/>
+                <ns4:Interaction.Behaviors>
+                  <ns3:SearchButtonBehavior>
+                    <ns3:SearchButtonBehavior.SearchBox>
+                      <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                    </ns3:SearchButtonBehavior.SearchBox>
+                  </ns3:SearchButtonBehavior>
+                </ns4:Interaction.Behaviors>
+              </Button>
+              <Button ToolTip="Clear" Style="{StaticResource MaterialDesignToolButton}" ns1:RippleAssist.IsCentered="True" DockPanel.Dock="Right" Opacity="0.56">
+                <ns1:PackIcon Kind="Close"/>
+                <Button.Visibility>
+                  <Binding Path="Children[2].Text.Length" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;1&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;binary op=&quot;Greater&quot;&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;prim val=&quot;0&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Int32&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/binary&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Hidden&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;length&quot; type=&quot;System.Int32&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                </Button.Visibility>
+                <ns4:Interaction.Behaviors>
+                  <ns3:ClearTextBoxBehavior>
+                    <ns3:ClearTextBoxBehavior.TextBox>
+                      <Binding Path="Children[2]" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DockPanel}}" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;0&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;cast&gt;&lt;typeinfo typename=&quot;System.Windows.Controls.TextBox&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/cast&gt;&lt;parameter name=&quot;e&quot; type=&quot;System.Windows.UIElement&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+                    </ns3:ClearTextBoxBehavior.TextBox>
+                  </ns3:ClearTextBoxBehavior>
+                </ns4:Interaction.Behaviors>
+              </Button>
+              <TextBox Width="200" VerticalAlignment="Center" BorderThickness="0" ns1:TextFieldAssist.DecorationVisibility="Hidden" ns1:HintAssist.Hint="Filter Rules">
+                <TextBox.Text>
+                  <Binding Path="LocalFilter" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+              </TextBox>
+            </DockPanel>
+          </ns1:ColorZone>
+        </StackPanel>
+      </Expander.Header>
+      <ItemsControl ItemTemplate="{StaticResource RuleViewModel}">
+        <ItemsControl.ItemsSource>
+          <Binding Path="Rules"/>
+        </ItemsControl.ItemsSource>
+        <ItemsControl.AlternationCount>
+          <Binding Path="Rules.Count"/>
+        </ItemsControl.AlternationCount>
+      </ItemsControl>
+    </Expander>
+    <DataTemplate.Triggers>
+      <DataTrigger Value="Solution Rules">
+        <DataTrigger.Binding>
+          <Binding Path="Title"/>
+        </DataTrigger.Binding>
+        <Setter Property="Background" Value="Transparent" TargetName="Expander"/>
+      </DataTrigger>
+      <DataTrigger Value="0">
+        <DataTrigger.Binding>
+          <Binding Path="Rules.Count"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+      <DataTrigger Value="False">
+        <DataTrigger.Binding>
+          <Binding Path="IsExpanded" ElementName="Expander"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+    </DataTemplate.Triggers>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type ns0:RuleViewModel}">
+    <Border BorderThickness="1" BorderBrush="Black" Background="#80FFFFFF">
+      <Grid Background="Transparent">
+        <StackPanel Orientation="Horizontal" ToolTip="Filtered" Background="LightGray">
+          <StackPanel.Visibility>
+            <Binding Path="IsFiltered" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;3&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;parameter name=&quot;isFiltered&quot; type=&quot;System.Boolean&quot; /&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Collapsed&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;isFiltered&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+          </StackPanel.Visibility>
+          <ns1:PackIcon Kind="EyeOff" Margin="6 0" VerticalAlignment="Center"/>
+          <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" VerticalAlignment="Center" FontWeight="Bold">
+            <TextBlock.Text>
+              <Binding Path="Name"/>
+            </TextBlock.Text>
+          </TextBlock>
+        </StackPanel>
+        <Expander x:Name="Expander" IsExpanded="True" Background="Transparent" Padding="6">
+          <Expander.Visibility>
+            <Binding Path="IsFiltered" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;4&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;parameter name=&quot;isFiltered&quot; type=&quot;System.Boolean&quot; /&gt;&lt;prim val=&quot;System.Windows.Visibility.Collapsed&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;isFiltered&quot; type=&quot;System.Boolean&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+          </Expander.Visibility>
+          <Expander.Header>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" VerticalAlignment="Center" FontWeight="Bold">
+                <TextBlock.Text>
+                  <Binding Path="Name"/>
+                </TextBlock.Text>
+              </TextBlock>
+              <Button ToolTip="Remove Rule" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Margin="12 0 0 0">
+                <ns1:PackIcon Kind="Delete"/>
+                <Button.Command>
+                  <Binding Path="DataContext.RemoveRuleCommand" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}"/>
+                </Button.Command>
+                <Button.CommandParameter>
+                  <Binding Path="(ItemsControl.AlternationIndex)" RelativeSource="{x:Static RelativeSource.TemplatedParent}"/>
+                </Button.CommandParameter>
+              </Button>
+            </StackPanel>
+          </Expander.Header>
+          <StackPanel Margin="6 0 6 6">
+            <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" TextWrapping="Wrap">
+              <TextBlock.Text>
+                <Binding Path="Documentation"/>
+              </TextBlock.Text>
+            </TextBlock>
+            <ItemsControl Margin="0 12 0 0" Grid.IsSharedSizeScope="True" BorderThickness="0 1 0 0" BorderBrush="Black">
+              <ItemsControl.ItemsSource>
+                <Binding Path="Configuration.Properties"/>
+              </ItemsControl.ItemsSource>
+              <ItemsControl.Visibility>
+                <Binding Path="Configuration" Converter="{x:Static ns2:ExpressionConverter.Instance}" ConverterParameter="&lt;expr id=&quot;5&quot;&gt;&lt;lambda isaction=&quot;False&quot;&gt;&lt;ternary&gt;&lt;binary op=&quot;NotEqual&quot;&gt;&lt;parameter name=&quot;configuration&quot; type=&quot;System.Object&quot; /&gt;&lt;null&gt;&lt;typeinfo typename=&quot;System.Object&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/null&gt;&lt;/binary&gt;&lt;prim val=&quot;System.Windows.Visibility.Visible&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;prim val=&quot;System.Windows.Visibility.Collapsed&quot; isnull=&quot;False&quot;&gt;&lt;typeinfo typename=&quot;System.Windows.Visibility&quot; isarray=&quot;False&quot;&gt;&lt;/typeinfo&gt;&lt;/prim&gt;&lt;/ternary&gt;&lt;parameter name=&quot;configuration&quot; type=&quot;System.Object&quot; /&gt;&lt;/lambda&gt;&lt;/expr&gt;"/>
+              </ItemsControl.Visibility>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type ns0:RuleConfigurationPropertyViewModel}">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto" SharedSizeGroup="A"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" BorderThickness="1 0 1 1" BorderBrush="Black" Background="LightGray">
+                      <StackPanel Margin="2 0">
+                        <TextBlock Style="{StaticResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap" FontWeight="Bold" x:Name="PropertyTitle">
+                          <TextBlock.Text>
+                            <Binding Path="Name"/>
+                          </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource MaterialDesignCaptionTextBlock}" TextWrapping="Wrap">
+                          <TextBlock.Text>
+                            <Binding Path="Documentation"/>
+                          </TextBlock.Text>
+                          <TextBlock.MaxWidth>
+                            <Binding Path="ActualWidth" ElementName="PropertyTitle"/>
+                          </TextBlock.MaxWidth>
+                        </TextBlock>
+                      </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1" BorderThickness="0 0 1 1" BorderBrush="Black" Background="{StaticResource MaterialDesignPaper}">
+                      <ContentPresenter TextBlock.FontSize="12" TextBlock.FontWeight="Regular">
+                        <ContentPresenter.Content>
+                          <Binding Path="Value"/>
+                        </ContentPresenter.Content>
+                      </ContentPresenter>
+                    </Border>
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Expander>
+      </Grid>
+    </Border>
+    <DataTemplate.Triggers>
+      <DataTrigger Value="False">
+        <DataTrigger.Binding>
+          <Binding Path="IsExpanded" ElementName="Expander"/>
+        </DataTrigger.Binding>
+        <Setter Property="Padding" Value="0" TargetName="Expander"/>
+      </DataTrigger>
+    </DataTemplate.Triggers>
+  </DataTemplate>
+</ResourceDictionary>

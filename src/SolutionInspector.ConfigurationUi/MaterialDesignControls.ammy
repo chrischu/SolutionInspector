@@ -1,0 +1,107 @@
+﻿using MaterialDesignThemes.Wpf
+
+alias LightSeparator() {
+  Separator { 
+    Style: resource "MaterialDesignLightSeparator"
+  }
+}
+
+alias MidSeparator() {
+  Separator { 
+    Style: resource "MaterialDesignSeparator"
+  }
+}
+
+alias DarkSeparator() {
+  Separator { 
+    Style: resource "MaterialDesignDarkSeparator"
+  }
+}
+
+alias FlatButton() {
+  Button {
+    Style: resource "MaterialDesignFlatButton"
+  }
+}
+
+alias PackIcon(kind) {
+  PackIcon { Kind: $kind }
+}
+
+alias LightButton() {
+  Button {
+    Style: resource "MaterialDesignRaisedLightButton"
+  }
+}
+
+alias MidButton() {
+  Button {
+    Style: resource "MaterialDesignRaisedButton"
+  }
+}
+
+alias DarkButton() {
+  Button {
+    Style: resource "MaterialDesignRaisedDarkButton"
+  }
+}
+
+alias AccentButton() {
+  Button {
+    Style: resource "MaterialDesignRaisedAccentButton"
+  }
+}
+
+alias ToolButton(tooltip, icon, command=none, commandParameter=none) {
+  Button { 
+    ToolTip: $tooltip
+    @PackIcon($icon) {}
+    Style: resource "MaterialDesignToolButton"
+    RippleAssist.IsCentered: true
+    Command: $command
+    CommandParameter: $commandParameter
+  }
+}
+
+alias InlineToolButton(tooltip, icon, command=none, commandParameter=none) {
+  @ToolButton($tooltip, $icon, $command, $commandParameter) {
+    Padding: "3 0"
+    Height: 25
+    Foreground: resource "PrimaryHueMidBrush"
+  }
+}
+
+alias MenuItem(header, icon, hotkey=none, command=none, commandParameter=none) {
+  MenuItem {
+    Header: $header
+    Icon: PackIcon { Kind: $icon }
+    InputGestureText: $hotkey
+    Command: $command
+    CommandParameter: $commandParameter
+  }
+}
+
+alias ToolBarButton(tooltip, icon, command, commandParameter=none) {
+  Button { 
+    ToolTip: $tooltip
+    PackIcon { Kind: $icon }
+    Command: $command
+    CommandParameter: $commandParameter
+  }
+}
+
+alias FloatingMiniAccentButton(tooltip, icon, command, commandParameter=none) {
+  Button {
+    ToolTip: $tooltip
+    PackIcon { Kind: $icon }
+    Command: $command
+    CommandParameter: $commandParameter
+    Style: resource "MaterialDesignFloatingActionMiniAccentButton"
+  }
+}
+
+alias ToolBar() {
+  ToolBar { 
+    Style: resource "MaterialDesignToolBar"
+  }
+}

@@ -1,0 +1,54 @@
+<UserControl x:Class="SolutionInspector.ConfigurationUi.Features.Start.StartPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ns0="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf" xmlns:ns1="clr-namespace:AmmySidekick;assembly=AmmySidekick" ns1:Ammy.Register="/SolutionInspector.ConfigurationUi;component/Features/Start/StartPage.g.xaml">
+  <WrapPanel x:Name="LayoutRoot" Margin="12" Orientation="Vertical">
+    <ns0:Card Padding="18" Margin="12" Focusable="False" Background="{StaticResource PrimaryHueMidBrush}" Foreground="{StaticResource PrimaryHueMidForegroundBrush}">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="140"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ns0:PackIcon Grid.Row="0" Kind="FileOutline" Height="140" Width="140" HorizontalAlignment="Center"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+          <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}" Text="Create New" VerticalAlignment="Center" TextWrapping="Wrap"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+          <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" TextWrapping="Wrap" Text="Creates a new SolutionInspector configuration file."/>
+        </StackPanel>
+        <StackPanel Grid.Row="3">
+          <Button Style="{StaticResource MaterialDesignFlatButton}" Content="CREATE NEW" Background="{StaticResource SecondaryAccentBrush}" Foreground="{StaticResource SecondaryAccentForegroundBrush}" Margin="0 12 0 0">
+            <Button.Command>
+              <Binding Path="CreateNewConfigurationCommand"/>
+            </Button.Command>
+          </Button>
+        </StackPanel>
+      </Grid>
+    </ns0:Card>
+    <ns0:Card Padding="18" Margin="12" Focusable="False" Background="{StaticResource PrimaryHueDarkBrush}" Foreground="{StaticResource PrimaryHueDarkForegroundBrush}">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="140"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ns0:PackIcon Grid.Row="0" Kind="FileDocument" Height="140" Width="140" HorizontalAlignment="Center"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+          <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}" Text="Open Existing" VerticalAlignment="Center" TextWrapping="Wrap"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+          <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" TextWrapping="Wrap" Text="Opens a existing SolutionInspector configuration file."/>
+        </StackPanel>
+        <StackPanel Grid.Row="3">
+          <Button Style="{StaticResource MaterialDesignFlatButton}" Content="OPEN EXISTING" Background="{StaticResource SecondaryAccentBrush}" Foreground="{StaticResource SecondaryAccentForegroundBrush}" Margin="0 12 0 0">
+            <Button.Command>
+              <Binding Path="LoadExistingConfigurationCommand"/>
+            </Button.Command>
+          </Button>
+        </StackPanel>
+      </Grid>
+    </ns0:Card>
+  </WrapPanel>
+</UserControl>

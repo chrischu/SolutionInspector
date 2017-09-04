@@ -1,0 +1,17 @@
+﻿// http://paletton.com/#uid=74R1q0kpuz3fSXYjUNKnzFKvntE
+
+mixin ColorSolution() for Control {
+  #LightGreenAccent200
+}
+
+mixin ColorProject() for Control {
+  #LightBlueAccent200
+}
+
+mixin ColorProjectItem() for Control {
+  #OrangeAccent200
+}
+
+mixin Lighten() for Control {
+  Background: "#80FFFFFF"
+}
