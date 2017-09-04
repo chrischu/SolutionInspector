@@ -5,6 +5,7 @@ using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Configuration.Tests
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
   public class ConfigurationDocumentTests
   {
     private TemporaryFile _temporaryFile;

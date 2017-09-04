@@ -10,6 +10,7 @@ namespace SolutionInspector.Configuration.Validation
   /// <summary>
   ///   Represents errors that occur when validating a configuration.
   /// </summary>
+  [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
   [Serializable]
   public class ConfigurationValidationException : Exception
   {

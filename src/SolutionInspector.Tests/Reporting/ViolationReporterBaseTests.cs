@@ -9,6 +9,7 @@ using SolutionInspector.Reporting;
 
 namespace SolutionInspector.Tests.Reporting
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
   public class ViolationReporterBaseTests
   {
     private Action<TextWriter, IEnumerable<IRuleViolation>> _reportAction;

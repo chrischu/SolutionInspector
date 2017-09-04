@@ -39,6 +39,7 @@ namespace SolutionInspector.Api.Configuration
     }
 
     /// <inheritdoc />
+    [SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
     [ExcludeFromCodeCoverage]
     public override string ToString ()
     {

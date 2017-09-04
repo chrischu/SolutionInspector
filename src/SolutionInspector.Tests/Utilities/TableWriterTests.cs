@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
@@ -6,20 +7,28 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.Tests.Utilities
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
   public class TableWriterTests
   {
-    private static ITableWriter _sut;
+    private ITableWriter _sut;
+    private TextWriter _textWriter;
 
     [SetUp]
     public void SetUp ()
     {
       _sut = new TableWriter();
+      _textWriter = new StringWriter();
+    }
+
+    [TearDown]
+    public void TearDown ()
+    {
+      _textWriter.Dispose();
     }
 
     [Test]
     public void Write ()
     {
-      var textWriter = new StringWriter();
       var rows = new[]
                  {
                    new Something { A = "One", B = "Uno" },
@@ -27,10 +36,11 @@ namespace SolutionInspector.Tests.Utilities
                  };
 
       // ACT
-      _sut.Write(textWriter, rows, x => x.A, x => x.B);
+      _sut.Write(_textWriter, rows, x => x.A, x => x.B);
 
       // ASSERT
-      textWriter.ToString().Should().BeWithDiff(@"
+      _textWriter.ToString().Should().BeWithDiff(
+        @"
 +-----+-----+
 │  A  │  B  │
 +-----+-----+
@@ -44,17 +54,17 @@ namespace SolutionInspector.Tests.Utilities
     [Test]
     public void Write_WithExplicitHeaders ()
     {
-      var textWriter = new StringWriter();
       var rows = new[]
                  {
                    new Something { A = "One" }
                  };
 
       // ACT
-      _sut.Write(textWriter, rows, new[] { "HEADER" }, x => x.A);
+      _sut.Write(_textWriter, rows, new[] { "HEADER" }, x => x.A);
 
       // ASSERT
-      textWriter.ToString().Should().BeWithDiff(@"
+      _textWriter.ToString().Should().BeWithDiff(
+        @"
 +--------+
 │ HEADER │
 +--------+
@@ -68,17 +78,17 @@ namespace SolutionInspector.Tests.Utilities
     {
       _sut = new TableWriter(new TableWriterOptions { PreferredTableWidth = 4 });
 
-      var textWriter = new StringWriter();
       var rows = new[]
                  {
                    new Something { A = "LONG LONG LONG" }
                  };
 
       // ACT
-      _sut.Write(textWriter, rows, x => x.A);
+      _sut.Write(_textWriter, rows, x => x.A);
 
       // ASSERT
-      textWriter.ToString().Should().BeWithDiff(@"
+      _textWriter.ToString().Should().BeWithDiff(
+        @"
 +------+
 │   A  │
 +------+
@@ -94,17 +104,17 @@ namespace SolutionInspector.Tests.Utilities
     {
       _sut = new TableWriter(new TableWriterOptions { PreferredTableWidth = 50 });
 
-      var textWriter = new StringWriter();
       var rows = new[]
                  {
                    new Something { A = "NOT SO LONG", B = "LONG LONG LONG LONG LONG LONG LONG LONG LONG" }
                  };
 
       // ACT
-      _sut.Write(textWriter, rows, x => x.A, x => x.B);
+      _sut.Write(_textWriter, rows, x => x.A, x => x.B);
 
       // ASSERT
-      textWriter.ToString().Should().BeWithDiff(@"
+      _textWriter.ToString().Should().BeWithDiff(
+        @"
 +-------------+--------------------------------+
 │      A      │                B               │
 +-------------+--------------------------------+
@@ -119,7 +129,6 @@ namespace SolutionInspector.Tests.Utilities
     {
       _sut = new TableWriter(new TableWriterOptions { Characters = TableWriterCharacters.AdvancedAscii });
 
-      var textWriter = new StringWriter();
       var rows = new[]
                  {
                    new Something { A = "One", B = "Uno" },
@@ -127,10 +136,11 @@ namespace SolutionInspector.Tests.Utilities
                  };
 
       // ACT
-      _sut.Write(textWriter, rows, x => x.A, x => x.B);
+      _sut.Write(_textWriter, rows, x => x.A, x => x.B);
 
       // ASSERT
-      textWriter.ToString().Should().BeWithDiff(@"
+      _textWriter.ToString().Should().BeWithDiff(
+        @"
 ┌─────┬─────┐
 │  A  │  B  │
 ├─────┼─────┤

@@ -6,7 +6,7 @@ namespace SolutionInspector.Commons
   /// <summary>
   ///   Utility class that creates a temporary file and deletes it when calling <see cref="Dispose" />.
   /// </summary>
-  public class TemporaryFile : IDisposable
+  public sealed class TemporaryFile : IDisposable
   {
     public TemporaryFile ()
     {

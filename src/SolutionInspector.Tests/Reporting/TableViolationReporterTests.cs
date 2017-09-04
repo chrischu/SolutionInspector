@@ -10,6 +10,7 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.Tests.Reporting
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
   public class TableViolationReporterTests
   {
     private IRuleViolationViewModelConverter _ruleViolationViewModelConverter;

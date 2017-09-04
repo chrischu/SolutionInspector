@@ -7,6 +7,7 @@ using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Tests.Reporting
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
   public class VisualStudioViolationReporterTests
   {
     private VisualStudioViolationReporter _sut;

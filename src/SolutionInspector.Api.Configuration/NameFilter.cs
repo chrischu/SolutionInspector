@@ -63,6 +63,7 @@ namespace SolutionInspector.Api.Configuration
       return _includeFilters.Any(f => f.IsMatch(name)) && !_excludeFilters.Any(f => f.IsMatch(name));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
     public override string ToString ()
     {
       return string.Join(";", Includes.Select(s => "+" + s).Concat(Excludes.Select(s => "-" + s)));
