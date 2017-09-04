@@ -99,6 +99,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemporaryFileTests.cs" />
     <Compile Include="Utilities\CollectionDifferenceFinderTests.cs" />
+    <Compile Include="Utilities\CollectionEqualityComparerTests.cs" />
     <Compile Include="Utilities\ExpressionUtilityTests.cs" />
     <None Include="app.config" />
     <None Include="packages.config" />

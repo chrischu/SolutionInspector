@@ -10,6 +10,20 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
   public class ProjectRuleGroupConfigurationElementTests
   {
     [Test]
+    public void NameSet()
+    {
+      var element = XElement.Parse(@"<projectRuleGroup name=""Name"" appliesTo=""*"" />");
+      var projectRuleGroup = ConfigurationElement.Load<ProjectRuleGroupConfigurationElement>(element);
+
+      // ACT
+      projectRuleGroup.Name = "Changed";
+
+      // ASSERT
+      projectRuleGroup.Name.Should().Be("Changed");
+      element.Attribute("name").AssertNotNull().Value.Should().Be("Changed");
+    }
+
+    [Test]
     public void AppliesToSet ()
     {
       var element = XElement.Parse(@"<projectRuleGroup appliesTo=""Original"" />");
@@ -26,6 +40,20 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
 
   public class ProjectItemRuleGroupConfigurationElementTests
   {
+    [Test]
+    public void NameSet()
+    {
+      var element = XElement.Parse(@"<projectItemRuleGroup name=""Name"" appliesTo=""*"" inProject=""*"" />");
+      var projectItemRuleGroup = ConfigurationElement.Load<ProjectItemRuleGroupConfigurationElement>(element);
+
+      // ACT
+      projectItemRuleGroup.Name = "Changed";
+
+      // ASSERT
+      projectItemRuleGroup.Name.Should().Be("Changed");
+      element.Attribute("name").AssertNotNull().Value.Should().Be("Changed");
+    }
+
     [Test]
     public void AppliesToSet ()
     {

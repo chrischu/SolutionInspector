@@ -111,5 +111,18 @@ namespace SolutionInspector.Api.Configuration.Tests
       // ASSERT
       result.Should().BeFalse();
     }
+
+    [Test]
+    public void Equals ()
+    {
+      var nf1 = new NameFilter(new[] { "Include" }, new[] { "Exclude" });
+      var nf2 = new NameFilter(new[] { "Include" }, new[] { "Exclude" });
+
+      // ACT & ASSERT
+      nf1.Equals(nf2).Should().BeTrue();
+      nf1.Equals(null).Should().BeFalse();
+      // ReSharper disable once SuspiciousTypeConversion.Global
+      nf1.Equals("").Should().BeFalse();
+    }
   }
 }

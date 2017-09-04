@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
-using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration
@@ -14,15 +14,12 @@ namespace SolutionInspector.Api.Configuration
   {
     private static readonly Regex s_removeDuplicateAsterisksRegex = new Regex(@"\*+", RegexOptions.Compiled);
 
-    private readonly bool _compiled;
     private readonly Regex[] _excludeFilters;
     private readonly Regex[] _includeFilters;
-    private readonly RegexOptions _regexOptions;
 
     /// <inheritdoc />
-    public NameFilter (IEnumerable<string> includes, IEnumerable<string> excludes = null, bool compiled = false)
+    public NameFilter (IEnumerable<string> includes, IEnumerable<string> excludes = null)
     {
-      _compiled = compiled;
       excludes = excludes ?? new string[0];
 
       Includes = includes as IReadOnlyCollection<string> ?? includes.ToList();
@@ -39,18 +36,8 @@ namespace SolutionInspector.Api.Configuration
       Includes = Includes;
       Excludes = SimplifyFilters(Excludes).ToList();
 
-      _regexOptions = compiled ? RegexOptions.Compiled : RegexOptions.None;
       _includeFilters = Includes.Select(FilterToRegex).ToArray();
       _excludeFilters = Excludes.Select(FilterToRegex).ToArray();
-    }
-
-    /// <summary>
-    ///   Compiles the <see cref="NameFilter" /> to reduce evaluation runtime in the future.
-    /// </summary>
-    [PublicApi]
-    public NameFilter Compile ()
-    {
-      return _compiled ? this : new NameFilter(Includes, Excludes, compiled: true);
     }
 
     public IReadOnlyCollection<string> Includes { get; }
@@ -63,7 +50,7 @@ namespace SolutionInspector.Api.Configuration
       return _includeFilters.Any(f => f.IsMatch(name)) && !_excludeFilters.Any(f => f.IsMatch(name));
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+    [SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
     public override string ToString ()
     {
       return string.Join(";", Includes.Select(s => "+" + s).Concat(Excludes.Select(s => "-" + s)));
@@ -71,7 +58,7 @@ namespace SolutionInspector.Api.Configuration
 
     private Regex FilterToRegex (string filter)
     {
-      return new Regex($"^{filter.Replace(".", "\\.").Replace("*", ".*")}$", _regexOptions);
+      return new Regex($"^{filter.Replace(".", "\\.").Replace("*", ".*")}$", RegexOptions.None);
     }
 
     /// <summary>

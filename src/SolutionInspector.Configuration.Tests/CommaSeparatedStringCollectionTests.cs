@@ -258,5 +258,32 @@ namespace SolutionInspector.Configuration.Tests
       // ASSERT
       _sut[0].Should().Be("B");
     }
+
+    [Test]
+    public void CopyTo ()
+    {
+      var target = new[] { "A", "B", "C" };
+
+      _sut.Add("b");
+      _sut.Add("c");
+
+      // ACT
+      _sut.CopyTo(target, 1);
+
+      // ASSERT
+      target.Should().Equal("A", "b", "c");
+    }
+
+    [Test]
+    public void IndexOf ()
+    {
+      _sut.AddRange(new[] { "A", "B", "C" });
+
+      // ACT
+      var result = _sut.IndexOf("B");
+
+      // ASSERT
+      result.Should().Be(1);
+    }
   }
 }

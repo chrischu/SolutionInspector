@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SolutionInspector.Api;
 using SolutionInspector.Api.Configuration;
@@ -130,6 +131,7 @@ namespace SolutionInspector.Internals
         yield return longestCommonPrefix + "*" + longestCommonSuffix;
     }
 
+    [ExcludeFromCodeCoverage]
     private static string GetLongestCommonAffix(
       IReadOnlyCollection<string> elements,
       Func<string, int, string> affixFunc)
@@ -143,7 +145,7 @@ namespace SolutionInspector.Internals
           return affixFunc(elements.First(), affixLength - 1);
       }
 
-      return null;
+      throw new InvalidOperationException("Unreachable code");
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Commons.Utilities;
@@ -9,7 +10,7 @@ namespace SolutionInspector.Internals.Tests.Utilities
   public class HashCodeHelperTests
   {
     [Test]
-    [TestCaseSource (nameof(GetHashCodeFromObjectsTestData))]
+    [TestCaseSource(nameof(GetHashCodeFromObjectsTestData))]
     public int GetHashCodeFromObjects (object[] input)
     {
       // ACT & ASSERT
@@ -60,7 +61,7 @@ namespace SolutionInspector.Internals.Tests.Utilities
     }
 
     [Test]
-    [TestCaseSource (nameof(GetHashCodeFromIntsTestData))]
+    [TestCaseSource(nameof(GetHashCodeFromIntsTestData))]
     public int GetHashCodeFromInts (int[] input)
     {
       // ACT & ASSERT
@@ -97,6 +98,34 @@ namespace SolutionInspector.Internals.Tests.Utilities
 
       // ASSERT
       result1.Should().NotBe(result2);
+    }
+
+    [Test]
+    public void GetOrderIndependentHashCode_FromObjects_SameObjectsInDifferentOrder_ReturnsDifferentHashCodes ()
+    {
+      var hashCode1 = Some.Integer;
+      var hashCode2 = Some.Integer;
+
+      // ACT
+      var result1 = HashCodeHelper.GetOrderIndependentHashCode(ObjectWithHashCode(hashCode1), ObjectWithHashCode(hashCode2));
+      var result2 = HashCodeHelper.GetOrderIndependentHashCode(ObjectWithHashCode(hashCode2), ObjectWithHashCode(hashCode1));
+
+      // ASSERT
+      result1.Should().Be(result2);
+    }
+
+    [Test]
+    public void GetOrderIndependentHashCode_FromInts_SameIntsInDifferentOrder_ReturnsSameHashCodes ()
+    {
+      var hashCode1 = Some.Integer;
+      var hashCode2 = Some.Integer;
+
+      // ACT
+      var result1 = HashCodeHelper.GetOrderIndependentHashCode(hashCode1, hashCode2);
+      var result2 = HashCodeHelper.GetOrderIndependentHashCode(hashCode2, hashCode1);
+
+      // ASSERT
+      result1.Should().Be(result2);
     }
 
     private static object ObjectWithHashCode (int hashCode)

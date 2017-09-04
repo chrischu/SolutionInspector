@@ -46,7 +46,7 @@ namespace SolutionInspector.Commons.Utilities
 
     public int GetHashCode (IEnumerable<T> obj)
     {
-      return HashCodeHelper.GetHashCode(obj.Select(x => _comparer.GetHashCode(x)).ToArray());
+      return HashCodeHelper.GetOrderIndependentHashCode(obj.Select(x => _comparer.GetHashCode(x)).ToArray());
     }
   }
 }

@@ -35,12 +35,12 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
       <rule type=""Namespace.SolutionRule, SolutionAssembly"" />
     </solutionRules>
     <projectRules>
-      <projectRuleGroup appliesTo=""Project"">
+      <projectRuleGroup name=""ProjectRuleGroup"" appliesTo=""Project"">
         <rule type=""Namespace.ProjectRule, ProjectAssembly"" />
       </projectRuleGroup>
     </projectRules>
     <projectItemRules>
-      <projectItemRuleGroup appliesTo=""Item"" inProject=""Project"">
+      <projectItemRuleGroup name=""ProjectItemRuleGroup"" appliesTo=""Item"" inProject=""Project"">
         <rule type=""Namespace.ProjectItemRule, ProjectItemAssembly"" />
       </projectItemRuleGroup>
     </projectItemRules>
@@ -74,6 +74,7 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
         {
           new
           {
+            Name = "ProjectRuleGroup",
             AppliesTo = "Project",
             Rules = new[]
                     {
@@ -88,6 +89,7 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
         {
           new
           {
+            Name = "ProjectItemRuleGroup",
             AppliesTo = "Item",
             InProject = "Project",
             Rules = new[]

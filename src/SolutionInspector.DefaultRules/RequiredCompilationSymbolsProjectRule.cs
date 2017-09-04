@@ -18,7 +18,7 @@ namespace SolutionInspector.DefaultRules
   public class RequiredCompilationSymbolsProjectRule : ConfigurableProjectRule<RequiredCompilationSymbolsProjectRuleConfiguration>
   {
     /// <inheritdoc />
-    public RequiredCompilationSymbolsProjectRule ([NotNull] RequiredCompilationSymbolsProjectRuleConfiguration configuration)
+    public RequiredCompilationSymbolsProjectRule([NotNull] RequiredCompilationSymbolsProjectRuleConfiguration configuration)
       : base(configuration)
     {
     }

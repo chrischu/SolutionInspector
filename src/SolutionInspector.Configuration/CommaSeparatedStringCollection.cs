@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -132,16 +133,17 @@ namespace SolutionInspector.Configuration
     }
 
     /// <inheritdoc />
-    public void CopyTo (string[] array, int arrayIndex)
+    public void CopyTo(string[] array, int arrayIndex)
     {
       _collection.CopyTo(array, arrayIndex);
     }
 
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public bool IsReadOnly => false;
 
     /// <inheritdoc />
-    public int IndexOf ([CanBeNull] string item)
+    public int IndexOf([CanBeNull] string item)
     {
       return _collection.IndexOf(item);
     }

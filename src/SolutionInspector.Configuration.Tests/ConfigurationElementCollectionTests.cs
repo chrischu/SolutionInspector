@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -46,6 +47,16 @@ namespace SolutionInspector.Configuration.Tests
     }
 
     [Test]
+    public void Add_Null_Throws ()
+    {
+      // ACT
+      Action act = () => _sut.Add(null);
+
+      // ASSERT
+      act.ShouldThrow<ArgumentNullException>();
+    }
+
+    [Test]
     public void Insert()
     {
       _sut.AddNew();
@@ -62,6 +73,16 @@ namespace SolutionInspector.Configuration.Tests
     }
 
     [Test]
+    public void Insert_Null_Throws ()
+    {
+      // ACT
+      Action act = () => _sut.Insert(0, null);
+
+      // ASSERT
+      act.ShouldThrow<ArgumentNullException>();
+    }
+
+    [Test]
     public void Remove ()
     {
       var element = _sut.AddNew();
@@ -72,6 +93,16 @@ namespace SolutionInspector.Configuration.Tests
       // ASSERT
       _collectionElement.Elements().Should().HaveCount(0);
       _sut.Should().HaveCount(0);
+    }
+
+    [Test]
+    public void Remove_Null_Throws ()
+    {
+      // ACT
+      Action act = () => _sut.Remove(null);
+
+      // ASSERT
+      act.ShouldThrow<ArgumentNullException>();
     }
 
     [Test]
