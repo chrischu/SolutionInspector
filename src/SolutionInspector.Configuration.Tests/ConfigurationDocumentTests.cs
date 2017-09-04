@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.TestInfrastructure;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Configuration.Tests
 {
@@ -45,7 +46,7 @@ namespace SolutionInspector.Configuration.Tests
       document.Save();
 
       // ASSERT
-      _temporaryFile.Read().Should().Be(@"<?xml version=""1.0"" encoding=""utf-8""?>
+      _temporaryFile.Read().Should().BeIgnoringDifferentLineEnds(@"<?xml version=""1.0"" encoding=""utf-8""?>
 <configuration simple=""newValue"" />");
     }
 
@@ -63,7 +64,7 @@ namespace SolutionInspector.Configuration.Tests
         // ASSERT
         _temporaryFile.Read().Should().BeEmpty();
 
-        otherTemporaryFile.Read().Should().Be(@"<?xml version=""1.0"" encoding=""utf-8""?>
+        otherTemporaryFile.Read().Should().BeIgnoringDifferentLineEnds(@"<?xml version=""1.0"" encoding=""utf-8""?>
 <configuration simple=""newValue"" />");
       }
     }

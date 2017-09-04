@@ -30,7 +30,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
       }
     }
 
-    private static void BeIgnoringDifferentLineEnds (this StringAssertions stringAssertions, string expected)
+    public static void BeIgnoringDifferentLineEnds (this StringAssertions stringAssertions, string expected)
     {
       var actualWithReplacedLineEndings = stringAssertions.Subject.Replace("\r\n", "\n");
       var expectedWithReplacedLineEndings = expected.Replace("\r\n", "\n");
