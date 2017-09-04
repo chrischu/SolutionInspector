@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using FluentAssertions.Primitives;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 using Wrapperator.Wrappers.IO;
 
 namespace SolutionInspector.TestInfrastructure.AssertionExtensions
@@ -11,7 +11,7 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
   /// <summary>
   ///   Extension for easier assertion of objects.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public static class ObjectStructuralEqualityExtensions
   {
     public static void ShouldAllBeEquivalentTo<T> (this IEnumerable<T> subject, params object[] expectation)

@@ -1,4 +1,5 @@
-using JetBrains.Annotations;
+using System;
+using SolutionInspector.Commons.Attributes;
 using Wrapperator.Interfaces.IO;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -6,7 +7,7 @@ namespace SolutionInspector.Api.ObjectModel
   /// <summary>
   ///   Represents a reference pointing to a DLL in the file system.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IDllReference : IReference
   {
     /// <summary>

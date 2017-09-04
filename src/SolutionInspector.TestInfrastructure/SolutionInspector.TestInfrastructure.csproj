@@ -104,6 +104,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj">
+      <Project>{61A5E798-3EB1-4362-B08A-CDDA370D17B6}</Project>
+      <Name>SolutionInspector.Commons</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

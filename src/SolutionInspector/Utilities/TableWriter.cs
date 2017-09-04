@@ -5,12 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Utilities
 {
-  [PublicAPI]
+  [ForFutureUse]
   internal interface ITableWriter
   {
     void Write<T> (TextWriter writer, IEnumerable<T> rows, params Expression<Func<T, object>>[] columnSelectors);

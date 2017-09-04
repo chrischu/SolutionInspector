@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using JetBrains.Annotations;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Attributes;
 using Wrapperator.Interfaces.IO;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -10,7 +10,7 @@ namespace SolutionInspector.Api.ObjectModel
   /// <summary>
   ///   Represents a MSBuild project.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IProject : IRuleTarget, IDisposable
   {
     /// <summary>

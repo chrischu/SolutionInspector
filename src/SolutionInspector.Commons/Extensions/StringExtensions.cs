@@ -20,14 +20,20 @@ namespace SolutionInspector.Commons.Extensions
       return s.EndsWith(suffix) ? s.Substring(0, s.Length - suffix.Length) : s;
     }
 
+    /// <summary>
+    ///   Get the prefix with the given <paramref name="length" /> from <paramref name="s" />.
+    /// </summary>
     [CanBeNull]
-    public static string Prefix([CanBeNull] this string s, int length)
+    public static string Prefix ([CanBeNull] this string s, int length)
     {
       return s?.Substring(0, Math.Min(s.Length, length));
     }
 
+    /// <summary>
+    ///   Get the suffix with the given <paramref name="length" /> from <paramref name="s" />.
+    /// </summary>
     [CanBeNull]
-    public static string Suffix([CanBeNull] this string s, int length)
+    public static string Suffix ([CanBeNull] this string s, int length)
     {
       return s?.Substring(Math.Max(0, s.Length - length));
     }

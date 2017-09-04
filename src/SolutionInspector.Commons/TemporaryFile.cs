@@ -13,11 +13,18 @@ namespace SolutionInspector.Commons
       Path = System.IO.Path.GetTempFileName();
     }
 
+    /// <summary>
+    ///   Get a writeable <see cref="Stream" /> for the file.
+    /// </summary>
+    /// <returns></returns>
     public Stream GetStream ()
     {
       return new FileStream(Path, FileMode.Open, FileAccess.ReadWrite);
     }
 
+    /// <summary>
+    ///   The path to the <see cref="TemporaryFile" />.
+    /// </summary>
     public string Path { get; }
 
     public void Dispose ()

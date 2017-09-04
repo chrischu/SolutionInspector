@@ -190,6 +190,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj">
+      <Project>{61A5E798-3EB1-4362-B08A-CDDA370D17B6}</Project>
+      <Name>SolutionInspector.Commons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
       <Project>{25e030c5-78b1-4a5c-bb25-6eccb892971c}</Project>
       <Name>SolutionInspector.Configuration</Name>

@@ -10,12 +10,9 @@ namespace SolutionInspector.Internals.ObjectModel
 {
   internal class AdvancedProject : IAdvancedProject
   {
-    private readonly Project _project;
-
-    public AdvancedProject (Project project, Microsoft.Build.Evaluation.Project msBuildProject, ProjectInSolution msBuildProjectInSolution)
+    public AdvancedProject (Microsoft.Build.Evaluation.Project msBuildProject, ProjectInSolution msBuildProjectInSolution)
     {
       MsBuildProjectInSolution = msBuildProjectInSolution;
-      _project = project;
       MsBuildProject = msBuildProject;
 
       Properties = ProcessProperties(MsBuildProject.Xml.Properties);

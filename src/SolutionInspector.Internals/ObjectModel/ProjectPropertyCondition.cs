@@ -26,6 +26,7 @@ namespace SolutionInspector.Internals.ObjectModel
     [ExcludeFromCodeCoverage]
     private string DebuggerDisplay
     {
+      [UsedImplicitly /* by DebuggerDisplay */]
       get
       {
         if (Self == null)
@@ -68,7 +69,8 @@ namespace SolutionInspector.Internals.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      return obj is ProjectPropertyCondition && Equals((ProjectPropertyCondition) obj);
+      var projectPropertyCondition = obj as ProjectPropertyCondition;
+      return projectPropertyCondition != null && Equals(projectPropertyCondition);
     }
 
     /// <inheritdoc />
@@ -82,7 +84,7 @@ namespace SolutionInspector.Internals.ObjectModel
     ///   Compares two <see cref="ProjectPropertyCondition" />s by using <see cref="Equals(object)" /> and returns <see langword="true" /> if
     ///   they are equal, <see langword="false" /> otherwise.
     /// </summary>
-    public static bool operator == (ProjectPropertyCondition left, ProjectPropertyCondition right)
+    public static bool operator == ([CanBeNull] ProjectPropertyCondition left, [CanBeNull] ProjectPropertyCondition right)
     {
       return Equals(left, right);
     }
@@ -91,7 +93,7 @@ namespace SolutionInspector.Internals.ObjectModel
     ///   Compares two <see cref="ProjectPropertyCondition" />s by using <see cref="Equals(object)" /> and returns <see langword="false" /> if
     ///   they are equal, <see langword="true" /> otherwise.
     /// </summary>
-    public static bool operator != (ProjectPropertyCondition left, ProjectPropertyCondition right)
+    public static bool operator != ([CanBeNull] ProjectPropertyCondition left, [CanBeNull] ProjectPropertyCondition right)
     {
       return !Equals(left, right);
     }

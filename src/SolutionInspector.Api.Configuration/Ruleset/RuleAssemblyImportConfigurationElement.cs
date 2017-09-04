@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
@@ -6,9 +7,12 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   /// <summary>
   ///   Configuration for rule assembly imports.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IRuleAssemblyImportConfiguration
   {
+    /// <summary>
+    ///   The path of the rule assembly to import.
+    /// </summary>
     string Path { get; }
   }
 

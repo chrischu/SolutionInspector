@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SolutionInspector.Configuration;
@@ -10,7 +11,14 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   /// </summary>
   public interface IRulesetConfiguration
   {
+    /// <summary>
+    ///   The collection of paths to rule assemblies to be imported.
+    /// </summary>
     IReadOnlyCollection<string> RuleAssemblyImports { get; }
+
+    /// <summary>
+    ///   The rules in the ruleset.
+    /// </summary>
     IRulesConfiguration Rules { get; }
   }
 
@@ -18,10 +26,16 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   /// >
   public class RulesetConfigurationDocument : ConfigurationDocument, IRulesetConfiguration
   {
-    [ConfigurationCollection (ElementName = "import")]
+    /// <summary>
+    ///   A collection of <see cref="RuleAssemblyImportConfigurationElement" />s.
+    /// </summary>
+    [ConfigurationCollection(ElementName = "import")]
     public ConfigurationElementCollection<RuleAssemblyImportConfigurationElement> RuleAssemblyImports
       => GetConfigurationCollection<RuleAssemblyImportConfigurationElement>();
 
+    /// <summary>
+    ///   A collection of <see cref="RulesConfigurationElement" />s.
+    /// </summary>
     [ConfigurationSubelement]
     public RulesConfigurationElement Rules => GetConfigurationSubelement<RulesConfigurationElement>();
 

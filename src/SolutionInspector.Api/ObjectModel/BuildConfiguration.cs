@@ -1,13 +1,14 @@
 using System;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
   ///   Represents a MSBuild build configuration consisting of the configuration (e.g. Debug) and the platform (e.g. AnyCPU).
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public sealed class BuildConfiguration : IEquatable<BuildConfiguration>
   {
     private static Regex s_regex = new Regex(@"[A-Za-z0-9 *]+\|[A-Za-z0-9 *]+", RegexOptions.Compiled);
@@ -59,7 +60,8 @@ namespace SolutionInspector.Api.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      return obj is BuildConfiguration && Equals((BuildConfiguration) obj);
+      var buildConfiguration = obj as BuildConfiguration;
+      return buildConfiguration != null && Equals(buildConfiguration);
     }
 
     /// <inheritdoc />

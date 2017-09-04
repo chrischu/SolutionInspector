@@ -39,7 +39,8 @@ namespace SolutionInspector.Internals.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      return obj is ProjectItemInclude && Equals((ProjectItemInclude) obj);
+      var projectItemInclude = obj as ProjectItemInclude;
+      return projectItemInclude != null && Equals(projectItemInclude);
     }
 
     /// <inheritdoc />
@@ -53,7 +54,7 @@ namespace SolutionInspector.Internals.ObjectModel
     ///   Compares two <see cref="ProjectItemInclude" />s by using <see cref="Equals(ProjectItemInclude)" /> and returns <see langword="true" /> if
     ///   they are equal, <see langword="false" /> otherwise.
     /// </summary>
-    public static bool operator == (ProjectItemInclude left, ProjectItemInclude right)
+    public static bool operator == ([CanBeNull] ProjectItemInclude left, [CanBeNull] ProjectItemInclude right)
     {
       return Equals(left, right);
     }
@@ -62,7 +63,7 @@ namespace SolutionInspector.Internals.ObjectModel
     ///   Compares two <see cref="ProjectItemInclude" />s by using <see cref="Equals(ProjectItemInclude)" /> and returns <see langword="false" /> if
     ///   they are equal, <see langword="true" /> otherwise.
     /// </summary>
-    public static bool operator != (ProjectItemInclude left, ProjectItemInclude right)
+    public static bool operator != ([CanBeNull] ProjectItemInclude left, [CanBeNull] ProjectItemInclude right)
     {
       return !Equals(left, right);
     }

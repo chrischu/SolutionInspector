@@ -25,16 +25,10 @@ namespace SolutionInspector.Commons.Extensions
       return enumerable.Skip(count).Any();
     }
 
-    public static IEnumerable<TSource> DistinctBy<TSource, TKey> (this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
-    {
-      var knownKeys = new HashSet<TKey>();
-
-      foreach (var element in source)
-        if (knownKeys.Add(keySelector(element)))
-          yield return element;
-    }
-
-    public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+    /// <summary>
+    ///   Executes <paramref name="action" /> for every element in <paramref name="source" />.
+    /// </summary>
+    public static void ForEach<T> (this IEnumerable<T> source, Action<T> action)
     {
       foreach (var item in source)
         action(item);

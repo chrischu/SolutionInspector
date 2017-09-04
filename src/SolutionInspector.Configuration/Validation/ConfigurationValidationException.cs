@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Configuration.Validation
 {
@@ -34,7 +34,7 @@ namespace SolutionInspector.Configuration.Validation
     /// <summary>
     ///   All validation errors by property path.
     /// </summary>
-    [PublicAPI]
+    [PublicApi]
     public IReadOnlyDictionary<string, IReadOnlyCollection<string>> ValidationErrors { get; }
 
     private static string FormatValidationErrorMessage (IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors)

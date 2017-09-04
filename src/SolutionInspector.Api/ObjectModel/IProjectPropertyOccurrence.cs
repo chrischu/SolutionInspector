@@ -1,11 +1,13 @@
+using System;
 using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
   ///   Represents a <see cref="IProjectProperty" />'s occurrence in the source MSBuild file.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IProjectPropertyOccurrence
   {
     /// <summary>

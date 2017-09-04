@@ -14,7 +14,6 @@ namespace SolutionInspector.Internals.ObjectModel
 {
   internal sealed class Solution : ISolution
   {
-    private readonly SolutionFile _solutionFile;
     private readonly string _solutionPath;
 
     private Solution (string solutionPath, IMsBuildParsingConfiguration msBuildParsingConfiguration)
@@ -22,13 +21,13 @@ namespace SolutionInspector.Internals.ObjectModel
       _solutionPath = solutionPath;
       Name = Path.GetFileNameWithoutExtension(solutionPath);
       SolutionDirectory = Wrapper.Wrap(new DirectoryInfo(Path.GetDirectoryName(solutionPath).AssertNotNull()));
-      _solutionFile = SolutionFile.Parse(solutionPath);
+      var solutionFile = SolutionFile.Parse(solutionPath);
 
       Projects =
-          _solutionFile.ProjectsInOrder.Where(p => p.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat)
+          solutionFile.ProjectsInOrder.Where(p => p.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat)
               .Select(p => Project.FromSolution(this, p, msBuildParsingConfiguration))
               .ToArray();
-      BuildConfigurations = _solutionFile.SolutionConfigurations.Select(c => new BuildConfiguration(c.ConfigurationName, c.PlatformName)).ToArray();
+      BuildConfigurations = solutionFile.SolutionConfigurations.Select(c => new BuildConfiguration(c.ConfigurationName, c.PlatformName)).ToArray();
     }
 
     public string Name { get; }

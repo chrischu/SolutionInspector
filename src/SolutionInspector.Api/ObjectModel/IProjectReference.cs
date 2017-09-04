@@ -1,6 +1,6 @@
 using System;
-using JetBrains.Annotations;
 using Microsoft.Build.Evaluation;
+using SolutionInspector.Commons.Attributes;
 using Wrapperator.Interfaces.IO;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -8,7 +8,7 @@ namespace SolutionInspector.Api.ObjectModel
   /// <summary>
   ///   Represents a reference to another <see cref="IProject" /> in the same solution.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IProjectReference
   {
     /// <summary>

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
 using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Configuration.Validation.Static
 {
-  [PublicAPI]
+  [ForFutureUse]
   internal interface IDynamicConfigurationValidator
   {
     void BeginTypeValidation (Type configurationElementType, XElement element, ReportValidationError reportValidationError);

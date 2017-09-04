@@ -1,13 +1,14 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
   ///   Represents a MSBuild project item build action (e.g. None, Compile).
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public sealed class ProjectItemBuildAction : IEquatable<ProjectItemBuildAction>
   {
     /// <summary>
@@ -62,7 +63,8 @@ namespace SolutionInspector.Api.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      return obj is ProjectItemBuildAction && Equals((ProjectItemBuildAction) obj);
+      var projectItemBuildAction = obj as ProjectItemBuildAction;
+      return projectItemBuildAction != (ProjectItemBuildAction) null && Equals(projectItemBuildAction);
     }
 
     /// <inheritdoc />

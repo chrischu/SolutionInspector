@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
@@ -8,11 +11,27 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   /// <summary>
   ///   Configuration for a group of <see cref="ProjectItemRule" />s.
   /// </summary>
+  [PublicApi]
   public interface IProjectItemRuleGroupConfiguration
   {
+    /// <summary>
+    ///   The name of the <see cref="IProjectItemRuleGroupConfiguration" />.
+    /// </summary>
     string Name { get; }
+
+    /// <summary>
+    ///   The <see cref="INameFilter" /> that controls to which <see cref="IProjectItem" />s the <see cref="IProjectItemRuleGroupConfiguration" /> applies.
+    /// </summary>
     INameFilter AppliesTo { get; }
+
+    /// <summary>
+    ///   The <see cref="INameFilter" /> that controls to which <see cref="IProject" />s the <see cref="IProjectItemRuleGroupConfiguration" /> applies.
+    /// </summary>
     INameFilter InProject { get; }
+
+    /// <summary>
+    ///   The collection of rules in the <see cref="IProjectItemRuleGroupConfiguration" />.
+    /// </summary>
     IReadOnlyCollection<IRuleConfiguration> Rules { get; }
   }
 
@@ -27,6 +46,7 @@ namespace SolutionInspector.Api.Configuration.Ruleset
       set { SetConfigurationValue(value); }
     }
 
+    /// <see cref="IProjectItemRuleGroupConfiguration.AppliesTo"/>
     [ConfigurationValue]
     public NameFilter AppliesTo
     {
@@ -34,6 +54,7 @@ namespace SolutionInspector.Api.Configuration.Ruleset
       set { SetConfigurationValue(value); }
     }
 
+    /// <see cref="IProjectItemRuleGroupConfiguration.InProject"/>
     [ConfigurationValue]
     public NameFilter InProject
     {
@@ -41,7 +62,8 @@ namespace SolutionInspector.Api.Configuration.Ruleset
       set { SetConfigurationValue(value); }
     }
 
-    [ConfigurationCollection (IsDefaultCollection = true, ElementName = "rule", IsOptional = true)]
+    /// <see cref="IProjectItemRuleGroupConfiguration.Rules"/>
+    [ConfigurationCollection(IsDefaultCollection = true, ElementName = "rule", IsOptional = true)]
     public ConfigurationElementCollection<RuleConfigurationElement> Rules => GetConfigurationCollection<RuleConfigurationElement>();
 
     [ExcludeFromCodeCoverage]

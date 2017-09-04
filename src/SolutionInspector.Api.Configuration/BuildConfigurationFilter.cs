@@ -15,9 +15,7 @@ namespace SolutionInspector.Api.Configuration
   {
     private readonly BuildConfiguration[] _filters;
 
-    /// <summary>
-    ///   Creates a <see cref="BuildConfigurationFilter" /> from the given <see cref="BuildConfiguration" />s.
-    /// </summary>
+    /// <inheritdoc />
     public BuildConfigurationFilter (IEnumerable<BuildConfiguration> filters)
       : this(filters.ToArray())
     {

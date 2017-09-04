@@ -11,6 +11,9 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
   /// </summary>
   public static class DiffFormatter
   {
+    /// <summary>
+    ///   Formats the differences between <paramref name="old" /> and <paramref name="new" /> in a human-readable way.
+    /// </summary>
     public static string FormatDiff (string old, string @new)
     {
       var diff = GetDiff(old, @new);

@@ -1,12 +1,12 @@
 using System;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
   ///   Represents a NuGet package referenced by a project.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface INuGetPackage : IEquatable<INuGetPackage>
   {
     /// <summary>

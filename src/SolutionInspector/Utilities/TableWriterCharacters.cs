@@ -1,9 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using JetBrains.Annotations;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Utilities
 {
-  [PublicAPI]
+  [ForFutureUse]
   [ExcludeFromCodeCoverage]
   internal class TableWriterCharacters
   {

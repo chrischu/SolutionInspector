@@ -4,12 +4,12 @@ using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Autofac;
-using JetBrains.Annotations;
 using ManyConsole;
 using NLog;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Commands;
+using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
 using SolutionInspector.DefaultRules;
@@ -29,7 +29,7 @@ namespace SolutionInspector
   /// <summary>
   ///   Entry point for a SolutionInspector run.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   [ExcludeFromCodeCoverage]
   public static class SolutionInspector
   {

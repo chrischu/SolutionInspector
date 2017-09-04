@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ForFutureUseAttribute.cs" />
+    <Compile Include="Attributes\PublicApiAttribute.cs" />
     <Compile Include="Extensions\AssertNotNullExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />

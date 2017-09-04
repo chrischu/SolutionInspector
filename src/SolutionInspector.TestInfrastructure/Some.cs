@@ -4,14 +4,14 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Xml.Linq;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.TestInfrastructure
 {
   /// <summary>
   ///   Returns random data for common types.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public static class Some
   {
     private const int c_someStringDefaultMaxLength = 100;
@@ -26,7 +26,9 @@ namespace SolutionInspector.TestInfrastructure
 
     private static Random Random => s_threadLocalRandomProvider.Value;
 
-    [SuppressMessage ("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
+    [SuppressMessage(
+      "Microsoft.Design",
+      "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
       Justification = "We do not raise an exception in this property, it simply returns a do-not-care exception instance for specs.")]
     public static Exception Exception => new SomeException(String());
 

@@ -1,3 +1,4 @@
+using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Rules
@@ -6,6 +7,7 @@ namespace SolutionInspector.Api.Rules
   ///   A SolutionInspector rule that applies to the given <typeparamref name="TTarget" /> and can be configured using the
   ///   <typeparamref name="TConfiguration" />.
   /// </summary>
+  [PublicApi]
   public interface IConfigurableRule<in TTarget, out TConfiguration> : IRule<TTarget>, IConfigurableRule
     where TTarget : IRuleTarget
   //where TConfiguration : ConfigurationElement // TODO

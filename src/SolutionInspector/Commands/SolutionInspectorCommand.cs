@@ -5,10 +5,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 using ManyConsole;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Commands
 {
-  [PublicAPI]
+  [ForFutureUse]
   internal interface IArgumentsBuilderWithSetValues<out TArguments>
   {
     IArgumentsBuilderWithSetValues<TArguments> Option<T> (
@@ -21,7 +22,7 @@ namespace SolutionInspector.Commands
     IArgumentsBuilderWithSetValues<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
   }
 
-  [PublicAPI]
+  [ForFutureUse]
   internal interface IArgumentsBuilder<out TArguments>
   {
     IArgumentsBuilder<TArguments> Option<T> (
@@ -36,7 +37,7 @@ namespace SolutionInspector.Commands
     IArgumentsBuilderWithSetValues<TArguments> Values (Action<IValueArgumentsBuilder<TArguments>> configureValueArguments);
   }
 
-  [PublicAPI]
+  [ForFutureUse]
   internal interface IValueArgumentsBuilder<out TArguments>
   {
     IValueArgumentsBuilder<TArguments> Value (string name, Action<TArguments, string> setValue);

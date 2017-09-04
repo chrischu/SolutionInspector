@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Configuration.Validation.Static
 {
-  [PublicAPI]
+  [ForFutureUse]
   internal interface IStaticConfigurationValidator
   {
     void BeginTypeValidation (Type configurationElementType, ReportValidationError reportValidationError);

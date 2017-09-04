@@ -13,6 +13,9 @@ namespace SolutionInspector.Commons.Utilities
     private static readonly Dictionary<Tuple<Type, MemberInfo>, Delegate> s_createActionFromGetterExpressionCache =
         new Dictionary<Tuple<Type, MemberInfo>, Delegate>();
 
+    /// <summary>
+    ///   Creates an <see cref="Action{TObject,TProperty}" /> that can be used to set the property referenced by <paramref name="propertyGet" />.
+    /// </summary>
     public static Action<TObject, TProperty> CreateSetterActionFromGetterExpression<TObject, TProperty> (
       Expression<Func<TObject, TProperty>> propertyGet)
     {

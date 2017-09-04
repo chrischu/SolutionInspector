@@ -46,7 +46,8 @@ namespace SolutionInspector.Internals.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      return obj is ProjectLocation && Equals((ProjectLocation) obj);
+      var projectLocation = obj as ProjectLocation;
+      return projectLocation != null && Equals(projectLocation);
     }
 
     /// <inheritdoc />
@@ -60,7 +61,7 @@ namespace SolutionInspector.Internals.ObjectModel
     ///   Compares two <see cref="ProjectLocation" />s by using <see cref="Equals(ProjectLocation)" /> and returns <see langword="true" /> if
     ///   they are equal, <see langword="false" /> otherwise.
     /// </summary>
-    public static bool operator == (ProjectLocation left, ProjectLocation right)
+    public static bool operator == ([CanBeNull] ProjectLocation left, [CanBeNull] ProjectLocation right)
     {
       return Equals(left, right);
     }
@@ -69,7 +70,7 @@ namespace SolutionInspector.Internals.ObjectModel
     ///   Compares two <see cref="ProjectLocation" />s by using <see cref="Equals(ProjectLocation)" /> and returns <see langword="false" /> if
     ///   they are equal, <see langword="true" /> otherwise.
     /// </summary>
-    public static bool operator != (ProjectLocation left, ProjectLocation right)
+    public static bool operator != ([CanBeNull] ProjectLocation left, [CanBeNull] ProjectLocation right)
     {
       return !Equals(left, right);
     }

@@ -62,6 +62,7 @@ namespace SolutionInspector.Api.Tests.Rules
         return Enumerable.Empty<IRuleViolation>();
       }
 
+      // ReSharper disable once UnassignedGetOnlyAutoProperty
       public ConfigurableRuleConfiguration Configuration { get; }
     }
 
@@ -72,6 +73,7 @@ namespace SolutionInspector.Api.Tests.Rules
         return Enumerable.Empty<IRuleViolation>();
       }
 
+      // ReSharper disable once UnassignedGetOnlyAutoProperty
       public ConfigurableRuleConfiguration Configuration { get; }
     }
 

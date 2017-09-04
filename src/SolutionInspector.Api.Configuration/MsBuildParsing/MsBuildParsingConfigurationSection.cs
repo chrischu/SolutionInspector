@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.Configuration.MsBuildParsing
 {
   /// <summary>
   ///   Configuration that controls how the MSBuild (e.g. csproj) files are parsed.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IMsBuildParsingConfiguration
   {
     /// <summary>
@@ -25,6 +25,7 @@ namespace SolutionInspector.Api.Configuration.MsBuildParsing
     <projectBuildAction name=""None"" />
   </projectBuildActions>
 </solutionInspector>";
+
     private Lazy<HashSet<string>> _projectBuildActionsHashSet;
 
     public MsBuildParsingConfigurationSection ()
@@ -32,7 +33,7 @@ namespace SolutionInspector.Api.Configuration.MsBuildParsing
       _projectBuildActionsHashSet = new Lazy<HashSet<string>>(() => new HashSet<string>(ProjectBuildActions.Select(a => a.Name)));
     }
 
-    [ConfigurationProperty ("projectBuildActions")]
+    [ConfigurationProperty("projectBuildActions")]
     public ProjectBuildActionsConfigurationElement ProjectBuildActions => (ProjectBuildActionsConfigurationElement) this["projectBuildActions"];
 
     public bool IsValidProjectItemType (string projectItemType)

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Microsoft.Build.Evaluation;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Attributes;
 using Wrapperator.Interfaces.IO;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -9,7 +9,7 @@ namespace SolutionInspector.Api.ObjectModel
   /// <summary>
   ///   Represents a MSBuild project item.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IProjectItem : IRuleTarget
   {
     /// <summary>

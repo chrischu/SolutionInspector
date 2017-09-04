@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
   ///   A SolutionInspector rule that applies to the given <typeparamref name="TTarget" />.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IRule<in TTarget> : IRule
     where TTarget : IRuleTarget
   {

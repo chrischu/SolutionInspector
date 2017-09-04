@@ -160,6 +160,7 @@ namespace SolutionInspector.Internals.Tests
         return Enumerable.Empty<IRuleViolation>();
       }
 
+      // ReSharper disable once UnassignedGetOnlyAutoProperty
       public ConfigurableRuleConfiguration Configuration { get; }
     }
 
@@ -170,6 +171,7 @@ namespace SolutionInspector.Internals.Tests
       {
       }
 
+      // ReSharper disable once UnusedParameter.Local
       public ConfigurableRuleWithMultipleCtors (ConfigurableRuleConfiguration configuration, object dummyParameter)
         : base(configuration)
       {

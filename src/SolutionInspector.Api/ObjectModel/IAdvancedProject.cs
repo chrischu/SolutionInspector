@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
   ///   Provides access to more advanced/raw properties of the underlying MSBuild project file.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IAdvancedProject
   {
     /// <summary>

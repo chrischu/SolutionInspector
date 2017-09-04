@@ -1,9 +1,9 @@
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.Rules
 {
   /// <inheritdoc />
-  [PublicAPI]
+  [PublicApi]
   public class RuleViolation : IRuleViolation
   {
     /// <summary>

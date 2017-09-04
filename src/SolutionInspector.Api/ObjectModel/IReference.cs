@@ -1,12 +1,12 @@
 using System.Reflection;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
   ///   Represents a reference from a <see cref="IProject" />.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IReference
   {
     /// <summary>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Attributes;
 using Wrapperator.Interfaces.IO;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -9,7 +10,7 @@ namespace SolutionInspector.Api.ObjectModel
   /// <summary>
   ///   Represents a VisualStudio solution.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface ISolution : IRuleTarget, IDisposable
   {
     /// <summary>

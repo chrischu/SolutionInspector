@@ -41,7 +41,7 @@ namespace SolutionInspector.Internals.ObjectModel
       BuildConfigurations =
           projectInSolution.ProjectConfigurations.Values.Select(c => new BuildConfiguration(c.ConfigurationName, c.PlatformName)).Distinct().ToArray();
 
-      Advanced = new AdvancedProject(this, project, projectInSolution);
+      Advanced = new AdvancedProject(project, projectInSolution);
 
       Guid = Guid.Parse(projectInSolution.ProjectGuid);
 

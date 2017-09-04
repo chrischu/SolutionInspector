@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Configuration
@@ -43,6 +44,10 @@ namespace SolutionInspector.Api.Configuration
       _excludeFilters = Excludes.Select(FilterToRegex).ToArray();
     }
 
+    /// <summary>
+    ///   Compiles the <see cref="NameFilter" /> to reduce evaluation runtime in the future.
+    /// </summary>
+    [PublicApi]
     public NameFilter Compile ()
     {
       return _compiled ? this : new NameFilter(Includes, Excludes, compiled: true);
@@ -68,6 +73,10 @@ namespace SolutionInspector.Api.Configuration
       return new Regex($"^{filter.Replace(".", "\\.").Replace("*", ".*")}$", _regexOptions);
     }
 
+    /// <summary>
+    ///   Creates a <see cref="NameFilter" /> from the given <paramref name="filter" /> containing a <see cref="string" /> representation of a
+    ///   <see cref="NameFilter" />.
+    /// </summary>
     public static NameFilter Parse ([NotNull] string filter)
     {
       var partRegex = @"((\+?|-)[\w\-.*]+)";

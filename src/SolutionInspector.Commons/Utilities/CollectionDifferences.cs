@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Commons.Utilities
 {
@@ -12,7 +12,7 @@ namespace SolutionInspector.Commons.Utilities
     /// <summary>
     ///   A instance of <see cref="CollectionDifferences{T}" /> that represents no differences.
     /// </summary>
-    [PublicAPI]
+    [PublicApi]
     public static readonly CollectionDifferences<T> None = new CollectionDifferences<T>(Enumerable.Empty<T>(), Enumerable.Empty<T>());
 
     /// <summary>

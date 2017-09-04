@@ -1,11 +1,13 @@
+using System;
 using JetBrains.Annotations;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.ObjectModel
 {
   /// <summary>
   ///   Represents the condition that must be fulfilled for the project property to be active.
   /// </summary>
-  [PublicAPI]
+  [PublicApi]
   public interface IProjectPropertyCondition
   {
     /// <summary>

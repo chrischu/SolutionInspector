@@ -91,7 +91,8 @@ namespace SolutionInspector.Internals.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      return obj is INuGetPackage && Equals((INuGetPackage) obj);
+      var nuGetPackage = obj as INuGetPackage;
+      return nuGetPackage != null && Equals(nuGetPackage);
     }
 
     /// <inheritdoc />
