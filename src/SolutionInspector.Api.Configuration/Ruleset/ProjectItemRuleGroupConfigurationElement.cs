@@ -36,7 +36,7 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   }
 
   /// <inheritdoc cref="IProjectItemRuleGroupConfiguration" />
-  /// >
+  [ForFutureUse]
   public class ProjectItemRuleGroupConfigurationElement : ConfigurationElement, IProjectItemRuleGroupConfiguration
   {
     [ConfigurationValue(IsOptional = true)]

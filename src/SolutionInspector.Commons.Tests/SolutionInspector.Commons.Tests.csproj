@@ -91,11 +91,13 @@
     <Compile Include="..\AssemblyInfoShared.cs">
       <Link>Properties\AssemblyInfoShared.cs</Link>
     </Compile>
+    <Compile Include="Extensions\CollectionExtensionsTests.cs" />
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTests.cs" />
     <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Extensions\XmlExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TemporaryFileTests.cs" />
     <Compile Include="Utilities\CollectionDifferenceFinderTests.cs" />
     <Compile Include="Utilities\ExpressionUtilityTests.cs" />
     <None Include="app.config" />

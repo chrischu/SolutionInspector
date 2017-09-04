@@ -2,12 +2,14 @@ using System;
 using System.Linq;
 using System.Reflection;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Internals
 {
   /// <summary>
   ///   Utility to resolve rule types from their name.
   /// </summary>
+  [PublicApi]
   public interface IRuleTypeResolver
   {
     /// <summary>

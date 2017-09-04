@@ -2,12 +2,14 @@ using System;
 using System.Reflection;
 using JetBrains.Annotations;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Internals
 {
   /// <summary>
   ///   Captures information about the type of a <see cref="Rule{TTarget}" />.
   /// </summary>
+  [PublicApi]
   public class RuleTypeInfo
   {
     /// <summary>

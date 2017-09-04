@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api
 {
   /// <summary>
   ///   Filter that checks a string against a set of include/exclude filters.
   /// </summary>
+  [PublicApi]
   public interface INameFilter
   {
     /// <summary>
