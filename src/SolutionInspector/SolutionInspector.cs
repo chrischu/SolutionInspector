@@ -22,6 +22,7 @@ using Wrapperator.Interfaces.Configuration;
 using Wrapperator.Interfaces.Diagnostics;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
+using Wrapperator.Interfaces.Xml.Linq;
 using Wrapperator.Wrappers;
 
 namespace SolutionInspector
@@ -45,6 +46,9 @@ namespace SolutionInspector
     /// </summary>
     public static int Run (string[] args)
     {
+      Environment.SetEnvironmentVariable("VSINSTALLDIR", @"C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools");
+      Environment.SetEnvironmentVariable("VisualStudioVersion", "15.0");
+
       s_logger.Debug($"SolutionInspector was run with the following arguments: [{string.Join(", ", args)}].");
 
       using (var container = SetupContainer())
@@ -64,6 +68,7 @@ namespace SolutionInspector
       builder.Register(ctx => Wrapper.Assembly).As<IAssemblyStatic>();
       builder.Register(ctx => Wrapper.ConfigurationManager).As<IConfigurationManagerStatic>();
       builder.Register(ctx => Wrapper.Process).As<IProcessStatic>();
+      builder.Register(ctx => Wrapper.XDocument).As<IXDocumentStatic>();
 
       builder.RegisterType<Configuration.ConfigurationManager>().As<IConfigurationManager>();
 
@@ -104,7 +109,8 @@ namespace SolutionInspector
           ctx.Resolve<IFileStatic>(),
           ctx.Resolve<IConsoleStatic>())
       ).As<ConsoleCommand>();
-      builder.RegisterType<ConfigureCommand>().As<ConsoleCommand>();
+
+      builder.Register(ctx => new ConfigureCommand("TODO", ctx.Resolve<IProcessStatic>())).As<ConsoleCommand>();
 
       builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();
 
