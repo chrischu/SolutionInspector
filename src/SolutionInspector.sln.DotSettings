@@ -9,6 +9,7 @@
 	<s:Boolean x:Key="/Default/CodeInspection/XmlDocInspections/RequireDocsOnOverridingMember/@EntryValue">False</s:Boolean>
 	<s:String x:Key="/Default/CodeInspection/XmlDocInspections/TypeAccessibility/@EntryValue">Public</s:String>
 	<s:String x:Key="/Default/CodeInspection/XmlDocInspections/TypeMemberAccessibility/@EntryValue">None</s:String>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/WRAP_LIMIT/@EntryValue">160</s:Int64>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=15425D843D916F428815DA77EEE7E271/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=15425D843D916F428815DA77EEE7E271/AbsolutePath/@EntryValue">D:\Development\SolutionInspector\src\Shared\CodeInspections.DotSettings</s:String>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=15425D843D916F428815DA77EEE7E271/RelativePath/@EntryValue">..\Shared\CodeInspections.DotSettings</s:String>

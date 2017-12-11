@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using SolutionInspector.Commons.Extensions;
 
-namespace SolutionInspector.TestInfrastructure
+namespace SolutionInspector.Internals.Tests.ObjectModel
 {
   public static class TestDataHelper
   {

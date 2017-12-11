@@ -11,7 +11,6 @@ using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Internals.ObjectModel;
-using SolutionInspector.TestInfrastructure;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 using Wrapperator.Wrappers.IO;
 

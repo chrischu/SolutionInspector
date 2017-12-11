@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Exceptions;
+using SolutionInspector.Internals.Tests.ObjectModel;
 using SolutionInspector.TestInfrastructure;
 using Wrapperator.Interfaces.IO;
 

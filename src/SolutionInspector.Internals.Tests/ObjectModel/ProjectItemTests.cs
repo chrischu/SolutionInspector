@@ -9,7 +9,6 @@ using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Internals.ObjectModel;
-using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Internals.Tests.ObjectModel
 {
