@@ -27,6 +27,7 @@ namespace SolutionInspector.Configuration.Validation
     ///   Serialization constructor.
     /// </summary>
     [ExcludeFromCodeCoverage /* Serialization ctor */]
+    // ReSharper disable once NotNullMemberIsNotInitialized
     protected ConfigurationValidationException (SerializationInfo info, StreamingContext context)
       : base(info, context)
     {

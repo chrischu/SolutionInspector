@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,22 +8,21 @@ using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Internals.ObjectModel;
+using SolutionInspector.TestInfrastructure;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Internals.Tests.ObjectModel
 {
   public class SolutionTests
   {
-    private static string _solutionPath;
-    private static IMsBuildParsingConfiguration _msBuildParsingConfiguration;
+    private string _solutionPath;
+    private IMsBuildParsingConfiguration _msBuildParsingConfiguration;
 
     [SetUp]
     public void SetUp ()
     {
-      _solutionPath = Path.Combine(
-        Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath).AssertNotNull(),
-        @"ObjectModel\TestData\Solution\TestSolution.sln");
-
+      _solutionPath = TestDataHelper.GetTestDataPath(@"Solution\TestSolution.sln");
+        
       _msBuildParsingConfiguration = A.Dummy<IMsBuildParsingConfiguration>();
     }
 

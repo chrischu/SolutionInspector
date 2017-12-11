@@ -11,6 +11,7 @@ using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Internals.ObjectModel;
+using SolutionInspector.TestInfrastructure;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 using Wrapperator.Wrappers.IO;
 
@@ -25,9 +26,7 @@ namespace SolutionInspector.Internals.Tests.ObjectModel
     [SetUp]
     public void SetUp ()
     {
-      _solutionPath = Path.Combine(
-        Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath).AssertNotNull(),
-        @"ObjectModel\TestData\Project\TestSolution.sln");
+      _solutionPath = TestDataHelper.GetTestDataPath(@"Project\TestSolution.sln");
 
       _msBuildParsingConfiguration = A.Fake<IMsBuildParsingConfiguration>();
       A.CallTo(() => _msBuildParsingConfiguration.IsValidProjectItemType(A<string>._)).Returns(true);
@@ -234,7 +233,7 @@ namespace SolutionInspector.Internals.Tests.ObjectModel
 
         var appConfigPath = Path.Combine(Path.GetDirectoryName(projectPath).AssertNotNull(), "App.config");
         var expectedAppConfigContent = XDocument.Load(appConfigPath).ToString();
-        result.ConfigurationProjectItem.ConfigurationXml.ToString().Should().Be(expectedAppConfigContent);
+        result.ConfigurationProjectItem.AssertNotNull().ConfigurationXml.ToString().Should().Be(expectedAppConfigContent);
       }
     }
 
@@ -305,7 +304,7 @@ namespace SolutionInspector.Internals.Tests.ObjectModel
           {
             var reference = p.ProjectReferences.Single(r => r.ReferencedProjectName == "EmptyProject");
 
-            reference.Project.Name.Should().Be("EmptyProject");
+            reference.Project.AssertNotNull().Name.Should().Be("EmptyProject");
             reference.ReferencedProjectName.Should().Be("EmptyProject");
             reference.ReferencedProjectGuid.Should().Be(_guidOfEmptyProject);
             reference.Include.Should().Be("..\\EmptyProject\\EmptyProject.csproj");
@@ -319,7 +318,7 @@ namespace SolutionInspector.Internals.Tests.ObjectModel
           {
             var reference = p.ProjectReferences.Single(r => r.ReferencedProjectName == "InvalidGuid");
 
-            reference.Project.Name.Should().Be("EmptyProject");
+            reference.Project.AssertNotNull().Name.Should().Be("EmptyProject");
             reference.ReferencedProjectName.Should().Be("InvalidGuid");
             reference.ReferencedProjectGuid.Should().Be(Guid.Empty);
             reference.Include.Should().Be("..\\EmptyProject\\EmptyProject.csproj");

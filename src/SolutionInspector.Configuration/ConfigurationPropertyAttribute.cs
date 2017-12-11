@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Configuration
 {
@@ -8,6 +9,7 @@ namespace SolutionInspector.Configuration
   [AttributeUsage (AttributeTargets.Property)]
   public abstract class ConfigurationPropertyAttribute : Attribute
   {
+    [CanBeNull]
     internal abstract string XmlName { get; }
 
     /// <summary>

@@ -19,8 +19,7 @@ namespace SolutionInspector.Commons.Extensions
       TKey key,
       TValue @default = default(TValue))
     {
-      TValue value;
-      return dictionary.TryGetValue(key, out value) ? value : @default;
+      return dictionary.TryGetValue(key, out var value) ? value : @default;
     }
 
     /// <summary>
@@ -29,8 +28,7 @@ namespace SolutionInspector.Commons.Extensions
     /// </summary>
     public static TValue GetOrAdd<TKey, TValue> (this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> valueFactory)
     {
-      TValue value;
-      if (!dictionary.TryGetValue(key, out value))
+      if (!dictionary.TryGetValue(key, out var value))
         value = dictionary[key] = valueFactory(key);
 
       return value;

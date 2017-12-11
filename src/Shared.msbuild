@@ -1,0 +1,34 @@
+<Project>
+  <PropertyGroup>
+    <VersionPrefix>0.2.1</VersionPrefix>
+    <VersionSuffix>pre</VersionSuffix>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile Condition="'$(OutputPath)'!=''">$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;IDE0005;IDE0002</NoWarn>
+    <!-- Explicitly set DebugType=full and DebugSymbols=True so that Fody generates debuggable PDBs, see DR's comment on https://github.com/Fody/Fody/issues/360 -->
+    <DebugType>full</DebugType>
+    <DebugSymbols>True</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfoShared.cs" Link="AssemblyInfoShared.cs" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="11.0.0" />
+    <PackageReference Include="Fody" Version="2.2.1" PrivateAssets="All" />
+    <PackageReference Include="NullGuard.Fody" version="1.6.3" PrivateAssets="All" />
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.6.0" PrivateAssets="All" />
+  </ItemGroup>
+</Project>

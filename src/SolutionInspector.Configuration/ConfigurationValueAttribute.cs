@@ -26,6 +26,7 @@ namespace SolutionInspector.Configuration
     [CanBeNull]
     public string DefaultValue { get; set; }
 
+    [CanBeNull]
     internal override string XmlName => AttributeName;
   }
 }

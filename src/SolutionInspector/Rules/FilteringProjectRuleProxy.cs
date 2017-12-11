@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Api;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
@@ -17,7 +18,7 @@ namespace SolutionInspector.Rules
       _rule = rule;
     }
 
-    public IEnumerable<IRuleViolation> Evaluate (IProject target)
+    public IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
     {
       if (_filter.IsMatch(target.Name))
         return _rule.Evaluate(target);

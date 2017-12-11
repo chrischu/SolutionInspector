@@ -142,7 +142,7 @@ namespace SolutionInspector.Commands
 
       public void HandleRemainingArguments (string[] remainingArguments)
       {
-        _valueArgumentsBuilder?.ParseAdditionalArguments(_arguments, remainingArguments);
+        _valueArgumentsBuilder.ParseAdditionalArguments(_arguments, remainingArguments);
       }
 
       private class ValueArgumentsBuilder : IValueArgumentsBuilder<TArguments>

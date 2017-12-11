@@ -101,8 +101,8 @@ namespace SolutionInspector.Api.Configuration.Tests
       // ReSharper disable once UnusedMember.Local
       public string Value
       {
-        get { return (string) this["value"]; }
-        set { this["value"] = value; }
+        get => (string) this["value"];
+        set => this["value"] = value;
       }
     }
   }

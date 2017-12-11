@@ -11,9 +11,9 @@ namespace SolutionInspector.Tests.Reporting
       var ruleViolation = A.Fake<IRuleViolation>();
 
       A.CallTo(() => ruleViolation.Rule).Returns(rule ?? new SomeRule());
-      A.CallTo(() => ruleViolation.Target.Identifier).Returns(target ?? Some.String());
-      A.CallTo(() => ruleViolation.Target.FullPath).Returns(targetPath ?? Some.String());
-      A.CallTo(() => ruleViolation.Message).Returns(message ?? Some.String());
+      A.CallTo(() => ruleViolation.Target.Identifier).Returns(target ?? Some.String);
+      A.CallTo(() => ruleViolation.Target.FullPath).Returns(targetPath ?? Some.String);
+      A.CallTo(() => ruleViolation.Message).Returns(message ?? Some.String);
 
       return ruleViolation;
     }

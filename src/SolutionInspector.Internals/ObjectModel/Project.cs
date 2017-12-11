@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
+using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
@@ -63,7 +64,7 @@ namespace SolutionInspector.Internals.ObjectModel
     public ISolution Solution { get; }
 
     public string Name { get; }
-    public string FolderName => Path.GetFileName(Advanced.MsBuildProject.DirectoryPath);
+    public string FolderName => Path.GetFileName(Advanced.MsBuildProject.DirectoryPath).AssertNotNull();
     public IFileInfo ProjectFile => Wrapper.Wrap(new FileInfo(Advanced.MsBuildProject.FullPath));
     public IDirectoryInfo ProjectDirectory => Wrapper.Wrap(new DirectoryInfo(Advanced.MsBuildProject.DirectoryPath));
     public XDocument ProjectXml => _projectXml.Value;
@@ -71,9 +72,12 @@ namespace SolutionInspector.Internals.ObjectModel
 
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 
+    [CanBeNull]
     public string DefaultNamespace => Advanced.Properties.GetValueOrDefault("RootNamespace")?.DefaultValue;
+    [CanBeNull]
     public string AssemblyName => Advanced.Properties.GetValueOrDefault("AssemblyName")?.DefaultValue;
 
+    [CanBeNull]
     public Version TargetFrameworkVersion
     {
       get
@@ -95,6 +99,7 @@ namespace SolutionInspector.Internals.ObjectModel
 
     public IReadOnlyCollection<IProjectItem> ProjectItems { get; }
 
+    [CanBeNull]
     public IConfigurationProjectItem ConfigurationProjectItem { get; }
 
     public string GetIncludePathFor (IProject projectToInclude)
@@ -105,7 +110,7 @@ namespace SolutionInspector.Internals.ObjectModel
       return relativeUri.OriginalString.Replace('/', '\\');
     }
 
-    string IRuleTarget.Identifier => Path.GetFileName(Advanced.MsBuildProject.FullPath);
+    string IRuleTarget.Identifier => Path.GetFileName(Advanced.MsBuildProject.FullPath).AssertNotNull();
     string IRuleTarget.FullPath => Advanced.MsBuildProject.FullPath;
 
     public void Dispose ()
@@ -114,6 +119,7 @@ namespace SolutionInspector.Internals.ObjectModel
       _projectCollection.Dispose();
     }
 
+    [CanBeNull]
     private IConfigurationProjectItem BuildConfigurationProjectItem ()
     {
       var configurationItem = ProjectItems.SingleOrDefault(
@@ -238,6 +244,7 @@ namespace SolutionInspector.Internals.ObjectModel
 
       public AssemblyName AssemblyName { get; }
 
+      [CanBeNull]
       public string HintPath => Metadata.GetValueOrDefault("HintPath");
 
       public IReadOnlyDictionary<string, string> Metadata { get; }

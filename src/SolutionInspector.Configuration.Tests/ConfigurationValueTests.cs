@@ -35,7 +35,7 @@ namespace SolutionInspector.Configuration.Tests
     [Test]
     public void Deserialize ()
     {
-      var serialized = Some.String();
+      var serialized = Some.String;
 
       // ACT
       _sut.Deserialize(serialized);

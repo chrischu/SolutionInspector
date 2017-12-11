@@ -58,9 +58,7 @@ namespace SolutionInspector.Internals.ObjectModel
 
       foreach (var propertyElement in propertyElements)
       {
-        ProjectProperty property;
-
-        if (!result.TryGetValue(propertyElement.Name, out property))
+        if (!result.TryGetValue(propertyElement.Name, out var property))
           property = result[propertyElement.Name] = new ProjectProperty(propertyElement.Name, MsBuildProject.GetPropertyValue(propertyElement.Name));
 
         property.Add(new ProjectPropertyOccurrence(propertyElement));

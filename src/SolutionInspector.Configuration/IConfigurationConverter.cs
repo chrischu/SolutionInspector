@@ -18,11 +18,11 @@ namespace SolutionInspector.Configuration
     /// <summary>
     ///   Convert the <paramref name="value" /> to its <see cref="string" /> representation.
     /// </summary>
-    string ConvertTo ([CanBeNull] T value);
+    [CanBeNull] string ConvertTo ([CanBeNull] T value);
 
     /// <summary>
     ///   Convert the <paramref name="value" /> back from its <see cref="string" /> representation.
     /// </summary>
-    T ConvertFrom ([CanBeNull] string value);
+    [CanBeNull] T ConvertFrom ([CanBeNull] string value);
   }
 }

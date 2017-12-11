@@ -3,7 +3,7 @@ branches:
   only:
   - master
   - develop
-image: Visual Studio 2015
+image: Visual Studio 2017
 environment:
   NuGetApiKey:
     secure: Q2iw3AS2EBEcG4wVWDZY/ruR0Whvs50gTeCleO/uypdP7G7ajODYw030N3sOONtP

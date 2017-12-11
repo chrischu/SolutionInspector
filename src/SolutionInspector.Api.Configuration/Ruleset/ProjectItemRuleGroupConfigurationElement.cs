@@ -39,27 +39,28 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   [ForFutureUse]
   public class ProjectItemRuleGroupConfigurationElement : ConfigurationElement, IProjectItemRuleGroupConfiguration
   {
+    /// <see cref="IProjectItemRuleGroupConfiguration.Name"/>
     [ConfigurationValue(IsOptional = true)]
     public string Name
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
 
     /// <see cref="IProjectItemRuleGroupConfiguration.AppliesTo"/>
     [ConfigurationValue]
     public NameFilter AppliesTo
     {
-      get { return GetConfigurationValue<NameFilter>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<NameFilter>();
+      set => SetConfigurationValue(value);
     }
 
     /// <see cref="IProjectItemRuleGroupConfiguration.InProject"/>
     [ConfigurationValue]
     public NameFilter InProject
     {
-      get { return GetConfigurationValue<NameFilter>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<NameFilter>();
+      set => SetConfigurationValue(value);
     }
 
     /// <see cref="IProjectItemRuleGroupConfiguration.Rules"/>

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Configuration;
@@ -21,7 +22,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProjectItem target)
     {
       if ((target.CustomTool ?? "") != Configuration.ExpectedCustomTool)
         yield return
@@ -52,8 +53,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("The expected custom tool.")]
     public string ExpectedCustomTool
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
 
     /// <summary>
@@ -63,8 +64,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("The expected custom tool namespace.")]
     public string ExpectedCustomToolNamespace
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
   }
 }

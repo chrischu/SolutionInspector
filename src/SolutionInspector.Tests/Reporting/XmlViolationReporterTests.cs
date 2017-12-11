@@ -11,10 +11,10 @@ namespace SolutionInspector.Tests.Reporting
 {
   public class XmlViolationReporterTests
   {
-    private static TextWriter _textWriter;
-    private static IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
+    private TextWriter _textWriter;
+    private IRuleViolationViewModelConverter _ruleViolationViewModelConverter;
 
-    private static XmlViolationReporter _sut;
+    private XmlViolationReporter _sut;
 
     [SetUp]
     public void SetUp ()

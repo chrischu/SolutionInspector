@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
@@ -35,21 +34,17 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
         if (configurationPropertyAttribute.Length == 0)
           continue;
 
-        var configurationValueAttribute = configurationPropertyAttribute[0] as ConfigurationValueAttribute;
-        if (configurationValueAttribute != null)
+        if (configurationPropertyAttribute[0] is ConfigurationValueAttribute configurationValueAttribute)
         {
-          XAttribute attribute;
-          if (TryGetAttribute(element, configurationValueAttribute.GetXmlName(property.Name), out attribute))
+          if (TryGetAttribute(element, configurationValueAttribute.GetXmlName(property.Name), out var attribute))
             visitor.VisitValue(newPropertyPath, property, configurationValueAttribute, attribute);
 
           continue;
         }
 
-        var configurationSubelementAttribute = configurationPropertyAttribute[0] as ConfigurationSubelementAttribute;
-        if (configurationSubelementAttribute != null)
+        if (configurationPropertyAttribute[0] is ConfigurationSubelementAttribute configurationSubelementAttribute)
         {
-          XElement subelement;
-          if (TryGetSubelement(element, configurationSubelementAttribute.GetXmlName(property.Name), out subelement))
+          if (TryGetSubelement(element, configurationSubelementAttribute.GetXmlName(property.Name), out var subelement))
           {
             if (subelement != null)
               subTypesToWalk.Add(Tuple.Create(newPropertyPath, configurationSubelementAttribute.GetSubelementType(property), subelement));
@@ -60,19 +55,15 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
           continue;
         }
 
-        var configurationCollectionAttribute = configurationPropertyAttribute[0] as ConfigurationCollectionAttribute;
-        if (configurationCollectionAttribute != null)
+        if (configurationPropertyAttribute[0] is ConfigurationCollectionAttribute configurationCollectionAttribute)
         {
-          XElement collectionElement;
-
-          if (TryGetSubelement(element, configurationCollectionAttribute.GetXmlName(property.Name), out collectionElement))
+          if (TryGetSubelement(element, configurationCollectionAttribute.GetXmlName(property.Name), out var collectionElement))
           {
-            ReadOnlyCollection<XElement> collectionItems;
-            if (TryGetSubelements(collectionElement, configurationCollectionAttribute.ElementName, out collectionItems))
+            if (TryGetSubelements(collectionElement, configurationCollectionAttribute.ElementName, out var collectionItems))
             {
               var collectionElementType = configurationCollectionAttribute.GetCollectionElementType(property);
 
-              if (collectionElementType != null && collectionElement != null)
+              if (collectionElementType != null && collectionElement != null && collectionItems != null)
                 for (var i = 0; i < collectionItems.Count; i++)
                   subTypesToWalk.Add(Tuple.Create($"{newPropertyPath}[{i}]", collectionElementType, collectionItems[i]));
 
@@ -88,7 +79,7 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
         WalkInternal(subTypeToWalk.Item2, subTypeToWalk.Item3, visitor, subTypeToWalk.Item1);
     }
 
-    private bool TryGetAttribute (XElement element, string attributeName, out XAttribute attribute)
+    private bool TryGetAttribute (XElement element, string attributeName, [CanBeNull] out XAttribute attribute)
     {
       try
       {
@@ -103,7 +94,7 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
       }
     }
 
-    private bool TryGetSubelement (XElement element, string subelementName, out XElement subelement)
+    private bool TryGetSubelement (XElement element, string subelementName, [CanBeNull] out XElement subelement)
     {
       try
       {
@@ -121,11 +112,11 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
     private bool TryGetSubelements (
       [CanBeNull] XElement element,
       string subelementName,
-      out ReadOnlyCollection<XElement> subelements)
+      [CanBeNull] out IReadOnlyList<XElement> subelements)
     {
       try
       {
-        subelements = element?.Elements(subelementName).ToList().AsReadOnly();
+        subelements = element?.Elements(subelementName).ToList();
         return true;
       }
       catch (XmlException)

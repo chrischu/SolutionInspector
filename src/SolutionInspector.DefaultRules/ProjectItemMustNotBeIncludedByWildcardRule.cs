@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 
@@ -12,7 +13,7 @@ namespace SolutionInspector.DefaultRules
   public class ProjectItemMustNotBeIncludedByWildcardRule : ProjectItemRule
   {
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProjectItem target)
     {
       if (target.IsIncludedByWildcard)
         yield return new RuleViolation(this, target, $"Project item '{target.Identifier}' must NOT be included via wildcard.");

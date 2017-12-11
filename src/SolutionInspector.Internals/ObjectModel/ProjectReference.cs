@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Wrappers;
@@ -17,13 +18,13 @@ namespace SolutionInspector.Internals.ObjectModel
       File = Wrapper.Wrap(new FileInfo(fullPath));
       Project = solution.GetProjectByAbsoluteProjectFilePath(fullPath);
 
-      Guid referencedProjectGuid;
-      if (Guid.TryParse(projectItem.GetMetadataValue("Project"), out referencedProjectGuid))
+      if (Guid.TryParse(projectItem.GetMetadataValue("Project"), out var referencedProjectGuid))
         ReferencedProjectGuid = referencedProjectGuid;
 
       ReferencedProjectName = projectItem.GetMetadataValue("Name");
     }
 
+    [CanBeNull]
     public IProject Project { get; }
     public Microsoft.Build.Evaluation.ProjectItem OriginalProjectItem { get; }
     public string Include { get; }

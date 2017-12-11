@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 
@@ -13,7 +14,7 @@ namespace SolutionInspector.DefaultRules
   public class ProjectItemsMustBePresentRule : ProjectRule
   {
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
     {
       return target.ProjectItems.Where(i => !i.File.Exists)
           .Select(i => new RuleViolation(this, target, $"Could not find project item '{i.Include.Evaluated}'."));

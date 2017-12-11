@@ -1,5 +1,6 @@
 using System.Xml.Linq;
 using FluentAssertions;
+using JetBrains.Annotations;
 using NUnit.Framework;
 using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Commons.Extensions;
@@ -47,12 +48,14 @@ namespace SolutionInspector.Api.Configuration.Tests.Ruleset
     // ReSharper disable once ClassNeverInstantiated.Local
     private class SubConfiguration : ConfigurationElement
     {
+      [CanBeNull]
       [ConfigurationValue]
       public string Indirect => GetConfigurationValue<string>();
     }
 
     private class SpecialRuleConfigurationElement : ConfigurationElement
     {
+      [CanBeNull]
       [ConfigurationValue]
       public string Direct => GetConfigurationValue<string>();
 

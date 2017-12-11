@@ -27,6 +27,7 @@ namespace SolutionInspector.Internals.ObjectModel
 
     public IProjectLocation Location { get; }
 
+    [CanBeNull]
     private static ProjectPropertyCondition CreateCondition (ProjectPropertyElement property)
     {
       var condition = new ProjectPropertyCondition(property);

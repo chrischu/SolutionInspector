@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.ObjectModel
@@ -27,6 +28,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The package's pre-release tag (if any).
     /// </summary>
+    [CanBeNull]
     string PreReleaseTag { get; }
 
     /// <summary>

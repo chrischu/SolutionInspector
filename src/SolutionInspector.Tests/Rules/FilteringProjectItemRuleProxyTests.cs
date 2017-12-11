@@ -35,11 +35,11 @@ namespace SolutionInspector.Tests.Rules
       _sut = new FilteringProjectItemRuleProxy(_projectItemNameFilter, _projectNameFilter, _projectItemRule);
 
       _projectItem = A.Fake<IProjectItem>();
-      _projectItemName = Some.String();
+      _projectItemName = Some.String;
       A.CallTo(() => _projectItem.Name).Returns(_projectItemName);
 
       var project = A.Fake<IProject>();
-      _projectName = Some.String();
+      _projectName = Some.String;
       A.CallTo(() => project.Name).Returns(_projectName);
 
       A.CallTo(() => _projectItem.Project).Returns(project);

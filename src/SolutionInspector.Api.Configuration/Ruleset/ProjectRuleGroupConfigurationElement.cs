@@ -34,22 +34,23 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   [ForFutureUse]
   public class ProjectRuleGroupConfigurationElement : ConfigurationElement, IProjectRuleGroupConfiguration
   {
+    /// <inheritdoc cref="IProjectRuleGroupConfiguration.Name"/>
     [ConfigurationValue(IsOptional = true)]
     public string Name
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
 
-    /// <see cref="IProjectRuleGroupConfiguration.AppliesTo"/>
+    /// See <see cref="IProjectRuleGroupConfiguration.AppliesTo"/>
     [ConfigurationValue]
     public NameFilter AppliesTo
     {
-      get { return GetConfigurationValue<NameFilter>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<NameFilter>();
+      set => SetConfigurationValue(value);
     }
 
-    /// <see cref="IProjectRuleGroupConfiguration.Rules"/>
+    /// See <see cref="IProjectRuleGroupConfiguration.Rules"/>
     [ConfigurationCollection(IsDefaultCollection = true, ElementName = "rule", IsOptional = true)]
     public ConfigurationElementCollection<RuleConfigurationElement> Rules => GetConfigurationCollection<RuleConfigurationElement>();
 

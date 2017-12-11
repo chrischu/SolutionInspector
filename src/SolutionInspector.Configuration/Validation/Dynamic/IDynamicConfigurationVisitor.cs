@@ -18,7 +18,7 @@ namespace SolutionInspector.Configuration.Validation.Dynamic
       PropertyInfo property,
       ConfigurationCollectionAttribute attribute,
       [CanBeNull] XElement collectionElement,
-      IReadOnlyCollection<XElement> collectionItems);
+      [CanBeNull] IReadOnlyCollection<XElement> collectionItems);
 
     void EndTypeVisit (string propertyPath, Type configurationElementType, XElement element);
   }

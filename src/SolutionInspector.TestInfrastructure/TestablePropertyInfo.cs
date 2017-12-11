@@ -14,7 +14,7 @@ namespace SolutionInspector.TestInfrastructure
   {
     public override MemberTypes MemberType => MemberTypes.Property;
 
-    public override void SetValue (
+    public override void SetValue(
       [CanBeNull] object obj,
       [CanBeNull] object value,
       BindingFlags invokeAttr,
@@ -25,27 +25,27 @@ namespace SolutionInspector.TestInfrastructure
       throw new NotImplementedException();
     }
 
-    public override MethodInfo[] GetAccessors (bool nonPublic)
+    public override MethodInfo[] GetAccessors(bool nonPublic)
     {
       throw new NotImplementedException();
     }
 
-    public override MethodInfo GetGetMethod (bool nonPublic)
+    public override MethodInfo GetGetMethod(bool nonPublic)
     {
       throw new NotImplementedException();
     }
 
-    public override MethodInfo GetSetMethod (bool nonPublic)
+    public override MethodInfo GetSetMethod(bool nonPublic)
     {
       throw new NotImplementedException();
     }
 
-    public override ParameterInfo[] GetIndexParameters ()
+    public override ParameterInfo[] GetIndexParameters()
     {
       throw new NotImplementedException();
     }
 
-    public override object GetValue (
+    public override object GetValue(
       [CanBeNull] object obj,
       BindingFlags invokeAttr,
       [CanBeNull] Binder binder,
@@ -55,17 +55,17 @@ namespace SolutionInspector.TestInfrastructure
       throw new NotImplementedException();
     }
 
-    public override object[] GetCustomAttributes (bool inherit)
+    public override object[] GetCustomAttributes(bool inherit)
     {
       throw new NotImplementedException();
     }
 
-    public override object[] GetCustomAttributes (Type attributeType, bool inherit)
+    public override object[] GetCustomAttributes(Type attributeType, bool inherit)
     {
       throw new NotImplementedException();
     }
 
-    public override bool IsDefined (Type attributeType, bool inherit)
+    public override bool IsDefined(Type attributeType, bool inherit)
     {
       throw new NotImplementedException();
     }
@@ -79,8 +79,13 @@ namespace SolutionInspector.TestInfrastructure
     public override MethodInfo GetMethod { get; }
     public override MethodInfo SetMethod { get; }
     public override string Name { get; }
+
+    [CanBeNull]
     public override Type DeclaringType { get; }
+
+    [CanBeNull]
     public override Type ReflectedType { get; }
+
     public override IEnumerable<CustomAttributeData> CustomAttributes { get; }
     public override int MetadataToken { get; }
 

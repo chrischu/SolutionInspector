@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules.Tests
@@ -35,7 +36,7 @@ namespace SolutionInspector.DefaultRules.Tests
         {
           var item = e.RequiredCompilationSymbols.AddNew();
           item.BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("Included", "*"));
-          item.RequiredCompilationSymbols.Add("TRACE", "DEBUG");
+          item.RequiredCompilationSymbols.AssertNotNull().Add("TRACE", "DEBUG");
         });
 
       _sut = new RequiredCompilationSymbolsProjectRule(requiredCompilationSymbolsProjectRuleConfiguration);

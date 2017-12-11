@@ -250,10 +250,10 @@ namespace SolutionInspector.Configuration.Tests.Validation
       A.CallTo(() => propertyInfo.DeclaringType).Returns(type);
 
       A.CallTo(() => _staticConfigurationValidator.BeginTypeValidation(A<Type>._, A<ReportValidationError>._))
-          .Invokes((Type t, ReportValidationError r) => r(propertyInfo, Some.String()));
+          .Invokes((Type t, ReportValidationError r) => r(propertyInfo, Some.String));
 
-      _sut.BeginTypeVisit(Some.String(), type);
-      _sut.BeginTypeVisit(Some.String(), type);
+      _sut.BeginTypeVisit(Some.String, type);
+      _sut.BeginTypeVisit(Some.String, type);
     }
 
     private bool IsValidationDisabled ()
@@ -265,7 +265,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       A.CallTo(() => _staticConfigurationValidator.EndTypeValidation(type, A<ReportValidationError>._))
           .Invokes((Type t, ReportValidationError r) => r(A.Dummy<TestablePropertyInfo>(), "Message"));
 
-      _sut.EndTypeVisit(Some.String(), type);
+      _sut.EndTypeVisit(Some.String, type);
 
       return result;
     }

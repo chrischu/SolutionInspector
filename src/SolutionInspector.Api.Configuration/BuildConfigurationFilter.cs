@@ -55,9 +55,9 @@ namespace SolutionInspector.Api.Configuration
       }
 
       [ExcludeFromCodeCoverage]
-      public int GetHashCode ([NotNull] BuildConfiguration obj)
+      public int GetHashCode ([CanBeNull] BuildConfiguration obj)
       {
-        return obj.GetHashCode();
+        return obj?.GetHashCode() ?? 0;
       }
     }
   }

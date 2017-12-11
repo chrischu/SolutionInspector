@@ -162,7 +162,8 @@ configuration=""configurationValue"">
       var result = _sut.ConfigurationWithDefault;
 
       // ASSERT
-      result.Value.Should().Be("defaultValue");
+      result.Should().NotBeNull();
+      result?.Value.Should().Be("defaultValue");
 
       _element.Attribute("configurationWithDefault")?.Value.Should().Be("defaultValue");
     }
@@ -288,69 +289,70 @@ configuration=""configurationValue"">
     {
       public object NotAConfigurationProperty
       {
-        get { return GetConfigurationValue<object>(); }
-        set { SetConfigurationValue(value); }
+        get => GetConfigurationValue<object>();
+        set => SetConfigurationValue(value);
       }
 
       [ConfigurationValue]
       public string Simple
       {
-        get { return GetConfigurationValue<string>(); }
-        set { SetConfigurationValue(value); }
+        get => GetConfigurationValue<string>();
+        set => SetConfigurationValue(value);
       }
 
       [ConfigurationValue]
       public int AutoConvertible
       {
-        get { return GetConfigurationValue<int>(); }
-        set { SetConfigurationValue(value); }
+        get => GetConfigurationValue<int>();
+        set => SetConfigurationValue(value);
       }
 
       [ConfigurationValue (IsOptional = true, DefaultValue = "defaultValue")]
       public string WithDefault
       {
-        get { return GetConfigurationValue<string>(); }
+        get => GetConfigurationValue<string>();
         // ReSharper disable once UnusedMember.Local
-        set { SetConfigurationValue(value); }
+        set => SetConfigurationValue(value);
       }
 
       [ConfigurationValue (ConfigurationConverter = typeof(DummyConfigurationConverter))]
       public DummyConvertedValue WithConverter
       {
-        get { return GetConfigurationValue<DummyConvertedValue>(); }
-        set { SetConfigurationValue(value); }
+        get => GetConfigurationValue<DummyConvertedValue>();
+        set => SetConfigurationValue(value);
       }
 
       [ConfigurationValue (IsOptional = true, ConfigurationConverter = typeof(DummyConfigurationConverter), DefaultValue = "defaultValue")]
       public DummyConvertedValue WithConverterAndDefault
       {
-        get { return GetConfigurationValue<DummyConvertedValue>(); }
+        get => GetConfigurationValue<DummyConvertedValue>();
         // ReSharper disable once UnusedMember.Local
-        set { SetConfigurationValue(value); }
+        set => SetConfigurationValue(value);
       }
 
       [ConfigurationValue]
       public DummyConvertedValueWithAttribute WithConverterFromAttribute
       {
-        get { return GetConfigurationValue<DummyConvertedValueWithAttribute>(); }
-        set { SetConfigurationValue(value); }
+        get => GetConfigurationValue<DummyConvertedValueWithAttribute>();
+        set => SetConfigurationValue(value);
       }
 
       [ConfigurationValue (IsOptional = true, DefaultValue = "defaultValue")]
       public DummyConvertedValueWithAttribute WithConverterFromAttributeAndDefault
       {
-        get { return GetConfigurationValue<DummyConvertedValueWithAttribute>(); }
+        get => GetConfigurationValue<DummyConvertedValueWithAttribute>();
         // ReSharper disable once UnusedMember.Local
-        set { SetConfigurationValue(value); }
+        set => SetConfigurationValue(value);
       }
 
       [ConfigurationValue]
       public DummyConfigurationValue Configuration
       {
-        get { return GetConfigurationValue<DummyConfigurationValue>(); }
-        set { SetConfigurationValue(value); }
+        get => GetConfigurationValue<DummyConfigurationValue>();
+        set => SetConfigurationValue(value);
       }
 
+      [CanBeNull]
       [ConfigurationValue (IsOptional = true, DefaultValue = "defaultValue")]
       public DummyConfigurationValue ConfigurationWithDefault => GetConfigurationValue<DummyConfigurationValue>();
 
@@ -376,9 +378,9 @@ configuration=""configurationValue"">
       [ConfigurationValue (IsOptional = true)]
       public string String
       {
-        get { return GetConfigurationValue<string>(); }
+        get => GetConfigurationValue<string>();
         // ReSharper disable once UnusedMember.Local
-        set { SetConfigurationValue(value); }
+        set => SetConfigurationValue(value);
       }
     }
 
@@ -389,6 +391,7 @@ configuration=""configurationValue"">
         Value = value;
       }
 
+      [CanBeNull]
       public string Value { get; }
     }
 
@@ -403,11 +406,13 @@ configuration=""configurationValue"">
 
     private class DummyConfigurationConverter : IConfigurationConverter<DummyConvertedValue>
     {
+      [CanBeNull]
       public string ConvertTo ([CanBeNull] DummyConvertedValue value)
       {
         return value?.Value;
       }
 
+      [CanBeNull]
       public DummyConvertedValue ConvertFrom ([CanBeNull] string value)
       {
         return new DummyConvertedValue(value);
@@ -416,11 +421,13 @@ configuration=""configurationValue"">
 
     private class DummyConfigurationConverter2 : IConfigurationConverter<DummyConvertedValueWithAttribute>
     {
+      [CanBeNull]
       public string ConvertTo ([CanBeNull] DummyConvertedValueWithAttribute value)
       {
         return value?.Value;
       }
 
+      [CanBeNull]
       public DummyConvertedValueWithAttribute ConvertFrom ([CanBeNull] string value)
       {
         return new DummyConvertedValueWithAttribute(value);
@@ -445,7 +452,7 @@ configuration=""configurationValue"">
 
       public string Value
       {
-        get { return _value; }
+        get => _value;
         set
         {
           _value = value;

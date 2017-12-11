@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Api.Rules
 {
   internal static class RuleTypeUtility
   {
+    [CanBeNull]
     public static Type GetConfigurationType (Type ruleType)
     {
       if (!typeof(IRule).IsAssignableFrom(ruleType))

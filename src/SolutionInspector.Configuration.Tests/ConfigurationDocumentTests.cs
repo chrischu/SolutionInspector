@@ -1,7 +1,7 @@
 ﻿using System.Xml.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using SolutionInspector.TestInfrastructure;
+using SolutionInspector.Commons;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Configuration.Tests
@@ -74,8 +74,8 @@ namespace SolutionInspector.Configuration.Tests
       [ConfigurationValue]
       public string Simple
       {
-        get { return GetConfigurationValue<string>(); }
-        set { SetConfigurationValue(value); }
+        get => GetConfigurationValue<string>();
+        set => SetConfigurationValue(value);
       }
     }
   }

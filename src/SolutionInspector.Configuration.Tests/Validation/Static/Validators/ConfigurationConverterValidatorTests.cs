@@ -71,14 +71,14 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
 
     private class IntConverter : IConfigurationConverter<int>
     {
-      public string ConvertTo (int value) => "";
+      [CanBeNull] public string ConvertTo (int value) => "";
       public int ConvertFrom ([CanBeNull] string value) => 0;
     }
 
     private class StringConverter : IConfigurationConverter<string>
     {
-      public string ConvertTo ([CanBeNull] string value) => "";
-      public string ConvertFrom ([CanBeNull] string value) => "";
+      [CanBeNull] public string ConvertTo ([CanBeNull] string value) => "";
+      [CanBeNull] public string ConvertFrom ([CanBeNull] string value) => "";
     }
   }
 }

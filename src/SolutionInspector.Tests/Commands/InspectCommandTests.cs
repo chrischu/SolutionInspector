@@ -277,13 +277,13 @@ namespace SolutionInspector.Tests.Commands
 
     private IReadOnlyCollection<IRuleViolation> SetupAndReturnSomeViolations ()
     {
-      var solutionRuleViolation = new RuleViolation(_solutionRule, _solution, Some.String());
+      var solutionRuleViolation = new RuleViolation(_solutionRule, _solution, Some.String);
       A.CallTo(() => _solutionRule.Evaluate(A<ISolution>._)).Returns(new[] { solutionRuleViolation });
 
-      var projectRuleViolation = new RuleViolation(_projectRule, _project, Some.String());
+      var projectRuleViolation = new RuleViolation(_projectRule, _project, Some.String);
       A.CallTo(() => _projectRule.Evaluate(A<IProject>._)).Returns(new[] { projectRuleViolation });
 
-      var projectItemRuleViolation = new RuleViolation(_projectItemRule, _projectItem, Some.String());
+      var projectItemRuleViolation = new RuleViolation(_projectItemRule, _projectItem, Some.String);
       A.CallTo(() => _projectItemRule.Evaluate(A<IProjectItem>._)).Returns(new[] { projectItemRuleViolation });
 
       return new[] { solutionRuleViolation, projectRuleViolation, projectItemRuleViolation };

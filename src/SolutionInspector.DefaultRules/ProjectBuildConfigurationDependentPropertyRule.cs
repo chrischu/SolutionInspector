@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
@@ -24,7 +25,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
     {
       var matchingBuildConfigs = target.BuildConfigurations.Where(c => Configuration.BuildConfigurationFilter.IsMatch(c));
 
@@ -57,8 +58,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("Controls in which build configurations the 'property' is checked against the 'expectedValue'.")]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
-      get { return GetConfigurationValue<BuildConfigurationFilter>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<BuildConfigurationFilter>();
+      set => SetConfigurationValue(value);
     }
 
     /// <summary>
@@ -68,8 +69,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("Name of the property to check.")]
     public string Property
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
 
     /// <summary>
@@ -79,8 +80,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("The expected property value to check against.")]
     public string ExpectedValue
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
   }
 }

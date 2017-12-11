@@ -1,5 +1,6 @@
 ﻿using System.Xml.Linq;
 using FluentAssertions;
+using JetBrains.Annotations;
 using NUnit.Framework;
 using SolutionInspector.Configuration;
 using SolutionInspector.TestInfrastructure;
@@ -39,6 +40,7 @@ namespace SolutionInspector.Internals.Tests
 
     private class RuleConfiguration : ConfigurationElement
     {
+      [CanBeNull]
       [ConfigurationValue]
       public string Property => GetConfigurationValue<string>();
     }

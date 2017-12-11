@@ -4,6 +4,7 @@ using System.Xml;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NUnit.Framework;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Internals.ObjectModel;
 using SolutionInspector.TestInfrastructure;
 
@@ -53,9 +54,9 @@ developmentDependency=""{developmentDependencyString}"" />");
 
     private static IEnumerable EqualsTestData ()
     {
-      var a = new NuGetPackage(Some.String(), Some.Version, Some.Boolean, Some.String(), Some.String(), Some.Boolean);
+      var a = new NuGetPackage(Some.String, Some.Version, Some.Boolean, Some.String, Some.String, Some.Boolean);
       var equalToA = new NuGetPackage(a.Id, a.Version, a.IsPreRelease, a.PreReleaseTag, a.TargetFramework, a.IsDevelopmentDependency);
-      var differentFromA = new NuGetPackage(Some.String(), Some.Version, Some.Boolean, Some.String(), Some.String(), Some.Boolean);
+      var differentFromA = new NuGetPackage(Some.String, Some.Version, Some.Boolean, Some.String, Some.String, Some.Boolean);
 
       yield return new TestCaseData(a, a) { ExpectedResult = true, TestName = "Equals_ReferenceEquality" };
       yield return new TestCaseData(a, equalToA) { ExpectedResult = true };
@@ -74,7 +75,7 @@ developmentDependency=""{developmentDependencyString}"" />");
 
     private static IEnumerable EqualsWithObjectsTestData ()
     {
-      var a = new NuGetPackage(Some.String(), Some.Version, Some.Boolean, Some.String(), Some.String(), Some.Boolean);
+      var a = new NuGetPackage(Some.String, Some.Version, Some.Boolean, Some.String, Some.String, Some.Boolean);
 
       yield return new TestCaseData(a, default(object)) { ExpectedResult = false };
       yield return new TestCaseData(a, a) { ExpectedResult = true };
@@ -83,9 +84,9 @@ developmentDependency=""{developmentDependencyString}"" />");
     [Test]
     public void EqualityOperators ()
     {
-      var a = new NuGetPackage(Some.String(), Some.Version, Some.Boolean, Some.String(), Some.String(), Some.Boolean);
+      var a = new NuGetPackage(Some.String, Some.Version, Some.Boolean, Some.String, Some.String, Some.Boolean);
       var equalToA = new NuGetPackage(a.Id, a.Version, a.IsPreRelease, a.PreReleaseTag, a.TargetFramework, a.IsDevelopmentDependency);
-      var differentFromA = new NuGetPackage(Some.String(), Some.Version, Some.Boolean, Some.String(), Some.String(), Some.Boolean);
+      var differentFromA = new NuGetPackage(Some.String, Some.Version, Some.Boolean, Some.String, Some.String, Some.Boolean);
 
       // ACT & ASSERT
       (a == equalToA).Should().BeTrue();
@@ -99,7 +100,7 @@ developmentDependency=""{developmentDependencyString}"" />");
     {
       var doc = new XmlDocument();
       doc.LoadXml(xml);
-      return doc.DocumentElement;
+      return doc.DocumentElement.AssertNotNull();
     }
   }
 }

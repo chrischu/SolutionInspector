@@ -33,8 +33,8 @@ namespace SolutionInspector.Configuration
     /// </summary>
     public T this [int index]
     {
-      get { return _collection[index]; }
-      set { _collection[index] = value; }
+      get => _collection[index];
+      set => _collection[index] = value;
     }
 
     /// <summary>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.ObjectModel;
@@ -35,11 +36,13 @@ namespace SolutionInspector.Internals.ObjectModel
     public IReadOnlyCollection<IProject> Projects { get; }
     public IReadOnlyCollection<BuildConfiguration> BuildConfigurations { get; }
 
+    [CanBeNull]
     public IProject GetProjectByProjectGuid (Guid projectGuid)
     {
       return Projects.SingleOrDefault(p => p.Guid == projectGuid);
     }
 
+    [CanBeNull]
     public IProject GetProjectByAbsoluteProjectFilePath (string absoluteProjectPath)
     {
       return Projects.SingleOrDefault(p => p.ProjectFile.FullName == absoluteProjectPath);

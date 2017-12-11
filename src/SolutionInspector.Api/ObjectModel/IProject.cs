@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Attributes;
 using Wrapperator.Interfaces.IO;
@@ -56,16 +57,19 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The project's default namespace.
     /// </summary>
+    [CanBeNull]
     string DefaultNamespace { get; }
 
     /// <summary>
     ///   The project's assembly name.
     /// </summary>
+    [CanBeNull]
     string AssemblyName { get; }
 
     /// <summary>
     ///   The project's target framework version.
     /// </summary>
+    [CanBeNull]
     Version TargetFrameworkVersion { get; }
 
     /// <summary>
@@ -116,6 +120,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The project configuration file (App.config/Web.config).
     /// </summary>
+    [CanBeNull]
     IConfigurationProjectItem ConfigurationProjectItem { get; }
 
     /// <summary>

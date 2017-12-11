@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules.Tests
@@ -26,8 +27,8 @@ namespace SolutionInspector.DefaultRules.Tests
       var configuration = ConfigurationElement.Create<SolutionBuildConfigurationsRuleConfiguration>(
         initialize: c =>
         {
-          c.Configurations.Add("Configuration");
-          c.Platforms.Add("Platform");
+          c.Configurations.AssertNotNull().Add("Configuration");
+          c.Platforms.AssertNotNull().Add("Platform");
         });
 
       _sut = new SolutionBuildConfigurationsRule(configuration);
@@ -39,8 +40,8 @@ namespace SolutionInspector.DefaultRules.Tests
       var configuration = ConfigurationElement.Create<SolutionBuildConfigurationsRuleConfiguration>(
         initialize: c =>
         {
-          c.Configurations.Add("C1", "C2");
-          c.Platforms.Add("P1", "P2");
+          c.Configurations.AssertNotNull().Add("C1", "C2");
+          c.Platforms.AssertNotNull().Add("P1", "P2");
         });
 
       _sut = new SolutionBuildConfigurationsRule(configuration);

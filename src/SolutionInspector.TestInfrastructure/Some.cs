@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Threading;
 using System.Xml.Linq;
 using SolutionInspector.Commons.Attributes;
@@ -14,13 +15,13 @@ namespace SolutionInspector.TestInfrastructure
   [PublicApi]
   public static class Some
   {
-    private const int c_someStringDefaultMaxLength = 100;
+    private const int c_SomeStringDefaultMaxLength = 100;
 
     // Thread-local Random instance provider
-    private static int s_seed = Environment.TickCount;
+    private static int s_Seed = Environment.TickCount;
 
     private static readonly ThreadLocal<Random> s_threadLocalRandomProvider =
-        new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref s_seed)));
+        new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref s_Seed)));
 
     private static readonly Type[] s_possibleTypes = typeof(int).Assembly.GetExportedTypes();
 
@@ -30,7 +31,7 @@ namespace SolutionInspector.TestInfrastructure
       "Microsoft.Design",
       "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
       Justification = "We do not raise an exception in this property, it simply returns a do-not-care exception instance for specs.")]
-    public static Exception Exception => new SomeException(String());
+    public static Exception Exception => new SomeException(String);
 
     private static int NextRandomBetweenInclusive (int minValue, int maxValue)
     {
@@ -58,10 +59,7 @@ namespace SolutionInspector.TestInfrastructure
     // ReSharper disable UnusedMember.Global - maybe used in the future
     public static bool Boolean => Random.Next(2) == 1;
 
-    public static string String ()
-    {
-      return StringBetween(1, c_someStringDefaultMaxLength);
-    }
+    public static string String => StringBetween(1, c_SomeStringDefaultMaxLength);
 
     public static Version Version => new Version(PositiveInteger, PositiveInteger, PositiveInteger, PositiveInteger);
 
@@ -70,13 +68,15 @@ namespace SolutionInspector.TestInfrastructure
       return new string(Enumerable.Range(1, NextRandomBetweenInclusive(minLength, maxLength)).Select(x => Char).ToArray());
     }
 
-    private static string AcceptableCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private const string c_AcceptableCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-    private static char Char => AcceptableCharacters[NextRandomBetweenInclusive(0, AcceptableCharacters.Length - 1)];
+    private static char Char => c_AcceptableCharacters[NextRandomBetweenInclusive(0, c_AcceptableCharacters.Length - 1)];
 
     public static int Integer => Random.Next(int.MinValue, int.MaxValue /* yes, this doesn't include int.MaxValue itself */);
 
     public static int PositiveInteger => NextRandomBetweenInclusive(1, 100);
+
+    public static byte[] ByteArray => Encoding.UTF8.GetBytes(String);
 
     public static T Enum<T> ()
     {
@@ -86,9 +86,9 @@ namespace SolutionInspector.TestInfrastructure
 
     public static Guid Guid => Guid.NewGuid();
 
-    public static XElement XElement => new XElement(String());
+    public static XElement XElement => new XElement(String);
 
-    public static XAttribute XAttribute => new XAttribute(String(), String());
+    public static XAttribute XAttribute => new XAttribute(String, String);
 
 
     public static Type Type => s_possibleTypes[Random.Next(s_possibleTypes.Length)];

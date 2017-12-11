@@ -42,9 +42,7 @@ namespace SolutionInspector.Configuration.Validation
 
     public void BeginTypeVisit (string propertyPath, Type configurationElementType)
     {
-      Dictionary<PropertyInfo, List<string>> typeValidationErrors;
-
-      if (_cachedStaticValidationErrorsByType.TryGetValue(configurationElementType, out typeValidationErrors))
+      if (_cachedStaticValidationErrorsByType.TryGetValue(configurationElementType, out var typeValidationErrors))
       {
         _disableValidation = true;
 

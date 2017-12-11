@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
@@ -14,7 +15,7 @@ namespace SolutionInspector.DefaultRules
   public class ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule : ProjectRule
   {
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
     {
       foreach (var property in target.Advanced.Properties.Values)
       {

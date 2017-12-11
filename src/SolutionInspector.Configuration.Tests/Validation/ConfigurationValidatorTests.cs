@@ -6,6 +6,7 @@ using SolutionInspector.Configuration.Validation;
 
 namespace SolutionInspector.Configuration.Tests.Validation
 {
+  [TestFixture]
   public class ConfigurationValidatorTests
   {
     [Test]

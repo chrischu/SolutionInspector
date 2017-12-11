@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Configuration;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Api.Tests.Rules
@@ -63,6 +63,7 @@ namespace SolutionInspector.Api.Tests.Rules
       }
 
       // ReSharper disable once UnassignedGetOnlyAutoProperty
+      // ReSharper disable once NotNullMemberIsNotInitialized
       public ConfigurableRuleConfiguration Configuration { get; }
     }
 
@@ -74,6 +75,7 @@ namespace SolutionInspector.Api.Tests.Rules
       }
 
       // ReSharper disable once UnassignedGetOnlyAutoProperty
+      // ReSharper disable once NotNullMemberIsNotInitialized
       public ConfigurableRuleConfiguration Configuration { get; }
     }
 

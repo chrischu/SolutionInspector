@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Microsoft.Build.Construction;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Commons.Utilities;
 
 namespace SolutionInspector.Internals.ObjectModel
@@ -30,7 +31,7 @@ namespace SolutionInspector.Internals.ObjectModel
       get
       {
         if (Self == null)
-          return Parent;
+          return Parent.AssertNotNull();
 
         if (Parent == null)
           return Self;
@@ -57,6 +58,7 @@ namespace SolutionInspector.Internals.ObjectModel
     [CanBeNull]
     public string Parent { get; }
 
+    [CanBeNull]
     private string ConvertCondition ([CanBeNull] string condition)
     {
       return string.IsNullOrWhiteSpace(condition) ? null : condition;

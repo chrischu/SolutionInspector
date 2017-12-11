@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
 
 namespace SolutionInspector.DefaultRules.Tests
@@ -22,8 +23,8 @@ namespace SolutionInspector.DefaultRules.Tests
       var configuration = ConfigurationElement.Create<RequiredResourceLanguagesRuleConfiguration>(
         initialize: c =>
         {
-          c.RequiredResources.Add("Resources1", "Resources2");
-          c.RequiredLanguages.Add("de", "cs");
+          c.RequiredResources.AssertNotNull().Add("Resources1", "Resources2");
+          c.RequiredLanguages.AssertNotNull().Add("de", "cs");
         });
 
       _sut = new RequiredResourceLanguagesRule(configuration);

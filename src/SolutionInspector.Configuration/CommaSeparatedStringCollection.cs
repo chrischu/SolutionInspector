@@ -37,7 +37,7 @@ namespace SolutionInspector.Configuration
     /// <inheritdoc />
     public string this [int index]
     {
-      get { return _collection[index]; }
+      get => _collection[index];
       set
       {
         _collection[index] = value;

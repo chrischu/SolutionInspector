@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Commons.Extensions;
 using Wrapperator.Interfaces.IO;
@@ -13,9 +14,9 @@ namespace SolutionInspector.Internals.ObjectModel
   internal class ProjectItem : IProjectItem
   {
     private readonly List<ProjectItem> _children = new List<ProjectItem>();
-    private Lazy<string> _identifier;
+    private readonly Lazy<string> _identifier;
 
-    protected ProjectItem (
+    protected ProjectItem(
       IProject project,
       Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
@@ -59,22 +60,28 @@ namespace SolutionInspector.Internals.ObjectModel
     public IFileInfo File { get; }
     public bool IsLink { get; }
     public bool IsIncludedByWildcard { get; }
+
+    [CanBeNull]
     public string WildcardInclude { get; }
+
+    [CanBeNull]
     public string WildcardExclude { get; }
 
     public IProjectLocation Location { get; }
 
     public IReadOnlyDictionary<string, string> Metadata { get; }
 
+    [CanBeNull]
     public string CustomTool => Metadata.GetValueOrDefault("Generator");
-    public string CustomToolNamespace => Metadata.GetValueOrDefault("CustomToolNamespace");
 
+    [CanBeNull]
+    public string CustomToolNamespace => Metadata.GetValueOrDefault("CustomToolNamespace");
 
     public IProjectItem Parent { get; private set; }
 
     public IReadOnlyCollection<IProjectItem> Children => _children;
 
-    private string CreateIdentifier ()
+    private string CreateIdentifier()
     {
       var sb = new StringBuilder();
 
@@ -92,13 +99,13 @@ namespace SolutionInspector.Internals.ObjectModel
       return sb.ToString();
     }
 
-    internal void SetParent (ProjectItem parent)
+    internal void SetParent(ProjectItem parent)
     {
       parent._children.Add(this);
       Parent = parent;
     }
 
-    public static ProjectItem FromMsBuildProjectItem (IProject project, Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
+    public static ProjectItem FromMsBuildProjectItem(IProject project, Microsoft.Build.Evaluation.ProjectItem msBuildProjectItem)
     {
       return new ProjectItem(project, msBuildProjectItem);
     }

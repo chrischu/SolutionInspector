@@ -19,9 +19,9 @@ namespace SolutionInspector.Internals.Tests.ObjectModel
 
     private static IEnumerable EqualsTestData ()
     {
-      var a = new ProjectItemInclude(Some.String(), Some.String());
+      var a = new ProjectItemInclude(Some.String, Some.String);
       var equalToA = new ProjectItemInclude(a.Evaluated, a.Unevaluated);
-      var differentFromA = new ProjectItemInclude(Some.String(), Some.String());
+      var differentFromA = new ProjectItemInclude(Some.String, Some.String);
 
       yield return new TestCaseData(a, a) { ExpectedResult = true, TestName = "Equals_ReferenceEquality" };
       yield return new TestCaseData(a, equalToA) { ExpectedResult = true };
@@ -40,7 +40,7 @@ namespace SolutionInspector.Internals.Tests.ObjectModel
 
     private static IEnumerable EqualsWithObjectsTestData ()
     {
-      var a = new ProjectItemInclude(Some.String(), Some.String());
+      var a = new ProjectItemInclude(Some.String, Some.String);
 
       yield return new TestCaseData(a, default(object)) { ExpectedResult = false };
       yield return new TestCaseData(a, a) { ExpectedResult = true };
@@ -49,9 +49,9 @@ namespace SolutionInspector.Internals.Tests.ObjectModel
     [Test]
     public void EqualityOperators ()
     {
-      var a = new ProjectItemInclude(Some.String(), Some.String());
+      var a = new ProjectItemInclude(Some.String, Some.String);
       var equalToA = new ProjectItemInclude(a.Evaluated, a.Unevaluated);
-      var differentFromA = new ProjectItemInclude(Some.String(), Some.String());
+      var differentFromA = new ProjectItemInclude(Some.String, Some.String);
 
       // ACT & ASSERT
       (a == equalToA).Should().BeTrue();

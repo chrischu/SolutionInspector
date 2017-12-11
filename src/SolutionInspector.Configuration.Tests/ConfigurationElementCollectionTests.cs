@@ -36,7 +36,7 @@ namespace SolutionInspector.Configuration.Tests
     [Test]
     public void Add ()
     {
-      var configElement = ConfigurationElement.Create<DummyConfigurationElement>("element");
+      var configElement = ConfigurationElement.Create<DummyConfigurationElement>();
 
       // ACT
       _sut.Add(configElement);
@@ -61,7 +61,7 @@ namespace SolutionInspector.Configuration.Tests
     {
       _sut.AddNew();
 
-      var configElement = ConfigurationElement.Create<DummyConfigurationElement>("element");
+      var configElement = ConfigurationElement.Create<DummyConfigurationElement>();
 
       // ACT
       _sut.Insert(0, configElement);

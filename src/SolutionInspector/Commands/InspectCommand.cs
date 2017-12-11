@@ -29,7 +29,7 @@ namespace SolutionInspector.Commands
     private readonly ISolutionLoader _solutionLoader;
     private readonly IViolationReporterFactory _violationReporterFactory;
 
-    public InspectCommand (
+    public InspectCommand(
       IConfigurationLoader configurationLoader,
       IRuleAssemblyLoader ruleAssemblyLoader,
       ISolutionLoader solutionLoader,
@@ -46,7 +46,7 @@ namespace SolutionInspector.Commands
       _configuration = configuration;
     }
 
-    protected override void SetupArguments (IArgumentsBuilder<RawArguments> argumentsBuilder)
+    protected override void SetupArguments(IArgumentsBuilder<RawArguments> argumentsBuilder)
     {
       argumentsBuilder
           .Option<ViolationReportFormat>(
@@ -68,7 +68,7 @@ namespace SolutionInspector.Commands
           .Values(c => c.Value("solutionFilePath", (a, v) => a.SolutionFilePath = v));
     }
 
-    protected override ParsedArguments ValidateAndParseArguments (RawArguments arguments, Func<string, Exception> reportError)
+    protected override ParsedArguments ValidateAndParseArguments(RawArguments arguments, Func<string, Exception> reportError)
     {
       var configuration = ValidateAndLoadRulesConfiguration(arguments, reportError);
       var solution = ValidateAndParseSolution(arguments, reportError);
@@ -77,7 +77,7 @@ namespace SolutionInspector.Commands
       return new ParsedArguments(solution, rules, arguments.ReportFormat, arguments.ReportOutputFile, configuration);
     }
 
-    private IRulesetConfiguration ValidateAndLoadRulesConfiguration (RawArguments arguments, Func<string, Exception> reportError)
+    private IRulesetConfiguration ValidateAndLoadRulesConfiguration(RawArguments arguments, Func<string, Exception> reportError)
     {
       try
       {
@@ -97,7 +97,7 @@ namespace SolutionInspector.Commands
       }
     }
 
-    private ISolution ValidateAndParseSolution (
+    private ISolution ValidateAndParseSolution(
       RawArguments arguments,
       Func<string, Exception> reportError)
     {
@@ -125,7 +125,7 @@ namespace SolutionInspector.Commands
       }
     }
 
-    protected override int Run (ParsedArguments arguments)
+    protected override int Run(ParsedArguments arguments)
     {
       using (var solution = arguments.Solution)
       {
@@ -150,7 +150,7 @@ namespace SolutionInspector.Commands
       }
     }
 
-    private IViolationReporter CreateViolationReporter (ParsedArguments arguments)
+    private IViolationReporter CreateViolationReporter(ParsedArguments arguments)
     {
       if (arguments.ReportOutputFile != null)
         return _violationReporterFactory.CreateFileReporter(arguments.ReportFormat, arguments.ReportOutputFile);
@@ -158,7 +158,7 @@ namespace SolutionInspector.Commands
       return _violationReporterFactory.CreateConsoleReporter(arguments.ReportFormat);
     }
 
-    private IEnumerable<IRuleViolation> GetRuleViolations (ISolution solution, IRuleCollection rules)
+    private IEnumerable<IRuleViolation> GetRuleViolations(ISolution solution, IRuleCollection rules)
     {
       var ruleViolations = new List<IRuleViolation>();
       var previousViolationCount = 0;
@@ -214,7 +214,7 @@ namespace SolutionInspector.Commands
 
     public class ParsedArguments
     {
-      public ParsedArguments (
+      public ParsedArguments(
         ISolution solution,
         IRuleCollection rules,
         ViolationReportFormat reportFormat,
@@ -231,7 +231,10 @@ namespace SolutionInspector.Commands
       public ISolution Solution { get; }
       public IRuleCollection Rules { get; }
       public ViolationReportFormat ReportFormat { get; }
+
+      [CanBeNull]
       public string ReportOutputFile { get; }
+
       public IRulesetConfiguration Configuration { get; }
     }
   }

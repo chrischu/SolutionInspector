@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Configuration;
@@ -20,30 +21,36 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
     {
-      foreach (var resourceName in Configuration.RequiredResources)
-      {
-        var resourceDefaultLanguageFileName = $"{resourceName}.resx";
-        if (target.ProjectItems.All(i => i.Name != resourceDefaultLanguageFileName))
-          yield return
-              new RuleViolation(
-                this,
-                target,
-                $"For the required resource '{resourceName}' no default resource file ('{resourceDefaultLanguageFileName}') could be found.");
-
-        foreach (var languageName in Configuration.RequiredLanguages)
+      if (Configuration.RequiredResources != null)
+        foreach (var resourceName in Configuration.RequiredResources)
         {
-          var resourceLanguageFileName = $"{resourceName}.{languageName}.resx";
-          if (target.ProjectItems.All(i => i.Name != resourceLanguageFileName))
+          var resourceDefaultLanguageFileName = $"{resourceName}.resx";
+          if (target.ProjectItems.All(i => i.Name != resourceDefaultLanguageFileName))
+          {
             yield return
                 new RuleViolation(
                   this,
                   target,
-                  $"For the required resource '{resourceName}' no resource file for language '{languageName}' " +
-                  $"('{resourceLanguageFileName}') could be found.");
+                  $"For the required resource '{resourceName}' no default resource file ('{resourceDefaultLanguageFileName}') could be found.");
+          }
+
+          if (Configuration.RequiredLanguages != null)
+          {
+            foreach (var languageName in Configuration.RequiredLanguages)
+            {
+              var resourceLanguageFileName = $"{resourceName}.{languageName}.resx";
+              if (target.ProjectItems.All(i => i.Name != resourceLanguageFileName))
+                yield return
+                    new RuleViolation(
+                      this,
+                      target,
+                      $"For the required resource '{resourceName}' no resource file for language '{languageName}' " +
+                      $"('{resourceLanguageFileName}') could be found.");
+            }
+          }
         }
-      }
     }
   }
 
@@ -55,6 +62,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Comma-separated list of required resources (e.g. "Resources,OtherResources").
     /// </summary>
+    [CanBeNull]
     [ConfigurationValue]
     [Description ("List of required resources (e.g. 'Resources').")]
     public CommaSeparatedStringCollection RequiredResources => GetConfigurationValue<CommaSeparatedStringCollection>();
@@ -62,6 +70,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Comma-separated list of required languages (e.g. "de,pl,hr").
     /// </summary>
+    [CanBeNull]
     [ConfigurationValue]
     [Description ("List of required languages (e.g. 'de', 'pl').")]
     public CommaSeparatedStringCollection RequiredLanguages => GetConfigurationValue<CommaSeparatedStringCollection>();

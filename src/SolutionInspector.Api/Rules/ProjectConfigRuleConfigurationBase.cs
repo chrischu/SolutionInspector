@@ -13,8 +13,8 @@ namespace SolutionInspector.Api.Rules
     [ConfigurationValue]
     public bool ReportViolationOnMissingConfigurationFile
     {
-      get { return GetConfigurationValue<bool>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<bool>();
+      set => SetConfigurationValue(value);
     }
   }
 }

@@ -24,11 +24,12 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   /// <inheritdoc cref="IRuleConfiguration" />
   public class RuleConfigurationElement : ConfigurationElement, IRuleConfiguration
   {
+    /// <inheritdoc cref="IRuleConfiguration.RuleType"/>
     [ConfigurationValue(AttributeName = "type")]
     public string RuleType
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
   }
 }

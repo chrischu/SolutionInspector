@@ -17,8 +17,6 @@ Param (
   [Parameter()]
   [bool] $RunDotCoverCoverageAnalysis = $True,
   [Parameter()]
-  [bool] $RunFxCopCodeAnalysis = $True,
-  [Parameter()]
   [bool] $RunReSharperCodeInspection = $True,
   [Parameter()]
   [bool] $CreateNuGetPackages = $False,
@@ -40,8 +38,8 @@ trap { $error[0] | Format-List -Force; $host.SetShouldExit(1) }
 . $PSScriptRoot\Shared\Build\BuildLibrary.ps1
 
 $TreatWarningsAsErrors = $True
-$MSBuildToolset = "14.0"
-$MSBuildExecutable = "C:\Program Files (x86)\MSBuild\$MSBuildToolset\Bin\MSBuild.exe"
+$MSBuildToolset = "15.0"
+$MSBuildExecutable = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\$MSBuildToolset\Bin\MSBuild.exe"
 $NuGetExecutable = ".\.nuget\NuGet.exe"
 
 $SolutionDirectory = $PSScriptRoot
@@ -52,7 +50,6 @@ $AssemblyInfoSharedFile = Join-Path $SolutionDirectory "AssemblyInfoShared.cs"
 
 $BuildOutputDirectory = Join-Path $SolutionDirectory "Build"
 $AnalysisResultsDirectory = Join-Path $BuildOutputDirectory "AnalysisResults"
-$FxCopResultsDirectory = Join-Path $AnalysisResultsDirectory "FxCop"
 $DotCoverResultsDirectory = Join-Path $AnalysisResultsDirectory "dotCover"
 $NuGetPackagesDirectory = Join-Path $BuildOutputDirectory "NuGetPackages"
 
@@ -67,40 +64,34 @@ $Projects = Get-ProjectsFromSolution $SolutionFile $Configuration | ? { $_.Proje
 $TestProjects = $Projects | ? { $_.ProjectName.EndsWith("Tests") }
 $TestAssemblies = $TestProjects | % { $_.TargetPath }
 
-$AssemblyVersion = "$($Version.Major).0.0.0"
-$AssemblyFileVersion = "$($Version.Major).$($Version.Minor).$($Version.Build).$($Version.Revision)"
-$AssemblyInformationalVersion = "$($Version.Major).$($Version.Minor).$($Version.Build)"
+$VersionPrefix = "$($Version.Major).$($Version.Minor).$($Version.Build)"
+$VersionSuffix = $null
 if ($IsPreRelease) {
-  $AssemblyInformationalVersion = "${AssemblyInformationalVersion}-pre$($Version.Revision)"
+  $VersionSuffix = "pre$($Version.Revision)"
 }
+$VersionString = "${VersionPrefix}-${VersionSuffix}"
 
 $NuGetVersion = $Version.Major, $Version.Minor, $Version.Build
 
 function Run() {
-  try {
-    Write-Host "Running in '$Mode' mode"
-    Write-Host "Building '$SolutionFile'"
-    Write-Host "Version: $Version"
-    Write-Host "Configuration: $Configuration"
-    Write-Host "Run tests: $RunTests (with DotCover coverage analysis: $RunDotCoverCoverageAnalysis)"
-    Write-Host "Run FxCop code analysis: $RunFxCopCodeAnalysis"
-    Write-Host "Run ReSharper code inspection: $RunReSharperCodeInspection"
-    Write-Host "Build NuGetPackages: $CreateNuGetPackages (with version: $AssemblyInformationalVersion)"
-    Write-Host "Push NuGet packages: $PushNuGetPackages (to $TargetNuGetFeed)"
-    Write-Host "Create archives: $CreateArchives"
+  Write-Host "Running in '$Mode' mode"
+  Write-Host "Building '$SolutionFile'"
+  Write-Host "Version: $VersionString"
+  Write-Host "Configuration: $Configuration"
+  Write-Host "Run tests: $RunTests (with DotCover coverage analysis: $RunDotCoverCoverageAnalysis)"
+  Write-Host "Run ReSharper code inspection: $RunReSharperCodeInspection"
+  Write-Host "Build NuGetPackages: $CreateNuGetPackages (with version: $VersionString)"
+  Write-Host "Push NuGet packages: $PushNuGetPackages (to $TargetNuGetFeed)"
+  Write-Host "Create archives: $CreateArchives"
 
-    Clean
-    Restore-NuGetPackages
-    Update-AssemblyInfos
-    Build
-    Run-ReSharperCodeInspection -Condition $RunReSharperCodeInspection
-    Run-Tests -Condition $RunTests
-    Create-NuGetPackages -Condition $CreateNuGetPackages
-    Push-Packages -Condition ($PushNuGetPackages -And $CreateNuGetPackages)
-    Create-Archives -Condition $CreateArchives
-  } finally {
-    Restore-AssemblyInfos
-  }
+  Clean
+  Restore-NuGetPackages
+  Build
+  Run-ReSharperCodeInspection -Condition $RunReSharperCodeInspection
+  Run-Tests -Condition $RunTests
+  Create-NuGetPackages -Condition $CreateNuGetPackages
+  Push-Packages -Condition ($PushNuGetPackages -And $CreateNuGetPackages)
+  Create-Archives -Condition $CreateArchives
   
   Publish-CoverageReports -Condition ($Mode -eq "AppVeyor" -and -not $IsPreRelease -and $RunDotCoverCoverageAnalysis -and $PushNuGetPackages)
 }
@@ -108,23 +99,20 @@ function Run() {
 BuildTask Clean {
   Clean-BuildDirectory $BuildOutputDirectory
   Clean-Solution $SolutionFile
-  New-Item $AnalysisResultsDirectory, $FxCopResultsDirectory, $DotCoverResultsDirectory, $NuGetPackagesDirectory -Type Directory | Out-Null
+  New-Item $AnalysisResultsDirectory, $DotCoverResultsDirectory, $NuGetPackagesDirectory -Type Directory | Out-Null
 }
 
 BuildTask Restore-NuGetPackages {
   Restore-NuGetPackagesForSolution $SolutionFile
 }
 
-BuildTask Update-AssemblyInfos { 
-  Update-AssemblyInfo $AssemblyInfoSharedFile $Configuration $AssemblyVersion $AssemblyFileVersion $AssemblyInformationalVersion
-}
-
-BuildTask Restore-AssemblyInfos {
-  Restore-AssemblyInfo $AssemblyInfoSharedFile
-}
-
 BuildTask Build {
-  Build-Solution $SolutionFile $Projects $Configuration $TreatWarningsAsErrors $RunFxCopCodeAnalysis $FxCopResultsDirectory
+  Build-Solution `
+    -SolutionFile $SolutionFile `
+    -Project $Projects `
+    -Configuration $Configuration `
+    -TreatWarningsAsErrors $TreatWarningsAsErrors `
+    -VersionPrefix $VersionPrefix -VersionSuffix $VersionSuffix
 }
 
 BuildTask Run-ReSharperCodeInspection {
@@ -149,7 +137,13 @@ BuildTask Create-NuGetPackages {
   $branchName = Get-CurrentBranchName
   
   $vcsUrlTemplate = "https://raw.githubusercontent.com/chrischu/SolutionInspector/${commitHash}/${branchName}/{0}"
-  Create-NuGetPackagesFromSolution $SolutionDirectory $Projects $AssemblyInformationalVersion $Configuration $vcsUrlTemplate $NuGetPackagesDirectory
+  Create-NuGetPackagesFromSolution `
+    -SolutionDirectory $SolutionDirectory `
+    -Projects $Projects `
+    -Configuration $Configuration `
+    -Version $VersionPrefix -VersionSuffix $VersionSuffix `
+    -VcsUrlTemplate $vcsUrlTemplate `
+    -ResultsDirectory $NuGetPackagesDirectory
 
   Get-ChildItem $NuGetPackagesDirectory *.nupkg | %{ Report-NuGetPackage $_.FullName }
 }
@@ -159,7 +153,7 @@ BuildTask Push-Packages {
 }
 
 BuildTask Create-Archives {
-  $archiveName = "SolutionInspector-${AssemblyInformationalVersion}.zip"
+  $archiveName = "SolutionInspector-${VersionString}.zip"
   $archivePath = Join-Path $BuildOutputDirectory $archiveName
 
   Write-Host "Creating archive '$archiveName'"
@@ -175,7 +169,7 @@ BuildTask Create-Archives {
 }
 
 BuildTask Publish-CoverageReports {
-  Publish-CoverageReport $AssemblyInformationalVersion $DotCoverCoverageBadgeFile $DotCoverCoverageReportFile
+  Publish-CoverageReport $VersionString $DotCoverCoverageBadgeFile $DotCoverCoverageReportFile
 }
 
 return Run

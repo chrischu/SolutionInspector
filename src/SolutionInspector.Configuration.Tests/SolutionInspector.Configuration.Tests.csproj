@@ -1,155 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C3E5CDEC-F2A7-49C0-8FD4-2CF58C78CA85}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SolutionInspector.Configuration.Tests</RootNamespace>
-    <AssemblyName>SolutionInspector.Configuration.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
+    <TargetFramework>net47</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>169,649</NoWarn>
-    <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>169,649</NoWarn>
-    <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
+  <Import Project="..\Shared.Test.msbuild" />
+
   <ItemGroup>
-    <Reference Include="FakeItEasy, Version=4.0.0.0, Culture=neutral, PublicKeyToken=eff28e2146d5fd2c, processorArchitecture=MSIL">
-      <HintPath>..\packages\FakeItEasy.4.0.0\lib\net45\FakeItEasy.dll</HintPath>
-    </Reference>
-    <Reference Include="Fasterflect, Version=2.1.3.0, Culture=neutral, PublicKeyToken=38d18473284c1ca7, processorArchitecture=MSIL">
-      <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions, Version=4.19.4.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.19.4\lib\net45\FluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.19.4.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.19.4\lib\net45\FluentAssertions.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.Annotations, Version=11.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.11.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="ManyConsole, Version=0.4.2.20, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ManyConsole.0.4.2.20\lib\ManyConsole.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NDesk.Options, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NullGuard, Version=1.5.2.0, Culture=neutral, PublicKeyToken=1958ac8092168428, processorArchitecture=MSIL">
-      <HintPath>..\packages\NullGuard.Fody.1.5.2\Lib\dotnet\NullGuard.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.8.1\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Wrapperator.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Interfaces.1.2.0\lib\net452\Wrapperator.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Wrapperator.Wrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Wrappers.1.2.0\lib\net452\Wrapperator.Wrappers.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="Wrapperator.Interfaces" Version="1.2.0" />
+    <PackageReference Include="Wrapperator.Wrappers" Version="1.2.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\AssemblyInfoShared.cs">
-      <Link>Properties\AssemblyInfoShared.cs</Link>
-    </Compile>
-    <Compile Include="CommaSeparatedStringCollectionTests.cs" />
-    <Compile Include="ConfigurationElementCollectionTests.cs" />
-    <Compile Include="ConfigurationManagerTests.cs" />
-    <Compile Include="Validation\ConfigurationValidatorTests.cs" />
-    <Compile Include="ConfigurationValueTests.cs" />
-    <Compile Include="ConfigurationConverterAttributeTests.cs" />
-    <Compile Include="ConfigurationDocumentTests.cs" />
-    <Compile Include="ConfigurationBaseTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Validation\Dynamic\DynamicConfigurationTypeWalkerTest.cs" />
-    <Compile Include="Validation\Dynamic\Validators\ValidationAttributeValidatorTests.cs" />
-    <Compile Include="Validation\Dynamic\Validators\RequiredValidatorTests.cs" />
-    <Compile Include="Validation\Dynamic\Validators\CollectionElementCountValidatorTests.cs" />
-    <Compile Include="Validation\Static\StaticConfigurationTypeWalkerTests.cs" />
-    <Compile Include="Validation\Static\Validators\XmlNameValidatorTests.cs" />
-    <Compile Include="Validation\Static\Validators\XmlNameUniquenessValidatorTests.cs" />
-    <Compile Include="Validation\Static\Validators\SingleDefaultCollectionValidatorTests.cs" />
-    <Compile Include="Validation\Static\Validators\DefaultCollectionMustNotSpecifyCollectionNameValidatorTests.cs" />
-    <Compile Include="Validation\Static\Validators\ConfigurationValueTypeValidatorTests.cs" />
-    <Compile Include="Validation\Static\Validators\ConfigurationSubelementTypeValidatorTests.cs" />
-    <Compile Include="Validation\Static\Validators\ConfigurationConverterValidatorTests.cs" />
-    <Compile Include="Validation\Static\Validators\ConfigurationCollectionTypeValidatorTests.cs" />
-    <Compile Include="Validation\ValidatingConfigurationVisitorTests.cs" />
-    <None Include="packages.config" />
+    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
+    <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj">
-      <Project>{023C6DC1-D26D-4034-AB57-9B24ACA4EE8C}</Project>
-      <Name>SolutionInspector.Api.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj">
-      <Project>{61A5E798-3EB1-4362-B08A-CDDA370D17B6}</Project>
-      <Name>SolutionInspector.Commons</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
-      <Project>{25E030C5-78B1-4A5C-BB25-6ECCB892971C}</Project>
-      <Name>SolutionInspector.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj">
-      <Project>{D154C744-EAB0-479A-BA22-B822AAFD3774}</Project>
-      <Name>SolutionInspector.TestInfrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
-      <Project>{84eb4f29-70f0-462b-ba37-da6f9261c8c8}</Project>
-      <Name>SolutionInspector.Api</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props'))" />
-    <Error Condition="!Exists('..\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets'))" />
-  </Target>
-  <Import Project="..\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets" Condition="Exists('..\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

@@ -18,7 +18,7 @@ namespace SolutionInspector.Api.Configuration
     private readonly Regex[] _includeFilters;
 
     /// <inheritdoc />
-    public NameFilter (IEnumerable<string> includes, IEnumerable<string> excludes = null)
+    public NameFilter(IEnumerable<string> includes, IEnumerable<string> excludes = null)
     {
       excludes = excludes ?? new string[0];
 
@@ -40,23 +40,37 @@ namespace SolutionInspector.Api.Configuration
       _excludeFilters = Excludes.Select(FilterToRegex).ToArray();
     }
 
+    /// <summary>
+    ///   All the includes in the filter.
+    /// </summary>
     public IReadOnlyCollection<string> Includes { get; }
+
+    /// <summary>
+    ///   All the excludes in the filter.
+    /// </summary>
     public IReadOnlyCollection<string> Excludes { get; }
 
+    /// <summary>
+    /// <see langword="true" /> if the filter includes all possible files, <see langword="false" /> otherwise.
+    /// </summary>
     public bool IncludesAll => Includes.Count == 1 && Includes.Single() == "*";
 
-    public bool IsMatch (string name)
+    /// <summary>
+    /// Returns <see langword="true" /> if the given <paramref name="name"/> matches the filter, <see langword="false" /> otherwise.
+    /// </summary>
+    public bool IsMatch(string name)
     {
       return _includeFilters.Any(f => f.IsMatch(name)) && !_excludeFilters.Any(f => f.IsMatch(name));
     }
 
+    /// <inheritdoc />
     [SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-    public override string ToString ()
+    public override string ToString()
     {
       return string.Join(";", Includes.Select(s => "+" + s).Concat(Excludes.Select(s => "-" + s)));
     }
 
-    private Regex FilterToRegex (string filter)
+    private Regex FilterToRegex(string filter)
     {
       return new Regex($"^{filter.Replace(".", "\\.").Replace("*", ".*")}$", RegexOptions.None);
     }
@@ -65,7 +79,7 @@ namespace SolutionInspector.Api.Configuration
     ///   Creates a <see cref="NameFilter" /> from the given <paramref name="filter" /> containing a <see cref="string" /> representation of a
     ///   <see cref="NameFilter" />.
     /// </summary>
-    public static NameFilter Parse ([NotNull] string filter)
+    public static NameFilter Parse([NotNull] string filter)
     {
       var partRegex = @"((\+?|-)[\w\-.*]+)";
       var regex = new Regex($"^{partRegex}(;{partRegex})*$");
@@ -87,7 +101,7 @@ namespace SolutionInspector.Api.Configuration
       return new NameFilter(includes, excludes);
     }
 
-    private IEnumerable<string> SimplifyFilters (IReadOnlyCollection<string> filters)
+    private IEnumerable<string> SimplifyFilters(IReadOnlyCollection<string> filters)
     {
       filters = filters.Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s_removeDuplicateAsterisksRegex.Replace(s, "*")).Distinct().ToList();
 
@@ -99,14 +113,14 @@ namespace SolutionInspector.Api.Configuration
             (current, wildCardFilter) => current.Where(f => f == wildCardFilter.Filter || !wildCardFilter.Regex.IsMatch(f)).ToList());
     }
 
-    public override bool Equals ([CanBeNull] object obj)
+    /// <inheritdoc />
+    public override bool Equals([CanBeNull] object obj)
     {
-      var other = obj as NameFilter;
-
-      return other != null && ToString().Equals(other.ToString());
+      return obj is NameFilter other && ToString().Equals(other.ToString());
     }
 
-    public override int GetHashCode ()
+    /// <inheritdoc />
+    public override int GetHashCode()
     {
       return ToString().GetHashCode();
     }

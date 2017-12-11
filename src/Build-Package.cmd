@@ -6,7 +6,6 @@ echo   -Mode "Local" `>> tmp.ps1
 echo   -Version $version `>> tmp.ps1
 echo   -IsPreRelease $True `>> tmp.ps1
 echo   -RunTests $False `>> tmp.ps1
-echo   -RunFxCopCodeAnalysis $False `>> tmp.ps1
 echo   -RunReSharperCodeInspection $False `>> tmp.ps1
 echo   -CreateNuGetPackages $True `>> tmp.ps1
 echo   -CreateArchives $True >> tmp.ps1

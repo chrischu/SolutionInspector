@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Configuration;
@@ -19,7 +20,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProjectItem target)
     {
       if (target.BuildAction != Configuration.ExpectedBuildAction)
         yield return
@@ -42,8 +43,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("The expected build action.")]
     public string ExpectedBuildAction
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
   }
 }

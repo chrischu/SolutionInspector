@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Authors>chrischu</Authors>
+    <Title>$(AssemblyName)</Title>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/chrischu/SolutionInspector/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/chrischu/SolutionInspector</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/chrischu/SolutionInspector/master/media/icon.png</PackageIconUrl>
+    <PackageTags>solutioninspector solution rules inspect</PackageTags>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+</Project>

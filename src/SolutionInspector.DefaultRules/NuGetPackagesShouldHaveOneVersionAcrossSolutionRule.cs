@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 
@@ -13,7 +14,7 @@ namespace SolutionInspector.DefaultRules
   public class NuGetPackagesShouldHaveOneVersionAcrossSolutionRule : SolutionRule
   {
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (ISolution target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] ISolution target)
     {
       var nuGetPackagesWithMultipleVersions =
           target.Projects.SelectMany(p => p.NuGetPackages)

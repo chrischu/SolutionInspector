@@ -36,6 +36,7 @@ namespace SolutionInspector.Configuration
     /// </summary>
     public string ElementName { get; set; } = "item";
 
+    [CanBeNull]
     internal override string XmlName => CollectionName;
 
     [CanBeNull]

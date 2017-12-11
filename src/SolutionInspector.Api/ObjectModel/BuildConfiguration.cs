@@ -11,7 +11,7 @@ namespace SolutionInspector.Api.ObjectModel
   [PublicApi]
   public sealed class BuildConfiguration : IEquatable<BuildConfiguration>
   {
-    private static Regex s_regex = new Regex(@"[A-Za-z0-9 *]+\|[A-Za-z0-9 *]+", RegexOptions.Compiled);
+    private static Regex s_Regex = new Regex(@"[A-Za-z0-9 *]+\|[A-Za-z0-9 *]+", RegexOptions.Compiled);
 
     /// <summary>
     ///   Creates a new <see cref="BuildConfiguration" />.
@@ -60,8 +60,7 @@ namespace SolutionInspector.Api.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      var buildConfiguration = obj as BuildConfiguration;
-      return buildConfiguration != null && Equals(buildConfiguration);
+      return obj is BuildConfiguration buildConfiguration && Equals(buildConfiguration);
     }
 
     /// <inheritdoc />
@@ -78,7 +77,7 @@ namespace SolutionInspector.Api.ObjectModel
     /// </summary>
     public static BuildConfiguration Parse (string s)
     {
-      if (!s_regex.IsMatch(s))
+      if (!s_Regex.IsMatch(s))
         throw new FormatException($"The value '{s}' is not a valid string representation of a {nameof(BuildConfiguration)}.");
 
       var split = s.Split('|');

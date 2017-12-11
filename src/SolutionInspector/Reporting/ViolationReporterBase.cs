@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using JetBrains.Annotations;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
 
@@ -19,7 +20,7 @@ namespace SolutionInspector.Reporting
       _writer.Dispose();
     }
 
-    public void Report (IEnumerable<IRuleViolation> violations)
+    public void Report ([NotNull] IEnumerable<IRuleViolation> violations)
     {
       Report(_writer, violations);
     }

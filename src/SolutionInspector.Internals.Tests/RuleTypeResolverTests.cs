@@ -161,6 +161,7 @@ namespace SolutionInspector.Internals.Tests
       }
 
       // ReSharper disable once UnassignedGetOnlyAutoProperty
+      // ReSharper disable once NotNullMemberIsNotInitialized
       public ConfigurableRuleConfiguration Configuration { get; }
     }
 

@@ -11,7 +11,7 @@ namespace SolutionInspector.Internals.Tests
     public void Generate_AllSelected_GeneratesSingleAllInclude ()
     {
       // ACT
-      var result = NameFilterGenerator.Generate(new[] { Tuple.Create(Some.String(), true) });
+      var result = NameFilterGenerator.Generate(new[] { Tuple.Create(Some.String, true) });
 
       // ASSERT
       result.Includes.Should().Equal("*");
@@ -22,7 +22,7 @@ namespace SolutionInspector.Internals.Tests
     public void Generate_NoneSelected_GeneratesSingleAllIncludeAndExclude ()
     {
       // ACT
-      var result = NameFilterGenerator.Generate(new[] { Tuple.Create(Some.String(), false) });
+      var result = NameFilterGenerator.Generate(new[] { Tuple.Create(Some.String, false) });
 
       // ASSERT
       result.Includes.Should().Equal("*");
@@ -36,7 +36,7 @@ namespace SolutionInspector.Internals.Tests
       var result = NameFilterGenerator.Generate(
         new[]
         {
-          Tuple.Create(Some.String(), false),
+          Tuple.Create(Some.String, false),
           Tuple.Create("Project.Web", true),
           Tuple.Create("Project.Console", true)
         });
@@ -53,7 +53,7 @@ namespace SolutionInspector.Internals.Tests
       var result = NameFilterGenerator.Generate(
         new[]
         {
-          Tuple.Create(Some.String(), false),
+          Tuple.Create(Some.String, false),
           Tuple.Create("Some.Tests", true),
           Tuple.Create("Other.Tests", true)
         });
@@ -70,7 +70,7 @@ namespace SolutionInspector.Internals.Tests
       var result = NameFilterGenerator.Generate(
         new[]
         {
-          Tuple.Create("B" + Some.String(), false),
+          Tuple.Create("B" + Some.String, false),
           Tuple.Create("AAAX", true),
           Tuple.Create("AAY", true),
           Tuple.Create("AZ", true)

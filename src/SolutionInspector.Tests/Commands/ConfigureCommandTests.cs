@@ -18,7 +18,7 @@ namespace SolutionInspector.Tests.Commands
     public new void SetUp ()
     {
       _processStatic = A.Fake<IProcessStatic>();
-      _configurationUiPath = Some.String();
+      _configurationUiPath = Some.String;
 
       _sut = new ConfigureCommand(_configurationUiPath, _processStatic);
     }

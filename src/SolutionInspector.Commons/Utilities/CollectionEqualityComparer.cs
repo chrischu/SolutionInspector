@@ -11,11 +11,15 @@ namespace SolutionInspector.Commons.Utilities
   {
     private readonly IEqualityComparer<T> _comparer;
 
+    /// <summary>
+    ///   Creates a new <see cref="CollectionEqualityComparer{T}"/>.
+    /// </summary>
     public CollectionEqualityComparer (IEqualityComparer<T> comparer = null)
     {
       _comparer = comparer ?? EqualityComparer<T>.Default;
     }
 
+    /// <inheritdoc />
     public bool Equals ([CanBeNull] IEnumerable<T> x, [CanBeNull] IEnumerable<T> y)
     {
       var cnt = new Dictionary<T, int>(_comparer);
@@ -44,6 +48,7 @@ namespace SolutionInspector.Commons.Utilities
       return cnt.Values.All(c => c == 0);
     }
 
+    /// <inheritdoc />
     public int GetHashCode (IEnumerable<T> obj)
     {
       return HashCodeHelper.GetOrderIndependentHashCode(obj.Select(x => _comparer.GetHashCode(x)).ToArray());

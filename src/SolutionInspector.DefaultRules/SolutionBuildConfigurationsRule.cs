@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Utilities;
@@ -35,7 +36,7 @@ namespace SolutionInspector.DefaultRules
     public IReadOnlyCollection<BuildConfiguration> ExpectedConfigurations => _expectedConfigurations.Value;
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (ISolution target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] ISolution target)
     {
       var differences = _collectionDifferenceFinder.FindDifferences(ExpectedConfigurations, target.BuildConfigurations);
 
@@ -55,6 +56,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   "A list of expected configurations (e.g. 'Build', 'Release')."
     /// </summary>
+    [CanBeNull]
     [ConfigurationValue (AttributeName = "expectedConfigurations", DefaultValue = "", IsOptional = false)]
     [Description ("A list of expected configurations (e.g. 'Build', 'Release').")]
     public CommaSeparatedStringCollection Configurations => GetConfigurationValue<CommaSeparatedStringCollection>();
@@ -62,6 +64,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   A list of expected platforms (e.g. 'Any CPU', 'x64').
     /// </summary>
+    [CanBeNull]
     [ConfigurationValue (AttributeName = "expectedPlatforms", DefaultValue = "", IsOptional = false)]
     [Description ("A list of expected platforms (e.g. 'Any CPU', 'x64).")]
     public CommaSeparatedStringCollection Platforms => GetConfigurationValue<CommaSeparatedStringCollection>();

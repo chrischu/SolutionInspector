@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 
@@ -14,7 +15,7 @@ namespace SolutionInspector.DefaultRules
   public class ProjectReferencesMustBeValidRule : ProjectRule
   {
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
     {
       foreach (var projectReference in target.ProjectReferences)
         if (projectReference.ReferencedProjectGuid == null)

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Configuration;
@@ -23,7 +24,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <inheritdoc />
-    protected override IEnumerable<IRuleViolation> Evaluate (IConfigurationProjectItem target, XDocument configurationXml)
+    protected override IEnumerable<IRuleViolation> Evaluate ([NotNull] IConfigurationProjectItem target, [NotNull] XDocument configurationXml)
     {
       var supportedRuntimeElement = configurationXml.XPathSelectElement("/configuration/startup/supportedRuntime");
 
@@ -64,8 +65,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("The expected framework version (e.g. 'v4.0')")]
     public string ExpectedVersion
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
 
     /// <summary>
@@ -75,8 +76,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("The expected SKU (e.g. '.NETFramework,Version=v4.6.1').")]
     public string ExpectedSKU
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
   }
 }

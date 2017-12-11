@@ -32,7 +32,7 @@ namespace SolutionInspector.Tests.Rules
       _sut = new FilteringProjectRuleProxy(_projectNameFilter, _projectRule);
 
       _project = A.Fake<IProject>();
-      _projectName = Some.String();
+      _projectName = Some.String;
       A.CallTo(() => _project.Name).Returns(_projectName);
     }
 

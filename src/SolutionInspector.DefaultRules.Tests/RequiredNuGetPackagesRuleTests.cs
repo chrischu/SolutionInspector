@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
 using SolutionInspector.TestInfrastructure;
 
@@ -21,7 +22,7 @@ namespace SolutionInspector.DefaultRules.Tests
       _project = A.Fake<IProject>();
 
       var configuration = ConfigurationElement.Create<RequiredNuGetPackagesRuleConfiguration>(
-        initialize: c => { c.RequiredNuGetPackages.Add("Package"); });
+        initialize: c => { c.RequiredNuGetPackages.AssertNotNull().Add("Package"); });
 
       _sut = new RequiredNuGetPackagesRule(configuration);
     }

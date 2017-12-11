@@ -17,7 +17,7 @@ namespace SolutionInspector.TestInfrastructure.Configuration
       {
         reader.WhitespaceHandling = WhitespaceHandling.None;
         reader.IsStartElement();
-        configurationElement.CallMethod("DeserializeElement", (XmlReader) reader, false);
+        configurationElement.CallMethod("DeserializeElement", reader, false);
       }
     }
 

@@ -13,8 +13,10 @@ namespace SolutionInspector.Api.Configuration
     where TElement : System.Configuration.ConfigurationElement, new()
 
   {
+    /// <inheritdoc />
     protected abstract override string ElementName { get; }
 
+    /// <inheritdoc />
     public override ConfigurationElementCollectionType CollectionType => ConfigurationElementCollectionType.BasicMap;
 
     /// <summary>
@@ -58,6 +60,7 @@ namespace SolutionInspector.Api.Configuration
       return new TElement();
     }
 
+    /// <inheritdoc />
     protected override bool IsElementName (string elementName)
     {
       return !string.IsNullOrWhiteSpace(elementName) && elementName == ElementName;

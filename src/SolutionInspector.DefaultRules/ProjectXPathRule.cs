@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
@@ -33,7 +34,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
     {
       var xdoc = GetXDocumentForXPathEvaluation(target.ProjectXml, Configuration.IgnoreNamespaces);
       var result = xdoc.XPathEvaluate(Configuration.XPath);
@@ -113,8 +114,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("XPath expression that should evaluate to true.")]
     public string XPath
     {
-      get { return GetConfigurationValue<string>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
 
     /// <summary>
@@ -124,8 +125,8 @@ namespace SolutionInspector.DefaultRules
     [Description ("Controls whether XML namespaces should be ignored or not during XPath evaluation.")]
     public bool IgnoreNamespaces
     {
-      get { return GetConfigurationValue<bool>(); }
-      set { SetConfigurationValue(value); }
+      get => GetConfigurationValue<bool>();
+      set => SetConfigurationValue(value);
     }
   }
 }

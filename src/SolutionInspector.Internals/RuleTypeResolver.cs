@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Attributes;
 
@@ -74,6 +75,7 @@ namespace SolutionInspector.Internals
       return ruleType;
     }
 
+    [CanBeNull]
     private Type ResolveConfigurationType (Type ruleType)
     {
       if (!typeof(IConfigurableRule).IsAssignableFrom(ruleType))

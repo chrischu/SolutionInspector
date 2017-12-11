@@ -10,12 +10,14 @@ namespace SolutionInspector.Api.Configuration
   /// </summary>
   public class BuildConfigurationFilterConverter : IConfigurationConverter<BuildConfigurationFilter>
   {
+    /// <inheritdoc />
     [CanBeNull]
     public string ConvertTo ([CanBeNull] BuildConfigurationFilter value)
     {
       return value?.ToString();
     }
 
+    /// <inheritdoc />
     [CanBeNull]
     public BuildConfigurationFilter ConvertFrom ([CanBeNull] string value)
     {

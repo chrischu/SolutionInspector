@@ -19,15 +19,12 @@ namespace SolutionInspector.Commons.Utilities
     public static Action<TObject, TProperty> CreateSetterActionFromGetterExpression<TObject, TProperty> (
       Expression<Func<TObject, TProperty>> propertyGet)
     {
-      var member = propertyGet.Body as MemberExpression;
-
-      if (member == null)
+      if (!(propertyGet.Body is MemberExpression member))
         throw new ArgumentException("The given expression is not a valid property get expression.", nameof(propertyGet));
 
       var cacheKey = Tuple.Create(typeof(TObject), member.Member);
 
-      Delegate action;
-      if (s_createActionFromGetterExpressionCache.TryGetValue(cacheKey, out action))
+      if (s_createActionFromGetterExpressionCache.TryGetValue(cacheKey, out var action))
         return (Action<TObject, TProperty>) action;
 
       var param = Expression.Parameter(typeof(TProperty), "value");

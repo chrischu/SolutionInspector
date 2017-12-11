@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
@@ -14,7 +15,7 @@ namespace SolutionInspector.DefaultRules
   public class ProjectGuidsMustBeUniqueRule : SolutionRule
   {
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (ISolution target)
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] ISolution target)
     {
       return target.Projects.GroupBy(p => p.Guid).Where(g => g.ContainsMoreThanOne()).Select(
         g =>

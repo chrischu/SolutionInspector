@@ -13,13 +13,14 @@ namespace SolutionInspector.Internals
     /// <summary>
     ///   Instantiates a rule configuration.
     /// </summary>
-    /// <returns></returns>
-    ConfigurationElement Instantiate ([CanBeNull] Type configurationType, XElement configurationElement);
+    [CanBeNull]
+    ConfigurationElement Instantiate([CanBeNull] Type configurationType, XElement configurationElement);
   }
 
   internal class RuleConfigurationInstantiator : IRuleConfigurationInstantiator
   {
-    public ConfigurationElement Instantiate ([CanBeNull] Type configurationType, XElement configurationElement)
+    [CanBeNull]
+    public ConfigurationElement Instantiate([CanBeNull] Type configurationType, XElement configurationElement)
     {
       if (configurationType == null)
         return null;

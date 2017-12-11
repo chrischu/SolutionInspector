@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Microsoft.Build.Evaluation;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Attributes;
@@ -59,11 +60,13 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The include path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
     /// </summary>
+    [CanBeNull]
     string WildcardInclude { get; }
 
     /// <summary>
     ///   The exclude path(s) (including a wildcard) for the project item or <see langword="null" /> if it wasn't included via wildcard.
     /// </summary>
+    [CanBeNull]
     string WildcardExclude { get; }
 
     /// <summary>
@@ -79,11 +82,13 @@ namespace SolutionInspector.Api.ObjectModel
     /// <summary>
     ///   The custom tool that is configured for the project item.
     /// </summary>
+    [CanBeNull]
     string CustomTool { get; }
 
     /// <summary>
     ///   The custom tool namespace that is configured for the project item.
     /// </summary>
+    [CanBeNull]
     string CustomToolNamespace { get; }
 
     /// <summary>

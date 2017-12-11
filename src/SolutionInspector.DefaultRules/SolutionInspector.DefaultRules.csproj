@@ -1,136 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BCB0A8E8-F220-46FB-9B07-9B2B3F9809B1}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SolutionInspector.DefaultRules</RootNamespace>
-    <AssemblyName>SolutionInspector.DefaultRules</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
+    <TargetFramework>net47</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;JETBRAINS_ANNOTATIONS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\Debug\SolutionInspector.DefaultRules.xml</DocumentationFile>
+
+  <Import Project="..\Shared.msbuild" />
+  <Import Project="..\BuildNuGetPackage.msbuild" />
+
+  <PropertyGroup>
+    <Description>Default rules for SolutionInspector.</Description>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;JETBRAINS_ANNOTATIONS</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\SolutionInspector.DefaultRules.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>..\FxCop.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=11.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.11.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="NullGuard, Version=1.5.2.0, Culture=neutral, PublicKeyToken=1958ac8092168428, processorArchitecture=MSIL">
-      <HintPath>..\packages\NullGuard.Fody.1.5.2\Lib\dotnet\NullGuard.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Wrapperator.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Interfaces.1.2.0\lib\net452\Wrapperator.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Wrapperator.Wrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wrapperator.Wrappers.1.2.0\lib\net452\Wrapperator.Wrappers.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="Wrapperator.Interfaces" Version="1.2.0" />
+    <PackageReference Include="Wrapperator.Wrappers" Version="1.2.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\AssemblyInfoShared.cs">
-      <Link>Properties\AssemblyInfoShared.cs</Link>
-    </Compile>
-    <Compile Include="NonDevelopmentNuGetReferencesShouldHaveIsPrivateSetToTrueRule.cs" />
-    <Compile Include="ProjectGuidsMustBeUniqueRule.cs" />
-    <Compile Include="NuGetReferenceHintPathsMustBeValidRule.cs" />
-    <Compile Include="ProjectItemMustBeIncludedByWildcardRule.cs" />
-    <Compile Include="ProjectItemMustNotBeIncludedByWildcardRule.cs" />
-    <Compile Include="ProjectItemsMustBePresentRule.cs" />
-    <Compile Include="ProjectReferencesMustBeValidRule.cs" />
-    <Compile Include="NuGetPackagesShouldHaveOneVersionAcrossSolutionRule.cs" />
-    <Compile Include="ProjectBuildConfigurationDependentPropertyRule.cs" />
-    <Compile Include="ProjectItemMustHaveCorrectBuildActionRule.cs" />
-    <Compile Include="ProjectMustProvideXmlDocumentationRule.cs" />
-    <Compile Include="ProjectItemMustHaveCustomToolSetRule.cs" />
-    <Compile Include="ProjectPropertyRule.cs" />
-    <Compile Include="ProjectShouldNotContainDuplicateProjectItemsRule.cs" />
-    <Compile Include="ProjectShouldNotContainProjectPropertiesWithDuplicateNameRule.cs" />
-    <Compile Include="ProjectXPathRule.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequiredCompilationSymbolsProjectRule.cs" />
-    <Compile Include="RequiredNuGetPackagesRule.cs" />
-    <Compile Include="ProjectConfigFileShouldHaveCorrectFrameworkVersionRule.cs" />
-    <Compile Include="RequiredResourceLanguagesRule.cs" />
-    <Compile Include="SolutionBuildConfigurationsRule.cs" />
+    <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj" />
+    <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj" />
+    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj" />
+    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\SharedTemplate.nuspec">
-      <Link>Properties\SharedTemplate.nuspec</Link>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Template.SolutionInspectorRuleset" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj">
-      <Project>{023C6DC1-D26D-4034-AB57-9B24ACA4EE8C}</Project>
-      <Name>SolutionInspector.Api.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj">
-      <Project>{84EB4F29-70F0-462B-BA37-DA6F9261C8C8}</Project>
-      <Name>SolutionInspector.Api</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj">
-      <Project>{61A5E798-3EB1-4362-B08A-CDDA370D17B6}</Project>
-      <Name>SolutionInspector.Commons</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj">
-      <Project>{25e030c5-78b1-4a5c-bb25-6eccb892971c}</Project>
-      <Name>SolutionInspector.Configuration</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props'))" />
-    <Error Condition="!Exists('..\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets'))" />
-  </Target>
-  <Import Project="..\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets" Condition="Exists('..\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

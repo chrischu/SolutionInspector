@@ -25,7 +25,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
     [Test]
     public void ValidateCollection_NonDefaultCollectionWithCollectionName_DoesNotReportError ()
     {
-      var attribute = new ConfigurationCollectionAttribute { CollectionName = Some.String(), IsDefaultCollection = false };
+      var attribute = new ConfigurationCollectionAttribute { CollectionName = Some.String, IsDefaultCollection = false };
 
       // ACT
       _sut.ValidateCollection(_propertyInfo, attribute, _reportValidationError);
@@ -49,7 +49,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static.Validators
     [Test]
     public void ValidateCollection_DefaultCollectionWithCollectionName_ReportsError ()
     {
-      var attribute = new ConfigurationCollectionAttribute { CollectionName = Some.String(), IsDefaultCollection = true };
+      var attribute = new ConfigurationCollectionAttribute { CollectionName = Some.String, IsDefaultCollection = true };
 
       // ACT
       _sut.ValidateCollection(_propertyInfo, attribute, _reportValidationError);

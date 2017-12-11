@@ -24,6 +24,7 @@ using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
 using Wrapperator.Interfaces.Xml.Linq;
 using Wrapperator.Wrappers;
+using ConfigurationManager = SolutionInspector.Configuration.ConfigurationManager;
 
 namespace SolutionInspector
 {
@@ -39,7 +40,7 @@ namespace SolutionInspector
     /// </summary>
     public const string RulesetFileExtension = "SolutionInspectorRuleset";
 
-    private static Logger s_logger = LogManager.GetCurrentClassLogger();
+    private static Logger s_Logger = LogManager.GetCurrentClassLogger();
 
     /// <summary>
     ///   Runs the SolutionInspector with the given console <paramref name="args" />.
@@ -49,7 +50,7 @@ namespace SolutionInspector
       Environment.SetEnvironmentVariable("VSINSTALLDIR", @"C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools");
       Environment.SetEnvironmentVariable("VisualStudioVersion", "15.0");
 
-      s_logger.Debug($"SolutionInspector was run with the following arguments: [{string.Join(", ", args)}].");
+      s_Logger.Debug($"SolutionInspector was run with the following arguments: [{string.Join(", ", args)}].");
 
       using (var container = SetupContainer())
       {
@@ -70,7 +71,7 @@ namespace SolutionInspector
       builder.Register(ctx => Wrapper.Process).As<IProcessStatic>();
       builder.Register(ctx => Wrapper.XDocument).As<IXDocumentStatic>();
 
-      builder.RegisterType<Configuration.ConfigurationManager>().As<IConfigurationManager>();
+      builder.RegisterType<ConfigurationManager>().As<IConfigurationManager>();
 
       builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
 

@@ -14,7 +14,7 @@ namespace SolutionInspector.DefaultRules
   ///   Verifies that all the compilation symbols (configured in <see cref="RequiredCompilationSymbolsProjectRuleConfiguration" />) are configured in the
   ///   project.
   /// </summary>
-  [Description ("Verifies that all the compilation symbols (see 'requiredCompilationSymbols') are configured in the project.")]
+  [Description("Verifies that all the compilation symbols (see 'requiredCompilationSymbols') are configured in the project.")]
   public class RequiredCompilationSymbolsProjectRule : ConfigurableProjectRule<RequiredCompilationSymbolsProjectRuleConfiguration>
   {
     /// <inheritdoc />
@@ -24,7 +24,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate([NotNull] IProject target)
     {
       foreach (var config in Configuration.RequiredCompilationSymbols)
       {
@@ -37,13 +37,14 @@ namespace SolutionInspector.DefaultRules
           var defineConstants = properties.GetValueOrDefault("DefineConstants")?.Value;
           var actualSymbols = new HashSet<string>(defineConstants?.Split(';') ?? Enumerable.Empty<string>());
 
-          foreach (var requiredSymbol in config.RequiredCompilationSymbols)
-            if (!actualSymbols.Contains(requiredSymbol))
-              yield return
-                  new RuleViolation(
-                    this,
-                    target,
-                    $"In the build configuration '{matchingBuildConfig}' the required compilation symbol '{requiredSymbol}' was not found.");
+          if (config.RequiredCompilationSymbols != null)
+            foreach (var requiredSymbol in config.RequiredCompilationSymbols)
+              if (!actualSymbols.Contains(requiredSymbol))
+                yield return
+                    new RuleViolation(
+                      this,
+                      target,
+                      $"In the build configuration '{matchingBuildConfig}' the required compilation symbol '{requiredSymbol}' was not found.");
         }
       }
     }
@@ -72,7 +73,7 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   Filter that controlls which build configuration this <see cref="RequiredCompilationSymbolsConfigurationElement" /> applies to.
     /// </summary>
-    [Description ("Filter that controlls which build configuration this rule applies to.")]
+    [Description("Filter that controlls which build configuration this rule applies to.")]
     [ConfigurationValue]
     public BuildConfigurationFilter BuildConfigurationFilter
     {
@@ -83,7 +84,8 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   All the compilation symbols that are required and are therefore checked.
     /// </summary>
-    [Description ("All the compilation symbols that are required and are therefore checked.")]
+    [CanBeNull]
+    [Description("All the compilation symbols that are required and are therefore checked.")]
     [ConfigurationValue]
     public CommaSeparatedStringCollection RequiredCompilationSymbols => GetConfigurationValue<CommaSeparatedStringCollection>();
   }

@@ -35,6 +35,7 @@ namespace SolutionInspector.Internals.ObjectModel
     public bool IsPreRelease { get; }
 
     /// <inheritdoc />
+    [CanBeNull]
     public string PreReleaseTag { get; }
 
     /// <inheritdoc />
@@ -91,8 +92,7 @@ namespace SolutionInspector.Internals.ObjectModel
         return false;
       if (ReferenceEquals(this, obj))
         return true;
-      var nuGetPackage = obj as INuGetPackage;
-      return nuGetPackage != null && Equals(nuGetPackage);
+      return obj is INuGetPackage nuGetPackage && Equals(nuGetPackage);
     }
 
     /// <inheritdoc />

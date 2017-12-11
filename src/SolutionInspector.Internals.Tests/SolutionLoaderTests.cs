@@ -1,12 +1,9 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.Api.Exceptions;
-using SolutionInspector.Commons.Extensions;
 using SolutionInspector.TestInfrastructure;
 using Wrapperator.Interfaces.IO;
 
@@ -44,10 +41,7 @@ namespace SolutionInspector.Internals.Tests
     [Test]
     public void Load_ExistingSolution_LoadsSolution ()
     {
-      var solutionPath = Path.Combine(
-        Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath).AssertNotNull(),
-        @"ObjectModel\TestData\Solution\TestSolution.sln");
-
+      var solutionPath = TestDataHelper.GetTestDataPath(@"Solution\TestSolution.sln");
       A.CallTo(() => _file.Exists(solutionPath)).Returns(true);
 
       // ACT

@@ -62,6 +62,7 @@ namespace SolutionInspector.Configuration
     /// <summary>
     ///   Gets the configuration value represented by the CLR property this method is called from.
     /// </summary>
+    [CanBeNull]
     protected T GetConfigurationValue<T> ([CallerMemberName] string clrPropertyName = null)
     {
       var configurationValueType = typeof(T);

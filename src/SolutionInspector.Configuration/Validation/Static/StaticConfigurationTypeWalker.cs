@@ -27,23 +27,20 @@ namespace SolutionInspector.Configuration.Validation.Static
         if (configurationPropertyAttribute.Length == 0)
           continue;
 
-        var configurationValueAttribute = configurationPropertyAttribute[0] as ConfigurationValueAttribute;
-        if (configurationValueAttribute != null)
+        if (configurationPropertyAttribute[0] is ConfigurationValueAttribute configurationValueAttribute)
         {
           visitor.VisitValue(newPropertyPath, property, configurationValueAttribute);
           continue;
         }
 
-        var configurationSubelementAttribute = configurationPropertyAttribute[0] as ConfigurationSubelementAttribute;
-        if (configurationSubelementAttribute != null)
+        if (configurationPropertyAttribute[0] is ConfigurationSubelementAttribute configurationSubelementAttribute)
         {
           subTypesToWalk.Add(Tuple.Create(newPropertyPath, configurationSubelementAttribute.GetSubelementType(property)));
           visitor.VisitSubelement(newPropertyPath, property, configurationSubelementAttribute);
           continue;
         }
 
-        var configurationCollectionAttribute = configurationPropertyAttribute[0] as ConfigurationCollectionAttribute;
-        if (configurationCollectionAttribute != null)
+        if (configurationPropertyAttribute[0] is ConfigurationCollectionAttribute configurationCollectionAttribute)
         {
           var collectionElementType = configurationCollectionAttribute.GetCollectionElementType(property);
           if (collectionElementType != null)

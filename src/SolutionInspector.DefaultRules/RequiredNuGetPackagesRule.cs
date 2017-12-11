@@ -11,21 +11,22 @@ namespace SolutionInspector.DefaultRules
   /// <summary>
   ///   Verifies that the project references all the NuGet packages configured via <see cref="RequiredNuGetPackagesRuleConfiguration" />.
   /// </summary>
-  [Description ("Verifies that the project references all the configured NuGet packages.")]
+  [Description("Verifies that the project references all the configured NuGet packages.")]
   public class RequiredNuGetPackagesRule : ConfigurableProjectRule<RequiredNuGetPackagesRuleConfiguration>
   {
     /// <inheritdoc />
-    public RequiredNuGetPackagesRule ([NotNull] RequiredNuGetPackagesRuleConfiguration configuration)
+    public RequiredNuGetPackagesRule([NotNull] RequiredNuGetPackagesRuleConfiguration configuration)
       : base(configuration)
     {
     }
 
     /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate (IProject target)
+    public override IEnumerable<IRuleViolation> Evaluate([NotNull] IProject target)
     {
-      foreach (var requiredNuGetPackageId in Configuration.RequiredNuGetPackages)
-        if (target.NuGetPackages.All(p => p.Id != requiredNuGetPackageId))
-          yield return new RuleViolation(this, target, $"Required NuGet package '{requiredNuGetPackageId}' is missing.");
+      if (Configuration.RequiredNuGetPackages != null)
+        foreach (var requiredNuGetPackageId in Configuration.RequiredNuGetPackages)
+          if (target.NuGetPackages.All(p => p.Id != requiredNuGetPackageId))
+            yield return new RuleViolation(this, target, $"Required NuGet package '{requiredNuGetPackageId}' is missing.");
     }
   }
 
@@ -37,8 +38,9 @@ namespace SolutionInspector.DefaultRules
     /// <summary>
     ///   All the required NuGet package ids (e.g. 'Autofac').
     /// </summary>
+    [CanBeNull]
     [ConfigurationValue]
-    [Description ("All the required NuGet package ids (e.g. 'Autofac').")]
+    [Description("All the required NuGet package ids (e.g. 'Autofac').")]
     public CommaSeparatedStringCollection RequiredNuGetPackages => GetConfigurationValue<CommaSeparatedStringCollection>();
   }
 }
