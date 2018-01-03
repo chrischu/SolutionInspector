@@ -25,4 +25,8 @@
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+
 </Project>

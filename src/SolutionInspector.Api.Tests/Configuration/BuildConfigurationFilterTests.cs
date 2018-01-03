@@ -1,9 +1,11 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Commons.Extensions;
 
-namespace SolutionInspector.Api.Configuration.Tests
+namespace SolutionInspector.Api.Tests.Configuration
 {
   public class BuildConfigurationFilterTests
   {

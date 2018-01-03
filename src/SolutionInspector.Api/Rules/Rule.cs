@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Commons.Attributes;
 
 namespace SolutionInspector.Api.Rules
@@ -16,8 +17,8 @@ namespace SolutionInspector.Api.Rules
     IEnumerable<IRuleViolation> Evaluate (TTarget target);
   }
 
-  /// <inheritdoc />
-  public abstract class Rule<TTarget> : IRule
+  /// <inheritdoc cref="IRule" />
+  public abstract class Rule<TTarget> : RuleConfigurationElement, IRule
     where TTarget : IRuleTarget
   {
     /// <summary>

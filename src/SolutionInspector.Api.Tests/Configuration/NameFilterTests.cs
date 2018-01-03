@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
+using SolutionInspector.Api.Configuration;
 
-namespace SolutionInspector.Api.Configuration.Tests
+namespace SolutionInspector.Api.Tests.Configuration
 {
   public class NameFilterTests
   {

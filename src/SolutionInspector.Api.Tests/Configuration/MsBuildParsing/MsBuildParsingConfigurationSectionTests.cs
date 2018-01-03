@@ -1,9 +1,10 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.Configuration.MsBuildParsing;
 using SolutionInspector.TestInfrastructure.Configuration;
 
-namespace SolutionInspector.Api.Configuration.Tests.MsBuildParsing
+namespace SolutionInspector.Api.Tests.Configuration.MsBuildParsing
 {
   public class MsBuildParsingConfigurationSectionTests
   {

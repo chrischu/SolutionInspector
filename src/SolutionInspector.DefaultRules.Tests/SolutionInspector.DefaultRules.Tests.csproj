@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SolutionInspector.Api.Configuration\SolutionInspector.Api.Configuration.csproj" />
     <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj" />
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
     <ProjectReference Include="..\SolutionInspector.DefaultRules\SolutionInspector.DefaultRules.csproj" />

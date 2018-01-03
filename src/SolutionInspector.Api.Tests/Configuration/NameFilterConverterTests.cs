@@ -1,9 +1,10 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.Commons.Extensions;
 
-namespace SolutionInspector.Api.Configuration.Tests
+namespace SolutionInspector.Api.Tests.Configuration
 {
   public class NameFilterConverterTests
   {

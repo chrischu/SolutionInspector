@@ -2,9 +2,10 @@
 using System.Configuration;
 using FluentAssertions;
 using NUnit.Framework;
+using SolutionInspector.Api.Configuration;
 using SolutionInspector.TestInfrastructure.Configuration;
 
-namespace SolutionInspector.Api.Configuration.Tests
+namespace SolutionInspector.Api.Tests.Configuration
 {
   public class KeyedConfigurationElementCollectionBaseTests
   {

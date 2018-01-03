@@ -1,3 +1,4 @@
+using System;
 using System.Xml.Linq;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -6,7 +7,7 @@ using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
 
-namespace SolutionInspector.Api.Configuration.Tests.Ruleset
+namespace SolutionInspector.Api.Tests.Configuration.Ruleset
 {
   public class RuleConfigurationElementTests
   {

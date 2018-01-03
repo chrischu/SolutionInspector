@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
@@ -6,7 +7,7 @@ using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Configuration;
 using Wrapperator.Interfaces.Xml.Linq;
 
-namespace SolutionInspector.Api.Configuration.Tests.Ruleset
+namespace SolutionInspector.Api.Tests.Configuration.Ruleset
 {
   public class RulesetConfigurationDocumentTests
   {
