@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://chrischu.github.io/SolutionInspector/schema/base_v1.xsd"
+           elementFormDefault="qualified"
+           xmlns="http://chrischu.github.io/SolutionInspector/schema/base_v1.xsd"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="rule" type="RuleBase" abstract="true" />
+  <xs:complexType name="RuleBase" abstract="true" />
+</xs:schema>
