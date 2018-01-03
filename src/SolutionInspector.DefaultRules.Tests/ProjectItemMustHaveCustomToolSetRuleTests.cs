@@ -1,13 +1,14 @@
-﻿using FakeItEasy;
+﻿using System;
+using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Configuration;
+using SolutionInspector.TestInfrastructure.Api;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  public class ProjectItemMustHaveCustomToolSetRuleTests
+  public class ProjectItemMustHaveCustomToolSetRuleTests : RuleTestBase
   {
     private IProjectItem _projectItem;
 
@@ -18,14 +19,11 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       _projectItem = A.Fake<IProjectItem>();
 
-      var configuration = ConfigurationElement.Create<ProjectItemMustHaveCustomToolSetRuleConfiguration>(
-        initialize: c =>
-        {
-          c.ExpectedCustomTool = "CustomTool";
-          c.ExpectedCustomToolNamespace = "CustomToolNamespace";
-        });
-
-      _sut = new ProjectItemMustHaveCustomToolSetRule(configuration);
+      _sut = CreateRule<ProjectItemMustHaveCustomToolSetRule>(r =>
+      {
+        r.ExpectedCustomTool = "CustomTool";
+        r.ExpectedCustomToolNamespace = "CustomToolNamespace";
+      });
     }
 
     [Test]
@@ -52,14 +50,14 @@ namespace SolutionInspector.DefaultRules.Tests
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(_sut, _projectItem, "Unexpected value for custom tool, was 'DIFFERENT' but should be 'CustomTool'."),
-          new RuleViolation(
-            _sut,
-            _projectItem,
-            "Unexpected value for custom tool namespace, was 'DIFFERENT_NS' but should be 'CustomToolNamespace'.")
-        });
+          new[]
+          {
+              new RuleViolation(_sut, _projectItem, "Unexpected value for custom tool, was 'DIFFERENT' but should be 'CustomTool'."),
+              new RuleViolation(
+                  _sut,
+                  _projectItem,
+                  "Unexpected value for custom tool namespace, was 'DIFFERENT_NS' but should be 'CustomToolNamespace'.")
+          });
     }
   }
 }

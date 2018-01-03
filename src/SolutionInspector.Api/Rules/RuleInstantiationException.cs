@@ -5,15 +5,15 @@ using System.Runtime.Serialization;
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
-  ///   Represents errors that occurs when trying to resolve the type of a <see cref="IRule" />.
+  ///   Represents errors that occurs when trying to instantiate a <see cref="IRule" />.
   /// </summary>
   [Serializable]
-  public class RuleTypeResolvingException : Exception
+  public class RuleInstantiationException : Exception
   {
     /// <summary>
-    ///   Creates a new <see cref="RuleTypeResolvingException" />
+    ///   Creates a new <see cref="RuleInstantiationException" />
     /// </summary>
-    public RuleTypeResolvingException (string message, Exception innerException = null)
+    public RuleInstantiationException (string message, Exception innerException = null)
       : base(message, innerException)
     {
     }
@@ -22,7 +22,7 @@ namespace SolutionInspector.Api.Rules
     ///   Serialization constructor.
     /// </summary>
     [ExcludeFromCodeCoverage /* Serialization ctor */]
-    protected RuleTypeResolvingException (SerializationInfo info, StreamingContext context)
+    protected RuleInstantiationException (SerializationInfo info, StreamingContext context)
       : base(info, context)
     {
     }

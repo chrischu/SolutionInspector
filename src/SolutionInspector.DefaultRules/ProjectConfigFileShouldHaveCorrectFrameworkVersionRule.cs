@@ -13,50 +13,7 @@ namespace SolutionInspector.DefaultRules
   ///   Checks that the configuration file for the project (App.config/Web.config) has the correct target framework version/SKU set.
   /// </summary>
   [Description ("Checks that the configuration file for the project (App.config/Web.config) has the correct target framework version/SKU set.")]
-  public class ProjectConfigFileShouldHaveCorrectFrameworkVersionRule
-      : ProjectConfigRuleBase<ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration>
-  {
-    /// <inheritdoc />
-    public ProjectConfigFileShouldHaveCorrectFrameworkVersionRule (
-      ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration configuration)
-      : base(configuration)
-    {
-    }
-
-    /// <inheritdoc />
-    protected override IEnumerable<IRuleViolation> Evaluate ([NotNull] IConfigurationProjectItem target, [NotNull] XDocument configurationXml)
-    {
-      var supportedRuntimeElement = configurationXml.XPathSelectElement("/configuration/startup/supportedRuntime");
-
-      if (supportedRuntimeElement == null)
-      {
-        yield return new RuleViolation(this, target, "No explicit configuration for the supported runtime version/SKU could be found.");
-      }
-      else
-      {
-        var version = supportedRuntimeElement.Attribute("version")?.Value;
-        if (version != Configuration.ExpectedVersion)
-          yield return
-              new RuleViolation(
-                this,
-                target,
-                $"Unexpected value for supported runtime version, was '{version ?? "<null>"}' but should be '{Configuration.ExpectedVersion}'.");
-
-        var sku = supportedRuntimeElement.Attribute("sku")?.Value;
-        if (sku != Configuration.ExpectedSKU)
-          yield return
-              new RuleViolation(
-                this,
-                target,
-                $"Unexpected value for supported runtime SKU, was '{sku ?? "<null>"}' but should be '{Configuration.ExpectedSKU}'.");
-      }
-    }
-  }
-
-  /// <summary>
-  ///   Configuration for the <see cref="ProjectConfigFileShouldHaveCorrectFrameworkVersionRule" />.
-  /// </summary>
-  public class ProjectConfigurationFileShouldHaveCorrectFrameworkVersionRuleConfiguration : ProjectConfigRuleConfigurationBase
+  public class ProjectConfigFileShouldHaveCorrectFrameworkVersionRule: ProjectConfigRuleBase
   {
     /// <summary>
     ///   The expected framework version (e.g. 'v4.0')
@@ -78,6 +35,35 @@ namespace SolutionInspector.DefaultRules
     {
       get => GetConfigurationValue<string>();
       set => SetConfigurationValue(value);
+    }
+
+    /// <inheritdoc />
+    protected override IEnumerable<IRuleViolation> Evaluate ([NotNull] IConfigurationProjectItem target, [NotNull] XDocument configurationXml)
+    {
+      var supportedRuntimeElement = configurationXml.XPathSelectElement("/configuration/startup/supportedRuntime");
+
+      if (supportedRuntimeElement == null)
+      {
+        yield return new RuleViolation(this, target, "No explicit configuration for the supported runtime version/SKU could be found.");
+      }
+      else
+      {
+        var version = supportedRuntimeElement.Attribute("version")?.Value;
+        if (version != ExpectedVersion)
+          yield return
+              new RuleViolation(
+                this,
+                target,
+                $"Unexpected value for supported runtime version, was '{version ?? "<null>"}' but should be '{ExpectedVersion}'.");
+
+        var sku = supportedRuntimeElement.Attribute("sku")?.Value;
+        if (sku != ExpectedSKU)
+          yield return
+              new RuleViolation(
+                this,
+                target,
+                $"Unexpected value for supported runtime SKU, was '{sku ?? "<null>"}' but should be '{ExpectedSKU}'.");
+      }
     }
   }
 }

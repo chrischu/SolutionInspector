@@ -1,13 +1,14 @@
-﻿using FakeItEasy;
+﻿using System;
+using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Configuration;
+using SolutionInspector.TestInfrastructure.Api;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  public class ProjectItemMustHaveCorrectBuildActionRuleTests
+  public class ProjectItemMustHaveCorrectBuildActionRuleTests : RuleTestBase
   {
     private IProjectItem _projectItem;
 
@@ -18,13 +19,7 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       _projectItem = A.Fake<IProjectItem>();
 
-      var configuration = ConfigurationElement.Create<ProjectItemMustHaveCorrectBuildActionRuleConfiguration>(
-        initialize: c =>
-        {
-          c.ExpectedBuildAction = "Compile";
-        });
-
-      _sut = new ProjectItemMustHaveCorrectBuildActionRule(configuration);
+      _sut = CreateRule<ProjectItemMustHaveCorrectBuildActionRule>(r => r.ExpectedBuildAction = "Compile");
     }
 
     [Test]
@@ -49,10 +44,10 @@ namespace SolutionInspector.DefaultRules.Tests
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(_sut, _projectItem, "Unexpected build action was \'None\', but should be \'Compile\'.")
-        });
+          new[]
+          {
+              new RuleViolation(_sut, _projectItem, "Unexpected build action was \'None\', but should be \'Compile\'.")
+          });
     }
   }
 }

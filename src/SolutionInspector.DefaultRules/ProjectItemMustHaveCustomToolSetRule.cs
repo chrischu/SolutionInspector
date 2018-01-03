@@ -8,49 +8,18 @@ using SolutionInspector.Configuration;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  ///   Verifies project items have custom tool and custom tool namespace set that is configured via
-  ///   <see cref="ProjectItemMustHaveCustomToolSetRuleConfiguration" />.
+  ///   Verifies project items have custom tool (<see cref="ExpectedCustomTool" />) and custom tool namespace (<see cref="ExpectedCustomToolNamespace" />) set,
   /// </summary>
-  [Description ("Verifies project items have custom tool and custom tool namespace set that is configured via 'expectedCustomTool' " +
-                "and 'expectedCustomToolNamespace'.")]
-  public class ProjectItemMustHaveCustomToolSetRule : ConfigurableProjectItemRule<ProjectItemMustHaveCustomToolSetRuleConfiguration>
-  {
-    /// <inheritdoc />
-    public ProjectItemMustHaveCustomToolSetRule (ProjectItemMustHaveCustomToolSetRuleConfiguration configuration)
-      : base(configuration)
-    {
-    }
-
-    /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProjectItem target)
-    {
-      if ((target.CustomTool ?? "") != Configuration.ExpectedCustomTool)
-        yield return
-            new RuleViolation(
-              this,
-              target,
-              $"Unexpected value for custom tool, was '{target.CustomTool}' but should be '{Configuration.ExpectedCustomTool}'.");
-
-      if ((target.CustomToolNamespace ?? "") != Configuration.ExpectedCustomToolNamespace)
-        yield return
-            new RuleViolation(
-              this,
-              target,
-              $"Unexpected value for custom tool namespace, was '{target.CustomToolNamespace}' " +
-              $"but should be '{Configuration.ExpectedCustomToolNamespace}'.");
-    }
-  }
-
-  /// <summary>
-  ///   Configuration for the <see cref="ProjectItemMustHaveCustomToolSetRule" />.
-  /// </summary>
-  public class ProjectItemMustHaveCustomToolSetRuleConfiguration : ConfigurationElement
+  [Description(
+      "Verifies project items have custom tool and custom tool namespace set that is configured via 'expectedCustomTool' " +
+      "and 'expectedCustomToolNamespace'.")]
+  public class ProjectItemMustHaveCustomToolSetRule : ProjectItemRule
   {
     /// <summary>
     ///   The expected custom tool.
     /// </summary>
     [ConfigurationValue]
-    [Description ("The expected custom tool.")]
+    [Description("The expected custom tool.")]
     public string ExpectedCustomTool
     {
       get => GetConfigurationValue<string>();
@@ -61,11 +30,30 @@ namespace SolutionInspector.DefaultRules
     ///   The expected custom tool namespace.
     /// </summary>
     [ConfigurationValue]
-    [Description ("The expected custom tool namespace.")]
+    [Description("The expected custom tool namespace.")]
     public string ExpectedCustomToolNamespace
     {
       get => GetConfigurationValue<string>();
       set => SetConfigurationValue(value);
+    }
+
+    /// <inheritdoc />
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProjectItem target)
+    {
+      if ((target.CustomTool ?? "") != ExpectedCustomTool)
+        yield return
+            new RuleViolation(
+                this,
+                target,
+                $"Unexpected value for custom tool, was '{target.CustomTool}' but should be '{ExpectedCustomTool}'.");
+
+      if ((target.CustomToolNamespace ?? "") != ExpectedCustomToolNamespace)
+        yield return
+            new RuleViolation(
+                this,
+                target,
+                $"Unexpected value for custom tool namespace, was '{target.CustomToolNamespace}' " +
+                $"but should be '{ExpectedCustomToolNamespace}'.");
     }
   }
 }

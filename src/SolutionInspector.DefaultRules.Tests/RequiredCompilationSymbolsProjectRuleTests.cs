@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
@@ -6,11 +7,11 @@ using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
-using SolutionInspector.Configuration;
+using SolutionInspector.TestInfrastructure.Api;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  public class RequiredCompilationSymbolsProjectRuleTests
+  public class RequiredCompilationSymbolsProjectRuleTests : RuleTestBase
   {
     private IAdvancedProject _advancedProject;
     private BuildConfiguration _filteredBuildConfiguration;
@@ -31,15 +32,13 @@ namespace SolutionInspector.DefaultRules.Tests
       A.CallTo(() => _project.Advanced).Returns(_advancedProject);
       A.CallTo(() => _project.BuildConfigurations).Returns(new[] { _includedBuildConfiguration, _filteredBuildConfiguration });
 
-      var requiredCompilationSymbolsProjectRuleConfiguration = ConfigurationElement.Create<RequiredCompilationSymbolsProjectRuleConfiguration>(
-        initialize: e =>
-        {
-          var item = e.RequiredCompilationSymbols.AddNew();
-          item.BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("Included", "*"));
-          item.RequiredCompilationSymbols.AssertNotNull().Add("TRACE", "DEBUG");
-        });
-
-      _sut = new RequiredCompilationSymbolsProjectRule(requiredCompilationSymbolsProjectRuleConfiguration);
+      _sut = CreateRule<RequiredCompilationSymbolsProjectRule>(
+          r =>
+          {
+            var item = r.RequiredCompilationSymbols.AddNew();
+            item.BuildConfigurationFilter = new BuildConfigurationFilter(new BuildConfiguration("Included", "*"));
+            item.RequiredCompilationSymbols.AssertNotNull().Add("TRACE", "DEBUG");
+          });
     }
 
     [Test]
@@ -70,13 +69,13 @@ namespace SolutionInspector.DefaultRules.Tests
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(
-            _sut,
-            _project,
-            $"In the build configuration '{_includedBuildConfiguration}' the required compilation symbol 'DEBUG' was not found.")
-        });
+          new[]
+          {
+              new RuleViolation(
+                  _sut,
+                  _project,
+                  $"In the build configuration '{_includedBuildConfiguration}' the required compilation symbol 'DEBUG' was not found.")
+          });
     }
 
     [Test]

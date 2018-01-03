@@ -47,7 +47,7 @@ namespace SolutionInspector
     /// </summary>
     public static int Run (string[] args)
     {
-      Environment.SetEnvironmentVariable("VSINSTALLDIR", @"C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools");
+      Environment.SetEnvironmentVariable("VSINSTALLDIR", @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community");
       Environment.SetEnvironmentVariable("VisualStudioVersion", "15.0");
 
       s_Logger.Debug($"SolutionInspector was run with the following arguments: [{string.Join(", ", args)}].");
@@ -78,9 +78,8 @@ namespace SolutionInspector
       builder.RegisterType<RuleAssemblyLoader>().As<IRuleAssemblyLoader>();
 
       builder.RegisterType<RuleCollectionBuilder>().As<IRuleCollectionBuilder>();
-      builder.RegisterType<RuleTypeResolver>().As<IRuleTypeResolver>();
 
-      builder.RegisterType<RuleConfigurationInstantiator>().As<IRuleConfigurationInstantiator>();
+      builder.RegisterType<RuleInstantiator>().As<IRuleInstantiator>();
 
       builder.RegisterType<RuleViolationViewModelConverter>().As<IRuleViolationViewModelConverter>();
 
@@ -116,7 +115,7 @@ namespace SolutionInspector
       builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();
 
       var configuration = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-      var solutionInspectorConfiguration = (ISolutionInspectorConfiguration)configuration.GetSectionGroup("solutionInspector").AssertNotNull();
+      var solutionInspectorConfiguration = (ISolutionInspectorConfiguration) configuration.GetSectionGroup("solutionInspector").AssertNotNull();
       builder.Register(ctx => solutionInspectorConfiguration).As<ISolutionInspectorConfiguration>().SingleInstance();
 
       return builder.Build();

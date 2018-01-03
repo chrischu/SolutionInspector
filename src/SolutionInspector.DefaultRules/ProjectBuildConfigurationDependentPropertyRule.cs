@@ -11,45 +11,11 @@ using SolutionInspector.Configuration;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  ///   Verifies that a project's property has the expected value in the build configurations matched by the
-  ///   <see cref="ProjectBuildConfigurationDependentPropertyRuleConfiguration.BuildConfigurationFilter" />.
+  ///   Verifies that a project's property has the expected value in the build configurations matched by the <see cref="BuildConfigurationFilter" />.
   /// </summary>
   [Description ("Verifies that a project's property has the expected value in the build configurations matched by the" +
                 "provided 'buildConfigurationFilter'.")]
-  public class ProjectBuildConfigurationDependentPropertyRule : ConfigurableProjectRule<ProjectBuildConfigurationDependentPropertyRuleConfiguration>
-  {
-    /// <inheritdoc />
-    public ProjectBuildConfigurationDependentPropertyRule (ProjectBuildConfigurationDependentPropertyRuleConfiguration configuration)
-      : base(configuration)
-    {
-    }
-
-    /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
-    {
-      var matchingBuildConfigs = target.BuildConfigurations.Where(c => Configuration.BuildConfigurationFilter.IsMatch(c));
-
-      foreach (var matchingBuildConfig in matchingBuildConfigs)
-      {
-        var properties = target.Advanced.EvaluateProperties(matchingBuildConfig);
-
-        var actualValue = properties.GetValueOrDefault(Configuration.Property)?.Value;
-
-        if (actualValue != Configuration.ExpectedValue)
-          yield return
-              new RuleViolation(
-                this,
-                target,
-                $"Unexpected value for property '{Configuration.Property}' in build configuration '{matchingBuildConfig}', " +
-                $"was '{actualValue ?? "<null>"}' but should be '{Configuration.ExpectedValue}'.");
-      }
-    }
-  }
-
-  /// <summary>
-  ///   Configuration for the <see cref="ProjectBuildConfigurationDependentPropertyRule" />.
-  /// </summary>
-  public class ProjectBuildConfigurationDependentPropertyRuleConfiguration : ConfigurationElement
+  public class ProjectBuildConfigurationDependentPropertyRule : ProjectRule
   {
     /// <summary>
     ///   Controls in which build configurations the <see cref="Property" /> is checked against the <see cref="ExpectedValue" />.
@@ -82,6 +48,27 @@ namespace SolutionInspector.DefaultRules
     {
       get => GetConfigurationValue<string>();
       set => SetConfigurationValue(value);
+    }
+
+    /// <inheritdoc />
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
+    {
+      var matchingBuildConfigs = target.BuildConfigurations.Where(c => BuildConfigurationFilter.IsMatch(c));
+
+      foreach (var matchingBuildConfig in matchingBuildConfigs)
+      {
+        var properties = target.Advanced.EvaluateProperties(matchingBuildConfig);
+
+        var actualValue = properties.GetValueOrDefault(Property)?.Value;
+
+        if (actualValue != ExpectedValue)
+          yield return
+              new RuleViolation(
+                this,
+                target,
+                $"Unexpected value for property '{Property}' in build configuration '{matchingBuildConfig}', " +
+                $"was '{actualValue ?? "<null>"}' but should be '{ExpectedValue}'.");
+      }
     }
   }
 }

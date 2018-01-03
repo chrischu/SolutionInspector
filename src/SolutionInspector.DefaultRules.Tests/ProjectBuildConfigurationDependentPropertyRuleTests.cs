@@ -5,11 +5,11 @@ using NUnit.Framework;
 using SolutionInspector.Api.Configuration;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Configuration;
+using SolutionInspector.TestInfrastructure.Api;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  public class ProjectBuildConfigurationDependentPropertyRuleTests
+  public class ProjectBuildConfigurationDependentPropertyRuleTests : RuleTestBase
   {
     private IAdvancedProject _advancedProject;
 
@@ -45,17 +45,13 @@ namespace SolutionInspector.DefaultRules.Tests
       _property = "Property";
       _expectedValue = "ExpectedValue";
 
-      var projectBuildConfigurationDependentPropertyRuleConfiguration =
-          ConfigurationElement.Create<ProjectBuildConfigurationDependentPropertyRuleConfiguration>(
-            initialize: e =>
-            {
-              e.Property = _property;
-              e.ExpectedValue = _expectedValue;
-              e.BuildConfigurationFilter = _filterIncludeOneOnly;
-            });
-
-      _sut = new ProjectBuildConfigurationDependentPropertyRule(
-        projectBuildConfigurationDependentPropertyRuleConfiguration);
+      _sut = CreateRule<ProjectBuildConfigurationDependentPropertyRule>(
+          r =>
+          {
+            r.BuildConfigurationFilter = _filterIncludeOneOnly;
+            r.Property = _property;
+            r.ExpectedValue = _expectedValue;
+          });
     }
 
     [Test]
@@ -127,14 +123,7 @@ namespace SolutionInspector.DefaultRules.Tests
     [Test]
     public void Evaluate_PropertyWithUnexpectedValueInMultipleConfigurations_ReturnsViolations ()
     {
-      _sut = new ProjectBuildConfigurationDependentPropertyRule(
-        ConfigurationElement.Create<ProjectBuildConfigurationDependentPropertyRuleConfiguration>(
-          initialize: e =>
-          {
-            e.Property = _property;
-            e.ExpectedValue = _expectedValue;
-            e.BuildConfigurationFilter = _filterIncludeOneAndTwo;
-          }));
+      _sut.BuildConfigurationFilter = _filterIncludeOneAndTwo;
 
       ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(_advancedProject, _buildConfiguration1, _property, "ActualValue");
       ProjectPropertyFakeUtility.SetupFakeBuildConfigurationDependentProperty(_advancedProject, _buildConfiguration2, _property, "ActualValue");

@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
-using SolutionInspector.Configuration;
+using SolutionInspector.TestInfrastructure.Api;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  public class SolutionBuildConfigurationsRuleTests
+  public class SolutionBuildConfigurationsRuleTests : RuleTestBase
   {
     private ISolution _solution;
     private IReadOnlyCollection<BuildConfiguration> _solutionConfigurations;
@@ -24,37 +25,12 @@ namespace SolutionInspector.DefaultRules.Tests
       _solutionConfigurations = new BuildConfiguration[0];
       A.CallTo(() => _solution.BuildConfigurations).Returns(_solutionConfigurations);
 
-      var configuration = ConfigurationElement.Create<SolutionBuildConfigurationsRuleConfiguration>(
-        initialize: c =>
-        {
-          c.Configurations.AssertNotNull().Add("Configuration");
-          c.Platforms.AssertNotNull().Add("Platform");
-        });
-
-      _sut = new SolutionBuildConfigurationsRule(configuration);
-    }
-
-    [Test]
-    public void GetExpectedConfigurations_ReturnsCrossproductOfConfigurationsAndPlatforms ()
-    {
-      var configuration = ConfigurationElement.Create<SolutionBuildConfigurationsRuleConfiguration>(
-        initialize: c =>
-        {
-          c.Configurations.AssertNotNull().Add("C1", "C2");
-          c.Platforms.AssertNotNull().Add("P1", "P2");
-        });
-
-      _sut = new SolutionBuildConfigurationsRule(configuration);
-
-      // ACT
-      var result = _sut.ExpectedConfigurations;
-
-      // ASSERT
-      result.Should().Equal(
-        new BuildConfiguration("C1", "P1"),
-        new BuildConfiguration("C1", "P2"),
-        new BuildConfiguration("C2", "P1"),
-        new BuildConfiguration("C2", "P2"));
+      _sut = CreateRule<SolutionBuildConfigurationsRule>(
+          r =>
+          {
+            r.Configurations.AssertNotNull().Add("Configuration");
+            r.Platforms.AssertNotNull().Add("Platform");
+          });
     }
 
     [Test]
@@ -80,10 +56,10 @@ namespace SolutionInspector.DefaultRules.Tests
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(_sut, _solution, "Unexpected build configuration 'Unex|pected' found.")
-        });
+          new[]
+          {
+              new RuleViolation(_sut, _solution, "Unexpected build configuration 'Unex|pected' found.")
+          });
     }
 
     [Test]
@@ -96,10 +72,10 @@ namespace SolutionInspector.DefaultRules.Tests
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(_sut, _solution, "Build configuration 'Configuration|Platform' could not be found.")
-        });
+          new[]
+          {
+              new RuleViolation(_sut, _solution, "Build configuration 'Configuration|Platform' could not be found.")
+          });
     }
   }
 }

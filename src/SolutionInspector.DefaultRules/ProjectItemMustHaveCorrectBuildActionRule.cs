@@ -8,33 +8,10 @@ using SolutionInspector.Configuration;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  ///   Verifies project items have the build action set that is configured via <see cref="ProjectItemMustHaveCorrectBuildActionRuleConfiguration" />.
+  ///   Verifies project items have the build action set that is configured via <see cref="ExpectedBuildAction" />.
   /// </summary>
   [Description ("Verifies project items have the build action set that is configured in 'expectedBuildAction'.")]
-  public class ProjectItemMustHaveCorrectBuildActionRule : ConfigurableProjectItemRule<ProjectItemMustHaveCorrectBuildActionRuleConfiguration>
-  {
-    /// <inheritdoc />
-    public ProjectItemMustHaveCorrectBuildActionRule (ProjectItemMustHaveCorrectBuildActionRuleConfiguration configuration)
-      : base(configuration)
-    {
-    }
-
-    /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProjectItem target)
-    {
-      if (target.BuildAction != Configuration.ExpectedBuildAction)
-        yield return
-            new RuleViolation(
-              this,
-              target,
-              $"Unexpected build action was '{target.BuildAction}', but should be '{Configuration.ExpectedBuildAction}'.");
-    }
-  }
-
-  /// <summary>
-  ///   Configuration for the <see cref="ProjectItemMustHaveCorrectBuildActionRule" />.
-  /// </summary>
-  public class ProjectItemMustHaveCorrectBuildActionRuleConfiguration : ConfigurationElement
+  public class ProjectItemMustHaveCorrectBuildActionRule : ProjectItemRule
   {
     /// <summary>
     ///   The expected build action.
@@ -45,6 +22,17 @@ namespace SolutionInspector.DefaultRules
     {
       get => GetConfigurationValue<string>();
       set => SetConfigurationValue(value);
+    }
+
+    /// <inheritdoc />
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProjectItem target)
+    {
+      if (target.BuildAction != ExpectedBuildAction)
+        yield return
+            new RuleViolation(
+              this,
+              target,
+              $"Unexpected build action was '{target.BuildAction}', but should be '{ExpectedBuildAction}'.");
     }
   }
 }

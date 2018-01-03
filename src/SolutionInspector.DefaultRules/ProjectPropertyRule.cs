@@ -12,33 +12,7 @@ namespace SolutionInspector.DefaultRules
   ///   Verifies that a project's property has the expected value.
   /// </summary>
   [Description ("Verifies that a project's property has the expected value.")]
-  public class ProjectPropertyRule : ConfigurableProjectRule<ProjectPropertyRuleConfiguration>
-  {
-    /// <inheritdoc />
-    public ProjectPropertyRule (ProjectPropertyRuleConfiguration configuration)
-      : base(configuration)
-    {
-    }
-
-    /// <inheritdoc />
-    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
-    {
-      var actualValue = target.Advanced.Properties.GetValueOrDefault(Configuration.Property)?.DefaultValue;
-
-      if (actualValue != Configuration.ExpectedValue)
-        yield return
-            new RuleViolation(
-              this,
-              target,
-              $"Unexpected value for property '{Configuration.Property}', was '{actualValue ?? "<null>"}' " +
-              $"but should be '{Configuration.ExpectedValue}'.");
-    }
-  }
-
-  /// <summary>
-  ///   Configuration for the <see cref="ProjectPropertyRule" />.
-  /// </summary>
-  public class ProjectPropertyRuleConfiguration : ConfigurationElement
+  public class ProjectPropertyRule : ProjectRule
   {
     /// <summary>
     ///   The property to check.
@@ -60,6 +34,20 @@ namespace SolutionInspector.DefaultRules
     {
       get => GetConfigurationValue<string>();
       set => SetConfigurationValue(value);
+    }
+
+    /// <inheritdoc />
+    public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
+    {
+      var actualValue = target.Advanced.Properties.GetValueOrDefault(Property)?.DefaultValue;
+
+      if (actualValue != ExpectedValue)
+        yield return
+            new RuleViolation(
+              this,
+              target,
+              $"Unexpected value for property '{Property}', was '{actualValue ?? "<null>"}' " +
+              $"but should be '{ExpectedValue}'.");
     }
   }
 }

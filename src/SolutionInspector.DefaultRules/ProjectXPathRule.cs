@@ -15,7 +15,7 @@ using SolutionInspector.Configuration;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  ///   Evaluates an XPath expression (configured via <see cref="ProjectXPathRuleConfiguration" />) against the project XML file
+  ///   Evaluates an XPath expression (configured via <see cref="XPath" />) against the project XML file
   ///   and returns a violation if it does not evaluate to <c>true</c>.
   /// </summary>
   /// <remarks>
@@ -25,27 +25,43 @@ namespace SolutionInspector.DefaultRules
   [Description (
     "Evaluates an XPath expression (configured via 'xPath') against the project XML file and returns a violation if it does not " +
     "evaluate to true. By default all XML namespaces are ignored, if that is not desirable, change the 'ignoreNamespaces' property to false")]
-  public class ProjectXPathRule : ConfigurableProjectRule<ProjectXPathRuleConfiguration>
+  public class ProjectXPathRule : ProjectRule
   {
-    /// <inheritdoc />
-    public ProjectXPathRule (ProjectXPathRuleConfiguration configuration)
-      : base(configuration)
+    /// <summary>
+    ///   XPath expression that should evaluate to true.
+    /// </summary>
+    [ConfigurationValue]
+    [Description ("XPath expression that should evaluate to true.")]
+    public string XPath
     {
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
+    }
+
+    /// <summary>
+    ///   Controls if XML namespaces should be ignored during XPath evaluation.
+    /// </summary>
+    [ConfigurationValue(IsOptional = true, DefaultValue = "true")]
+    [Description ("Controls whether XML namespaces should be ignored or not during XPath evaluation.")]
+    public bool IgnoreNamespaces
+    {
+      get => GetConfigurationValue<bool>();
+      set => SetConfigurationValue(value);
     }
 
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate ([NotNull] IProject target)
     {
-      var xdoc = GetXDocumentForXPathEvaluation(target.ProjectXml, Configuration.IgnoreNamespaces);
-      var result = xdoc.XPathEvaluate(Configuration.XPath);
+      var xdoc = GetXDocumentForXPathEvaluation(target.ProjectXml, IgnoreNamespaces);
+      var result = xdoc.XPathEvaluate(XPath);
 
       if (result.GetType() != typeof(bool))
-        throw new InvalidXPathExpressionException(Configuration.XPath);
+        throw new InvalidXPathExpressionException(XPath);
 
       var boolResult = (bool) result;
 
       if (!boolResult)
-        yield return new RuleViolation(this, target, $"The XPath expression '{Configuration.XPath}' did not evaluate to 'true', but to 'false'.");
+        yield return new RuleViolation(this, target, $"The XPath expression '{XPath}' did not evaluate to 'true', but to 'false'.");
     }
 
     private XDocument GetXDocumentForXPathEvaluation (XDocument xdoc, bool ignoreNamespaces)
@@ -78,7 +94,7 @@ namespace SolutionInspector.DefaultRules
     }
 
     /// <summary>
-    ///   Occurs when the XPath expression used in <see cref="ProjectXPathRuleConfiguration" /> does not evaluate to a boolean value.
+    ///   Occurs when the XPath expression used in <see cref="XPath" /> does not evaluate to a boolean value.
     /// </summary>
     [Serializable]
     public class InvalidXPathExpressionException : Exception
@@ -99,34 +115,6 @@ namespace SolutionInspector.DefaultRules
         : base(info, context)
       {
       }
-    }
-  }
-
-  /// <summary>
-  ///   Configuration for the <see cref="ProjectXPathRule" />.
-  /// </summary>
-  public class ProjectXPathRuleConfiguration : ConfigurationElement
-  {
-    /// <summary>
-    ///   XPath expression that should evaluate to true.
-    /// </summary>
-    [ConfigurationValue]
-    [Description ("XPath expression that should evaluate to true.")]
-    public string XPath
-    {
-      get => GetConfigurationValue<string>();
-      set => SetConfigurationValue(value);
-    }
-
-    /// <summary>
-    ///   Controls if XML namespaces should be ignored during XPath evaluation.
-    /// </summary>
-    [ConfigurationValue(DefaultValue = "true")]
-    [Description ("Controls whether XML namespaces should be ignored or not during XPath evaluation.")]
-    public bool IgnoreNamespaces
-    {
-      get => GetConfigurationValue<bool>();
-      set => SetConfigurationValue(value);
     }
   }
 }

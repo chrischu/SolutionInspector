@@ -6,12 +6,12 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Configuration;
 using SolutionInspector.TestInfrastructure;
+using SolutionInspector.TestInfrastructure.Api;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  public class ProjectXPathRuleTests
+  public class ProjectXPathRuleTests : RuleTestBase
   {
     private IProject _project;
 
@@ -23,13 +23,16 @@ namespace SolutionInspector.DefaultRules.Tests
       _project = A.Fake<IProject>();
       A.CallTo(() => _project.ProjectXml).Returns(XDocument.Parse("<xml><element attr=\"7\" /></xml>"));
 
-      _sut = new ProjectXPathRule(CreateConfiguration("boolean(//element[@attr=7])"));
+      _sut = CreateRule<ProjectXPathRule>(r =>
+      {
+        r.XPath = "don't care";
+      });
     }
 
     [Test]
     public void Evaluate_XPathExpressionThatEvaluatesToTrue_ReturnsNoViolations ()
     {
-      _sut = new ProjectXPathRule(CreateConfiguration("boolean(//element[@attr=7])"));
+      _sut.XPath = "boolean(//element[@attr=7])";
 
       // ACT
       var result = _sut.Evaluate(_project);
@@ -41,7 +44,7 @@ namespace SolutionInspector.DefaultRules.Tests
     [Test]
     public void Evaluate_XPathExpressionThatEvaluatesToFalse_ReturnsViolation ()
     {
-      _sut = new ProjectXPathRule(CreateConfiguration("boolean(//nonExistingElement)"));
+      _sut.XPath = "boolean(//nonExistingElement)";
 
       // ACT
       var result = _sut.Evaluate(_project);
@@ -50,27 +53,27 @@ namespace SolutionInspector.DefaultRules.Tests
       result.ShouldBeEquivalentTo(
         new[]
         {
-          new RuleViolation(_sut, _project, $"The XPath expression '{_sut.Configuration.XPath}' did not evaluate to 'true', but to 'false'.")
+          new RuleViolation(_sut, _project, $"The XPath expression '{_sut.XPath}' did not evaluate to 'true', but to 'false'.")
         });
     }
 
     [Test]
     public void Evaluate_XPathExpressionThatDoesNotEvaluateToBoolean_Throws ()
     {
-      _sut = new ProjectXPathRule(CreateConfiguration("//element"));
+      _sut.XPath = "//element";
 
       // ACT
       Action act = () => Dev.Null = _sut.Evaluate(_project).ToArray();
 
       // ASSERT
       act.ShouldThrow<ProjectXPathRule.InvalidXPathExpressionException>()
-          .WithMessage($"The configured XPath expression '{_sut.Configuration.XPath}' does not evaluate to a boolean value.");
+          .WithMessage($"The configured XPath expression '{_sut.XPath}' does not evaluate to a boolean value.");
     }
 
     [Test]
     public void Evaluate_DocumentWithNamespaces_IgnoresNamespaces ()
     {
-      _sut = new ProjectXPathRule(CreateConfiguration("boolean(//element)"));
+      _sut.XPath = "boolean(//element)";
 
       A.CallTo(() => _project.ProjectXml)
           .Returns(XDocument.Parse("<xml xmlns=\"http://some.namespace\" xmlns:x=\"http://some.other.namespace\"><element /></xml>"));
@@ -85,10 +88,8 @@ namespace SolutionInspector.DefaultRules.Tests
     [Test]
     public void Evaluate_DocumentWithNamespacesAndNamespaceIgnoringIsDisabled_ReturnsViolation ()
     {
-      var configuration = CreateConfiguration("boolean(//element)");
-      configuration.IgnoreNamespaces = false;
-
-      _sut = new ProjectXPathRule(configuration);
+      _sut.XPath = "boolean(//element)";
+      _sut.IgnoreNamespaces = false;
 
       A.CallTo(() => _project.ProjectXml).Returns(XDocument.Parse("<xml xmlns=\"http://some.namespace\"><element /></xml>"));
 
@@ -99,13 +100,8 @@ namespace SolutionInspector.DefaultRules.Tests
       result.ShouldBeEquivalentTo(
         new[]
         {
-          new RuleViolation(_sut, _project, $"The XPath expression '{_sut.Configuration.XPath}' did not evaluate to 'true', but to 'false'.")
+          new RuleViolation(_sut, _project, $"The XPath expression '{_sut.XPath}' did not evaluate to 'true', but to 'false'.")
         });
-    }
-
-    private ProjectXPathRuleConfiguration CreateConfiguration(string xPath)
-    {
-      return ConfigurationElement.Create<ProjectXPathRuleConfiguration>(initialize: c => c.XPath = xPath);
     }
   }
 }

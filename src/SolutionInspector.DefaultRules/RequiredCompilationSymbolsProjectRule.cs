@@ -11,22 +11,23 @@ using SolutionInspector.Configuration;
 namespace SolutionInspector.DefaultRules
 {
   /// <summary>
-  ///   Verifies that all the compilation symbols (configured in <see cref="RequiredCompilationSymbolsProjectRuleConfiguration" />) are configured in the
+  ///   Verifies that all the compilation symbols (configured in <see cref="RequiredCompilationSymbols" />) are configured in the
   ///   project.
   /// </summary>
   [Description("Verifies that all the compilation symbols (see 'requiredCompilationSymbols') are configured in the project.")]
-  public class RequiredCompilationSymbolsProjectRule : ConfigurableProjectRule<RequiredCompilationSymbolsProjectRuleConfiguration>
+  public class RequiredCompilationSymbolsProjectRule : ProjectRule
   {
-    /// <inheritdoc />
-    public RequiredCompilationSymbolsProjectRule([NotNull] RequiredCompilationSymbolsProjectRuleConfiguration configuration)
-      : base(configuration)
-    {
-    }
+    /// <summary>
+    ///   All the required compilation symbols.
+    /// </summary>
+    [ConfigurationCollection]
+    public ConfigurationElementCollection<RequiredCompilationSymbolsConfigurationElement> RequiredCompilationSymbols
+      => GetConfigurationCollection<RequiredCompilationSymbolsConfigurationElement>();
 
     /// <inheritdoc />
     public override IEnumerable<IRuleViolation> Evaluate([NotNull] IProject target)
     {
-      foreach (var config in Configuration.RequiredCompilationSymbols)
+      foreach (var config in RequiredCompilationSymbols)
       {
         var matchingBuildConfigs = target.BuildConfigurations.Where(c => config.BuildConfigurationFilter.IsMatch(c));
 
@@ -48,20 +49,6 @@ namespace SolutionInspector.DefaultRules
         }
       }
     }
-  }
-
-  /// <summary>
-  ///   Configuration for the <see cref="RequiredCompilationSymbolsProjectRule" />.
-  /// </summary>
-  [UsedImplicitly /* by configuration */]
-  public class RequiredCompilationSymbolsProjectRuleConfiguration : ConfigurationElement
-  {
-    /// <summary>
-    ///   All the required compilation symbols.
-    /// </summary>
-    [ConfigurationCollection]
-    public ConfigurationElementCollection<RequiredCompilationSymbolsConfigurationElement> RequiredCompilationSymbols
-      => GetConfigurationCollection<RequiredCompilationSymbolsConfigurationElement>();
   }
 
   /// <summary>

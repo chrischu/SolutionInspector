@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using FakeItEasy;
 using Fasterflect;
 using FluentAssertions;
@@ -16,21 +18,18 @@ namespace SolutionInspector.Tests.Rules
 {
   public class RuleCollectionBuilderTests
   {
-    private IRuleConfigurationInstantiator _ruleConfigurationInstantiator;
-    private IRuleTypeResolver _ruleTypeResolver;
+    private IRuleInstantiator _ruleInstantiator;
 
     private IRuleCollectionBuilder _sut;
 
     [SetUp]
     public void SetUp ()
     {
-      _ruleTypeResolver = A.Fake<IRuleTypeResolver>();
-      _ruleConfigurationInstantiator = A.Fake<IRuleConfigurationInstantiator>();
+      _ruleInstantiator = A.Fake<IRuleInstantiator>();
 
-      A.CallTo(() => _ruleTypeResolver.Resolve(A<string>._))
-          .Returns(new RuleTypeInfo("Rule", typeof(Rule), null, typeof(Rule).GetConstructors().Single()));
+      A.CallTo(() => _ruleInstantiator.Instantiate(A<string>._, A<XElement>._)).Returns(new Rule());
 
-      _sut = new RuleCollectionBuilder(_ruleTypeResolver, _ruleConfigurationInstantiator);
+      _sut = new RuleCollectionBuilder(_ruleInstantiator);
     }
 
     [Test]
@@ -45,34 +44,34 @@ namespace SolutionInspector.Tests.Rules
       var rules =
           new[]
           {
-            FakeHelper.CreateAndConfigure<IRuleConfiguration>(
-              r => { A.CallTo(() => r.RuleType).Returns("Namespace.RuleName, Assembly"); })
+              FakeHelper.CreateAndConfigure<IRuleConfiguration>(
+                  r => { A.CallTo(() => r.RuleType).Returns("Namespace.RuleName, Assembly"); })
           };
 
       A.CallTo(() => rulesConfiguration.SolutionRules).Returns(rules);
 
       A.CallTo(() => rulesConfiguration.ProjectRuleGroups).Returns(
-        new[]
-        {
-          FakeHelper.CreateAndConfigure<IProjectRuleGroupConfiguration>(
-            c =>
-            {
-              A.CallTo(() => c.AppliesTo).Returns(appliesToNameFilter1);
-              A.CallTo(() => c.Rules).Returns(rules);
-            })
-        });
+          new[]
+          {
+              FakeHelper.CreateAndConfigure<IProjectRuleGroupConfiguration>(
+                  c =>
+                  {
+                    A.CallTo(() => c.AppliesTo).Returns(appliesToNameFilter1);
+                    A.CallTo(() => c.Rules).Returns(rules);
+                  })
+          });
 
       A.CallTo(() => rulesConfiguration.ProjectItemRuleGroups).Returns(
-        new[]
-        {
-          FakeHelper.CreateAndConfigure<IProjectItemRuleGroupConfiguration>(
-            c =>
-            {
-              A.CallTo(() => c.AppliesTo).Returns(appliesToNameFilter2);
-              A.CallTo(() => c.InProject).Returns(inProjectFilter);
-              A.CallTo(() => c.Rules).Returns(rules);
-            })
-        });
+          new[]
+          {
+              FakeHelper.CreateAndConfigure<IProjectItemRuleGroupConfiguration>(
+                  c =>
+                  {
+                    A.CallTo(() => c.AppliesTo).Returns(appliesToNameFilter2);
+                    A.CallTo(() => c.InProject).Returns(inProjectFilter);
+                    A.CallTo(() => c.Rules).Returns(rules);
+                  })
+          });
 
       // ACT
       var result = _sut.Build(rulesConfiguration);
@@ -82,7 +81,7 @@ namespace SolutionInspector.Tests.Rules
       AssertProjectRuleProxy<Rule>(result.ProjectRules.First(), appliesToNameFilter1);
       AssertProjectItemRuleProxy<Rule>(result.ProjectItemRules.Single(), appliesToNameFilter2, inProjectFilter);
 
-      A.CallTo(() => _ruleTypeResolver.Resolve("Namespace.RuleName, Assembly")).MustHaveHappened(Repeated.Exactly.Times(3));
+      A.CallTo(() => _ruleInstantiator.Instantiate("Namespace.RuleName, Assembly", A<XElement>._)).MustHaveHappened(Repeated.Exactly.Times(3));
     }
 
     private void AssertProjectRuleProxy<TRule> (IRule rule, INameFilter expectedNameFilter)
@@ -110,9 +109,9 @@ namespace SolutionInspector.Tests.Rules
       inProjectFilter.Should().BeSameAs(expectedInProjectFilter);
     }
 
-    private class Rule : IProjectRule, ISolutionRule, IProjectItemRule
+    private class Rule : RuleConfigurationElement, ISolutionRule, IProjectRule, IProjectItemRule
     {
-      public IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
+      public IEnumerable<IRuleViolation> Evaluate (ISolution target)
       {
         return Enumerable.Empty<RuleViolation>();
       }
@@ -122,7 +121,7 @@ namespace SolutionInspector.Tests.Rules
         return Enumerable.Empty<RuleViolation>();
       }
 
-      public IEnumerable<IRuleViolation> Evaluate (ISolution target)
+      public IEnumerable<IRuleViolation> Evaluate (IProjectItem target)
       {
         return Enumerable.Empty<RuleViolation>();
       }

@@ -1,15 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
-using SolutionInspector.Configuration;
+using SolutionInspector.TestInfrastructure.Api;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  public class RequiredResourceLanguagesRuleTests
+  public class RequiredResourceLanguagesRuleTests : RuleTestBase
   {
     private IProject _project;
 
@@ -20,29 +21,28 @@ namespace SolutionInspector.DefaultRules.Tests
     {
       _project = A.Fake<IProject>();
 
-      var configuration = ConfigurationElement.Create<RequiredResourceLanguagesRuleConfiguration>(
-        initialize: c =>
-        {
-          c.RequiredResources.AssertNotNull().Add("Resources1", "Resources2");
-          c.RequiredLanguages.AssertNotNull().Add("de", "cs");
-        });
-
-      _sut = new RequiredResourceLanguagesRule(configuration);
+      _sut = new RequiredResourceLanguagesRule();
+      _sut = CreateRule<RequiredResourceLanguagesRule>(
+          r =>
+          {
+            r.RequiredResources.AssertNotNull().Add("Resources1", "Resources2");
+            r.RequiredLanguages.AssertNotNull().Add("de", "cs");
+          });
     }
-
+    
     [Test]
     public void Evaluate_ProjectContainsResourcesForAllRequiredLanguages_ReturnsNoViolations ()
     {
       A.CallTo(() => _project.ProjectItems).Returns(
-        new[]
-        {
-          CreateProjectItem("Resources1.resx"),
-          CreateProjectItem("Resources1.de.resx"),
-          CreateProjectItem("Resources1.cs.resx"),
-          CreateProjectItem("Resources2.resx"),
-          CreateProjectItem("Resources2.de.resx"),
-          CreateProjectItem("Resources2.cs.resx")
-        });
+          new[]
+          {
+              CreateProjectItem("Resources1.resx"),
+              CreateProjectItem("Resources1.de.resx"),
+              CreateProjectItem("Resources1.cs.resx"),
+              CreateProjectItem("Resources2.resx"),
+              CreateProjectItem("Resources2.de.resx"),
+              CreateProjectItem("Resources2.cs.resx")
+          });
 
       // ACT
       var result = _sut.Evaluate(_project).ToArray();
@@ -55,54 +55,57 @@ namespace SolutionInspector.DefaultRules.Tests
     public void Evaluate_ProjectDoesNotContainDefaultResourceFileForRequiredLanguages_ReturnsViolations ()
     {
       A.CallTo(() => _project.ProjectItems).Returns(
-        new[]
-        {
-          CreateProjectItem("Resources1.de.resx"),
-          CreateProjectItem("Resources1.cs.resx"),
-          CreateProjectItem("Resources2.de.resx"),
-          CreateProjectItem("Resources2.cs.resx")
-        });
+          new[]
+          {
+              CreateProjectItem("Resources1.de.resx"),
+              CreateProjectItem("Resources1.cs.resx"),
+              CreateProjectItem("Resources2.de.resx"),
+              CreateProjectItem("Resources2.cs.resx")
+          });
 
       // ACT
       var result = _sut.Evaluate(_project);
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(_sut, _project, "For the required resource 'Resources1' no default resource file ('Resources1.resx') could be found."),
-          new RuleViolation(_sut, _project, "For the required resource 'Resources2' no default resource file ('Resources2.resx') could be found.")
-        });
+          new[]
+          {
+              new RuleViolation(
+                  _sut,
+                  _project,
+                  "For the required resource 'Resources1' no default resource file ('Resources1.resx') could be found."),
+              new RuleViolation(_sut, _project, "For the required resource 'Resources2' no default resource file ('Resources2.resx') could be found.")
+          });
     }
 
     [Test]
     public void Evaluate_ProjectDoesNotContainDResourceFileForARequiredLanguage_ReturnsViolations ()
     {
       A.CallTo(() => _project.ProjectItems).Returns(
-        new[]
-        {
-          CreateProjectItem("Resources1.resx"),
-          CreateProjectItem("Resources1.cs.resx"),
-          CreateProjectItem("Resources2.resx"),
-          CreateProjectItem("Resources2.cs.resx")
-        });
+          new[]
+          {
+              CreateProjectItem("Resources1.resx"),
+              CreateProjectItem("Resources1.cs.resx"),
+              CreateProjectItem("Resources2.resx"),
+              CreateProjectItem("Resources2.cs.resx")
+          });
 
       // ACT
       var result = _sut.Evaluate(_project);
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(
-            _sut,
-            _project,
-            "For the required resource 'Resources1' no resource file for language 'de' ('Resources1.de.resx') could be found."),
-          new RuleViolation(
-            _sut,
-            _project,
-            "For the required resource 'Resources2' no resource file for language 'de' ('Resources2.de.resx') could be found.")
-        });
+          new[]
+          {
+              new RuleViolation(
+                  _sut,
+                  _project,
+                  "For the required resource 'Resources1' no resource file for language 'de' ('Resources1.de.resx') could be found."),
+              new RuleViolation(
+                  _sut,
+                  _project,
+                  "For the required resource 'Resources2' no resource file for language 'de' ('Resources2.de.resx') could be found.")
+          });
     }
 
     private IProjectItem CreateProjectItem (string name)

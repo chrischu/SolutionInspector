@@ -2,19 +2,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using SolutionInspector.Api.ObjectModel;
+using SolutionInspector.Configuration;
 
 namespace SolutionInspector.Api.Rules
 {
   /// <summary>
   ///   Base class for rules that verify the contents of the project configuration file (App.config/Web.config).
   /// </summary>
-  public abstract class ProjectConfigRuleBase<TConfiguration> : ConfigurableRule<IProject, TConfiguration>, IProjectRule
-    where TConfiguration : ProjectConfigRuleConfigurationBase
+  public abstract class ProjectConfigRuleBase : ProjectRule
   {
-    /// <inheritdoc />
-    protected ProjectConfigRuleBase (TConfiguration configuration)
-      : base(configuration)
+    /// <summary>
+    ///   Controls whether to report a violation when no configuration file can be found for the project or if the rule should just be skipped in that case.
+    /// </summary>
+    [ConfigurationValue(IsOptional = true, DefaultValue = "true")]
+    public bool ReportViolationOnMissingConfigurationFile
     {
+      get => GetConfigurationValue<bool>();
+      set => SetConfigurationValue(value);
     }
 
     /// <inheritdoc cref="Evaluate(IProject)" />
@@ -23,7 +27,7 @@ namespace SolutionInspector.Api.Rules
       var configurationItem = target.ConfigurationProjectItem;
 
       if (configurationItem == null)
-        return Configuration.ReportViolationOnMissingConfigurationFile
+        return ReportViolationOnMissingConfigurationFile
           ? new[] { new RuleViolation(this, target, $"For the project '{target.Name}' no configuration file could be found.") }
           : Enumerable.Empty<IRuleViolation>();
 

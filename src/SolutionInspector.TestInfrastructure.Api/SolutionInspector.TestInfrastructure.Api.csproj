@@ -7,15 +7,16 @@
   <Import Project="..\Shared.Test.msbuild" />
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build" Version="15.5.180" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="15.5.180" />
+    <PackageReference Include="DiffPlex" Version="1.4.1" />
+    <PackageReference Include="fasterflect" Version="2.1.3" />
+    <PackageReference Include="Wrapperator.Interfaces" Version="1.2.0" />
+    <PackageReference Include="Wrapperator.Wrappers" Version="1.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj" />
+    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj" />
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
-    <ProjectReference Include="..\SolutionInspector.TestInfrastructure.Api\SolutionInspector.TestInfrastructure.Api.csproj" />
-    <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

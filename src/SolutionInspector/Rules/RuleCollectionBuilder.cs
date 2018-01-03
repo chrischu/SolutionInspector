@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SolutionInspector.Api.Configuration.Ruleset;
@@ -13,15 +14,11 @@ namespace SolutionInspector.Rules
 
   internal class RuleCollectionBuilder : IRuleCollectionBuilder
   {
-    private readonly IRuleConfigurationInstantiator _ruleConfigurationInstantiator;
-    private readonly IRuleTypeResolver _ruleTypeResolver;
+    private readonly IRuleInstantiator _ruleInstantiator;
 
-    public RuleCollectionBuilder (
-      IRuleTypeResolver ruleTypeResolver,
-      IRuleConfigurationInstantiator ruleConfigurationInstantiator)
+    public RuleCollectionBuilder (IRuleInstantiator ruleInstantiator)
     {
-      _ruleTypeResolver = ruleTypeResolver;
-      _ruleConfigurationInstantiator = ruleConfigurationInstantiator;
+      _ruleInstantiator = ruleInstantiator;
     }
 
     public IRuleCollection Build (IRulesConfiguration rulesConfiguration)
@@ -53,13 +50,10 @@ namespace SolutionInspector.Rules
     }
 
     private IEnumerable<TRule> InstantiateRules<TRule> (IReadOnlyCollection<IRuleConfiguration> ruleConfigurations)
-      where TRule : IRule
+        where TRule : IRule
     {
       return from ruleConfiguration in ruleConfigurations
-          let ruleTypeInfo = _ruleTypeResolver.Resolve(ruleConfiguration.RuleType)
-          let config = _ruleConfigurationInstantiator.Instantiate(ruleTypeInfo.ConfigurationType, ruleConfiguration.Element)
-          let constructorParameters = ruleTypeInfo.IsConfigurable ? new object[] { config } : new object[0]
-          select (TRule) ruleTypeInfo.Constructor.Invoke(constructorParameters);
+          select (TRule) (object) _ruleInstantiator.Instantiate(ruleConfiguration.RuleType, ruleConfiguration.Element);
     }
   }
 }

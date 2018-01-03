@@ -1,13 +1,14 @@
-﻿using FakeItEasy;
+﻿using System;
+using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Configuration;
+using SolutionInspector.TestInfrastructure.Api;
 
 namespace SolutionInspector.DefaultRules.Tests
 {
-  public class ProjectPropertyRuleTests
+  public class ProjectPropertyRuleTests : RuleTestBase
   {
     private IAdvancedProject _advancedProject;
     private IProject _project;
@@ -22,14 +23,12 @@ namespace SolutionInspector.DefaultRules.Tests
       _advancedProject = A.Fake<IAdvancedProject>();
       A.CallTo(() => _project.Advanced).Returns(_advancedProject);
 
-      var configuration = ConfigurationElement.Create<ProjectPropertyRuleConfiguration>(
-        initialize: c =>
-        {
-          c.Property = "Property";
-          c.ExpectedValue = "ExpectedValue";
-        });
-
-      _sut = new ProjectPropertyRule(configuration);
+      _sut = CreateRule<ProjectPropertyRule>(
+          r =>
+          {
+            r.Property = "Property";
+            r.ExpectedValue = "ExpectedValue";
+          });
     }
 
     [Test]
@@ -54,10 +53,10 @@ namespace SolutionInspector.DefaultRules.Tests
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(_sut, _project, "Unexpected value for property 'Property', was 'ActualValue' but should be 'ExpectedValue'.")
-        });
+          new[]
+          {
+              new RuleViolation(_sut, _project, "Unexpected value for property 'Property', was 'ActualValue' but should be 'ExpectedValue'.")
+          });
     }
 
     [Test]
@@ -70,10 +69,10 @@ namespace SolutionInspector.DefaultRules.Tests
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(_sut, _project, "Unexpected value for property 'Property', was '<null>' but should be 'ExpectedValue'.")
-        });
+          new[]
+          {
+              new RuleViolation(_sut, _project, "Unexpected value for property 'Property', was '<null>' but should be 'ExpectedValue'.")
+          });
     }
   }
 }

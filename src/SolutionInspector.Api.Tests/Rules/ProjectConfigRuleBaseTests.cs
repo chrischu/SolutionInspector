@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using FakeItEasy;
@@ -6,26 +7,20 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Configuration;
+using SolutionInspector.TestInfrastructure.Api;
 
 namespace SolutionInspector.Api.Tests.Rules
 {
-  public class ProjectConfigRuleBaseTests
+  public class ProjectConfigRuleBaseTests : RuleTestBase
   {
-    private DummyProjectConfigurationRuleConfiguration _configuration;
-
     private IProject _project;
-    private IRuleViolation _ruleViolation;
 
     private DummyProjectConfigRule _sut;
 
     [SetUp]
     public void SetUp ()
     {
-      _configuration = ConfigurationElement.Create<DummyProjectConfigurationRuleConfiguration>();
-      _ruleViolation = A.Fake<IRuleViolation>();
-
-      _sut = new DummyProjectConfigRule(_configuration, _ruleViolation);
+      _sut = CreateRule<DummyProjectConfigRule>();
 
       _project = A.Fake<IProject>();
       A.CallTo(() => _project.Name).Returns("Project");
@@ -38,14 +33,17 @@ namespace SolutionInspector.Api.Tests.Rules
       var result = _sut.Evaluate(_project).ToArray();
 
       // ASSERT
-      result.Length.Should().Be(1);
-      result[0].Should().BeSameAs(_ruleViolation);
+      result.ShouldBeEquivalentTo(
+          new[]
+          {
+              new RuleViolation(_sut, _project, "VIOLATION")
+          });
     }
 
     [Test]
     public void Evaluate_ProjectWithoutConfiguration_AndReportViolationOnMissingConfigurationFileSetToTrue_ReportsViolation ()
     {
-      _configuration.ReportViolationOnMissingConfigurationFile = true;
+      _sut.ReportViolationOnMissingConfigurationFile = true;
       A.CallTo(() => _project.ConfigurationProjectItem).Returns(null);
 
       // ACT
@@ -53,16 +51,16 @@ namespace SolutionInspector.Api.Tests.Rules
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new RuleViolation(_sut, _project, "For the project 'Project' no configuration file could be found.")
-        });
+          new[]
+          {
+              new RuleViolation(_sut, _project, "For the project 'Project' no configuration file could be found.")
+          });
     }
 
     [Test]
     public void Evaluate_ProjectWithoutConfiguration_AndReportViolationOnMissingConfigurationFileSetToFalse_ReportsNoViolation ()
     {
-      _configuration.ReportViolationOnMissingConfigurationFile = false;
+      _sut.ReportViolationOnMissingConfigurationFile = false;
       A.CallTo(() => _project.ConfigurationProjectItem).Returns(null);
 
       // ACT
@@ -72,26 +70,14 @@ namespace SolutionInspector.Api.Tests.Rules
       result.Should().BeEmpty();
     }
 
-    private class DummyProjectConfigRule : ProjectConfigRuleBase<DummyProjectConfigurationRuleConfiguration>
+    private class DummyProjectConfigRule : ProjectConfigRuleBase
     {
-      private readonly IRuleViolation _violation;
-
-      public DummyProjectConfigRule (DummyProjectConfigurationRuleConfiguration configuration, IRuleViolation violation)
-        : base(configuration)
-      {
-        _violation = violation;
-      }
-
       protected override IEnumerable<IRuleViolation> Evaluate (
-        IConfigurationProjectItem target,
-        XDocument configurationXml)
+          IConfigurationProjectItem target,
+          XDocument configurationXml)
       {
-        yield return _violation;
+        yield return new RuleViolation(this, target, "VIOLATION");
       }
-    }
-
-    private class DummyProjectConfigurationRuleConfiguration : ProjectConfigRuleConfigurationBase
-    {
     }
   }
 }

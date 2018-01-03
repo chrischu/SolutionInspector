@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SolutionInspector": {
+      "commandName": "Project",
+      "commandLineArgs": "inspect \"D:\\Development\\SolutionInspector\\src\\SolutionInspector.sln\""
+    }
+  }
+}
