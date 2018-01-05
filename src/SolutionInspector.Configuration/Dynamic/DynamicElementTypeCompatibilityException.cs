@@ -14,11 +14,6 @@ namespace SolutionInspector.Configuration.Dynamic
     {
     }
 
-    public DynamicElementTypeCompatibilityException (string message, Exception innerException)
-        : base(message, innerException)
-    {
-    }
-
     protected DynamicElementTypeCompatibilityException (SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

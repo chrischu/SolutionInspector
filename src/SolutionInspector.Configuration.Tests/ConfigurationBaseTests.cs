@@ -549,10 +549,6 @@ namespace SolutionInspector.Configuration.Tests
   internal class DummyDynamicConfigurationElement : DummyDynamicConfigurationElementBase
   {
     [ConfigurationValue]
-    public string Value
-    {
-      get => GetConfigurationValue<string>();
-      set => SetConfigurationValue(value);
-    }
+    public string Value => GetConfigurationValue<string>();
   }
 }
