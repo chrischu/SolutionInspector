@@ -73,6 +73,9 @@ $VersionString = "${VersionPrefix}-${VersionSuffix}"
 
 $NuGetVersion = $Version.Major, $Version.Minor, $Version.Build
 
+$BranchName = Get-CurrentBranchName
+$CommitHash = Get-CurrentCommitHash
+
 function Run() {
   Write-Host "Running in '$Mode' mode"
   Write-Host "Building '$SolutionFile'"
@@ -117,7 +120,7 @@ BuildTask Build {
 
 BuildTask Run-ReSharperCodeInspection {
   $ReSharperCodeInspectionResultsFile = Join-Path $AnalysisResultsDirectory "ReSharperCodeInspectionResults.xml"
-  $numberOfIssues = Execute-ReSharperCodeInspection $SolutionFile $Configuration $ReSharperCodeInspectionResultsFile
+  $numberOfIssues = Execute-ReSharperCodeInspection $SolutionFile $Configuration $ReSharperCodeInspectionResultsFile $BranchName
 }
 
 BuildTask Run-Tests {
@@ -133,10 +136,7 @@ BuildTask Run-Tests {
 }
 
 BuildTask Create-NuGetPackages {
-  $commitHash = Get-CurrentCommitHash
-  $branchName = Get-CurrentBranchName
-  
-  $vcsUrlTemplate = "https://raw.githubusercontent.com/chrischu/SolutionInspector/${commitHash}/${branchName}/{0}"
+  $vcsUrlTemplate = "https://raw.githubusercontent.com/chrischu/SolutionInspector/${CommitHash}/${BranchName}/{0}"
   Create-NuGetPackagesFromSolution `
     -SolutionDirectory $SolutionDirectory `
     -Projects $Projects `
