@@ -24,16 +24,16 @@
   </style>
 </head>
 <body>
-  <h1>Files</h1>
+  <h1>Schemas</h1>
   <table style="width:100%">
     <tr>
       <th>Name</th>
       <th>Last modified</th>
     </tr>
           {% for res in site.static_files %}
-            {% if res.path contains 'files' %}
+            {% if res.path contains 'schema' %}
               <tr>
-                <td><a class="post-link" href="{{ res.path | prepend: site.baseurl }}">{{ res.path | remove:'/files/' }}</a></td>
+                <td><a class="post-link" href="{{ res.path | prepend: site.baseurl }}">{{ res.path | remove:'/schema/' }}</a></td>
                 <td>{{ res.modified_time | date: "%-d %b, %Y" }}</td>
               </tr>
             {% endif %}
