@@ -110,8 +110,6 @@ namespace SolutionInspector
           ctx.Resolve<IConsoleStatic>())
       ).As<ConsoleCommand>();
 
-      builder.Register(ctx => new ConfigureCommand("TODO", ctx.Resolve<IProcessStatic>())).As<ConsoleCommand>();
-
       builder.RegisterType<ConfigurationLoader>().As<IConfigurationLoader>();
 
       var configuration = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
