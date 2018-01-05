@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace SolutionInspector.Configuration
+namespace SolutionInspector.Configuration.Attributes
 {
   /// <summary>
   ///   Marks a property as a configuration value.

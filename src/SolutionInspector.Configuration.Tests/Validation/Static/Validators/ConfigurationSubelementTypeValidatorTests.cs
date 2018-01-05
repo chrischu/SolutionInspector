@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using FakeItEasy;
 using NUnit.Framework;
+using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.Configuration.Validation;
 using SolutionInspector.Configuration.Validation.Static.Validators;
 using SolutionInspector.TestInfrastructure;

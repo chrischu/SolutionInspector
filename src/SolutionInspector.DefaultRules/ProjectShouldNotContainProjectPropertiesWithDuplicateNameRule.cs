@@ -26,7 +26,7 @@ namespace SolutionInspector.DefaultRules
             this,
             target,
             $"There are multiple project properties with name '{property.Name}' and the same conditions in the following locations: " +
-            $"{string.Join(", ", group.Select(i => i.Location))}.");
+            $"{group.ConvertAndJoin(i => i.Location, ", ")}.");
       }
     }
   }

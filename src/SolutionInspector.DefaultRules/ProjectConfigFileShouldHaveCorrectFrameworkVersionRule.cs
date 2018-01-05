@@ -5,7 +5,7 @@ using System.Xml.XPath;
 using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
-using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
 
 namespace SolutionInspector.DefaultRules
 {

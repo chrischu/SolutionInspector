@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Runtime.Serialization;
 using SolutionInspector.Commons.Attributes;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Configuration.Validation
 {
@@ -41,14 +41,13 @@ namespace SolutionInspector.Configuration.Validation
 
     private static string FormatValidationErrorMessage (IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors)
     {
-      var properties = string.Join(
-        Environment.NewLine,
-        validationErrors.Select(
+      var properties = validationErrors.ConvertAndJoin(
           e =>
           {
-            var messages = string.Join(Environment.NewLine, e.Value.Select(s => $"    - {s}"));
+            var messages = EnumerableExtensions.ConvertAndJoin(e.Value, s => $"    - {s}", Environment.NewLine);
             return $"  - For property '{e.Key}':{Environment.NewLine}{messages}";
-          }));
+          },
+          Environment.NewLine);
 
       return $"Validation failed because of the following errors:{Environment.NewLine}{properties}";
     }

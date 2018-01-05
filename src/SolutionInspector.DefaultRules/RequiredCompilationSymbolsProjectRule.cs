@@ -7,6 +7,8 @@ using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Configuration.Collections;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -21,7 +23,7 @@ namespace SolutionInspector.DefaultRules
     ///   All the required compilation symbols.
     /// </summary>
     [ConfigurationCollection]
-    public ConfigurationElementCollection<RequiredCompilationSymbolsConfigurationElement> RequiredCompilationSymbols
+    public IConfigurationElementCollection<RequiredCompilationSymbolsConfigurationElement> RequiredCompilationSymbols
       => GetConfigurationCollection<RequiredCompilationSymbolsConfigurationElement>();
 
     /// <inheritdoc />

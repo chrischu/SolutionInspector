@@ -35,5 +35,29 @@ namespace SolutionInspector.Commons.Tests.Extensions
       A.CallTo(() => action(1)).MustHaveHappened(Repeated.Exactly.Once);
       A.CallTo(() => action(2)).MustHaveHappened(Repeated.Exactly.Once);
     }
+
+    [Test]
+    public void Join ()
+    {
+      var source = new[] { "A", "B" };
+
+      // ACT
+      var result = source.Join(";");
+
+      // ASSERT
+      result.Should().Be("A;B");
+    }
+
+    [Test]
+    public void Join_WithConversion ()
+    {
+      var source = new[] { 1, 2 };
+      
+      // ACT
+      var result = source.ConvertAndJoin(x => x * 3, ";");
+
+      // ASSERT
+      result.Should().Be("3;6");
+    }
   }
 }

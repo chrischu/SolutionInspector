@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
-using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
 
 namespace SolutionInspector.Api.Configuration
 {

@@ -13,11 +13,14 @@ namespace SolutionInspector.TestInfrastructure.AssertionExtensions
     ///   Checks that the given <paramref name="action" /> throws an <see cref="ArgumentException" /> with the given <paramref name="message" /> and
     ///   <paramref name="parameterName" />.
     /// </summary>
-    public static void ShouldThrowArgumentException (this Action action, string message, string parameterName)
+    public static void ShouldThrowArgumentException (this Action action, string message, string parameterName, Exception innerException = null)
     {
       var expectedMessage = new ArgumentException(message, parameterName).Message;
 
-      action.ShouldThrow<ArgumentException>().WithMessage(expectedMessage);
+      var exceptionAssertions = action.ShouldThrow<ArgumentException>().WithMessage(expectedMessage);
+
+      if (innerException != null)
+        exceptionAssertions.WithInnerException(innerException);
     }
 
     /// <summary>

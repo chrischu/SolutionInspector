@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Configuration
 {
@@ -50,7 +51,7 @@ namespace SolutionInspector.Configuration
     /// </summary>
     public override string Serialize ()
     {
-      return string.Join(",", _collection);
+      return _collection.Join(",");
     }
 
     /// <summary>

@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Xml.Linq;
 using JetBrains.Annotations;
+using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.Configuration.Validation.Dynamic.Attributes;
 
 namespace SolutionInspector.Configuration.Validation.Dynamic.Validators

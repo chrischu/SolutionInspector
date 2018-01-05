@@ -11,6 +11,7 @@ using SolutionInspector.Api.Exceptions;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
@@ -52,7 +53,7 @@ namespace SolutionInspector.Commands
           .Option<ViolationReportFormat>(
             "reportFormat",
             "f",
-            $"Controls the format of the violation report ({string.Join("|", Enum.GetNames(typeof(ViolationReportFormat)))}).",
+            $"Controls the format of the violation report ({Enum.GetNames(typeof(ViolationReportFormat)).Join("|")}).",
             (a, v) => a.ReportFormat = v)
           .Option<string>(
             "reportOutputFile",

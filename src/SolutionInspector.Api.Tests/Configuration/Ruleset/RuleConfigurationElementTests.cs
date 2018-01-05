@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SolutionInspector.Api.Configuration.Ruleset;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
 
 namespace SolutionInspector.Api.Tests.Configuration.Ruleset
 {

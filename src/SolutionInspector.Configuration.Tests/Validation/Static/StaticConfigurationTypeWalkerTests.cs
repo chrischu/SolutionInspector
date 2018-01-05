@@ -5,6 +5,8 @@ using FakeItEasy;
 using FakeItEasy.Configuration;
 using NUnit.Framework;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Configuration.Collections;
 using SolutionInspector.Configuration.Validation.Static;
 
 namespace SolutionInspector.Configuration.Tests.Validation.Static
@@ -126,7 +128,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
       public SubElement Subelement { get; set; }
 
       [ConfigurationCollection]
-      public ConfigurationElementCollection<CollectionElement> Collection { get; set; }
+      public IConfigurationElementCollection<CollectionElement> Collection { get; set; }
     }
 
     private class SubElement : ConfigurationElement
@@ -138,7 +140,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
       public EmptyElement Subelement { get; set; }
 
       [ConfigurationCollection]
-      public ConfigurationElementCollection<EmptyElement> Collection { get; set; }
+      public IConfigurationElementCollection<EmptyElement> Collection { get; set; }
     }
 
     private class CollectionElement : ConfigurationElement
@@ -150,7 +152,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Static
       public EmptyElement Subelement { get; set; }
 
       [ConfigurationCollection]
-      public ConfigurationElementCollection<EmptyElement> Collection { get; set; }
+      public IConfigurationElementCollection<EmptyElement> Collection { get; set; }
     }
 
     private class EmptyElement : ConfigurationElement

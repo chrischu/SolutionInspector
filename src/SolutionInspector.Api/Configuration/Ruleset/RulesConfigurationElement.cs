@@ -4,6 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Configuration.Collections;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
@@ -35,16 +37,16 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   {
     /// <see cref="IRulesConfiguration.SolutionRules" />
     [ConfigurationCollection(ElementName = "rule", IsOptional = true)]
-    public ConfigurationElementCollection<RuleConfigurationElement> SolutionRules => GetConfigurationCollection<RuleConfigurationElement>();
+    public IConfigurationElementCollection<RuleConfigurationElement> SolutionRules => GetConfigurationCollection<RuleConfigurationElement>();
 
     /// <see cref="IRulesConfiguration.ProjectRuleGroups" />
     [ConfigurationCollection(CollectionName = "projectRules", ElementName = "projectRuleGroup", IsOptional = true)]
-    public ConfigurationElementCollection<ProjectRuleGroupConfigurationElement> ProjectRuleGroups
+    public IConfigurationElementCollection<ProjectRuleGroupConfigurationElement> ProjectRuleGroups
       => GetConfigurationCollection<ProjectRuleGroupConfigurationElement>();
 
     /// <see cref="IRulesConfiguration.ProjectItemRuleGroups" />
     [ConfigurationCollection(CollectionName = "projectItemRules", ElementName = "projectItemRuleGroup", IsOptional = true)]
-    public ConfigurationElementCollection<ProjectItemRuleGroupConfigurationElement> ProjectItemRuleGroups
+    public IConfigurationElementCollection<ProjectItemRuleGroupConfigurationElement> ProjectItemRuleGroups
       => GetConfigurationCollection<ProjectItemRuleGroupConfigurationElement>();
 
     [ExcludeFromCodeCoverage]

@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.DefaultRules
 {
@@ -27,7 +28,7 @@ namespace SolutionInspector.DefaultRules
             this,
             target,
             $"The NuGet package '{@group.Key}' is referenced " +
-            $"in more than one version ({string.Join(", ", versions)}).");
+            $"in more than one version ({versions.Join(", ")}).");
     }
   }
 }

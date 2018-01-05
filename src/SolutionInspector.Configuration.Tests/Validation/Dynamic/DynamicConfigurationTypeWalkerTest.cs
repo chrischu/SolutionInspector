@@ -6,6 +6,8 @@ using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Configuration.Collections;
 using SolutionInspector.Configuration.Validation.Dynamic;
 
 namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
@@ -203,7 +205,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
       public ConfigurationSubElement Subelement { get; set; }
 
       [ConfigurationCollection]
-      public ConfigurationElementCollection<ConfigurationCollectionElement> Collection { get; set; }
+      public IConfigurationElementCollection<ConfigurationCollectionElement> Collection { get; set; }
     }
 
     private class ConfigurationSubElement : ConfigurationElement
@@ -215,7 +217,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
       public EmptyElement Subelement { get; set; }
 
       [ConfigurationCollection]
-      public ConfigurationElementCollection<EmptyElement> Collection { get; set; }
+      public IConfigurationElementCollection<EmptyElement> Collection { get; set; }
     }
 
     private class ConfigurationCollectionElement : ConfigurationElement
@@ -227,7 +229,7 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
       public EmptyElement Subelement { get; set; }
 
       [ConfigurationCollection]
-      public ConfigurationElementCollection<EmptyElement> Collection { get; set; }
+      public IConfigurationElementCollection<EmptyElement> Collection { get; set; }
     }
 
     private class EmptyElement : ConfigurationElement
@@ -243,10 +245,10 @@ namespace SolutionInspector.Configuration.Tests.Validation.Dynamic
       public ConfigurationSubElement Subelement { get; set; }
 
       [ConfigurationCollection (CollectionName = "@")]
-      public ConfigurationElementCollection<ConfigurationCollectionElement> Collection { get; set; }
+      public IConfigurationElementCollection<ConfigurationCollectionElement> Collection { get; set; }
 
       [ConfigurationCollection (ElementName = "@")]
-      public ConfigurationElementCollection<ConfigurationCollectionElement> CollectionWithInvalidElementName { get; set; }
+      public IConfigurationElementCollection<ConfigurationCollectionElement> CollectionWithInvalidElementName { get; set; }
     }
 
     // ReSharper restore UnusedMember.Local

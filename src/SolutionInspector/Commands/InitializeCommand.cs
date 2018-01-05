@@ -14,7 +14,7 @@ namespace SolutionInspector.Commands
     private readonly IAssembly _resourceAssembly;
 
     public InitializeCommand (IAssembly resourceAssembly, IFileStatic file, IConsoleStatic console)
-      : base("initialize", "Creates a new SolutionInspector configuration file or overwrite an existing one.")
+      : base("initialize", "Creates a new SolutionInspector configuration file or overwrites an existing one.")
     {
       _resourceAssembly = resourceAssembly;
       _file = file;

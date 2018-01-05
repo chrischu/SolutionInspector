@@ -1,34 +1,57 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
+using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NUnit.Framework;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Configuration.Collections;
+using SolutionInspector.Configuration.Dynamic;
 using SolutionInspector.TestInfrastructure;
 
 namespace SolutionInspector.Configuration.Tests
 {
   public class ConfigurationBaseTests
   {
+    private XDocument _document;
     private XElement _element;
     private DummyConfigurationElement _sut;
 
     [SetUp]
     public void SetUp ()
     {
-      _element =
-          XDocument.Parse(@"<element 
-simple=""simpleValue"" 
-autoConvertible=""7"" 
-withConverter=""withConverterValue"" 
-withConverterFromAttribute=""withConverterFromAttributeValue"" 
-configuration=""configurationValue"">
-  <sub string=""subValue"" />
-  <collection>
-    <item string=""item1"" />
-    <item string=""item2"" />
-  </collection>
-</element>").Root.AssertNotNull();
+      var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+
+      var dynamicConfigurationElementTypeResolver = A.Fake<IDynamicConfigurationElementTypeHelper>();
+      A.CallTo(() => dynamicConfigurationElementTypeResolver.ResolveElementType(A<XElement>._)).Returns(typeof(DummyDynamicConfigurationElement));
+      ConfigurationBase.DynamicConfigurationElementTypeHelper = dynamicConfigurationElementTypeResolver;
+
+      _document = XDocument.Parse(
+          $@"
+<root xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""
+      xsi:schemaLocation=""{assemblyName} {assemblyName}.xsd""
+      xmlns:x=""{assemblyName}"">
+  <element 
+  simple=""simpleValue"" 
+  autoConvertible=""7"" 
+  withConverter=""withConverterValue"" 
+  withConverterFromAttribute=""withConverterFromAttributeValue"" 
+  configuration=""configurationValue"">
+    <sub string=""subValue"" />
+    <collection>
+      <item string=""item1"" />
+      <item string=""item2"" />
+    </collection>
+    <dynamicCollection>
+      <x:{typeof(DummyDynamicConfigurationElement).FullName} value=""dynamicValue"" />
+    </dynamicCollection>
+  </element>
+</root>");
+
+      _element = _document.Root.AssertNotNull().Elements().Single().AssertNotNull();
       _sut = ConfigurationElement.Load<DummyConfigurationElement>(_element);
     }
 
@@ -44,7 +67,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Get_SimpleValue_Works ()
+    public void Get_SimpleValue ()
     {
       // ACT
       var result = _sut.Simple;
@@ -54,7 +77,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Get_AutoConvertibleValue_Works ()
+    public void Get_AutoConvertibleValue ()
     {
       // ACT
       var result = _sut.AutoConvertible;
@@ -64,7 +87,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Get_ValueWithConverter_Works ()
+    public void Get_ValueWithConverter ()
     {
       // ACT
       var result = _sut.WithConverter;
@@ -74,7 +97,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Get_ValueWithConverterFromTypeAttribute_Works ()
+    public void Get_ValueWithConverterFromTypeAttribute ()
     {
       // ACT
       var result = _sut.WithConverterFromAttribute;
@@ -84,7 +107,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Get_IConfigurationValue_Works ()
+    public void Get_IConfigurationValue ()
     {
       // ACT
       var result = _sut.Configuration;
@@ -94,23 +117,34 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Get_CollectionValue_Works ()
+    public void Get_CollectionValue ()
     {
       // ACT
       var result = _sut.Collection;
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-        new[]
-        {
-          new { String = "item1" },
-          new { String = "item2" }
-        },
-        o => o.ExcludingMissingMembers().WithStrictOrdering());
+          new[]
+          {
+              new { String = "item1" },
+              new { String = "item2" }
+          },
+          o => o.ExcludingMissingMembers().WithStrictOrdering());
     }
 
     [Test]
-    public void Get_SubValue_Works ()
+    public void Get_DynamicCollectionValue ()
+    {
+      // ACT
+      var result = _sut.DynamicCollection;
+
+      // ASSERT
+      result.Should().HaveCount(1);
+      result[0].Should().BeOfType<DummyDynamicConfigurationElement>().Which.Value.Should().Be("dynamicValue");
+    }
+
+    [Test]
+    public void Get_SubValue ()
     {
       // ACT
       var result = _sut.Sub;
@@ -181,6 +215,18 @@ configuration=""configurationValue"">
     }
 
     [Test]
+    public void Get_NonExistingDynamicCollectionValue_ReturnsEmptyCollectionAndUpdatesXml ()
+    {
+      // ACT
+      var result = _sut.NonExistingDynamicCollection;
+
+      // ASSERT
+      result.Count.Should().Be(0);
+
+      _element.Element("nonExistingDynamicCollection").Should().NotBeNull();
+    }
+
+    [Test]
     public void Get_NonExistingSubValue_ReturnsEmptySubelementAndUpdatesXml ()
     {
       // ACT
@@ -204,6 +250,17 @@ configuration=""configurationValue"">
     }
 
     [Test]
+    public void Get_DynamicCollectionValueWithoutAttribute_Throws ()
+    {
+      // ACT
+      Action act = () => Dev.Null = _sut.DynamicCollectionWithoutAttribute;
+
+      // ASSERT
+      act.ShouldThrow<InvalidOperationException>()
+          .WithMessage("Property 'DynamicCollectionWithoutAttribute' is not properly marked as a dynamic configuration collection.");
+    }
+
+    [Test]
     public void Get_SubValueWithoutAttribute_Throws ()
     {
       // ACT
@@ -215,7 +272,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Set_SimpleValue_Works ()
+    public void Set_SimpleValue ()
     {
       // ACT
       _sut.Simple = "newValue";
@@ -236,7 +293,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Set_AutoConvertibleValue_Works ()
+    public void Set_AutoConvertibleValue ()
     {
       // ACT
       _sut.AutoConvertible = 1337;
@@ -246,7 +303,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Set_ValueWithConverter_Works ()
+    public void Set_ValueWithConverter ()
     {
       // ACT
       _sut.WithConverter = new DummyConvertedValue("newValue");
@@ -256,7 +313,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Set_ValueWithConverterFromAttribute_Works ()
+    public void Set_ValueWithConverterFromAttribute ()
     {
       // ACT
       _sut.WithConverterFromAttribute = new DummyConvertedValueWithAttribute("newValue");
@@ -266,7 +323,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Set_IConfigurationValue_Works ()
+    public void Set_IConfigurationValue ()
     {
       // ACT
       _sut.Configuration = new DummyConfigurationValue(s => { }, "newValue");
@@ -276,7 +333,7 @@ configuration=""configurationValue"">
     }
 
     [Test]
-    public void Set_InnerValueFromIConfigurationValue_Works ()
+    public void Set_InnerValueFromIConfigurationValue ()
     {
       // ACT
       _sut.Configuration.Value = "newValue";
@@ -307,7 +364,7 @@ configuration=""configurationValue"">
         set => SetConfigurationValue(value);
       }
 
-      [ConfigurationValue (IsOptional = true, DefaultValue = "defaultValue")]
+      [ConfigurationValue(IsOptional = true, DefaultValue = "defaultValue")]
       public string WithDefault
       {
         get => GetConfigurationValue<string>();
@@ -315,14 +372,14 @@ configuration=""configurationValue"">
         set => SetConfigurationValue(value);
       }
 
-      [ConfigurationValue (ConfigurationConverter = typeof(DummyConfigurationConverter))]
+      [ConfigurationValue(ConfigurationConverter = typeof(DummyConfigurationConverter))]
       public DummyConvertedValue WithConverter
       {
         get => GetConfigurationValue<DummyConvertedValue>();
         set => SetConfigurationValue(value);
       }
 
-      [ConfigurationValue (IsOptional = true, ConfigurationConverter = typeof(DummyConfigurationConverter), DefaultValue = "defaultValue")]
+      [ConfigurationValue(IsOptional = true, ConfigurationConverter = typeof(DummyConfigurationConverter), DefaultValue = "defaultValue")]
       public DummyConvertedValue WithConverterAndDefault
       {
         get => GetConfigurationValue<DummyConvertedValue>();
@@ -337,7 +394,7 @@ configuration=""configurationValue"">
         set => SetConfigurationValue(value);
       }
 
-      [ConfigurationValue (IsOptional = true, DefaultValue = "defaultValue")]
+      [ConfigurationValue(IsOptional = true, DefaultValue = "defaultValue")]
       public DummyConvertedValueWithAttribute WithConverterFromAttributeAndDefault
       {
         get => GetConfigurationValue<DummyConvertedValueWithAttribute>();
@@ -353,21 +410,32 @@ configuration=""configurationValue"">
       }
 
       [CanBeNull]
-      [ConfigurationValue (IsOptional = true, DefaultValue = "defaultValue")]
+      [ConfigurationValue(IsOptional = true, DefaultValue = "defaultValue")]
       public DummyConfigurationValue ConfigurationWithDefault => GetConfigurationValue<DummyConfigurationValue>();
 
       [ConfigurationCollection]
-      public ConfigurationElementCollection<DummySubelement> Collection => GetConfigurationCollection<DummySubelement>();
+      public IConfigurationElementCollection<DummySubelement> Collection => GetConfigurationCollection<DummySubelement>();
 
-      [ConfigurationCollection (IsOptional = true)]
-      public ConfigurationElementCollection<DummySubelement> NonExistingCollection => GetConfigurationCollection<DummySubelement>();
+      [ConfigurationCollection(IsOptional = true)]
+      public IConfigurationElementCollection<DummySubelement> NonExistingCollection => GetConfigurationCollection<DummySubelement>();
 
-      public ConfigurationElementCollection<DummySubelement> CollectionWithoutAttribute => GetConfigurationCollection<DummySubelement>();
+      public IConfigurationElementCollection<DummySubelement> CollectionWithoutAttribute => GetConfigurationCollection<DummySubelement>();
+
+      [DynamicConfigurationCollection]
+      public IDynamicConfigurationElementCollection<DummyDynamicConfigurationElementBase> DynamicCollection =>
+          GetDynamicConfigurationCollection<DummyDynamicConfigurationElementBase>();
+
+      [DynamicConfigurationCollection(IsOptional = true)]
+      public IDynamicConfigurationElementCollection<DummyDynamicConfigurationElementBase> NonExistingDynamicCollection =>
+          GetDynamicConfigurationCollection<DummyDynamicConfigurationElementBase>();
+
+      public IDynamicConfigurationElementCollection<DummyDynamicConfigurationElementBase> DynamicCollectionWithoutAttribute =>
+          GetDynamicConfigurationCollection<DummyDynamicConfigurationElementBase>();
 
       [ConfigurationSubelement]
       public DummySubelement Sub => GetConfigurationSubelement<DummySubelement>();
 
-      [ConfigurationSubelement (IsOptional = true)]
+      [ConfigurationSubelement(IsOptional = true)]
       public DummySubelement NonExistingSub => GetConfigurationSubelement<DummySubelement>();
 
       public DummySubelement SubWithoutAttribute => GetConfigurationSubelement<DummySubelement>();
@@ -375,7 +443,7 @@ configuration=""configurationValue"">
 
     private class DummySubelement : ConfigurationElement
     {
-      [ConfigurationValue (IsOptional = true)]
+      [ConfigurationValue(IsOptional = true)]
       public string String
       {
         get => GetConfigurationValue<string>();
@@ -395,11 +463,11 @@ configuration=""configurationValue"">
       public string Value { get; }
     }
 
-    [ConfigurationConverter (typeof(DummyConfigurationConverter2))]
+    [ConfigurationConverter(typeof(DummyConfigurationConverter2))]
     private class DummyConvertedValueWithAttribute : DummyConvertedValue
     {
       public DummyConvertedValueWithAttribute ([CanBeNull] string value)
-        : base(value)
+          : base(value)
       {
       }
     }
@@ -440,12 +508,12 @@ configuration=""configurationValue"">
 
       // ReSharper disable once MemberCanBePrivate.Local
       public DummyConfigurationValue (Action<string> updateValue)
-        : base(updateValue)
+          : base(updateValue)
       {
       }
 
       public DummyConfigurationValue (Action<string> updateValue, string value)
-        : this(updateValue)
+          : this(updateValue)
       {
         Value = value;
       }
@@ -469,6 +537,22 @@ configuration=""configurationValue"">
       {
         Value = serialized;
       }
+    }
+
+    
+  }
+
+  internal abstract class DummyDynamicConfigurationElementBase : ConfigurationElement
+  {
+  }
+
+  internal class DummyDynamicConfigurationElement : DummyDynamicConfigurationElementBase
+  {
+    [ConfigurationValue]
+    public string Value
+    {
+      get => GetConfigurationValue<string>();
+      set => SetConfigurationValue(value);
     }
   }
 }

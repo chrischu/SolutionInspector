@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration.Attributes;
 
 namespace SolutionInspector.Configuration.Validation.Static.Validators
 {
@@ -28,9 +30,8 @@ namespace SolutionInspector.Configuration.Validation.Static.Validators
       if (_defaultCollectionProperties.Count > 1)
         foreach (var collectionProperty in _defaultCollectionProperties)
         {
-          var otherDefaultCollectionProperties = string.Join(
-            ", ",
-            _defaultCollectionProperties.Where(p => p.Name != collectionProperty.Name).Select(p => $"'{p.Name}'"));
+          var otherDefaultCollectionProperties =
+              _defaultCollectionProperties.Where(p => p.Name != collectionProperty.Name).ConvertAndJoin(p => $"'{p.Name}'", ", ");
 
           reportValidationError(
             collectionProperty,

@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Commons;
+using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Configuration.Tests

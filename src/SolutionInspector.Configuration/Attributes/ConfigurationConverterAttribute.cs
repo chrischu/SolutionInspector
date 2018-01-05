@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SolutionInspector.Configuration
+namespace SolutionInspector.Configuration.Attributes
 {
   /// <summary>
   ///   Associates a <see cref="IConfigurationConverter" /> with the attribute this type is applied to.

@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.TestInfrastructure;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 

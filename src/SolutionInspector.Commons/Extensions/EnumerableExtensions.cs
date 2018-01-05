@@ -33,5 +33,23 @@ namespace SolutionInspector.Commons.Extensions
       foreach (var item in source)
         action(item);
     }
+
+    /// <summary>
+    ///   Joins all the string in the <paramref name="source" /> with the given <paramref name="separator" />.
+    /// </summary>
+    public static string Join (this IEnumerable<string> source, string separator)
+    {
+      return string.Join(separator, source);
+    }
+
+    /// <summary>
+    ///   Stringifies the <paramref name="source" /> by converting every element to a string with <paramref name="converter" /> and then joining them with
+    ///   a the <paramref name="separator" />.
+    /// </summary>
+    public static string ConvertAndJoin<TSource> (this IEnumerable<TSource> source, Func<TSource, object> converter = null, string separator = "")
+    {
+      converter = converter ?? (x => x);
+      return source.Select(x => converter(x).ToString()).Join(separator);
+    }
   }
 }

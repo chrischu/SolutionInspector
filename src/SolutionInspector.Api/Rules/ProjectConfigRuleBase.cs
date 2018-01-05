@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using SolutionInspector.Api.ObjectModel;
-using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
 
 namespace SolutionInspector.Api.Rules
 {

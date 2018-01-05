@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using JetBrains.Annotations;
 using ManyConsole;
 using SolutionInspector.Commons.Attributes;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Commands
 {
@@ -149,7 +149,7 @@ namespace SolutionInspector.Commands
       {
         private readonly List<ValueArgument> _valueArguments = new List<ValueArgument>();
 
-        private string AdditionalArgumentsString => string.Join(" ", _valueArguments.Select(a => $"<{a.Name}>"));
+        private string AdditionalArgumentsString => _valueArguments.ConvertAndJoin(a => $"<{a.Name}>", " ");
 
         public IValueArgumentsBuilder<TArguments> Value (string name, Action<TArguments, string> setValue)
         {

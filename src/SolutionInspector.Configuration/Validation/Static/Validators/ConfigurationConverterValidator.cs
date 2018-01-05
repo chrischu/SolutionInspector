@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using SolutionInspector.Configuration.Attributes;
 
 namespace SolutionInspector.Configuration.Validation.Static.Validators
 {

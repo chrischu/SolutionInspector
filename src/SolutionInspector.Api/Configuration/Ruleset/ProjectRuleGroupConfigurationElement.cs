@@ -5,6 +5,8 @@ using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Configuration.Collections;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
@@ -52,7 +54,7 @@ namespace SolutionInspector.Api.Configuration.Ruleset
 
     /// See <see cref="IProjectRuleGroupConfiguration.Rules"/>
     [ConfigurationCollection(IsDefaultCollection = true, ElementName = "rule", IsOptional = true)]
-    public ConfigurationElementCollection<RuleConfigurationElement> Rules => GetConfigurationCollection<RuleConfigurationElement>();
+    public IConfigurationElementCollection<RuleConfigurationElement> Rules => GetConfigurationCollection<RuleConfigurationElement>();
 
     [ExcludeFromCodeCoverage]
     INameFilter IProjectRuleGroupConfiguration.AppliesTo => AppliesTo;

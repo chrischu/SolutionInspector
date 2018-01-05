@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration.Attributes;
 
 namespace SolutionInspector.Configuration.Validation.Static.Validators
 {
@@ -57,9 +58,7 @@ namespace SolutionInspector.Configuration.Validation.Static.Validators
       foreach (var xmlElementNameWithMultipleProperties in xmlElementNamesWithMultipleProperties)
       foreach (var property in xmlElementNameWithMultipleProperties.Value)
       {
-        var properties = string.Join(
-          ", ",
-          xmlElementNameWithMultipleProperties.Value.Where(p => p.Name != property.Name).Select(p => $"'{p.Name}'"));
+        var properties = xmlElementNameWithMultipleProperties.Value.Where(p => p.Name != property.Name).ConvertAndJoin(p => $"'{p.Name}'", ", ");
         reportValidationError(
           property,
           $"The XML element name '{xmlElementNameWithMultipleProperties.Key}' is not unique (it is duplicated in {properties}).");
@@ -70,9 +69,7 @@ namespace SolutionInspector.Configuration.Validation.Static.Validators
       foreach (var xmlAttributeNameWithMultipleProperties in xmlAttributeNamesWithMultipleProperties)
       foreach (var property in xmlAttributeNameWithMultipleProperties.Value)
       {
-        var properties = string.Join(
-          ", ",
-          xmlAttributeNameWithMultipleProperties.Value.Where(p => p.Name != property.Name).Select(p => $"'{p.Name}'"));
+        var properties = xmlAttributeNameWithMultipleProperties.Value.Where(p => p.Name != property.Name).ConvertAndJoin(p => $"'{p.Name}'", ", ");
         reportValidationError(
           property,
           $"The XML attribute name '{xmlAttributeNameWithMultipleProperties.Key}' is not unique (it is duplicated in {properties}).");

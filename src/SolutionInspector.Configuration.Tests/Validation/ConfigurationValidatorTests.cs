@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.Configuration.Validation;
 
 namespace SolutionInspector.Configuration.Tests.Validation

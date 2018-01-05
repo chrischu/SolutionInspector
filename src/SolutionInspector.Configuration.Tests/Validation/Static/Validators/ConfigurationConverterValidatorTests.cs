@@ -2,6 +2,7 @@
 using FakeItEasy;
 using JetBrains.Annotations;
 using NUnit.Framework;
+using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.Configuration.Validation;
 using SolutionInspector.Configuration.Validation.Static.Validators;
 using SolutionInspector.TestInfrastructure;

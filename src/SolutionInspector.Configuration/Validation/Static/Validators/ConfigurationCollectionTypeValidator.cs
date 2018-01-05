@@ -1,5 +1,7 @@
 using System;
 using System.Reflection;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Configuration.Collections;
 
 namespace SolutionInspector.Configuration.Validation.Static.Validators
 {
@@ -14,12 +16,12 @@ namespace SolutionInspector.Configuration.Validation.Static.Validators
         reportValidationError(
           property,
           $"'{property.PropertyType}' is not a valid type for a configuration collection, only " +
-          $"'{typeof(ConfigurationElementCollection<>)}' is allowed.");
+          $"'{typeof(IConfigurationElementCollection<>)}' is allowed.");
     }
 
     private bool IsValidConfigurationCollectionType (Type type)
     {
-      return type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(ConfigurationElementCollection<>);
+      return type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(IConfigurationElementCollection<>);
     }
   }
 }

@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
+using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.Configuration.Validation;
 using SolutionInspector.Configuration.Validation.Static;
 using SolutionInspector.TestInfrastructure;

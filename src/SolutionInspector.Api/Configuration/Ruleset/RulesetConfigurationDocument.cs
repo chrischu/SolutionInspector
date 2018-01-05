@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Configuration.Collections;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
@@ -30,7 +32,7 @@ namespace SolutionInspector.Api.Configuration.Ruleset
     ///   A collection of <see cref="RuleAssemblyImportConfigurationElement" />s.
     /// </summary>
     [ConfigurationCollection(ElementName = "import")]
-    public ConfigurationElementCollection<RuleAssemblyImportConfigurationElement> RuleAssemblyImports
+    public IConfigurationElementCollection<RuleAssemblyImportConfigurationElement> RuleAssemblyImports
       => GetConfigurationCollection<RuleAssemblyImportConfigurationElement>();
 
     /// <summary>

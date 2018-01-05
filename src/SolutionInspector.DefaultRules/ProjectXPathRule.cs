@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
-using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
 
 namespace SolutionInspector.DefaultRules
 {

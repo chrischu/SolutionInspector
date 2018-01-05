@@ -22,7 +22,7 @@ namespace SolutionInspector.DefaultRules
           this,
           target,
           $"There are multiple project items with include '{group.Key}' in the following locations: " +
-          $"{string.Join(", ", group.Select(i => i.Location))}."));
+          $"{group.ConvertAndJoin(i => i.Location, ", ")}."));
     }
   }
 }

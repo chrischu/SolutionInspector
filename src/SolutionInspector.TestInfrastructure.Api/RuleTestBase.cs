@@ -14,7 +14,9 @@ namespace SolutionInspector.TestInfrastructure.Api
     protected T CreateRule<T> (Action<T> configure = null)
         where T : RuleConfigurationElement, new()
     {
+      var document = new XDocument();
       var element = new XElement("rule");
+      document.Add(element);
       element.SetAttributeValue("ruleType", "type");
       return ConfigurationElement.Load<T>(
           element,

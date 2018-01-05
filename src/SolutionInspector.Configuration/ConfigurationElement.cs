@@ -12,8 +12,10 @@ namespace SolutionInspector.Configuration
     ///   Creates a new <see cref="ConfigurationElement" /> with an underlying <see cref="XElement" /> that uses <paramref name="elementName" />
     ///   as its name.
     /// </summary>
-    public static T Create<T> (string elementName = "element", Action<T> initialize = null) where T : ConfigurationElement, new()
+    public static T Create<T> (XName elementName = null, Action<T> initialize = null) where T : ConfigurationElement, new()
     {
+      elementName = elementName ?? "element";
+
       var configurationElement = (T) Create(elementName, typeof(T));
 
       initialize?.Invoke(configurationElement);
@@ -25,7 +27,7 @@ namespace SolutionInspector.Configuration
     ///   Create a new <see cref="ConfigurationElement" /> of the given <paramref name="configurationElementType" /> with the given
     ///   <paramref name="elementName" />.
     /// </summary>
-    public new static ConfigurationElement Create (string elementName, Type configurationElementType)
+    public new static ConfigurationElement Create (XName elementName, Type configurationElementType)
     {
       return (ConfigurationElement) ConfigurationBase.Create(elementName, configurationElementType);
     }

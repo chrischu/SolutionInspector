@@ -3,7 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Api.ObjectModel;
-using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Api.Configuration
 {
@@ -43,7 +44,7 @@ namespace SolutionInspector.Api.Configuration
     [ExcludeFromCodeCoverage]
     public override string ToString ()
     {
-      return string.Join(",", _filters.Select(f => f.ToString()));
+      return _filters.ConvertAndJoin(separator: ",");
     }
 
     private class BuildConfigurationFilterEqualityComparer : IEqualityComparer<BuildConfiguration>

@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using Fasterflect;
 using JetBrains.Annotations;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration.Attributes;
+using SolutionInspector.Configuration.Collections;
+using SolutionInspector.Configuration.Dynamic;
 using SolutionInspector.Configuration.Validation;
+using Wrapperator.Wrappers;
 
 namespace SolutionInspector.Configuration
 {
@@ -14,6 +19,9 @@ namespace SolutionInspector.Configuration
   /// </summary>
   public abstract class ConfigurationBase
   {
+    public static IDynamicConfigurationElementTypeHelper DynamicConfigurationElementTypeHelper { get; set; } =
+      new DynamicConfigurationElementTypeHelper(new SchemaLocationHelper(), Wrapper.Assembly);
+
     /// <summary>
     ///   The underlying <see cref="XElement" />.
     /// </summary>
@@ -24,7 +32,7 @@ namespace SolutionInspector.Configuration
       return (T) Load(typeof(T), element, c => modifyBeforeValidation?.Invoke((T) c));
     }
 
-    internal static ConfigurationBase Create (string elementName, Type configurationType)
+    internal static ConfigurationBase Create (XName elementName, Type configurationType)
     {
       var instance = (ConfigurationBase) Activator.CreateInstance(configurationType);
       instance.Element = new XElement(elementName);
@@ -143,7 +151,7 @@ namespace SolutionInspector.Configuration
     /// <summary>
     ///   Gets the configuration collection represented by the CLR property this method is called from.
     /// </summary>
-    protected ConfigurationElementCollection<T> GetConfigurationCollection<T> ([CallerMemberName] string clrPropertyName = null)
+    protected IConfigurationElementCollection<T> GetConfigurationCollection<T> ([CallerMemberName] string clrPropertyName = null)
       where T : ConfigurationElement, new()
     {
       var configurationCollectionAttribute = GetConfigurationPropertyAttribute<ConfigurationCollectionAttribute>(clrPropertyName.AssertNotNull());
@@ -164,7 +172,29 @@ namespace SolutionInspector.Configuration
           Element.Add(collectionElement = new XElement(configurationCollectionAttribute.GetXmlName(clrPropertyName)));
       }
 
-      return new ConfigurationElementCollection<T>(collectionElement, configurationCollectionAttribute.ElementName);
+      var collectionItems = collectionElement.Elements(configurationCollectionAttribute.ElementName).Select(element => Load<T>(element));
+      return new ConfigurationElementCollection<T>(collectionElement, configurationCollectionAttribute.ElementName, collectionItems);
+    }
+
+    protected IDynamicConfigurationElementCollection<T> GetDynamicConfigurationCollection<T>([CallerMemberName] string clrPropertyName = null)
+      where T : ConfigurationElement
+    {
+      var configurationCollectionAttribute = GetConfigurationPropertyAttribute<DynamicConfigurationCollectionAttribute>(clrPropertyName.AssertNotNull());
+
+      if (configurationCollectionAttribute == null)
+        throw new InvalidOperationException($"Property '{clrPropertyName}' is not properly marked as a dynamic configuration collection.");
+
+      var collectionElement = Element.Element(configurationCollectionAttribute.GetXmlName(clrPropertyName));
+      if (collectionElement == null)
+        Element.Add(collectionElement = new XElement(configurationCollectionAttribute.GetXmlName(clrPropertyName)));
+
+      var collectionItems = collectionElement.Elements().Select(e =>
+      {
+        var elementType = DynamicConfigurationElementTypeHelper.ResolveElementType(e);
+        return (T) Load(elementType, e);
+      });
+
+      return new DynamicConfigurationElementCollection<T>(collectionElement, collectionItems);
     }
 
     [CanBeNull]

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using JetBrains.Annotations;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.Configuration.Validation.Dynamic;
 using SolutionInspector.Configuration.Validation.Static;
 

@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using FakeItEasy;
 using NUnit.Framework;
+using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.Configuration.Validation;
 using SolutionInspector.Configuration.Validation.Dynamic.Attributes;
 using SolutionInspector.Configuration.Validation.Dynamic.Validators;

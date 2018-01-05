@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using SolutionInspector.Commons.Attributes;
 using SolutionInspector.Configuration;
+using SolutionInspector.Configuration.Attributes;
 
 namespace SolutionInspector.Api.Configuration.Ruleset
 {
