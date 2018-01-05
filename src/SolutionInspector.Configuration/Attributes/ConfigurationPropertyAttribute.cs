@@ -22,7 +22,7 @@ namespace SolutionInspector.Configuration.Attributes
     /// </summary>
     public bool IsRequired => !IsOptional;
 
-    internal string GetXmlName (string clrPropertyName)
+    public string GetXmlName (string clrPropertyName)
     {
       return XmlName ?? char.ToLower(clrPropertyName[0]) + clrPropertyName.Substring(1);
     }

@@ -25,9 +25,13 @@ namespace SolutionInspector.Api.Configuration.Ruleset
   }
 
   /// <inheritdoc cref="IRulesetConfiguration" />
-  /// >
   public class RulesetConfigurationDocument : ConfigurationDocument, IRulesetConfiguration
   {
+    public RulesetConfigurationDocument ()
+        : base("solutionInspectorRuleset")
+    {
+    }
+
     /// <summary>
     ///   A collection of <see cref="RuleAssemblyImportConfigurationElement" />s.
     /// </summary>

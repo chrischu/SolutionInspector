@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net47</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="..\Shared.msbuild" />
+  <Import Project="..\BuildNuGetPackage.msbuild" />
+  <ItemGroup>
+    <PackageReference Include="ManyConsole" Version="1.0.0.3" />
+    <PackageReference Include="NDesk.Options" Version="0.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Commons\SolutionInspector.Commons.csproj" />
+  </ItemGroup>
+
+</Project>

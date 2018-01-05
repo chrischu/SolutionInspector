@@ -47,10 +47,11 @@ namespace SolutionInspector
     /// </summary>
     public static int Run (string[] args)
     {
+      // TODO: Detect installed VS17 versions
       Environment.SetEnvironmentVariable("VSINSTALLDIR", @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community");
       Environment.SetEnvironmentVariable("VisualStudioVersion", "15.0");
 
-      s_Logger.Debug($"SolutionInspector was run with the following arguments: [{args.Join(", ")}].");
+      s_Logger.Debug($"SolutionInspector was started with the following arguments: [{string.Join(", ", args)}].");
 
       using (var container = SetupContainer())
       {

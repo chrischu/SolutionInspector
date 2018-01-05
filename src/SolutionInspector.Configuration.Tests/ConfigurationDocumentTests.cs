@@ -72,6 +72,10 @@ namespace SolutionInspector.Configuration.Tests
 
     private class DummyConfigurationDocument : ConfigurationDocument
     {
+      public DummyConfigurationDocument () : base("configuration")
+      {
+      }
+
       [ConfigurationValue]
       public string Simple
       {

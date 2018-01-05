@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using SolutionInspector.Commons.Console;
 using SolutionInspector.Commons.Extensions;
 using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
@@ -7,7 +8,7 @@ using Wrapperator.Interfaces.Reflection;
 
 namespace SolutionInspector.Commands
 {
-  internal class InitializeCommand : SolutionInspectorCommand<InitializeCommand.RawArguments, InitializeCommand.ParsedArguments>
+  internal class InitializeCommand : ConsoleCommandBase<InitializeCommand.RawArguments, InitializeCommand.ParsedArguments>
   {
     private readonly IConsoleStatic _console;
     private readonly IFileStatic _file;

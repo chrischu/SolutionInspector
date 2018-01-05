@@ -12,6 +12,7 @@ using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.Commons.Console;
 using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
@@ -19,7 +20,7 @@ using SolutionInspector.Utilities;
 
 namespace SolutionInspector.Commands
 {
-  internal class InspectCommand : SolutionInspectorCommand<InspectCommand.RawArguments, InspectCommand.ParsedArguments>
+  internal class InspectCommand : ConsoleCommandBase<InspectCommand.RawArguments, InspectCommand.ParsedArguments>
   {
     private static readonly Logger s_logger = LogManager.GetCurrentClassLogger();
     private readonly ISolutionInspectorConfiguration _configuration;

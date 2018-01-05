@@ -42,6 +42,9 @@ namespace SolutionInspector.Configuration.Tests
 
     private class DummyConfigurationDocument : ConfigurationDocument
     {
+      public DummyConfigurationDocument () : base("element")
+      {
+      }
     }
   }
 }

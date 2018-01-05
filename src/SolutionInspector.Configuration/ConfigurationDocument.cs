@@ -19,6 +19,13 @@ namespace SolutionInspector.Configuration
       return configurationDocument;
     }
 
+    protected ConfigurationDocument(string rootElementName)
+    {
+      RootElementName = rootElementName;
+    }
+
+    public string RootElementName { get; }
+
     /// <summary>
     ///   Save the <see cref="ConfigurationDocument" /> at the given <paramref name="path" /> or if no path is given, at the last path the document was saved
     ///   at.

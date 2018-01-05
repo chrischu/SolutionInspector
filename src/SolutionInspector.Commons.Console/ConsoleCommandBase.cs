@@ -2,56 +2,61 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using JetBrains.Annotations;
 using ManyConsole;
-using SolutionInspector.Commons.Attributes;
-using SolutionInspector.Commons.Extensions;
 
-namespace SolutionInspector.Commands
+namespace SolutionInspector.Commons.Console
 {
-  [ForFutureUse]
-  internal interface IArgumentsBuilderWithSetValues<out TArguments>
+  [PublicAPI]
+  // ReSharper disable once MissingXmlDoc
+  public interface IArgumentsBuilderWithSetValues<out TArguments>
   {
     IArgumentsBuilderWithSetValues<TArguments> Option<T> (
-      string longKey,
-      string shortKey,
-      string description,
-      Action<TArguments, T> setValue,
-      T defaultValue = default(T));
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, T> setValue,
+        T defaultValue = default(T));
 
     IArgumentsBuilderWithSetValues<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
   }
 
-  [ForFutureUse]
-  internal interface IArgumentsBuilder<out TArguments>
+  [PublicAPI]
+  // ReSharper disable once MissingXmlDoc
+  public interface IArgumentsBuilder<out TArguments>
   {
     IArgumentsBuilder<TArguments> Option<T> (
-      string longKey,
-      string shortKey,
-      string description,
-      Action<TArguments, T> setValue,
-      T defaultValue = default(T));
+        string longKey,
+        string shortKey,
+        string description,
+        Action<TArguments, T> setValue,
+        T defaultValue = default(T));
 
     IArgumentsBuilder<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue);
 
     IArgumentsBuilderWithSetValues<TArguments> Values (Action<IValueArgumentsBuilder<TArguments>> configureValueArguments);
   }
 
-  [ForFutureUse]
-  internal interface IValueArgumentsBuilder<out TArguments>
+  [PublicAPI]
+  // ReSharper disable once MissingXmlDoc
+  public interface IValueArgumentsBuilder<out TArguments>
   {
     IValueArgumentsBuilder<TArguments> Value (string name, Action<TArguments, string> setValue);
   }
 
-  internal abstract class SolutionInspectorCommand<TRawArguments, TParsedArguments> : ConsoleCommand
-    where TRawArguments : new()
+  /// <summary>
+  ///   Base class for console commands.
+  /// </summary>
+  public abstract class ConsoleCommandBase<TRawArguments, TParsedArguments> : ConsoleCommand
+      where TRawArguments : new()
   {
     private readonly TRawArguments _rawArguments;
     private readonly ArgumentsBuilder<TRawArguments> _rawArgumentsBuilder;
     private TParsedArguments _parsedArguments;
 
-    [SuppressMessage ("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    protected SolutionInspectorCommand (string command, string description)
+    [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+    protected ConsoleCommandBase (string command, string description)
     {
       IsCommand(command, description);
       SkipsCommandSummaryBeforeRunning();
@@ -81,7 +86,7 @@ namespace SolutionInspector.Commands
     protected abstract int Run (TParsedArguments arguments);
 
     private class ArgumentsBuilder<TArguments> : IArgumentsBuilder<TArguments>, IArgumentsBuilderWithSetValues<TArguments>
-      where TArguments : new()
+        where TArguments : new()
     {
       private readonly TArguments _arguments;
       private readonly ConsoleCommand _command;
@@ -94,17 +99,16 @@ namespace SolutionInspector.Commands
       }
 
       public IArgumentsBuilder<TArguments> Option<T> (
-        string longKey,
-        string shortKey,
-        string description,
-        Action<TArguments, T> setValue,
-        T defaultValue = default(T))
+          string longKey,
+          string shortKey,
+          string description,
+          Action<TArguments, T> setValue,
+          T defaultValue = default(T))
       {
         setValue(_arguments, defaultValue);
         _command.HasOption<T>($"{shortKey}|{longKey}=", description, v => setValue(_arguments, v));
         return this;
       }
-
 
       public IArgumentsBuilder<TArguments> Flag (string longKey, string shortKey, string description, Action<TArguments, bool> setValue)
       {
@@ -121,21 +125,21 @@ namespace SolutionInspector.Commands
 
       [ExcludeFromCodeCoverage]
       IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Option<T> (
-        string longKey,
-        string shortKey,
-        string description,
-        Action<TArguments, T> setValue,
-        [CanBeNull] T defaultValue)
+          string longKey,
+          string shortKey,
+          string description,
+          Action<TArguments, T> setValue,
+          [CanBeNull] T defaultValue)
       {
         return (IArgumentsBuilderWithSetValues<TArguments>) Option(longKey, shortKey, description, setValue);
       }
 
       [ExcludeFromCodeCoverage]
       IArgumentsBuilderWithSetValues<TArguments> IArgumentsBuilderWithSetValues<TArguments>.Flag (
-        string longKey,
-        string shortKey,
-        string description,
-        Action<TArguments, bool> setValue)
+          string longKey,
+          string shortKey,
+          string description,
+          Action<TArguments, bool> setValue)
       {
         return (IArgumentsBuilderWithSetValues<TArguments>) Flag(longKey, shortKey, description, setValue);
       }
@@ -149,7 +153,7 @@ namespace SolutionInspector.Commands
       {
         private readonly List<ValueArgument> _valueArguments = new List<ValueArgument>();
 
-        private string AdditionalArgumentsString => _valueArguments.ConvertAndJoin(a => $"<{a.Name}>", " ");
+        private string AdditionalArgumentsString => string.Join(" ", _valueArguments.Select(a => $"<{a.Name}>"));
 
         public IValueArgumentsBuilder<TArguments> Value (string name, Action<TArguments, string> setValue)
         {

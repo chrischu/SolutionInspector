@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration.Validation.Dynamic;
 using SolutionInspector.Configuration.Validation.Static;
 
 namespace SolutionInspector.Configuration.Validation
 {
-  internal static class ConfigurationValidator
+  /// <summary>
+  ///   Utility class to validate configurations.
+  /// </summary>
+  public static class ConfigurationValidator
   {
     private static readonly Lazy<List<IStaticConfigurationValidator>> s_staticConfigurationValidators;
     private static readonly Lazy<List<IDynamicConfigurationValidator>> s_dynamicConfigurationValidators;
@@ -18,23 +22,39 @@ namespace SolutionInspector.Configuration.Validation
       s_dynamicConfigurationValidators = new Lazy<List<IDynamicConfigurationValidator>>(GetConfigurationValidators<IDynamicConfigurationValidator>);
     }
 
-    public static List<IStaticConfigurationValidator> StaticConfigurationValidators => s_staticConfigurationValidators.Value;
-    public static List<IDynamicConfigurationValidator> DynamicConfigurationValidators => s_dynamicConfigurationValidators.Value;
+    private static List<IStaticConfigurationValidator> StaticConfigurationValidators => s_staticConfigurationValidators.Value;
+    private static List<IDynamicConfigurationValidator> DynamicConfigurationValidators => s_dynamicConfigurationValidators.Value;
+
+    public static void Validate (Type configurationType)
+    {
+      if (!typeof(ConfigurationBase).IsAssignableFrom(configurationType))
+        throw new ArgumentException($"The given type '{configurationType}' does not derive from {typeof(ConfigurationBase)}.", nameof(configurationType));
+
+      ValidateInternal(configurationType, null);
+    }
 
     public static void Validate (ConfigurationBase configuration)
+    {
+      ValidateInternal(configuration.GetType(), configuration);
+    }
+
+    private static void ValidateInternal (Type configurationType, [CanBeNull] ConfigurationBase configuration)
     {
       var validationErrorCollector = new ConfigurationValidationErrorCollector();
 
       var compositeValidator = new ValidatingConfigurationVisitor(
-        validationErrorCollector,
-        StaticConfigurationValidators,
-        DynamicConfigurationValidators);
+          validationErrorCollector,
+          StaticConfigurationValidators,
+          DynamicConfigurationValidators);
 
       var staticWalker = new StaticConfigurationTypeWalker();
-      staticWalker.Walk(configuration.GetType(), compositeValidator);
+      staticWalker.Walk(configurationType, compositeValidator);
 
-      var dynamicWalker = new DynamicConfigurationTypeWalker();
-      dynamicWalker.Walk(configuration.GetType(), configuration.Element, compositeValidator);
+      if (configuration != null)
+      {
+        var dynamicWalker = new DynamicConfigurationTypeWalker();
+        dynamicWalker.Walk(configuration.GetType(), configuration.Element, compositeValidator);
+      }
 
       if (validationErrorCollector.ValidationErrors.Count > 0)
         throw new ConfigurationValidationException(validationErrorCollector.ValidationErrors);

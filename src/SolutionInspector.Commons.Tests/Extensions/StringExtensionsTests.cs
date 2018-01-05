@@ -48,5 +48,19 @@ namespace SolutionInspector.Commons.Tests.Extensions
       // ASSERT
       result.Should().Be(expected);
     }
+
+    [Test]
+    [TestCase(null, null)]
+    [TestCase("", "")]
+    [TestCase("a", "A")]
+    [TestCase("A", "A")]
+    public void ToUpper ([CanBeNull] string input, [CanBeNull] string expected)
+    {
+      // ACT
+      var result = input.ToFirstCharUpper();
+
+      // ASSERT
+      result.Should().Be(expected);
+    }
   }
 }

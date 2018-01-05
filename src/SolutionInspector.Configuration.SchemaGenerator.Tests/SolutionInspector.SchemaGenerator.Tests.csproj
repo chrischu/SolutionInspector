@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net47</TargetFramework>
+  </PropertyGroup>
+
+  <Import Project="..\Shared.Test.msbuild" />
+
+  <ItemGroup>
+    <PackageReference Include="Wrapperator.Interfaces" Version="1.2.0" />
+    <PackageReference Include="Wrapperator.Wrappers" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Configuration.SchemaGenerator\SolutionInspector.SchemaGenerator.csproj" />
+    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
+    <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -33,7 +33,7 @@ namespace SolutionInspector.Configuration.Attributes
     internal override string XmlName => IsDefaultCollection ? null : CollectionName;
 
     [CanBeNull]
-    internal Type GetCollectionElementType (PropertyInfo property)
+    public Type GetCollectionElementType (PropertyInfo property)
     {
       var genericArguments = property.PropertyType.GetGenericArguments();
 

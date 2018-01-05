@@ -37,5 +37,19 @@ namespace SolutionInspector.Commons.Extensions
     {
       return s?.Substring(Math.Max(0, s.Length - length));
     }
+
+    public static string ToFirstCharUpper ([CanBeNull] this string s)
+    {
+      if (s == null)
+        return null;
+
+      if (s.Length == 0)
+        return s;
+
+      if (s.Length == 1)
+        return s.ToUpper();
+
+      return char.ToUpper(s[0]) + s.Substring(1);
+    }
   }
 }
