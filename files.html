@@ -1,0 +1,43 @@
+---
+
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style>
+  table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+  }
+
+  td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+  }
+
+  tr:nth-child(even) {
+      background-color: #dddddd;
+  }
+  </style>
+</head>
+<body>
+  <h1>Files</h1>
+  <table style="width:100%">
+    <tr>
+      <th>Name</th>
+      <th>Last modified</th>
+    </tr>
+          {% for res in site.static_files %}
+            {% if res.path contains 'files' %}
+              <tr>
+                <td><a class="post-link" href="{{ res.path | prepend: site.baseurl }}">{{ res.path | remove:'/files/' }}</a></td>
+                <td>{{ res.modified_time | date: "%-d %b, %Y" }}</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+  </table>
+</body>
+</html>
