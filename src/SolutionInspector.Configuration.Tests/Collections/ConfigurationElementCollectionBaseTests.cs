@@ -5,6 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Configuration.Collections;
 using SolutionInspector.TestInfrastructure;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Configuration.Tests.Collections
 {
@@ -16,6 +17,16 @@ namespace SolutionInspector.Configuration.Tests.Collections
     public new void SetUp ()
     {
       _sut = new DummyConfigurationElementCollection(CollectionElement);
+    }
+
+    [Test]
+    public void Ctor_WithElementNotAttachedToDocument_Throws ()
+    {
+      // ACT
+      Action act = () => Dev.Null = new DummyConfigurationElementCollection(new XElement("element"));
+
+      // ASSERT
+      act.ShouldThrowArgumentException("The collection element is not attached to a document.", "collectionElement");
     }
 
     [Test]

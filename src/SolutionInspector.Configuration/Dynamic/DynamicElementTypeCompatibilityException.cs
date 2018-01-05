@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace SolutionInspector.Configuration.Dynamic
@@ -14,6 +15,7 @@ namespace SolutionInspector.Configuration.Dynamic
     {
     }
 
+    [ExcludeFromCodeCoverage]
     protected DynamicElementTypeCompatibilityException (SerializationInfo info, StreamingContext context)
         : base(info, context)
     {

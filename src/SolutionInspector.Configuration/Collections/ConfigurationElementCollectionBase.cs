@@ -29,6 +29,7 @@ namespace SolutionInspector.Configuration.Collections
 
     public int Count => _items.Count;
 
+    [ExcludeFromCodeCoverage]
     public bool IsReadOnly => false;
 
     public TElement this [int index]
