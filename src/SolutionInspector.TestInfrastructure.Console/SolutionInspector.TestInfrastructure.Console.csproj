@@ -7,17 +7,12 @@
   <Import Project="..\Shared.Test.msbuild" />
 
   <ItemGroup>
-    <PackageReference Include="Wrapperator.Interfaces" Version="2.0.0" />
-    <PackageReference Include="Wrapperator.Wrappers" Version="2.0.0" />
+    <PackageReference Include="ManyConsole" Version="1.0.0.3" />
+    <PackageReference Include="NDesk.Options" Version="0.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
     <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
   </ItemGroup>
 
 </Project>

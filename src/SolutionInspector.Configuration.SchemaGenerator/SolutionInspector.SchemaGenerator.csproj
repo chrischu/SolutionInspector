@@ -20,11 +20,18 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
     <PackageReference Include="fasterflect" Version="2.1.3" />
     <PackageReference Include="ManyConsole" Version="1.0.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
     <PackageReference Include="NDesk.Options" Version="0.2.1" />
-    <PackageReference Include="Wrapperator.Interfaces" Version="1.2.0" />
-    <PackageReference Include="Wrapperator.Wrappers" Version="1.2.0" />
+    <PackageReference Include="Wrapperator.Interfaces" Version="2.0.0" />
+    <PackageReference Include="Wrapperator.Wrappers" Version="2.0.0" />
   </ItemGroup>
 
   <ItemDefinitionGroup>
@@ -46,6 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj" />
     <ProjectReference Include="..\SolutionInspector.Commons.Console\SolutionInspector.Commons.Console.csproj" />
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
   </ItemGroup>
@@ -54,6 +62,14 @@
     <Compile Remove="bin\**" />
     <EmbeddedResource Remove="bin\**" />
     <None Remove="bin\**" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="appSettings.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="appSettings.json" />
   </ItemGroup>
 
 </Project>

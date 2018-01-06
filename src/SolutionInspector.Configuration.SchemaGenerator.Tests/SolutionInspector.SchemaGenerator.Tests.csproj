@@ -7,13 +7,16 @@
   <Import Project="..\Shared.Test.msbuild" />
 
   <ItemGroup>
-    <PackageReference Include="Wrapperator.Interfaces" Version="1.2.0" />
-    <PackageReference Include="Wrapperator.Wrappers" Version="1.2.0" />
+    <PackageReference Include="Wrapperator.Interfaces" Version="2.0.0" />
+    <PackageReference Include="Wrapperator.Wrappers" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SolutionInspector.Api\SolutionInspector.Api.csproj" />
+    <ProjectReference Include="..\SolutionInspector.Commons.Console\SolutionInspector.Commons.Console.csproj" />
     <ProjectReference Include="..\SolutionInspector.Configuration.SchemaGenerator\SolutionInspector.SchemaGenerator.csproj" />
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
+    <ProjectReference Include="..\SolutionInspector.TestInfrastructure.Console\SolutionInspector.TestInfrastructure.Console.csproj" />
     <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj" />
   </ItemGroup>
 

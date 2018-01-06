@@ -17,6 +17,7 @@ using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
 using SolutionInspector.TestInfrastructure;
+using SolutionInspector.TestInfrastructure.Console.Commands;
 using SolutionInspector.Utilities;
 
 namespace SolutionInspector.Tests.Commands
@@ -134,7 +135,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      TextWriter.ToString().Should().Contain("NOTFOUND");
+      CapturedOutput.ToString().Should().Contain("NOTFOUND");
     }
 
     [Test]
@@ -149,7 +150,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      TextWriter.ToString().Should().Contain($"Unexpected error when loading configuration file: {thrownException.Message}.");
+      CapturedOutput.ToString().Should().Contain($"Unexpected error when loading configuration file: {thrownException.Message}.");
     }
 
     [Test]
@@ -216,7 +217,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      TextWriter.ToString().Should().Contain("Could not convert string `DOES_NOT_EXIST' to type ViolationReportFormat");
+      CapturedOutput.ToString().Should().Contain("Could not convert string `DOES_NOT_EXIST' to type ViolationReportFormat");
     }
 
     [Test]
@@ -232,7 +233,7 @@ namespace SolutionInspector.Tests.Commands
       result.Should().Be(-1);
 
       A.CallTo(() => _configurationLoader.LoadRulesConfig($"DOES_NOT_EXIST.{SolutionInspector.RulesetFileExtension}")).MustHaveHappened();
-      TextWriter.ToString().Should().Contain("Given solution file 'DOES_NOT_EXIST' could not be found.");
+      CapturedOutput.ToString().Should().Contain("Given solution file 'DOES_NOT_EXIST' could not be found.");
 
       AssertDoesNotCreateViolationReporter();
     }
@@ -249,7 +250,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      TextWriter.ToString()
+      CapturedOutput.ToString()
           .Should()
           .Contain($"Given solution file 'solution' contains an invalid project file '{Environment.CurrentDirectory}\\projectFile'");
 
@@ -269,7 +270,7 @@ namespace SolutionInspector.Tests.Commands
       // ASSERT
       result.Should().Be(-1);
 
-      TextWriter.ToString().Should().Contain($"Unexpected error when loading solution file 'solution': {thrownException.Message}");
+      CapturedOutput.ToString().Should().Contain($"Unexpected error when loading solution file 'solution': {thrownException.Message}");
 
       AssertDoesNotCreateViolationReporter();
       AssertConfigurationLoadWithDefaultParameters();

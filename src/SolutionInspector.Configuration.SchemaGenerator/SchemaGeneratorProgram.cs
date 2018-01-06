@@ -1,15 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using ManyConsole;
+using SolutionInspector.SchemaGenerator.Commands;
+using Wrapperator.Interfaces;
+using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
 using Wrapperator.Wrappers;
 
 namespace SolutionInspector.SchemaGenerator
 {
-  internal static class SchemaGeneratorProgram
+  [ExcludeFromCodeCoverage]
+  internal class SchemaGeneratorProgram
   {
+    internal const string DefaultBaseSchemaVersion = "1";
+    internal const string BaseSchemaNamespaceTemplate = "http://chrischu.github.io/SolutionInspector/schema/base_v{0}.xsd";
+
     public static int Main (string[] args)
+    {
+      return new SchemaGeneratorProgram().Run(args);
+    }
+
+    private int Run (string[] args)
     {
       using (var container = SetupContainer())
       {
@@ -23,6 +36,11 @@ namespace SolutionInspector.SchemaGenerator
       var builder = new ContainerBuilder();
 
       builder.Register(ctx => Wrapper.Assembly).As<IAssemblyStatic>();
+      builder.Register(ctx => Wrapper.File).As<IFileStatic>();
+      builder.Register(ctx => Wrapper.Console).As<IConsoleStatic>();
+
+      builder.RegisterType<RuleAssemblySchemaCreator>().As<IRuleAssemblySchemaCreator>();
+      builder.RegisterType<SchemaInfoRetriever>().As<ISchemaInfoRetriever>();
 
       builder.RegisterType<GenerateCommand>().As<ConsoleCommand>();
 

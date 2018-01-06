@@ -10,28 +10,20 @@ using SolutionInspector.SchemaGenerator.SchemaModel;
 namespace SolutionInspector.SchemaGenerator
 {
   /// <summary>
-  ///   Retrieves schema info from a <see cref="Type" /> representing a <see cref="ConfigurationDocument" />.
+  ///   Retrieves schema info from a <see cref="Type" /> representing a <see cref="ConfigurationElement" />.
   /// </summary>
   public interface ISchemaInfoRetriever
   {
-    ConfigurationDocumentSchemaInfo GetSchemaInfo (Type configurationDocumentType);
+    ConfigurationElementSchemaInfo GetSchemaInfo (Type configurationElementType);
   }
 
   internal class SchemaInfoRetriever : ISchemaInfoRetriever
   {
-    public ConfigurationDocumentSchemaInfo GetSchemaInfo (Type configurationDocumentType)
+    public ConfigurationElementSchemaInfo GetSchemaInfo (Type configurationElementType)
     {
-      var rootElement = GetRootElementSchemaInfo(configurationDocumentType);
-
-      return new ConfigurationDocumentSchemaInfo(rootElement);
-    }
-
-    private ConfigurationElementSchemaInfo GetRootElementSchemaInfo (Type configurationDocumentType)
-    {
-      var configurationDocumentBase = (ConfigurationDocument) Activator.CreateInstance(configurationDocumentType);
-      var elementName = configurationDocumentBase.RootElementName;
-      var possibleEntities = GetPossibleEntities(configurationDocumentType);
-      return new ConfigurationElementSchemaInfo(elementName, 1, 1, possibleEntities.Attributes, possibleEntities.Elements);
+      var elementName = configurationElementType.Name.ToFirstCharLower();
+      var possibleEntities = GetPossibleEntities(configurationElementType);
+      return new ConfigurationElementSchemaInfo(elementName, 0, int.MaxValue, possibleEntities.Attributes, possibleEntities.Elements);
     }
 
     private (IReadOnlyList<ConfigurationAttributeSchemaInfo> Attributes, IReadOnlyList<ConfigurationElementSchemaInfo> Elements)

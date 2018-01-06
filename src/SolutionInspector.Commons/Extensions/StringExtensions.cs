@@ -40,16 +40,28 @@ namespace SolutionInspector.Commons.Extensions
 
     public static string ToFirstCharUpper ([CanBeNull] this string s)
     {
+      return TransformFirstChar(s, char.ToUpper);
+    }
+
+    public static string ToFirstCharLower ([CanBeNull] this string s)
+    {
+      return TransformFirstChar(s, char.ToLower);
+    }
+
+    private static string TransformFirstChar([CanBeNull] string s, Func<char, char> transform)
+    {
       if (s == null)
         return null;
 
       if (s.Length == 0)
         return s;
 
-      if (s.Length == 1)
-        return s.ToUpper();
+      var transformedFirstChar = transform(s[0]);
 
-      return char.ToUpper(s[0]) + s.Substring(1);
+      if (s.Length == 1)
+        return transformedFirstChar.ToString();
+
+      return transformedFirstChar + s.Substring(1);
     }
   }
 }

@@ -16,14 +16,15 @@
     <PackageReference Include="NLog" Version="4.4.12" />
     <PackageReference Include="NLog.Config" Version="4.4.12" />
     <PackageReference Include="NLog.Schema" Version="4.4.12" />
-    <PackageReference Include="Wrapperator.Interfaces" Version="1.2.0" />
-    <PackageReference Include="Wrapperator.Wrappers" Version="1.2.0" />
+    <PackageReference Include="Wrapperator.Interfaces" Version="2.0.0" />
+    <PackageReference Include="Wrapperator.Wrappers" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.Commons.Console\SolutionInspector.Commons.Console.csproj" />
     <ProjectReference Include="..\SolutionInspector.Configuration\SolutionInspector.Configuration.csproj" />
     <ProjectReference Include="..\SolutionInspector.Internals\SolutionInspector.Internals.csproj" />
+    <ProjectReference Include="..\SolutionInspector.TestInfrastructure.Console\SolutionInspector.TestInfrastructure.Console.csproj" />
     <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj" />
     <ProjectReference Include="..\SolutionInspector\SolutionInspector.csproj" />
   </ItemGroup>

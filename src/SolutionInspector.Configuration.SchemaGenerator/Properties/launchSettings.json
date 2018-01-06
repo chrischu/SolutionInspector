@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SolutionInspector.Configuration.SchemaGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "generate \"D:\\Development\\SolutionInspector\\src\\SolutionInspector.DefaultRules\\bin\\Debug\\net47\\SolutionInspector.DefaultRules.dll\""
+    }
+  }
+}

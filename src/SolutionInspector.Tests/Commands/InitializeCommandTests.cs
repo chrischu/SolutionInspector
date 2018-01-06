@@ -3,6 +3,7 @@ using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Commands;
+using SolutionInspector.TestInfrastructure.Console.Commands;
 using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;

@@ -29,7 +29,7 @@ namespace SolutionInspector.DefaultRules
     ///   "A list of expected configurations (e.g. 'Build', 'Release')."
     /// </summary>
     [CanBeNull]
-    [ConfigurationValue (AttributeName = "expectedConfigurations", DefaultValue = "", IsOptional = false)]
+    [ConfigurationValue (AttributeName = "expectedConfigurations")]
     [Description ("A list of expected configurations (e.g. 'Build', 'Release').")]
     public CommaSeparatedStringCollection Configurations => GetConfigurationValue<CommaSeparatedStringCollection>();
 
@@ -37,7 +37,7 @@ namespace SolutionInspector.DefaultRules
     ///   A list of expected platforms (e.g. 'Any CPU', 'x64').
     /// </summary>
     [CanBeNull]
-    [ConfigurationValue (AttributeName = "expectedPlatforms", DefaultValue = "", IsOptional = false)]
+    [ConfigurationValue (AttributeName = "expectedPlatforms")]
     [Description ("A list of expected platforms (e.g. 'Any CPU', 'x64).")]
     public CommaSeparatedStringCollection Platforms => GetConfigurationValue<CommaSeparatedStringCollection>();
 

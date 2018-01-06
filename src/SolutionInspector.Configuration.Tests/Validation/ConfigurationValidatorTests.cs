@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.Configuration.Validation;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Configuration.Tests.Validation
 {
@@ -32,6 +33,16 @@ namespace SolutionInspector.Configuration.Tests.Validation
 
       // ASSERT
       act.ShouldThrow<ConfigurationValidationException>();
+    }
+
+    [Test]
+    public void Validate_WithInvalidType_Throws ()
+    {
+      // ACT
+      Action act = () => ConfigurationValidator.Validate(typeof(string));
+
+      // ASSERT
+      act.ShouldThrowArgumentException($"The given type '{typeof(string)}' does not derive from {typeof(ConfigurationBase)}.", "configurationType");
     }
 
     private class DummyConfigurationElement : ConfigurationElement

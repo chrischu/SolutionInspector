@@ -23,115 +23,109 @@ namespace SolutionInspector.SchemaGenerator.Tests
     public void GetSchemaInfo ()
     {
       // ACT
-      var result = _sut.GetSchemaInfo(typeof(SomeConfigurationDocument));
+      var result = _sut.GetSchemaInfo(typeof(SomeConfigurationElement));
 
       // ASSERT
       result.ShouldBeEquivalentTo(
-          new ConfigurationDocumentSchemaInfo(
-              new ConfigurationElementSchemaInfo(
-                  "rootElement",
-                  minOccurs: 1,
-                  maxOccurs: 1,
-                  possibleAttributes: new[]
-                                      {
-                                          new ConfigurationAttributeSchemaInfo("value", typeof(string), isRequired: true, defaultValue: null),
-                                          new ConfigurationAttributeSchemaInfo("optValue", typeof(string), isRequired: false, defaultValue: "default")
-                                      },
-                  possibleSubelements: new[]
-                                       {
-                                           new ConfigurationElementSchemaInfo(
-                                               "subelement",
-                                               minOccurs: 1,
-                                               maxOccurs: 1,
-                                               possibleAttributes: new[]
-                                                                   {
-                                                                       new ConfigurationAttributeSchemaInfo(
-                                                                           "subValue",
-                                                                           typeof(string),
-                                                                           isRequired: true,
-                                                                           defaultValue: null)
-                                                                   },
-                                               possibleSubelements: new ConfigurationElementSchemaInfo[0]),
-                                           new ConfigurationElementSchemaInfo(
-                                               "optSubelement",
-                                               minOccurs: 0,
-                                               maxOccurs: 1,
-                                               possibleAttributes: new[]
-                                                                   {
-                                                                       new ConfigurationAttributeSchemaInfo(
-                                                                           "subValue",
-                                                                           typeof(string),
-                                                                           isRequired: true,
-                                                                           defaultValue: null)
-                                                                   },
-                                               possibleSubelements: new ConfigurationElementSchemaInfo[0]),
-                                           new ConfigurationElementSchemaInfo(
-                                               "collection",
-                                               minOccurs: 1,
-                                               maxOccurs: 1,
-                                               possibleAttributes: new ConfigurationAttributeSchemaInfo[0],
-                                               possibleSubelements: new[]
-                                                                    {
-                                                                        new ConfigurationElementSchemaInfo(
-                                                                            "item",
-                                                                            0,
-                                                                            int.MaxValue,
-                                                                            new[]
-                                                                            {
-                                                                                new ConfigurationAttributeSchemaInfo(
-                                                                                    "collValue",
-                                                                                    typeof(string),
-                                                                                    isRequired: true,
-                                                                                    defaultValue: null)
-                                                                            },
-                                                                            new ConfigurationElementSchemaInfo[0])
-                                                                    }),
-                                           new ConfigurationElementSchemaInfo(
-                                               "optColl",
-                                               minOccurs: 0,
-                                               maxOccurs: 1,
-                                               possibleAttributes: new ConfigurationAttributeSchemaInfo[0],
-                                               possibleSubelements: new[]
-                                                                    {
-                                                                        new ConfigurationElementSchemaInfo(
-                                                                            "optCollItem",
-                                                                            4,
-                                                                            7,
-                                                                            new[]
-                                                                            {
-                                                                                new ConfigurationAttributeSchemaInfo(
-                                                                                    "collValue",
-                                                                                    typeof(string),
-                                                                                    isRequired: true,
-                                                                                    defaultValue: null)
-                                                                            },
-                                                                            new ConfigurationElementSchemaInfo[0])
-                                                                    }),
-                                           new ConfigurationElementSchemaInfo(
-                                               "defaultCollItem",
-                                               minOccurs: 0,
-                                               maxOccurs: int.MaxValue,
-                                               possibleAttributes: new[]
-                                                                   {
-                                                                       new ConfigurationAttributeSchemaInfo(
-                                                                           "collValue",
-                                                                           typeof(string),
-                                                                           isRequired: true,
-                                                                           defaultValue: null)
-                                                                   },
-                                               possibleSubelements: new ConfigurationElementSchemaInfo[0])
-                                       })));
+          new ConfigurationElementSchemaInfo(
+              "someConfigurationElement",
+              minOccurs: 0,
+              maxOccurs: int.MaxValue,
+              possibleAttributes: new[]
+                                  {
+                                      new ConfigurationAttributeSchemaInfo("value", typeof(string), isRequired: true, defaultValue: null),
+                                      new ConfigurationAttributeSchemaInfo("optValue", typeof(string), isRequired: false, defaultValue: "default")
+                                  },
+              possibleSubelements: new[]
+                                   {
+                                       new ConfigurationElementSchemaInfo(
+                                           "subelement",
+                                           minOccurs: 1,
+                                           maxOccurs: 1,
+                                           possibleAttributes: new[]
+                                                               {
+                                                                   new ConfigurationAttributeSchemaInfo(
+                                                                       "subValue",
+                                                                       typeof(string),
+                                                                       isRequired: true,
+                                                                       defaultValue: null)
+                                                               },
+                                           possibleSubelements: new ConfigurationElementSchemaInfo[0]),
+                                       new ConfigurationElementSchemaInfo(
+                                           "optSubelement",
+                                           minOccurs: 0,
+                                           maxOccurs: 1,
+                                           possibleAttributes: new[]
+                                                               {
+                                                                   new ConfigurationAttributeSchemaInfo(
+                                                                       "subValue",
+                                                                       typeof(string),
+                                                                       isRequired: true,
+                                                                       defaultValue: null)
+                                                               },
+                                           possibleSubelements: new ConfigurationElementSchemaInfo[0]),
+                                       new ConfigurationElementSchemaInfo(
+                                           "collection",
+                                           minOccurs: 1,
+                                           maxOccurs: 1,
+                                           possibleAttributes: new ConfigurationAttributeSchemaInfo[0],
+                                           possibleSubelements: new[]
+                                                                {
+                                                                    new ConfigurationElementSchemaInfo(
+                                                                        "item",
+                                                                        0,
+                                                                        int.MaxValue,
+                                                                        new[]
+                                                                        {
+                                                                            new ConfigurationAttributeSchemaInfo(
+                                                                                "collValue",
+                                                                                typeof(string),
+                                                                                isRequired: true,
+                                                                                defaultValue: null)
+                                                                        },
+                                                                        new ConfigurationElementSchemaInfo[0])
+                                                                }),
+                                       new ConfigurationElementSchemaInfo(
+                                           "optColl",
+                                           minOccurs: 0,
+                                           maxOccurs: 1,
+                                           possibleAttributes: new ConfigurationAttributeSchemaInfo[0],
+                                           possibleSubelements: new[]
+                                                                {
+                                                                    new ConfigurationElementSchemaInfo(
+                                                                        "optCollItem",
+                                                                        4,
+                                                                        7,
+                                                                        new[]
+                                                                        {
+                                                                            new ConfigurationAttributeSchemaInfo(
+                                                                                "collValue",
+                                                                                typeof(string),
+                                                                                isRequired: true,
+                                                                                defaultValue: null)
+                                                                        },
+                                                                        new ConfigurationElementSchemaInfo[0])
+                                                                }),
+                                       new ConfigurationElementSchemaInfo(
+                                           "defaultCollItem",
+                                           minOccurs: 0,
+                                           maxOccurs: int.MaxValue,
+                                           possibleAttributes: new[]
+                                                               {
+                                                                   new ConfigurationAttributeSchemaInfo(
+                                                                       "collValue",
+                                                                       typeof(string),
+                                                                       isRequired: true,
+                                                                       defaultValue: null)
+                                                               },
+                                           possibleSubelements: new ConfigurationElementSchemaInfo[0])
+                                   }));
     }
 
     // ReSharper disable ClassNeverInstantiated.Local
     // ReSharper disable UnusedMember.Local
-    private class SomeConfigurationDocument : ConfigurationDocument
+    private class SomeConfigurationElement : ConfigurationElement
     {
-      public SomeConfigurationDocument () : base("rootElement")
-      {
-        
-      }
-
       [ConfigurationValue]
       public string Value { get; set; }
 

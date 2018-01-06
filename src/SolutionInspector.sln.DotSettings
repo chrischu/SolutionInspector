@@ -5,7 +5,7 @@
 	<s:Boolean x:Key="/Default/CodeInspection/XmlDocInspections/ExcludeConstructors/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/XmlDocInspections/ExcludeMembersOverridingSuperMember/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/CodeInspection/XmlDocInspections/IncludeAttributeFullNames/@EntryValue">SolutionInspector.Commons.Attributes.PublicApiAttribute</s:String>
-	<s:String x:Key="/Default/CodeInspection/XmlDocInspections/ProjectExclusionRegex/@EntryValue">(Tests|TestInfrastructure)$</s:String>
+	<s:String x:Key="/Default/CodeInspection/XmlDocInspections/ProjectExclusionRegex/@EntryValue">(Tests$|TestInfrastructure)</s:String>
 	<s:Boolean x:Key="/Default/CodeInspection/XmlDocInspections/RequireDocsOnOverridingMember/@EntryValue">False</s:Boolean>
 	<s:String x:Key="/Default/CodeInspection/XmlDocInspections/TypeAccessibility/@EntryValue">Public</s:String>
 	<s:String x:Key="/Default/CodeInspection/XmlDocInspections/TypeMemberAccessibility/@EntryValue">None</s:String>

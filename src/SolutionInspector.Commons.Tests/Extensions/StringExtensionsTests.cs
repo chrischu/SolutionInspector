@@ -53,11 +53,27 @@ namespace SolutionInspector.Commons.Tests.Extensions
     [TestCase(null, null)]
     [TestCase("", "")]
     [TestCase("a", "A")]
-    [TestCase("A", "A")]
-    public void ToUpper ([CanBeNull] string input, [CanBeNull] string expected)
+    [TestCase("axxx", "Axxx")]
+    [TestCase("Axxx", "Axxx")]
+    public void ToFirstCharUpper ([CanBeNull] string input, [CanBeNull] string expected)
     {
       // ACT
       var result = input.ToFirstCharUpper();
+
+      // ASSERT
+      result.Should().Be(expected);
+    }
+
+    [Test]
+    [TestCase(null, null)]
+    [TestCase("", "")]
+    [TestCase("A", "a")]
+    [TestCase("Axxx", "axxx")]
+    [TestCase("axxx", "axxx")]
+    public void ToFirstCharLower ([CanBeNull] string input, [CanBeNull] string expected)
+    {
+      // ACT
+      var result = input.ToFirstCharLower();
 
       // ASSERT
       result.Should().Be(expected);
