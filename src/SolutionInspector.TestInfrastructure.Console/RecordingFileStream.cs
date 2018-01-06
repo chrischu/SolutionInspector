@@ -10,7 +10,7 @@ using Microsoft.Win32.SafeHandles;
 using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
 
-namespace SolutionInspector.SchemaGenerator.Tests.Commands
+namespace SolutionInspector.TestInfrastructure.Console
 {
   public class RecordingFileStream : IFileStream
   {

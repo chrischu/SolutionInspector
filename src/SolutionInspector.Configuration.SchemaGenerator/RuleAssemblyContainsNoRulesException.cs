@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
-namespace SolutionInspector.SchemaGenerator
+namespace SolutionInspector.BuildTool
 {
   /// <summary>
   ///   Thrown when a rule assembly contains no rules.

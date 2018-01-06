@@ -4,12 +4,12 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using SolutionInspector.Api.Configuration.Ruleset;
+using SolutionInspector.BuildTool.SchemaModel;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration.Validation;
-using SolutionInspector.SchemaGenerator.SchemaModel;
 using Wrapperator.Interfaces.Reflection;
 
-namespace SolutionInspector.SchemaGenerator
+namespace SolutionInspector.BuildTool
 {
   /// <summary>
   ///   Creates a <see cref="XmlSchema" /> from an <see cref="IAssembly" /> containing <see cref="RuleConfigurationElement" />s.

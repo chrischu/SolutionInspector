@@ -11,9 +11,9 @@ using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
 using Wrapperator.Interfaces.Xml;
 
-namespace SolutionInspector.SchemaGenerator.Commands
+namespace SolutionInspector.BuildTool.Commands
 {
-  internal class GenerateCommand : ConsoleCommandBase<GenerateCommand.RawArguments, GenerateCommand.ParsedArguments>
+  internal class GenerateSchemaCommand : ConsoleCommandBase<GenerateSchemaCommand.RawArguments, GenerateSchemaCommand.ParsedArguments>
   {
     private readonly IFileStatic _file;
     private readonly IConsoleStatic _console;
@@ -21,13 +21,13 @@ namespace SolutionInspector.SchemaGenerator.Commands
     private readonly IAssemblyStatic _assembly;
     private readonly IRuleAssemblySchemaCreator _ruleAssemblySchemaCreator;
 
-    public GenerateCommand (
+    public GenerateSchemaCommand (
         IAssemblyStatic assembly,
         IFileStatic file,
         IConsoleStatic console,
         IXmlWriterStatic xmlWriter,
         IRuleAssemblySchemaCreator ruleAssemblySchemaCreator)
-        : base("generate", "Generates a XSD schema for the rules contained in the specified assembly.")
+        : base("generateSchema", "Generates a XSD schema for the rules contained in the specified assembly.")
     {
       _file = file;
       _console = console;
@@ -53,8 +53,8 @@ namespace SolutionInspector.SchemaGenerator.Commands
     {
       var assembly = LoadAssembly(arguments.AssemblyFilePath, reportError);
 
-      var baseSchemaVersion = arguments.BaseSchemaVersion ?? SchemaGeneratorProgram.DefaultBaseSchemaVersion;
-      var baseSchemaNamespace = string.Format(SchemaGeneratorProgram.BaseSchemaNamespaceTemplate, baseSchemaVersion);
+      var baseSchemaVersion = arguments.BaseSchemaVersion ?? BuildToolProgram.DefaultBaseSchemaVersion;
+      var baseSchemaNamespace = string.Format(BuildToolProgram.BaseSchemaNamespaceTemplate, baseSchemaVersion);
 
       var outputFilePath = GetAndValidateOutputFilePath(arguments.OutputFilePath, arguments.AssemblyFilePath, reportError);
 

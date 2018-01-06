@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using SolutionInspector.BuildTool.SchemaModel;
 using SolutionInspector.Commons.Extensions;
 using SolutionInspector.Configuration;
 using SolutionInspector.Configuration.Attributes;
-using SolutionInspector.SchemaGenerator.SchemaModel;
 
-namespace SolutionInspector.SchemaGenerator
+namespace SolutionInspector.BuildTool
 {
   /// <summary>
   ///   Retrieves schema info from a <see cref="Type" /> representing a <see cref="ConfigurationElement" />.

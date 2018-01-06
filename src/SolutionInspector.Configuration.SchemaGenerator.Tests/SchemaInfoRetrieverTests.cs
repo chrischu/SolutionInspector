@@ -1,12 +1,12 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
+using SolutionInspector.BuildTool.SchemaModel;
 using SolutionInspector.Configuration;
 using SolutionInspector.Configuration.Attributes;
 using SolutionInspector.Configuration.Collections;
-using SolutionInspector.SchemaGenerator.SchemaModel;
 
-namespace SolutionInspector.SchemaGenerator.Tests
+namespace SolutionInspector.BuildTool.Tests
 {
   [TestFixture]
   public class SchemaInfoRetrieverTests

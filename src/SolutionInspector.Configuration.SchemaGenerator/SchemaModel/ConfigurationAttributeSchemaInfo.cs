@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace SolutionInspector.SchemaGenerator.SchemaModel
+namespace SolutionInspector.BuildTool.SchemaModel
 {
   /// <summary>
   ///   Completion info for a rule-configuring XML attribute.

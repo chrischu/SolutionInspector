@@ -6,8 +6,9 @@ using System.Xml.Schema;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
-using SolutionInspector.SchemaGenerator.Commands;
+using SolutionInspector.BuildTool.Commands;
 using SolutionInspector.TestInfrastructure;
+using SolutionInspector.TestInfrastructure.Console;
 using SolutionInspector.TestInfrastructure.Console.Commands;
 using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
@@ -15,9 +16,9 @@ using Wrapperator.Interfaces.Reflection;
 using Wrapperator.Interfaces.Xml;
 using Wrapperator.Wrappers;
 
-namespace SolutionInspector.SchemaGenerator.Tests.Commands
+namespace SolutionInspector.BuildTool.Tests.Commands
 {
-  public class GenerateCommandTests : CommandTestsBase
+  public class GenerateSchemaCommandTests : CommandTestsBase
   {
     private IAssemblyStatic _assembly;
     private IFileStatic _file;
@@ -25,7 +26,7 @@ namespace SolutionInspector.SchemaGenerator.Tests.Commands
     private IXmlWriterStatic _xmlWriterStatic;
     private IRuleAssemblySchemaCreator _ruleAssemblySchemaCreator;
 
-    private GenerateCommand _sut;
+    private GenerateSchemaCommand _sut;
     private IAssembly _loadedAssembly;
     private XmlSchema _xmlSchema;
     private RecordingFileStream _outputStream;
@@ -39,7 +40,7 @@ namespace SolutionInspector.SchemaGenerator.Tests.Commands
       _xmlWriterStatic = A.Fake<IXmlWriterStatic>(o => o.Wrapping(Wrapper.XmlWriter));
       _ruleAssemblySchemaCreator = A.Fake<IRuleAssemblySchemaCreator>();
 
-      _sut = new GenerateCommand(_assembly, _file, _console, _xmlWriterStatic, _ruleAssemblySchemaCreator);
+      _sut = new GenerateSchemaCommand(_assembly, _file, _console, _xmlWriterStatic, _ruleAssemblySchemaCreator);
 
       _loadedAssembly = A.Fake<IAssembly>();
       A.CallTo(() => _assembly.LoadFrom(A<string>._)).Returns(_loadedAssembly);
@@ -72,7 +73,7 @@ namespace SolutionInspector.SchemaGenerator.Tests.Commands
       A.CallTo(
           () => _ruleAssemblySchemaCreator.CreateSchema(
               _loadedAssembly,
-              string.Format(SchemaGeneratorProgram.BaseSchemaNamespaceTemplate, SchemaGeneratorProgram.DefaultBaseSchemaVersion))).MustHaveHappened();
+              string.Format(BuildToolProgram.BaseSchemaNamespaceTemplate, BuildToolProgram.DefaultBaseSchemaVersion))).MustHaveHappened();
 
       A.CallTo(() => _file.Create("Assembly.xsd")).MustHaveHappened();
       // ReSharper disable once AccessToDisposedClosure
@@ -89,7 +90,7 @@ namespace SolutionInspector.SchemaGenerator.Tests.Commands
       // ASSERT
       result.Should().Be(0);
 
-      A.CallTo(() => _ruleAssemblySchemaCreator.CreateSchema(_loadedAssembly, string.Format(SchemaGeneratorProgram.BaseSchemaNamespaceTemplate, "7")))
+      A.CallTo(() => _ruleAssemblySchemaCreator.CreateSchema(_loadedAssembly, string.Format(BuildToolProgram.BaseSchemaNamespaceTemplate, "7")))
           .MustHaveHappened();
 
       A.CallTo(() => _file.Create("Path\\out.xsd")).MustHaveHappened();

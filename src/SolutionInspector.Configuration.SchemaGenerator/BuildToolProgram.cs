@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using ManyConsole;
-using SolutionInspector.SchemaGenerator.Commands;
+using SolutionInspector.BuildTool.Commands;
 using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
 using Wrapperator.Wrappers;
 
-namespace SolutionInspector.SchemaGenerator
+namespace SolutionInspector.BuildTool
 {
   [ExcludeFromCodeCoverage]
-  internal class SchemaGeneratorProgram
+  internal class BuildToolProgram
   {
     internal const string DefaultBaseSchemaVersion = "1";
     internal const string BaseSchemaNamespaceTemplate = "http://chrischu.github.io/SolutionInspector/schema/base_v{0}.xsd";
 
     public static int Main (string[] args)
     {
-      return new SchemaGeneratorProgram().Run(args);
+      return new BuildToolProgram().Run(args);
     }
 
     private int Run (string[] args)
@@ -42,7 +42,7 @@ namespace SolutionInspector.SchemaGenerator
       builder.RegisterType<RuleAssemblySchemaCreator>().As<IRuleAssemblySchemaCreator>();
       builder.RegisterType<SchemaInfoRetriever>().As<ISchemaInfoRetriever>();
 
-      builder.RegisterType<GenerateCommand>().As<ConsoleCommand>();
+      builder.RegisterType<GenerateSchemaCommand>().As<ConsoleCommand>();
 
       return builder.Build();
     }

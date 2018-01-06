@@ -14,7 +14,7 @@ using SolutionInspector.TestInfrastructure;
 using SolutionInspector.TestInfrastructure.AssertionExtensions;
 using Wrapperator.Interfaces.Reflection;
 
-namespace SolutionInspector.SchemaGenerator.Tests
+namespace SolutionInspector.BuildTool.Tests
 {
   [TestFixture]
   public class RuleAssemblySchemaCreatorTests
