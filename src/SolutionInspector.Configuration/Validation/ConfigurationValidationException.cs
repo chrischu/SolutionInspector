@@ -17,10 +17,13 @@ namespace SolutionInspector.Configuration.Validation
     /// <summary>
     ///   Creates a new <see cref="ConfigurationValidationException" />
     /// </summary>
-    public ConfigurationValidationException (IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors)
-      : base(FormatValidationErrorMessage(validationErrors))
+    public ConfigurationValidationException (
+        IReadOnlyCollection<string> documentValidationErrors,
+        IReadOnlyDictionary<string, IReadOnlyCollection<string>> propertyValidationErrors)
+        : base(FormatValidationErrorMessage(documentValidationErrors, propertyValidationErrors))
     {
-      ValidationErrors = validationErrors;
+      DocumentValidationErrors = documentValidationErrors;
+      PropertyValidationErrors = propertyValidationErrors;
     }
 
     /// <summary>
@@ -29,19 +32,29 @@ namespace SolutionInspector.Configuration.Validation
     [ExcludeFromCodeCoverage /* Serialization ctor */]
     // ReSharper disable once NotNullMemberIsNotInitialized
     protected ConfigurationValidationException (SerializationInfo info, StreamingContext context)
-      : base(info, context)
+        : base(info, context)
     {
     }
 
     /// <summary>
-    ///   All validation errors by property path.
+    ///   All document validation errors.
+    /// </summary>
+    public IReadOnlyCollection<string> DocumentValidationErrors { get; }
+
+    /// <summary>
+    ///   All property validation errors by property path.
     /// </summary>
     [PublicApi]
-    public IReadOnlyDictionary<string, IReadOnlyCollection<string>> ValidationErrors { get; }
+    public IReadOnlyDictionary<string, IReadOnlyCollection<string>> PropertyValidationErrors { get; }
 
-    private static string FormatValidationErrorMessage (IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors)
+    private static string FormatValidationErrorMessage (
+        IReadOnlyCollection<string> documentValidationErrors,
+        IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors)
     {
-      var properties = validationErrors.ConvertAndJoin(
+      var documentMessages = EnumerableExtensions.ConvertAndJoin(documentValidationErrors, s => $"    - {s}", Environment.NewLine);
+      var documentErrors = $"  - For the document:{Environment.NewLine}{documentMessages}";
+
+      var propertyErrors = validationErrors.ConvertAndJoin(
           e =>
           {
             var messages = EnumerableExtensions.ConvertAndJoin(e.Value, s => $"    - {s}", Environment.NewLine);
@@ -49,7 +62,7 @@ namespace SolutionInspector.Configuration.Validation
           },
           Environment.NewLine);
 
-      return $"Validation failed because of the following errors:{Environment.NewLine}{properties}";
+      return $"Validation failed because of the following errors:{Environment.NewLine}{documentErrors}{Environment.NewLine}{propertyErrors}";
     }
   }
 }

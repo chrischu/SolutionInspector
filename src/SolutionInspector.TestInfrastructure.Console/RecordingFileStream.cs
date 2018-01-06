@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.Remoting;
 using System.Security.AccessControl;
@@ -12,6 +13,7 @@ using Wrapperator.Interfaces.IO;
 
 namespace SolutionInspector.TestInfrastructure.Console
 {
+  [ExcludeFromCodeCoverage]
   public class RecordingFileStream : IFileStream
   {
     private readonly MemoryStream _stream = new MemoryStream();

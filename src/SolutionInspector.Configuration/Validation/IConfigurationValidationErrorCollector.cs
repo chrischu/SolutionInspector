@@ -2,6 +2,9 @@ namespace SolutionInspector.Configuration.Validation
 {
   internal interface IConfigurationValidationErrorCollector
   {
-    void AddError (string propertyPath, string message);
+    bool HasErrors { get; }
+
+    void AddDocumentError (string message);
+    void AddPropertyError (string propertyPath, string message);
   }
 }

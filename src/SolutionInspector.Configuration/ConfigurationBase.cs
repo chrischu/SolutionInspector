@@ -27,7 +27,8 @@ namespace SolutionInspector.Configuration
     /// </summary>
     public XElement Element { get; private set; }
 
-    internal static T Load<T> (XElement element, Action<T> modifyBeforeValidation = null) where T : ConfigurationBase, new()
+    internal static T Load<T> (XElement element, Action<T> modifyBeforeValidation = null)
+        where T : ConfigurationBase, new()
     {
       return (T) Load(typeof(T), element, c => modifyBeforeValidation?.Invoke((T) c));
     }

@@ -42,6 +42,13 @@ namespace SolutionInspector.Configuration.Validation
     {
       var validationErrorCollector = new ConfigurationValidationErrorCollector();
 
+      if (configuration is ConfigurationDocument document && configuration.Element.Name.LocalName != document.RootElementName)
+      {
+        validationErrorCollector.AddDocumentError(
+            $"The root element of this configuration document must be named '{document.RootElementName}' " +
+            $"but it is named '{configuration.Element.Name.LocalName}'.");
+      }
+
       var compositeValidator = new ValidatingConfigurationVisitor(
           validationErrorCollector,
           StaticConfigurationValidators,
@@ -56,8 +63,8 @@ namespace SolutionInspector.Configuration.Validation
         dynamicWalker.Walk(configuration.GetType(), configuration.Element, compositeValidator);
       }
 
-      if (validationErrorCollector.ValidationErrors.Count > 0)
-        throw new ConfigurationValidationException(validationErrorCollector.ValidationErrors);
+      if (validationErrorCollector.HasErrors)
+        throw new ConfigurationValidationException(validationErrorCollector.DocumentValidationErrors, validationErrorCollector.ValidationErrors);
     }
 
     private static List<T> GetConfigurationValidators<T> ()
@@ -73,14 +80,24 @@ namespace SolutionInspector.Configuration.Validation
 
     private class ConfigurationValidationErrorCollector : IConfigurationValidationErrorCollector
     {
-      private readonly Dictionary<string, List<string>> _validationErrors = new Dictionary<string, List<string>>();
+      private readonly List<string> _documentValidationErrors = new List<string>();
+      private readonly Dictionary<string, List<string>> _propertyValidationErrors = new Dictionary<string, List<string>>();
+
+      public IReadOnlyCollection<string> DocumentValidationErrors => _documentValidationErrors;
 
       public IReadOnlyDictionary<string, IReadOnlyCollection<string>> ValidationErrors
-        => _validationErrors.ToDictionary(kvp => kvp.Key, kvp => (IReadOnlyCollection<string>) kvp.Value);
+        => _propertyValidationErrors.ToDictionary(kvp => kvp.Key, kvp => (IReadOnlyCollection<string>) kvp.Value);
 
-      public void AddError (string propertyPath, string message)
+      public bool HasErrors => _documentValidationErrors.Any() || _propertyValidationErrors.Any();
+
+      public void AddDocumentError(string message)
       {
-        var propertyErrors = _validationErrors.GetOrAdd(propertyPath, s => new List<string>());
+        _documentValidationErrors.Add(message);
+      }
+
+      public void AddPropertyError (string propertyPath, string message)
+      {
+        var propertyErrors = _propertyValidationErrors.GetOrAdd(propertyPath, s => new List<string>());
         propertyErrors.Add(message);
       }
     }

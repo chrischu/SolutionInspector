@@ -46,7 +46,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.BeginTypeVisit(propertyPath, configurationElementType);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Property", "Message")).MustHaveHappened();
 
       A.CallTo(() => _staticConfigurationValidator.BeginTypeValidation(configurationElementType, A<ReportValidationError>._)).MustHaveHappened();
     }
@@ -70,7 +70,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.BeginTypeVisit(propertyPath, configurationElementType);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Property", "Message")).MustHaveHappened();
 
       A.CallTo(() => _staticConfigurationValidator.BeginTypeValidation(configurationElementType, A<ReportValidationError>._))
           .MustHaveHappened(Repeated.Exactly.Once);
@@ -90,7 +90,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.VisitValue(propertyPath, propertyInfo, configurationValueAttribute);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Value", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Value", "Message")).MustHaveHappened();
 
       A.CallTo(() => _staticConfigurationValidator.ValidateValue(propertyInfo, configurationValueAttribute, A<ReportValidationError>._))
           .MustHaveHappened();
@@ -134,7 +134,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.VisitSubelement(propertyPath, propertyInfo, configurationSubelementAttribute);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Value", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Value", "Message")).MustHaveHappened();
 
       A.CallTo(() => _staticConfigurationValidator.ValidateSubelement(propertyInfo, configurationSubelementAttribute, A<ReportValidationError>._))
           .MustHaveHappened();
@@ -178,7 +178,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.VisitCollection(propertyPath, propertyInfo, configurationCollectionAttribute);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Value", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Value", "Message")).MustHaveHappened();
 
       A.CallTo(() => _staticConfigurationValidator.ValidateCollection(propertyInfo, configurationCollectionAttribute, A<ReportValidationError>._))
           .MustHaveHappened();
@@ -219,7 +219,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.EndTypeVisit(propertyPath, configurationElementType);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Property", "Message")).MustHaveHappened();
 
       A.CallTo(() => _staticConfigurationValidator.EndTypeValidation(configurationElementType, A<ReportValidationError>._)).MustHaveHappened();
     }
@@ -234,7 +234,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       var propertyPath = "Type";
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError(A<string>._, "Message")).MustNotHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError(A<string>._, "Message")).MustNotHaveHappened();
 
       // ACT
       _sut.EndTypeVisit(propertyPath, configurationElementType);
@@ -262,7 +262,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       var result = true;
       var type = typeof(object);
 
-      A.CallTo(() => _errorCollector.AddError(A<string>._, A<string>._)).Invokes(() => result = false);
+      A.CallTo(() => _errorCollector.AddPropertyError(A<string>._, A<string>._)).Invokes(() => result = false);
       A.CallTo(() => _staticConfigurationValidator.EndTypeValidation(type, A<ReportValidationError>._))
           .Invokes((Type t, ReportValidationError r) => r(A.Dummy<TestablePropertyInfo>(), "Message"));
 
@@ -288,7 +288,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.BeginTypeVisit(propertyPath, configurationElementType, element);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Property", "Message")).MustHaveHappened();
 
       A.CallTo(() => _dynamicConfigurationValidator.BeginTypeValidation(configurationElementType, element, A<ReportValidationError>._))
           .MustHaveHappened();
@@ -316,7 +316,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.VisitValue(propertyPath, propertyInfo, attribute, xAttribute);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Property", "Message")).MustHaveHappened();
 
       A.CallTo(() => _dynamicConfigurationValidator.ValidateValue(propertyInfo, attribute, xAttribute, A<ReportValidationError>._))
           .MustHaveHappened();
@@ -344,7 +344,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.VisitSubelement(propertyPath, propertyInfo, attribute, xElement);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Property", "Message")).MustHaveHappened();
 
       A.CallTo(() => _dynamicConfigurationValidator.ValidateSubelement(propertyInfo, attribute, xElement, A<ReportValidationError>._))
           .MustHaveHappened();
@@ -374,7 +374,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.VisitCollection(propertyPath, propertyInfo, attribute, collectionElement, collectionElements);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Property", "Message")).MustHaveHappened();
 
       A.CallTo(
             () =>
@@ -404,7 +404,7 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.EndTypeVisit(propertyPath, configurationElementType, element);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Property", "Message")).MustHaveHappened();
 
       A.CallTo(() => _dynamicConfigurationValidator.EndTypeValidation(configurationElementType, element, A<ReportValidationError>._))
           .MustHaveHappened();
@@ -425,13 +425,13 @@ namespace SolutionInspector.Configuration.Tests.Validation
       _sut.BeginTypeVisit("Type", configurationElementType);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Type.Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Type.Property", "Message")).MustHaveHappened();
 
       // ACT
       _sut.BeginTypeVisit("", configurationElementType);
 
       // ASSERT
-      A.CallTo(() => _errorCollector.AddError("Property", "Message")).MustHaveHappened();
+      A.CallTo(() => _errorCollector.AddPropertyError("Property", "Message")).MustHaveHappened();
     }
   }
 }

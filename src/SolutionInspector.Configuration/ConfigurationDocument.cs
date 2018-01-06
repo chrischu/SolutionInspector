@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 using SolutionInspector.Commons.Extensions;
 
 namespace SolutionInspector.Configuration
@@ -10,6 +11,15 @@ namespace SolutionInspector.Configuration
   {
     private XDocument _document;
     private string _path;
+
+    internal static T Create<T> (XName elementName)
+        where T : ConfigurationDocument, new()
+    {
+      var document = new XDocument(new XElement(elementName));
+      var configurationDocument = Load<T>(document.Root.AssertNotNull());
+      configurationDocument._document = document;
+      return configurationDocument;
+    }
 
     internal static T Load<T> (string path, XDocument xDocument) where T : ConfigurationDocument, new()
     {
@@ -32,7 +42,16 @@ namespace SolutionInspector.Configuration
     /// </summary>
     public void Save (string path = null)
     {
-      _document.Save(path ?? _path);
+      path = path ?? _path;
+
+      if(path == null)
+      {
+        throw new ArgumentException(
+            "The configuration document was not loaded from a path and therefore it is necessary to specify the save path explicitly.",
+            nameof(path));
+      }
+
+      _document.Save(path);
     }
   }
 }

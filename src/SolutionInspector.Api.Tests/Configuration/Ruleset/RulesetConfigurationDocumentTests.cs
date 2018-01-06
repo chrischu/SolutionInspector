@@ -26,7 +26,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Ruleset
     public void Load ()
     {
       var xDocument = XDocument.Parse(@"
-<ruleset>
+<solutionInspectorRuleset>
   <ruleAssemblyImports>
     <import path=""C:\A.dll"" />
     <import path=""C:\Assemblies"" />
@@ -46,7 +46,7 @@ namespace SolutionInspector.Api.Tests.Configuration.Ruleset
       </projectItemRuleGroup>
     </projectItemRules>
   </rules>
-</ruleset>");
+</solutionInspectorRuleset>");
 
       A.CallTo(() => _xDocumentStatic.Load(A<string>._))
           .Returns(A.Fake<IXDocument>(o => o.ConfigureFake(x => A.CallTo(() => x._XDocument).Returns(xDocument))));

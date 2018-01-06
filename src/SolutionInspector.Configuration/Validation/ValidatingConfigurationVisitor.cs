@@ -52,7 +52,7 @@ namespace SolutionInspector.Configuration.Validation
           var newPropertyPath = BuildPropertyPath(propertyPath, propertyValidationErrors.Key);
 
           foreach (var messages in propertyValidationErrors.Value)
-            _errorCollector.AddError(newPropertyPath, messages);
+            _errorCollector.AddPropertyError(newPropertyPath, messages);
         }
       }
       else
@@ -104,7 +104,7 @@ namespace SolutionInspector.Configuration.Validation
       var validationErrorsForProperty = validationErrorsForType.GetOrAdd(property, key => new List<string>());
       validationErrorsForProperty.Add(message);
 
-      _errorCollector.AddError(propertyPath, message);
+      _errorCollector.AddPropertyError(propertyPath, message);
     }
 
     #endregion
@@ -163,7 +163,7 @@ namespace SolutionInspector.Configuration.Validation
 
     private void ReportDynamicValidationError (string propertyPath, string message)
     {
-      _errorCollector.AddError(propertyPath, message);
+      _errorCollector.AddPropertyError(propertyPath, message);
     }
 
     #endregion
