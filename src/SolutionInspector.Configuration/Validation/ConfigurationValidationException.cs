@@ -49,12 +49,12 @@ namespace SolutionInspector.Configuration.Validation
 
     private static string FormatValidationErrorMessage (
         IReadOnlyCollection<string> documentValidationErrors,
-        IReadOnlyDictionary<string, IReadOnlyCollection<string>> validationErrors)
+        IReadOnlyDictionary<string, IReadOnlyCollection<string>> propertyValidationErrors)
     {
       var documentMessages = EnumerableExtensions.ConvertAndJoin(documentValidationErrors, s => $"    - {s}", Environment.NewLine);
       var documentErrors = $"  - For the document:{Environment.NewLine}{documentMessages}";
 
-      var propertyErrors = validationErrors.ConvertAndJoin(
+      var propertyErrors = propertyValidationErrors.ConvertAndJoin(
           e =>
           {
             var messages = EnumerableExtensions.ConvertAndJoin(e.Value, s => $"    - {s}", Environment.NewLine);

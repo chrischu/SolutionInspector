@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using JetBrains.Annotations;
 
 namespace SolutionInspector.Commons.Extensions
 {
@@ -50,6 +52,41 @@ namespace SolutionInspector.Commons.Extensions
     {
       converter = converter ?? (x => x);
       return source.Select(x => converter(x).ToString()).Join(separator);
+    }
+
+    private static readonly ThreadLocal<int> s_indentLevel = new ThreadLocal<int>();
+
+    public static string FormatAsList<T> (this IEnumerable<T> source, [CanBeNull] string header, Func<T, string> formatElement)
+    {
+      return FormatAsListInternal(source, header, formatElement);
+    }
+
+    public static string FormatAsList (this IEnumerable<string> source, string header = null)
+    {
+      return FormatAsListInternal(source, header, x => x);
+    }
+
+    private static string FormatAsListInternal<T> (IEnumerable<T> source, [CanBeNull] string header, Func<T, string> formatElement)
+    {
+      try
+      {
+        s_indentLevel.Value++;
+
+        var preamble = header == null
+            ? ""
+            : $"{header}:{Environment.NewLine}";
+
+        return $"{preamble}{source.ConvertAndJoin(x => Indent(formatElement(x), s_indentLevel.Value), Environment.NewLine)}";
+      }
+      finally
+      {
+        s_indentLevel.Value--;
+      }
+
+      string Indent (string s, int level)
+      {
+        return new string(' ', level * 2) + "- " + s;
+      }
     }
   }
 }

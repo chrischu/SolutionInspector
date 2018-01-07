@@ -60,18 +60,20 @@ namespace SolutionInspector.BuildTool.Commands
         var errorCount = validationEventArgs.Count(a => a.Severity == XmlSeverityType.Error);
         var warningCount = validationEventArgs.Count(a => a.Severity == XmlSeverityType.Warning);
 
-        var formattedMessages = validationEventArgs.ConvertAndJoin(
-            e => $"  - {e.Severity.ToString().ToUpper()} on ({e.Exception.LineNumber},{e.Exception.LinePosition}): {e.Message}",
-            Environment.NewLine);
+        var message = validationEventArgs.FormatAsList(
+            errorCount > 0
+                ? $"Schema is not valid (found {errorCount} errors and {warningCount} warnings)"
+                : $"Schema is valid but contains {warningCount} warnings",
+            e => $"{e.Severity.ToString().ToUpper()} on ({e.Exception.LineNumber},{e.Exception.LinePosition}): {e.Message}");
 
         if (errorCount > 0)
         {
-          LogError($"Schema is not valid (found {errorCount} errors and {warningCount} warnings):{Environment.NewLine}{formattedMessages}");
+          LogError(message);
           return ConsoleConstants.ErrorExitCode;
         }
         else
         {
-          LogWarning($"Schema is valid but contains {warningCount} warnings:{Environment.NewLine}{formattedMessages}");
+          LogWarning(message);
           return ConsoleConstants.SuccessExitCode;
         }
       }

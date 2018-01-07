@@ -48,8 +48,6 @@ namespace SolutionInspector.TestInfrastructure.Console.Commands
 
     protected void AssertLog(LogLevel level, string message, Exception exception = null)
     {
-      Trace.Assert(!message.EndsWith("."), "Message must not end with a period.");
-
       LogManager.Flush();
       _logTarget.LogEvents.Should().Contain(new RecordedLogEvent(level, message, exception));
     }

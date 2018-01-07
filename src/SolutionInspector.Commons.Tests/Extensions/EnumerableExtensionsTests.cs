@@ -4,6 +4,7 @@ using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using SolutionInspector.Commons.Extensions;
+using SolutionInspector.TestInfrastructure.AssertionExtensions;
 
 namespace SolutionInspector.Commons.Tests.Extensions
 {
@@ -49,7 +50,7 @@ namespace SolutionInspector.Commons.Tests.Extensions
     }
 
     [Test]
-    public void Join_WithConversion ()
+    public void ConvertAndJoin ()
     {
       var source = new[] { 1, 2 };
       
@@ -58,6 +59,59 @@ namespace SolutionInspector.Commons.Tests.Extensions
 
       // ASSERT
       result.Should().Be("3;6");
+    }
+
+    [Test]
+    public void FormatAsList ()
+    {
+      var source = new[] { "A", "B" };
+
+      // ACT
+      var result = source.FormatAsList();
+
+      // ASSERT
+      result.Should().Be($"  - A{Environment.NewLine}  - B");
+    }
+
+    [Test]
+    public void FormatAsList_WithHeader ()
+    {
+      var source = new[] { "A", "B" };
+
+      // ACT
+      var result = source.FormatAsList("Header");
+
+      // ASSERT
+      result.Should().BeWithDiff(
+          @"Header:
+  - A
+  - B");
+    }
+
+    [Test]
+    public void FormatAsList_WithConversion ()
+    {
+      var source = new Dictionary<string, Dictionary<string, IEnumerable<int>>>
+                   {
+                       { "A", new Dictionary<string, IEnumerable<int>> { { "A1", new[] { 1, 2 } }, { "A2", new[] { 3 } } } },
+                       { "B", new Dictionary<string, IEnumerable<int>> { { "B1", new[] { 4 } } } }
+                   };
+
+      // ACT
+      var result = source.FormatAsList("Header", x => x.Value.FormatAsList(x.Key, y => y.Value.FormatAsList(y.Key, z => z.ToString())));
+
+      // ASSERT
+      result.Should().BeWithDiff(
+          @"Header:
+  - A:
+    - A1:
+      - 1
+      - 2
+    - A2:
+      - 3
+  - B:
+    - B1:
+      - 4");
     }
   }
 }

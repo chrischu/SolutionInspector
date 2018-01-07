@@ -93,15 +93,6 @@ namespace SolutionInspector.BuildTool.Tests.Commands
   - WARNING on (47,11): Warning2");
     }
 
-    private ValidationEventArgs CreateValidationEvent (XmlSeverityType severityType, string message, int lineNumber, int linePosition)
-    {
-      var xmlSchemaException = new XmlSchemaException(message, null, lineNumber, linePosition);
-      var xmlSeverityType = severityType;
-
-      var ctor = typeof(ValidationEventArgs).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance).Single(c => c.GetParameters().Length == 2);
-      return (ValidationEventArgs) ctor.Invoke(new object[] { xmlSchemaException, xmlSeverityType });
-    }
-    
     [Test]
     public void Run_WithSchemaThatDoesNotExist_ReportsError ()
     {
@@ -128,6 +119,15 @@ namespace SolutionInspector.BuildTool.Tests.Commands
       // ASSERT
       result.Should().Be(ConsoleConstants.ErrorExitCode);
       AssertErrorLog("Unexpected error while opening schema from 'Schema.xsd'", thrownException);
+    }
+
+    private ValidationEventArgs CreateValidationEvent (XmlSeverityType severityType, string message, int lineNumber, int linePosition)
+    {
+      var xmlSchemaException = new XmlSchemaException(message, null, lineNumber, linePosition);
+      var xmlSeverityType = severityType;
+
+      var ctor = typeof(ValidationEventArgs).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance).Single(c => c.GetParameters().Length == 2);
+      return (ValidationEventArgs) ctor.Invoke(new object[] { xmlSchemaException, xmlSeverityType });
     }
   }
 }
