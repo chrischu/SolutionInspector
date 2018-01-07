@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Autofac;
-using ManyConsole;
-using SolutionInspector.BuildTool.Commands;
+using SolutionInspector.Commons.Console;
 using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
+using Wrapperator.Interfaces.Xml;
 using Wrapperator.Wrappers;
 
 namespace SolutionInspector.BuildTool
 {
   [ExcludeFromCodeCoverage]
-  internal class BuildToolProgram
+  internal class BuildToolProgram : ConsoleProgramBase
   {
     internal const string DefaultBaseSchemaVersion = "1";
     internal const string BaseSchemaNamespaceTemplate = "http://chrischu.github.io/SolutionInspector/schema/base_v{0}.xsd";
@@ -22,29 +21,15 @@ namespace SolutionInspector.BuildTool
       return new BuildToolProgram().Run(args);
     }
 
-    private int Run (string[] args)
+    protected override void RegisterServices (ContainerBuilder builder)
     {
-      using (var container = SetupContainer())
-      {
-        var commands = container.Resolve<IEnumerable<ConsoleCommand>>();
-        return ConsoleCommandDispatcher.DispatchCommand(commands, args, Console.Out);
-      }
-    }
-
-    private static IContainer SetupContainer ()
-    {
-      var builder = new ContainerBuilder();
-
       builder.Register(ctx => Wrapper.Assembly).As<IAssemblyStatic>();
       builder.Register(ctx => Wrapper.File).As<IFileStatic>();
       builder.Register(ctx => Wrapper.Console).As<IConsoleStatic>();
+      builder.Register(ctx => Wrapper.XmlWriter).As<IXmlWriterStatic>();
 
       builder.RegisterType<RuleAssemblySchemaCreator>().As<IRuleAssemblySchemaCreator>();
       builder.RegisterType<SchemaInfoRetriever>().As<ISchemaInfoRetriever>();
-
-      builder.RegisterType<GenerateSchemaCommand>().As<ConsoleCommand>();
-
-      return builder.Build();
     }
   }
 }

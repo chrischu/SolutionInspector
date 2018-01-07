@@ -7,12 +7,6 @@
   <Import Project="..\Shared.Test.msbuild" />
 
   <ItemGroup>
-    <PackageReference Include="ManyConsole" Version="1.0.0.3" />
-    <PackageReference Include="NDesk.Options" Version="0.2.1" />
-    <PackageReference Include="NLog" Version="4.4.12" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SolutionInspector.Commons.Console\SolutionInspector.Commons.Console.csproj" />
     <ProjectReference Include="..\SolutionInspector.TestInfrastructure\SolutionInspector.TestInfrastructure.csproj" />
   </ItemGroup>

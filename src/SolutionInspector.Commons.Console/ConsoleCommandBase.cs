@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using ManyConsole;
+using NLog;
 
 namespace SolutionInspector.Commons.Console
 {
@@ -51,7 +54,7 @@ namespace SolutionInspector.Commons.Console
   public abstract class ConsoleCommandBase<TRawArguments, TParsedArguments> : ConsoleCommand
       where TRawArguments : new()
   {
-    private readonly TRawArguments _rawArguments;
+    private readonly Logger _logger = LogManager.GetCurrentClassLogger();
     private readonly ArgumentsBuilder<TRawArguments> _rawArgumentsBuilder;
     private TParsedArguments _parsedArguments;
 
@@ -60,8 +63,7 @@ namespace SolutionInspector.Commons.Console
     {
       IsCommand(command, description);
       SkipsCommandSummaryBeforeRunning();
-      _rawArguments = new TRawArguments();
-      _rawArgumentsBuilder = new ArgumentsBuilder<TRawArguments>(this, _rawArguments);
+      _rawArgumentsBuilder = new ArgumentsBuilder<TRawArguments>(this);
       // ReSharper disable once VirtualMemberCallInContructor
       SetupArguments(_rawArgumentsBuilder);
     }
@@ -71,12 +73,26 @@ namespace SolutionInspector.Commons.Console
     public sealed override int? OverrideAfterHandlingArgumentsBeforeRun ([NotNull] string[] remainingArguments)
     {
       _rawArgumentsBuilder.HandleRemainingArguments(remainingArguments);
-      _parsedArguments = ValidateAndParseArguments(_rawArguments, message => new ConsoleHelpAsException(message));
+
+      var rawArguments = GetRawArguments();
+      _parsedArguments = ValidateAndParseArguments(rawArguments);
 
       return base.OverrideAfterHandlingArgumentsBeforeRun(remainingArguments);
     }
 
-    protected abstract TParsedArguments ValidateAndParseArguments (TRawArguments arguments, Func<string, Exception> reportError);
+    private TRawArguments GetRawArguments ()
+    {
+      try
+      {
+        return _rawArgumentsBuilder.Build();
+      }
+      catch (ArgumentParsingException ex)
+      {
+        throw ReportArgumentValidationError(ex.Message);
+      }
+    }
+
+    protected abstract TParsedArguments ValidateAndParseArguments (TRawArguments arguments);
 
     public sealed override int Run ([NotNull] string[] remainingArguments)
     {
@@ -85,17 +101,70 @@ namespace SolutionInspector.Commons.Console
 
     protected abstract int Run (TParsedArguments arguments);
 
+    [MustUseReturnValue("Returned exception must be thrown")]
+    protected Exception ReportArgumentValidationError (string message, Exception ex = null)
+    {
+      Trace.Assert(!message.EndsWith("."), "Message must not end with a '.'");
+
+      _logger.Error(ex, message);
+
+      return new ConsoleHelpAsException("");
+    }
+
+    [MustUseReturnValue("Returned value must be used as exit code")]
+    protected int ReportExecutionError (string message, Exception ex)
+    {
+      _logger.Error(ex, message);
+      return ConsoleConstants.ErrorExitCode;
+    }
+
+    [MustUseReturnValue("Returned value must be used as exit code")]
+    protected int ReportAbortion ()
+    {
+      _logger.Info("Command was aborted");
+      return ConsoleConstants.SuccessExitCode;
+    }
+
+    protected void LogInfo (string message)
+    {
+      _logger.Log(LogLevel.Info, message);
+    }
+
+    protected void LogDebug (string message)
+    {
+      _logger.Log(LogLevel.Debug, message);
+    }
+
+    protected void LogError(string message)
+    {
+      _logger.Log(LogLevel.Error, message);
+    }
+
+    protected void LogWarning(string message)
+    {
+      _logger.Log(LogLevel.Warn, message);
+    }
+
     private class ArgumentsBuilder<TArguments> : IArgumentsBuilder<TArguments>, IArgumentsBuilderWithSetValues<TArguments>
         where TArguments : new()
     {
       private readonly TArguments _arguments;
       private readonly ConsoleCommand _command;
       private readonly ValueArgumentsBuilder _valueArgumentsBuilder = new ValueArgumentsBuilder();
+      private readonly List<UnparsedArgument> _unparsedArguments = new List<UnparsedArgument>();
 
-      public ArgumentsBuilder (ConsoleCommand command, TArguments arguments)
+      public ArgumentsBuilder (ConsoleCommand command)
       {
+        _arguments = new TArguments();
         _command = command;
-        _arguments = arguments;
+      }
+
+      public TArguments Build ()
+      {
+        foreach (var unparsedArgument in _unparsedArguments)
+          unparsedArgument.Parse(_arguments);
+
+        return _arguments;
       }
 
       public IArgumentsBuilder<TArguments> Option<T> (
@@ -106,7 +175,10 @@ namespace SolutionInspector.Commons.Console
           T defaultValue = default(T))
       {
         setValue(_arguments, defaultValue);
-        _command.HasOption<T>($"{shortKey}|{longKey}=", description, v => setValue(_arguments, v));
+
+        var unparsedArgument = new UnparsedArgument(longKey, typeof(T), (args, value) => setValue(args, (T) value));
+        _unparsedArguments.Add(unparsedArgument);
+        _command.HasOption<string>($"{shortKey}|{longKey}=", description, v => unparsedArgument.SetUnparsedArgumentValue(v));
         return this;
       }
 
@@ -149,6 +221,42 @@ namespace SolutionInspector.Commons.Console
         _valueArgumentsBuilder.ParseAdditionalArguments(_arguments, remainingArguments);
       }
 
+      private class UnparsedArgument
+      {
+        private string _unparsedArgument;
+        private readonly Type _argumentType;
+        private readonly string _argumentLongKey;
+        private readonly Action<TArguments, object> _setParsedValue;
+
+        public UnparsedArgument (string argumentLongKey, Type parsedType, Action<TArguments, object> setParsedValue)
+        {
+          _argumentType = Nullable.GetUnderlyingType(parsedType) ?? parsedType;
+          _argumentLongKey = argumentLongKey;
+          _setParsedValue = setParsedValue;
+        }
+
+        public void SetUnparsedArgumentValue (string unparsedArgument)
+        {
+          _unparsedArgument = unparsedArgument;
+        }
+
+        public void Parse (TArguments arguments)
+        {
+          if (_unparsedArgument == null)
+            return;
+
+          try
+          {
+            var parsedArgument = TypeDescriptor.GetConverter(_argumentType).ConvertFromString(_unparsedArgument);
+            _setParsedValue(arguments, parsedArgument);
+          }
+          catch (Exception ex)
+          {
+            throw new ArgumentParsingException($"Invalid value for argument '{_argumentLongKey}': '{_unparsedArgument}'", ex);
+          }
+        }
+      }
+
       private class ValueArgumentsBuilder : IValueArgumentsBuilder<TArguments>
       {
         private readonly List<ValueArgument> _valueArguments = new List<ValueArgument>();
@@ -185,6 +293,21 @@ namespace SolutionInspector.Commons.Console
           public string Name { get; }
           public Action<TArguments, string> SetValueAction { get; }
         }
+      }
+    }
+
+    [Serializable]
+    private class ArgumentParsingException : Exception
+    {
+      public ArgumentParsingException (string message, Exception innerException)
+          : base(message, innerException)
+      {
+      }
+
+      [ExcludeFromCodeCoverage]
+      protected ArgumentParsingException (SerializationInfo info, StreamingContext context)
+          : base(info, context)
+      {
       }
     }
   }

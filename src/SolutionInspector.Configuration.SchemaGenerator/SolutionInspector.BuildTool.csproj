@@ -29,7 +29,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
-    <PackageReference Include="NDesk.Options" Version="0.2.1" />
     <PackageReference Include="Wrapperator.Interfaces" Version="2.0.0" />
     <PackageReference Include="Wrapperator.Wrappers" Version="2.0.0" />
   </ItemGroup>
@@ -62,10 +61,6 @@
     <Compile Remove="bin\**" />
     <EmbeddedResource Remove="bin\**" />
     <None Remove="bin\**" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Remove="appSettings.json" />
   </ItemGroup>
   
   <ItemGroup>

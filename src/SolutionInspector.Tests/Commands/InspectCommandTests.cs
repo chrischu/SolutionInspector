@@ -13,6 +13,7 @@ using SolutionInspector.Api.ObjectModel;
 using SolutionInspector.Api.Reporting;
 using SolutionInspector.Api.Rules;
 using SolutionInspector.Commands;
+using SolutionInspector.Commons.Console;
 using SolutionInspector.Internals;
 using SolutionInspector.Reporting;
 using SolutionInspector.Rules;
@@ -101,9 +102,9 @@ namespace SolutionInspector.Tests.Commands
       var result = RunCommand(_sut, "solution");
 
       // ASSERT
-      result.Should().Be(0);
+      result.Should().Be(ConsoleConstants.SuccessExitCode);
 
-      A.CallTo(() => _configurationLoader.LoadRulesConfig($"solution.{SolutionInspector.RulesetFileExtension}")).MustHaveHappened();
+      A.CallTo(() => _configurationLoader.LoadRulesConfig($"solution.{SolutionInspectorProgram.RulesetFileExtension}")).MustHaveHappened();
 
       AssertCorrectCommandExecution();
       AssertDoesNotCreateViolationReporter();
@@ -116,7 +117,7 @@ namespace SolutionInspector.Tests.Commands
       var result = RunCommand(_sut, "--configurationFile=file", "solution");
 
       // ASSERT
-      result.Should().Be(0);
+      result.Should().Be(ConsoleConstants.SuccessExitCode);
 
       A.CallTo(() => _configurationLoader.LoadRulesConfig("file")).MustHaveHappened();
 
@@ -133,9 +134,9 @@ namespace SolutionInspector.Tests.Commands
       var result = RunCommand(_sut, "solution");
 
       // ASSERT
-      result.Should().Be(-1);
+      result.Should().Be(ConsoleConstants.ErrorExitCode);
 
-      CapturedOutput.ToString().Should().Contain("NOTFOUND");
+      AssertErrorLog("Could not find configuration file 'solution.SolutionInspectorRuleset'");
     }
 
     [Test]
@@ -148,9 +149,9 @@ namespace SolutionInspector.Tests.Commands
       var result = RunCommand(_sut, "solution");
 
       // ASSERT
-      result.Should().Be(-1);
+      result.Should().Be(ConsoleConstants.ErrorExitCode);
 
-      CapturedOutput.ToString().Should().Contain($"Unexpected error when loading configuration file: {thrownException.Message}.");
+      AssertErrorLog("Unexpected error when loading configuration file 'solution.SolutionInspectorRuleset'", thrownException);
     }
 
     [Test]
@@ -215,9 +216,8 @@ namespace SolutionInspector.Tests.Commands
       var result = RunCommand(_sut, "--reportFormat=DOES_NOT_EXIST", "solution");
 
       // ASSERT
-      result.Should().Be(-1);
-
-      CapturedOutput.ToString().Should().Contain("Could not convert string `DOES_NOT_EXIST' to type ViolationReportFormat");
+      result.Should().Be(ConsoleConstants.ErrorExitCode);
+      AssertErrorLog("Invalid value for argument 'reportFormat': 'DOES_NOT_EXIST'");
     }
 
     [Test]
@@ -230,10 +230,10 @@ namespace SolutionInspector.Tests.Commands
       var result = RunCommand(_sut, "DOES_NOT_EXIST");
 
       // ASSERT
-      result.Should().Be(-1);
+      result.Should().Be(ConsoleConstants.ErrorExitCode);
 
-      A.CallTo(() => _configurationLoader.LoadRulesConfig($"DOES_NOT_EXIST.{SolutionInspector.RulesetFileExtension}")).MustHaveHappened();
-      CapturedOutput.ToString().Should().Contain("Given solution file 'DOES_NOT_EXIST' could not be found.");
+      A.CallTo(() => _configurationLoader.LoadRulesConfig($"DOES_NOT_EXIST.{SolutionInspectorProgram.RulesetFileExtension}")).MustHaveHappened();
+      AssertErrorLog("Given solution file 'DOES_NOT_EXIST' could not be found");
 
       AssertDoesNotCreateViolationReporter();
     }
@@ -248,12 +248,9 @@ namespace SolutionInspector.Tests.Commands
       var result = RunCommand(_sut, "solution");
 
       // ASSERT
-      result.Should().Be(-1);
+      result.Should().Be(ConsoleConstants.ErrorExitCode);
 
-      CapturedOutput.ToString()
-          .Should()
-          .Contain($"Given solution file 'solution' contains an invalid project file '{Environment.CurrentDirectory}\\projectFile'");
-
+      AssertErrorLog($"Given solution file 'solution' contains an invalid project file '{Environment.CurrentDirectory}\\projectFile'");
       AssertDoesNotCreateViolationReporter();
       AssertConfigurationLoadWithDefaultParameters();
     }
@@ -268,10 +265,9 @@ namespace SolutionInspector.Tests.Commands
       var result = RunCommand(_sut, "solution");
 
       // ASSERT
-      result.Should().Be(-1);
+      result.Should().Be(ConsoleConstants.ErrorExitCode);
 
-      CapturedOutput.ToString().Should().Contain($"Unexpected error when loading solution file 'solution': {thrownException.Message}");
-
+      AssertErrorLog("Unexpected error when loading solution file 'solution'", thrownException);
       AssertDoesNotCreateViolationReporter();
       AssertConfigurationLoadWithDefaultParameters();
     }
@@ -292,7 +288,7 @@ namespace SolutionInspector.Tests.Commands
 
     private void AssertConfigurationLoadWithDefaultParameters ()
     {
-      A.CallTo(() => _configurationLoader.LoadRulesConfig($"solution.{SolutionInspector.RulesetFileExtension}")).MustHaveHappened();
+      A.CallTo(() => _configurationLoader.LoadRulesConfig($"solution.{SolutionInspectorProgram.RulesetFileExtension}")).MustHaveHappened();
     }
 
     private void AssertCorrectCommandExecution ()

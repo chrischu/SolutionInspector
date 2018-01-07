@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using SolutionInspector.Commons.Console;
 using SolutionInspector.Commons.Extensions;
-using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
 
@@ -10,16 +9,16 @@ namespace SolutionInspector.Commands
 {
   internal class InitializeCommand : ConsoleCommandBase<InitializeCommand.RawArguments, InitializeCommand.ParsedArguments>
   {
-    private readonly IConsoleStatic _console;
+    private readonly IConsoleHelper _consoleHelper;
     private readonly IFileStatic _file;
     private readonly IAssembly _resourceAssembly;
 
-    public InitializeCommand (IAssembly resourceAssembly, IFileStatic file, IConsoleStatic console)
+    public InitializeCommand (IAssembly resourceAssembly, IFileStatic file, IConsoleHelper consoleHelper)
       : base("initialize", "Creates a new SolutionInspector configuration file or overwrites an existing one.")
     {
       _resourceAssembly = resourceAssembly;
       _file = file;
-      _console = console;
+      _consoleHelper = consoleHelper;
     }
 
     protected override void SetupArguments (IArgumentsBuilder<RawArguments> argumentsBuilder)
@@ -29,7 +28,7 @@ namespace SolutionInspector.Commands
           .Values(c => c.Value("configFilePath", (a, v) => a.ConfigFilePath = v));
     }
 
-    protected override ParsedArguments ValidateAndParseArguments (RawArguments arguments, Func<string, Exception> reportError)
+    protected override ParsedArguments ValidateAndParseArguments (RawArguments arguments)
     {
       return new ParsedArguments(arguments.ConfigFilePath, arguments.Force);
     }
@@ -38,13 +37,8 @@ namespace SolutionInspector.Commands
     {
       if (_file.Exists(arguments.ConfigFilePath) && !arguments.Force)
       {
-        _console.Write($"File '{arguments.ConfigFilePath}' already exists. Do you want to overwrite it? [y/N] ");
-        var answer = _console.ReadLine();
-        if (string.IsNullOrEmpty(answer) || !string.Equals(answer, "y", StringComparison.OrdinalIgnoreCase))
-        {
-          _console.WriteLine("Command was aborted.");
-          return 1;
-        }
+        if(!_consoleHelper.Confirm($"File '{arguments.ConfigFilePath}' already exists. Do you want to overwrite it?"))
+          return ReportAbortion();
       }
 
       using (var sourceStream = _resourceAssembly.GetManifestResourceStream("SolutionInspector.Template.SolutionInspectorConfig").AssertNotNull())

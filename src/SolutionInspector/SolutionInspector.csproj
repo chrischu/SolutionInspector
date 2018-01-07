@@ -25,10 +25,7 @@
     <PackageReference Include="Microsoft.Build" Version="15.5.180" />
     <PackageReference Include="Microsoft.Build.Framework" Version="15.5.180" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.5.180" />
-    <PackageReference Include="NDesk.Options" Version="0.2.1" />
     <PackageReference Include="NLog" Version="4.4.12" />
-    <PackageReference Include="NLog.Config" Version="4.4.12" />
-    <PackageReference Include="NLog.Schema" Version="4.4.12" />
     <PackageReference Include="Wrapperator.Interfaces" Version="2.0.0" />
     <PackageReference Include="Wrapperator.Wrappers" Version="2.0.0" />
   </ItemGroup>
