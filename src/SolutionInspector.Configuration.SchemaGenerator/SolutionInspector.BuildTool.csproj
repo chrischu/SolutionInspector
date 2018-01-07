@@ -29,8 +29,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
-    <PackageReference Include="Wrapperator.Interfaces" Version="2.0.0" />
-    <PackageReference Include="Wrapperator.Wrappers" Version="2.0.0" />
+    <PackageReference Include="Wrapperator.Interfaces" Version="2.1.0" />
+    <PackageReference Include="Wrapperator.Wrappers" Version="2.1.0" />
   </ItemGroup>
 
   <ItemDefinitionGroup>

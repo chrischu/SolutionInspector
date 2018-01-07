@@ -7,8 +7,8 @@
   <Import Project="..\Shared.Test.msbuild" />
 
   <ItemGroup>
-    <PackageReference Include="Wrapperator.Interfaces" Version="2.0.0" />
-    <PackageReference Include="Wrapperator.Wrappers" Version="2.0.0" />
+    <PackageReference Include="Wrapperator.Interfaces" Version="2.1.0" />
+    <PackageReference Include="Wrapperator.Wrappers" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

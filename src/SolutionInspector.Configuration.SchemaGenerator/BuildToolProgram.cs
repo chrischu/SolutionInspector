@@ -6,6 +6,7 @@ using Wrapperator.Interfaces;
 using Wrapperator.Interfaces.IO;
 using Wrapperator.Interfaces.Reflection;
 using Wrapperator.Interfaces.Xml;
+using Wrapperator.Interfaces.Xml.Schema;
 using Wrapperator.Wrappers;
 
 namespace SolutionInspector.BuildTool
@@ -27,6 +28,7 @@ namespace SolutionInspector.BuildTool
       builder.Register(ctx => Wrapper.File).As<IFileStatic>();
       builder.Register(ctx => Wrapper.Console).As<IConsoleStatic>();
       builder.Register(ctx => Wrapper.XmlWriter).As<IXmlWriterStatic>();
+      builder.Register(ctx => Wrapper.XmlSchema).As<IXmlSchemaStatic>();
 
       builder.RegisterType<RuleAssemblySchemaCreator>().As<IRuleAssemblySchemaCreator>();
       builder.RegisterType<SchemaInfoRetriever>().As<ISchemaInfoRetriever>();
