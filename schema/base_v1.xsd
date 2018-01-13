@@ -4,6 +4,12 @@
            xmlns="http://chrischu.github.io/SolutionInspector/schema/base_v1.xsd"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="rule" type="RuleBase" abstract="true" />
-  <xs:complexType name="RuleBase" abstract="true" />
+  <xs:element name="solutionRule" type="SolutionRuleBase" abstract="true" />
+  <xs:complexType name="SolutionRuleBase" abstract="true" />
+  
+  <xs:element name="projectRule" type="ProjectRuleBase" abstract="true" />
+  <xs:complexType name="ProjectRuleBase" abstract="true" />
+  
+  <xs:element name="projectItemRule" type="ProjectItemRule" abstract="true" />
+  <xs:complexType name="ProjectItemRule" abstract="true" />
 </xs:schema>
