@@ -6,10 +6,10 @@
 
   <xs:element name="solutionRule" type="SolutionRuleBase" abstract="true" />
   <xs:complexType name="SolutionRuleBase" abstract="true" />
-  
+
   <xs:element name="projectRule" type="ProjectRuleBase" abstract="true" />
   <xs:complexType name="ProjectRuleBase" abstract="true" />
-  
-  <xs:element name="projectItemRule" type="ProjectItemRule" abstract="true" />
-  <xs:complexType name="ProjectItemRule" abstract="true" />
+
+  <xs:element name="projectItemRule" type="ProjectItemRuleBase" abstract="true" />
+  <xs:complexType name="ProjectItemRuleBase" abstract="true" />
 </xs:schema>
